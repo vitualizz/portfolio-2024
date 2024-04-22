@@ -6,5 +6,5 @@ import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 export default tseslint.config(
   eslint.configs.recommended,
   eslintPluginPrettierRecommended,
-  ...eslintPluginAstro.configs['flat/recommended'],
+  ...eslintPluginAstro.configs['flat/recommended']
 )
