@@ -17,6 +17,18 @@ const navItems: NavItem[] = [
   {
     name: 'presentation',
     path: '#presentation'
+  },
+  {
+    name: 'about_me',
+    path: '#about'
+  },
+  {
+    name: 'projects',
+    path: '#projects'
+  },
+  {
+    name: 'contact_me',
+    path: '#contact_me'
   }
 ]
 ---
@@ -36,24 +48,24 @@ const navItems: NavItem[] = [
         </label>
       </div>
 
-      <div class="navbar-center bg-base-100 lg:justify-start">
+      <div class="navbar-center bg-base-100">
         {
           navItems.map((item) => (
-            <div>
+            <div class="items-cente group mx-2 flex flex-col items-center">
               <a
                 href={item.path}
                 key={item.path}
-                class="group hidden transition duration-300 md:block"
+                class="hidden transition duration-300 md:block group-hover:font-medium"
               >
                 {tNav[item.name]}
               </a>
-              <span class="block h-0.5 max-w-10 transition-all duration-500 group-hover:max-w-full" />
+              <span class="align-center block h-0.5 w-0 bg-yellow-500 transition-all duration-500 group-hover:w-[80%]" />
             </div>
           ))
         }
       </div>
 
-      <div class="navbar-end flex-none text-gray-700 dark:text-gray-200">
+      <div class="navbar-end text-gray-700 dark:text-gray-200">
         <ThemeToggleBtn />
       </div>
     </div>
