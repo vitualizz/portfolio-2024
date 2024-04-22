@@ -1,5 +1,96 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+import { getLangFromUrl, useTranslations } from '../i18n/utils'
+import ThemeToggleBtn from '../components/ThemeToggleBtn.astro'
+import Bars3 from 'astro-heroicons/outline/Bars3.astro'
 
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+type NavItem = {
+  name: string
+  path: string
+}
+
+const tNav = t('nav')
+const navItems: NavItem[] = [
+  {
+    name: 'presentation',
+    path: '#presentation'
+  }
+]
 ---
 
-<h1>Navbar</h1>
+<div class="drawer">
+  <input id="drawerNavbar" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-content flex flex-col">
+    <div class="navbar w-full shadow-md">
+      <div class="navbar-start md:invisible">
+        <label
+          id="drawerToggleOpen"
+          htmlFor="drawerNavbar"
+          aria-label="open sidebar"
+          class="btn btn-square btn-ghost"
+        >
+          <Bars3 class="w-6" />
+        </label>
+      </div>
+
+      <div class="navbar-center bg-base-100 lg:justify-start">
+        {
+          navItems.map((item) => (
+            <div>
+              <a
+                href={item.path}
+                key={item.path}
+                class="group hidden transition duration-300 md:block"
+              >
+                {tNav[item.name]}
+              </a>
+              <span class="block h-0.5 max-w-10 transition-all duration-500 group-hover:max-w-full" />
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="navbar-end flex-none text-gray-700 dark:text-gray-200">
+        <ThemeToggleBtn />
+      </div>
+    </div>
+
+    <slot />
+  </div>
+
+  <div class="drawer-side">
+    <label
+      id="drawerToggleClose"
+      htmlFor="drawerNavbar"
+      aria-label="close sidebar"
+      class="drawer-overlay"></label>
+    <ul class="menu min-h-full w-80 bg-base-100 p-3">
+      <li>
+        {
+          navItems.map((item) => (
+            <a href={item.path} key={item.path}>
+              {tNav[item.name]}
+            </a>
+          ))
+        }
+      </li>
+    </ul>
+  </div>
+</div>
+
+<script is:inline>
+  const drawerNavbar = document.getElementById('drawerNavbar')
+  const drawerToggleOpen = document.getElementById('drawerToggleOpen')
+  const drawerToggleClose = document.getElementById('drawerToggleClose')
+
+  drawerToggleOpen.addEventListener('click', () => {
+    drawerNavbar.checked = true
+  })
+
+  drawerToggleClose.addEventListener('click', () => {
+    drawerNavbar.checked = false
+  })
+</script>

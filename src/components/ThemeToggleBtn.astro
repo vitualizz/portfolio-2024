@@ -1,0 +1,56 @@
+---
+import Sun from 'astro-heroicons/outline/Sun.astro'
+import Moon from 'astro-heroicons/outline/Moon.astro'
+---
+
+<label class="swap swap-rotate p-3">
+  <input type="checkbox" id="themeToggle" />
+  <Sun
+    id="sunIcon"
+    class="h-6 w-6 fill-current fill-yellow-500 stroke-yellow-500"
+  />
+  <Moon
+    id="moonIcon"
+    class="h-6 w-6 fill-current fill-gray-200 stroke-gray-200 lg:h-7 lg:w-7"
+  />
+</label>
+
+<script is:inline>
+  localStorage.setItem('theme', 'dark')
+  const theme = (() => {
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+      return localStorage.getItem('theme')
+    }
+
+    if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+      return 'light'
+    }
+    return 'dark'
+  })()
+
+  document
+    .getElementById('moonIcon')
+    .classList.add(theme === 'dark' ? 'swap-off' : 'swap-on')
+
+  document
+    .getElementById('sunIcon')
+    .classList.add(theme === 'dark' ? 'swap-on' : 'swap-off')
+
+  document.documentElement.setAttribute('data-theme', theme)
+  document.documentElement.classList.add(theme)
+  document.documentElement.classList.remove(theme === 'dark' ? 'light' : 'dark')
+
+  const handleToggleClick = () => {
+    const element = document.documentElement
+    const isDark = element.getAttribute('data-theme') === 'dark'
+
+    localStorage.setItem('theme', isDark ? 'dark' : 'light')
+    element.removeAttribute('class')
+    element.classList.add(isDark ? 'light' : 'dark')
+    element.setAttribute('data-theme', isDark ? 'light' : 'dark')
+  }
+
+  document
+    .getElementById('themeToggle')
+    .addEventListener('click', handleToggleClick)
+</script>
