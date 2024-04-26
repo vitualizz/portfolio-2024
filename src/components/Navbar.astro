@@ -1,5 +1,4 @@
 ---
-import type { HTMLAttributes } from 'astro/types'
 import { getLangFromUrl, useTranslations } from '../i18n/utils'
 import ThemeToggleBtn from '../components/ThemeToggleBtn.astro'
 import Bars3 from 'astro-heroicons/outline/Bars3.astro'
@@ -35,7 +34,7 @@ const navItems: NavItem[] = [
 
 <div class="drawer">
   <input id="drawerNavbar" type="checkbox" class="drawer-toggle" />
-  <div class="drawer-content flex flex-col h-screen">
+  <div class="drawer-content flex h-screen flex-col landscape:h-full">
     <div class="navbar w-full shadow-md">
       <div class="navbar-start md:invisible">
         <label
@@ -48,14 +47,14 @@ const navItems: NavItem[] = [
         </label>
       </div>
 
-      <div class="navbar-center bg-base-100">
+      <nav class="navbar-center grid grid-cols-4 bg-base-100 md:w-[480px]">
         {
           navItems.map((item) => (
             <div class="items-cente group mx-2 flex flex-col items-center">
               <a
                 href={item.path}
                 key={item.path}
-                class="hidden transition duration-300 md:block group-hover:font-medium"
+                class="hidden transition duration-300 group-hover:font-bold md:block"
               >
                 {tNav[item.name]}
               </a>
@@ -63,14 +62,16 @@ const navItems: NavItem[] = [
             </div>
           ))
         }
-      </div>
+      </nav>
 
       <div class="navbar-end text-gray-700 dark:text-gray-200">
         <ThemeToggleBtn />
       </div>
     </div>
 
-    <slot />
+    <div class="h-full landscape:mt-10">
+      <slot />
+    </div>
   </div>
 
   <div class="drawer-side">
