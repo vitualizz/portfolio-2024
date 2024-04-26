@@ -1,7 +1,49 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import Logo from '../components/Logo.astro'
+import Envelope from 'astro-heroicons/outline/Envelope.astro'
+import DocumentText from 'astro-heroicons/outline/DocumentText.astro'
+import GithubIcon from '../components/icons/Github.astro'
+import LinkedinIcon from '../components/icons/Linkedin.astro'
+import ChevronDown from 'astro-heroicons/outline/ChevronDown.astro'
+import { getLangFromUrl, useTranslations } from '../i18n/utils.ts'
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+const tPresentation = t('presentation')
 ---
 
 <Layout title="Welcome to Astro.">
-  <h1>Main</h1>
+  <section class="section">
+    <Logo style='w-40 md:w-56' />
+    <div class='flex flex-col items-center'>
+      <h1 class='font-bold mt-4 text-2xl lg:text-3xl'>Lee Palacios</h1>
+      <h1 class='text-custom-gray font-bold text-xl lg:text-2xl'>@vitualizz</h1>
+    </div>
+    <p class='w-9/12 lg:w-[35%] text-center text-xl' set:html={tPresentation.description} />
+    <div class='flex gap-3'>
+      <a class='hover:scale-125 transform transition duration-y'>
+        <Envelope class='w-10 lg:w-14'/>
+      </a>
+      <a class='hover:scale-125 transform transition duration-y'>
+        <DocumentText class='w-10 lg:w-14' />
+      </a>
+      <a class='hover:scale-125 transform transition duration-y'>
+        <GithubIcon style='w-10 lg:w-14' />
+      </a>
+      <a class='hover:scale-125 transform transition duration-y'>
+        <LinkedinIcon style='w-10 lg:w-14' />
+      </a>
+    </div>
+    <div class='rounded-full border border-solid p-2'>
+      <ChevronDown class='w-6' />
+    </div>
+  </section>
 </Layout>
+
+<style>
+.section {
+  @apply h-[80%] flex justify-center items-center flex-col gap-7 lg:gap-9
+}
+</style>

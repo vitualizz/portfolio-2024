@@ -16,6 +16,9 @@ export type LanguageLocale = {
     about_me: string
     projects: string
     contact_me: string
+  },
+  presentation: {
+    description: string
   }
 }
 export const ui: Record<LanguagesCodes, LanguageLocale> = {
