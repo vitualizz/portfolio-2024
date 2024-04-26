@@ -55,10 +55,14 @@ const navItems: NavItem[] = [
                 href={item.path}
                 key={item.path}
                 class="hidden transition duration-300 group-hover:font-bold md:block"
+                data-nav-item={item.name}
               >
                 {tNav[item.name]}
               </a>
-              <span class="align-center block h-0.5 w-0 bg-yellow-500 transition-all duration-500 group-hover:w-[80%]" />
+              <span
+                data-nav-item={item.name}
+                class="align-center block h-0.5 w-0 bg-yellow-500 transition-all duration-500 group-hover:w-[80%]"
+              />
             </div>
           ))
         }
@@ -95,6 +99,7 @@ const navItems: NavItem[] = [
 </div>
 
 <script is:inline>
+  /* Navbar Mobile */
   const drawerNavbar = document.getElementById('drawerNavbar')
   const drawerToggleOpen = document.getElementById('drawerToggleOpen')
   const drawerToggleClose = document.getElementById('drawerToggleClose')
@@ -106,4 +111,29 @@ const navItems: NavItem[] = [
   drawerToggleClose.addEventListener('click', () => {
     drawerNavbar.checked = false
   })
+
+  /* Intersection Observer */
+  const sectionTargets = document.querySelectorAll('[data-section]')
+  const aNavTargets = document.querySelectorAll('a[data-nav-item]')
+  const spanNavTargets = document.querySelectorAll('span[data-nav-item]')
+
+  const observer = new IntersectionObserver((entries) => {
+    aNavTargets.forEach((x) => x.classList.remove('font-bold'))
+    spanNavTargets.forEach((x) => x.classList.remove('w-[80%]'))
+
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const aItemTarget = document.querySelector(
+          `a[data-nav-item=${entry.target.dataset.section}]`
+        )
+        const spanItemTarget = document.querySelector(
+          `span[data-nav-item=${entry.target.dataset.section}]`
+        )
+        spanItemTarget.classList.add('w-[80%]')
+        aItemTarget.classList.add('font-bold')
+      }
+    })
+  })
+
+  sectionTargets.forEach((x) => observer.observe(x))
 </script>
