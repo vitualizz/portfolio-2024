@@ -11,7 +11,7 @@ module.exports = {
       colors: {
         'custom-gray': '#A8A8A8',
         'color-1': '#9CEF5A',
-        'color-2': '#F38181',
+        'color-2': '#F38181'
       }
     }
   },
@@ -20,14 +20,14 @@ module.exports = {
     themes: [
       {
         light: {
-          ...require('daisyui/src/theming/themes')['light'],
+          ...require('daisyui/src/theming/themes')['light']
         }
       },
       {
         dark: {
           ...require('daisyui/src/theming/themes')['dark'],
           'base-100': '#1D1C1A',
-          'base-content': '#FFF',
+          'base-content': '#FFF'
         }
       }
     ]

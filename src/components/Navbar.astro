@@ -35,7 +35,7 @@ const navItems: NavItem[] = [
 <div class="drawer">
   <input id="drawerNavbar" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content flex h-screen flex-col landscape:h-full">
-    <div class="navbar w-full shadow-md">
+    <div class="navbar fixed z-50 w-full bg-base-100 shadow-md">
       <div class="navbar-start md:invisible">
         <label
           id="drawerToggleOpen"
@@ -69,7 +69,7 @@ const navItems: NavItem[] = [
       </div>
     </div>
 
-    <div class="h-full landscape:mt-10">
+    <div class="h-full md:h-screen landscape:mt-10 landscape:md:mt-0">
       <slot />
     </div>
   </div>
