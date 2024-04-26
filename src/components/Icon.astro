@@ -1,0 +1,23 @@
+---
+import Ruby from '../components/icons/Ruby.astro'
+import Javascript from '../components/icons/Javascript.astro'
+import Python from '../components/icons/Python.astro'
+import Typescript from '../components/icons/Typescript.astro'
+
+export type IconType = 'ruby' | 'javascript' | 'typescript' | 'python'
+export interface Props {
+  name: IconType
+}
+const { name } = Astro.props as Props
+
+const map: Record<IconType, string> = {
+  javascript: Javascript,
+  ruby: Ruby,
+  typescript: Typescript,
+  python: Python
+}
+
+const Component = map[name]
+---
+
+<Component />

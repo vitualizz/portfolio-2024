@@ -1,0 +1,49 @@
+---
+import Skill from '../components/Skill.astro'
+import { getLangFromUrl, useTranslations } from '../i18n/utils.ts'
+import languages from '../data/languages.json'
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+const tAboutMe = t('about_me')
+---
+
+<section id="about_me" class="hero min-h-screen">
+  <div
+    class="hero-content flex-col lg:flex-row-reverse"
+    data-section="about_me"
+  >
+    <div
+      class="flex h-screen w-10/12 flex-col items-center justify-center text-center"
+    >
+      <h2 class="mb-3 text-2xl font-semibold tracking-wider">
+        <span class="text-custom-yellow">{'<'}</span>{
+          tAboutMe.section_about_me
+        }<span class="text-custom-yellow">{'/>'}</span>
+      </h2>
+      <p set:html={tAboutMe.biography} class="text-2xl font-thin" />
+    </div>
+    <div class="flex w-10/12 flex-col justify-center">
+      <h2 class="mb-3 text-center text-2xl font-semibold tracking-wider">
+        <span class="text-custom-yellow">{'<'}</span>{
+          tAboutMe.section_skills
+        }<span class="text-custom-yellow">{'/>'}</span>
+      </h2>
+      <div class="flex flex-col gap-4">
+        <div>
+          <p class="font-semibold"># {tAboutMe.skills_section_language}</p>
+          <div class="mt-4 grid grid-cols-4 gap-2">
+            {languages.map((lang) => <Skill {...lang} />)}
+          </div>
+        </div>
+        <div>
+          <p># {tAboutMe.skills_section_frameworks}</p>
+        </div>
+        <div>
+          <p># {tAboutMe.skills_section_others}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

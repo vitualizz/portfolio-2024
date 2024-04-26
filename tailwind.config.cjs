@@ -6,12 +6,17 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Bakbak One', ...defaultTheme.fontFamily.sans]
+        sans: [
+          'Fredoka Variable',
+          'Bakbak One',
+          ...defaultTheme.fontFamily.sans
+        ]
       },
       colors: {
         'custom-gray': '#A8A8A8',
         'color-1': '#9CEF5A',
-        'color-2': '#F38181'
+        'color-2': '#F38181',
+        'custom-yellow': '#F3D463'
       }
     }
   },

@@ -19,7 +19,7 @@ const navItems: NavItem[] = [
   },
   {
     name: 'about_me',
-    path: '#about'
+    path: '#about_me'
   },
   {
     name: 'projects',
@@ -61,7 +61,7 @@ const navItems: NavItem[] = [
               </a>
               <span
                 data-nav-item={item.name}
-                class="align-center block h-0.5 w-0 bg-yellow-500 transition-all duration-500 group-hover:w-[80%]"
+                class="align-center bg-custom-yellow block h-0.5 w-0 transition-all duration-500 group-hover:w-[80%]"
               />
             </div>
           ))
@@ -117,23 +117,27 @@ const navItems: NavItem[] = [
   const aNavTargets = document.querySelectorAll('a[data-nav-item]')
   const spanNavTargets = document.querySelectorAll('span[data-nav-item]')
 
-  const observer = new IntersectionObserver((entries) => {
-    aNavTargets.forEach((x) => x.classList.remove('font-bold'))
-    spanNavTargets.forEach((x) => x.classList.remove('w-[80%]'))
-
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const aItemTarget = document.querySelector(
-          `a[data-nav-item=${entry.target.dataset.section}]`
-        )
-        const spanItemTarget = document.querySelector(
-          `span[data-nav-item=${entry.target.dataset.section}]`
-        )
-        spanItemTarget.classList.add('w-[80%]')
-        aItemTarget.classList.add('font-bold')
-      }
-    })
-  })
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          aNavTargets.forEach((x) => x.classList.remove('font-bold'))
+          spanNavTargets.forEach((x) => x.classList.remove('w-[80%]'))
+          const aItemTarget = document.querySelector(
+            `a[data-nav-item=${entry.target.dataset.section}]`
+          )
+          const spanItemTarget = document.querySelector(
+            `span[data-nav-item=${entry.target.dataset.section}]`
+          )
+          spanItemTarget.classList.add('w-[80%]')
+          aItemTarget.classList.add('font-bold')
+        }
+      })
+    },
+    {
+      rootMargin: '-50px'
+    }
+  )
 
   sectionTargets.forEach((x) => observer.observe(x))
 </script>
