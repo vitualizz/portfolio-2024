@@ -8,6 +8,13 @@ const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
 
 const tAboutMe = t('about_me')
+
+const skillSections = [
+  {
+    key: 'languages',
+    data: languages
+  }
+]
 ---
 
 <section id="about_me" class="hero min-h-screen">
@@ -31,84 +38,125 @@ const tAboutMe = t('about_me')
           tAboutMe.section_skills
         }<span class="text-custom-yellow">{'/>'}</span>
       </h2>
-      <div id="all-skills" class="flex flex-col gap-4">
-        <div>
-          <div class="flex justify-between">
-            <p class="font-semibold"># {tAboutMe.skills_section_language}</p>
-            <a data-skill="languages" class="text-custom-yellow text-sm"
-              >View More</a
-            >
-          </div>
-          <div class="mt-4 grid grid-cols-4 gap-2">
-            {languages.slice(0, 4).map((lang) => <Skill {...lang} />)}
-          </div>
-        </div>
-        <div>
-          <p># {tAboutMe.skills_section_frameworks}</p>
-        </div>
-        <div>
-          <p># {tAboutMe.skills_section_others}</p>
-        </div>
-      </div>
-      <div id="list-languages" class="opacity-0 hidden"  client:visible>
-        <div class="flex justify-between">
-          <p class="font-semibold"># {tAboutMe.skills_section_language}</p>
-          <a data-skill="languages" class="fill-custom-yellow h-4 w-4">
-            <CloseIcon />
-          </a>
-        </div>
-        <div class="mt-4 grid grid-cols-4 gap-2">
-          {languages.map((lang) => <Skill {...lang} />)}
-        </div>
+      <div class="flex flex-col gap-4">
+        {
+          skillSections.map((section) => (
+            <div data-skill-section={section.key}>
+              <div class="flex justify-between">
+                <p class="font-semibold">
+                  # {tAboutMe[`skills_section_${section.key}`]}
+                </p>
+                <div class={section.data.length > 4 ? '' : 'hidden'}>
+                  <label class="swap">
+                    <input type="checkbox" data-skill-toggle={section.key} />
+                    <svg
+                      class="swap-off h-6 w-6 fill-none stroke-current"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+
+                    <svg
+                      class="swap-on h-6 w-6 fill-none stroke-current"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M2.99902 3L20.999 21M9.8433 9.91364C9.32066 10.4536 8.99902 11.1892 8.99902 12C8.99902 13.6569 10.3422 15 11.999 15C12.8215 15 13.5667 14.669 14.1086 14.133M6.49902 6.64715C4.59972 7.90034 3.15305 9.78394 2.45703 12C3.73128 16.0571 7.52159 19 11.9992 19C13.9881 19 15.8414 18.4194 17.3988 17.4184M10.999 5.04939C11.328 5.01673 11.6617 5 11.9992 5C16.4769 5 20.2672 7.94291 21.5414 12C21.2607 12.894 20.8577 13.7338 20.3522 14.5"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </label>
+                </div>
+              </div>
+              <div class="mt-5">
+                <div class="grid grid-cols-4 justify-center gap-2">
+                  {section.data.slice(0, 4).map((lang) => (
+                    <Skill {...lang} />
+                  ))}
+                </div>
+                <div
+                  data-skill-list={section.key}
+                  class="mt-6 grid hidden grid-cols-4 gap-2 animate-delay-200"
+                >
+                  {section.data.slice(4).map((lang) => (
+                    <Skill {...lang} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))
+        }
       </div>
     </div>
   </div>
 </section>
 
-<script is:inline>
-  const showMoreTargets = document.querySelectorAll('[data-skill]')
-  const allSkillsTarget = document.getElementById('all-skills')
+<script>
+  const skillsVisibilityToggleTargets = document.querySelectorAll(
+    '[data-skill-toggle]'
+  )
+  const skillShowMoreTargets = document.querySelectorAll(
+    '[data-skill-show-more]'
+  )
+  const skillListTargets = Array.from(
+    document.querySelectorAll('[data-skill-list]')
+  )
+  const skillSectionTargets = Array.from(
+    document.querySelectorAll('[data-skill-section]')
+  )
 
-  showMoreTargets.forEach((target) => {
-    target.addEventListener('click', () => {
-      allSkillsTarget.classList.add(
-        'animate-fade-out',
-        'animate-delay-300',
-        'transition-opacity',
-        'ease-in',
-        'duration-700',
-        'opacity-0'
+  skillsVisibilityToggleTargets.forEach((t) => {
+    t.addEventListener('change', (e) => {
+      const target = e.target
+      const currentSection = target.dataset.skillToggle
+
+      const currentListTarget = skillListTargets.find(
+        (x) => x.dataset['skillList'] === currentSection
       )
-      allSkillsTarget.dataset.skillSelect = target.dataset.skill
+      const noCurrentSectionsTargets = skillSectionTargets.filter(
+        (x) => x.dataset['skillSection'] !== currentSection
+      )
+
+      /* If checked is true === open/show */
+      if (target.checked) {
+        noCurrentSectionsTargets.forEach((s) => {
+          s.classList.add(
+            'animate-slide-out-left',
+            'animate-delay-300',
+            'transition-opacity',
+            'ease-in',
+            'duration-700',
+            'opacity-0'
+          )
+        })
+        setTimeout(() => {
+          currentListTarget.classList.remove('hidden', 'animate-fade-out')
+          currentListTarget.classList.add('animate-fade-in')
+        }, 300)
+      } else {
+        currentListTarget.classList.add('animate-fade-out')
+      }
     })
   })
 
-  document.addEventListener('animationstart', (e) => {
-    const target = e.target
-    console.log(target.id)
-    if (target.id === 'list-languages') {
-      setTimeout(() => {
-        target.classList.remove('opacity-0')
-      }, 1000)
-    }
-  })
-
   document.addEventListener('animationend', (e) => {
-    const target = e.target
-
-    if (target.id === 'all-skills') {
-      target.classList.add('hidden')
-      const listSkillTarget = document.getElementById(
-        `list-${target.dataset.skillSelect}`
-      )
-      listSkillTarget.classList.remove('hidden')
-      listSkillTarget.classList.add(
-        'animate-fade-in',
-        'animate-delay-350',
-        'ease-in',
-        'duration-700',
-        'opacity-100'
-      )
+    if (e.animationName === 'fade-out') {
+      e.target.classList.add('hidden')
     }
   })
 </script>
