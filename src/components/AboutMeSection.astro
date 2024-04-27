@@ -28,20 +28,23 @@ const skillSections = [
 
 <section id="about_me" class="hero min-h-screen">
   <div
-    class="hero-content flex-col lg:flex-row-reverse"
+    class="hero-content flex-col md:items-start md:!justify-around md:gap-8 lg:flex-row"
     data-section="about_me"
   >
     <div
-      class="flex h-screen w-10/12 flex-col items-center justify-center text-center"
+      class="flex h-screen w-10/12 flex-col items-center justify-center text-center md:h-full md:w-4/12"
     >
       <h2 class="mb-3 text-2xl font-semibold tracking-wider">
         <span class="text-custom-yellow">{'<'}</span>{
           tAboutMe.section_about_me
         }<span class="text-custom-yellow">{'/>'}</span>
       </h2>
-      <p set:html={tAboutMe.biography} class="text-2xl font-thin" />
+      <p
+        set:html={tAboutMe.biography}
+        class="text-2xl font-thin md:text-3xl md:font-light"
+      />
     </div>
-    <div class="flex w-10/12 flex-col justify-center">
+    <div class="flex w-10/12 flex-col justify-center md:w-4/12">
       <h2 class="mb-3 text-center text-2xl font-semibold tracking-wider">
         <span class="text-custom-yellow">{'<'}</span>{
           tAboutMe.section_skills
@@ -52,7 +55,7 @@ const skillSections = [
           skillSections.map((section) => (
             <div>
               <div class="flex justify-between">
-                <p class="font-semibold">
+                <p class="font-semibold md:text-xl">
                   # {tAboutMe[`skills_section_${section.key}`]}
                 </p>
                 <div class={section.data.length > 4 ? '' : 'hidden'}>
@@ -131,7 +134,9 @@ const skillSections = [
     t.addEventListener('change', (e) => {
       const target = e.target
       const currentSection = target.dataset.skillToggle
-      const collapseCurrent = skillsCollapseTargets.find(x => x.dataset.skillCollapse === currentSection)
+      const collapseCurrent = skillsCollapseTargets.find(
+        (x) => x.dataset.skillCollapse === currentSection
+      )
       collapseCurrent.checked = target.checked
     })
   })
