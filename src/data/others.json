@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Git",
+    "icon": "git"
+  },
+  {
+    "title": "AWS",
+    "icon": "aws"
+  },
+  {
+    "title": "Docker",
+    "icon": "docker"
+  },
+  {
+    "title": "Postgres",
+    "icon": "postgres"
+  },
+  {
+    "title": "Selenium",
+    "icon": "selenium"
+  }
+]

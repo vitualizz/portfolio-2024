@@ -3,6 +3,7 @@ import Skill from '../components/Skill.astro'
 import { getLangFromUrl, useTranslations } from '../i18n/utils.ts'
 import languages from '../data/languages.json'
 import frameworks from '../data/frameworks.json'
+import others from '../data/others.json'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
@@ -17,6 +18,10 @@ const skillSections = [
   {
     key: 'frameworks',
     data: frameworks
+  },
+  {
+    key: 'others',
+    data: others
   }
 ]
 ---
@@ -45,7 +50,7 @@ const skillSections = [
       <div class="flex flex-col gap-4">
         {
           skillSections.map((section) => (
-            <div data-skill-section={section.key}>
+            <div>
               <div class="flex justify-between">
                 <p class="font-semibold">
                   # {tAboutMe[`skills_section_${section.key}`]}
@@ -93,13 +98,17 @@ const skillSections = [
                     <Skill {...lang} />
                   ))}
                 </div>
-                <div
-                  data-skill-list={section.key}
-                  class="mt-6 grid hidden grid-cols-4 gap-2 animate-delay-200"
-                >
-                  {section.data.slice(4).map((lang) => (
-                    <Skill {...lang} />
-                  ))}
+                <div class="collapse mt-5">
+                  <input
+                    data-skill-collapse={section.key}
+                    type="checkbox"
+                    class="hidden"
+                  />
+                  <div class="collapse-content grid grid-cols-4 justify-center gap-2 !p-0">
+                    {section.data.slice(4).map((lang) => (
+                      <Skill {...lang} />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -114,72 +123,16 @@ const skillSections = [
   const skillsVisibilityToggleTargets = document.querySelectorAll(
     '[data-skill-toggle]'
   )
-  const skillShowMoreTargets = document.querySelectorAll(
-    '[data-skill-show-more]'
-  )
-  const skillListTargets = Array.from(
-    document.querySelectorAll('[data-skill-list]')
-  )
-  const skillSectionTargets = Array.from(
-    document.querySelectorAll('[data-skill-section]')
+  const skillsCollapseTargets = Array.from(
+    document.querySelectorAll('[data-skill-collapse]')
   )
 
   skillsVisibilityToggleTargets.forEach((t) => {
     t.addEventListener('change', (e) => {
       const target = e.target
       const currentSection = target.dataset.skillToggle
-
-      const currentListTarget = skillListTargets.find(
-        (x) => x.dataset['skillList'] === currentSection
-      )
-      const noCurrentSectionsTargets = skillSectionTargets.filter(
-        (x) => x.dataset['skillSection'] !== currentSection
-      )
-
-      /* If checked is true === open/show */
-      if (target.checked) {
-        noCurrentSectionsTargets.forEach((s) => {
-          s.classList.remove('animate-slide-in-left', 'opacity-100')
-          s.classList.add(
-            'animate-slide-out-left',
-            'animate-delay-100',
-            'transition-opacity',
-            'ease-in',
-            'duration-700',
-            'opacity-0'
-          )
-        })
-        setTimeout(() => {
-          currentListTarget.classList.remove(
-            'hidden',
-            'opacity-100',
-            'animate-fade-out'
-          )
-          currentListTarget.classList.add('animate-fade-in')
-        }, 300)
-      } else {
-        currentListTarget.classList.add('animate-fade-out')
-        setTimeout(() => {
-          noCurrentSectionsTargets.forEach((s) => {
-            s.classList.remove('hidden', 'opacity-0', 'animate-slide-out-left')
-            s.classList.add(
-              'animate-slide-in-left',
-              'animate-delay-200',
-              'transition-opacity',
-              'ease-in',
-              'duration-700',
-              'opacity-100'
-            )
-          })
-        }, 250)
-      }
+      const collapseCurrent = skillsCollapseTargets.find(x => x.dataset.skillCollapse === currentSection)
+      collapseCurrent.checked = target.checked
     })
-  })
-
-  document.addEventListener('animationend', (e) => {
-    console.log(e)
-    if (e.animationName === 'fade-out' || e.animationName === 'slide-out-left') {
-      e.target.classList.add('hidden')
-    }
   })
 </script>

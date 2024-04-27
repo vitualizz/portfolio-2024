@@ -11,6 +11,11 @@ import Tailwind from '../components/icons/Tailwind.astro'
 import AstroIcon from '../components/icons/Astro.astro'
 import Vue from '../components/icons/Vue.astro'
 import NodeJS from '../components/icons/Node.astro'
+import Postgres from '../components/icons/Postgres.astro'
+import Aws from '../components/icons/Aws.astro'
+import Selenium from '../components/icons/Selenium.astro'
+import Git from '../components/icons/Git.astro'
+import Docker from '../components/icons/Docker.astro'
 
 export interface Props {
   name: IconType
@@ -28,7 +33,12 @@ const map: Record<IconType, string> = {
   tailwind: Tailwind,
   astro: AstroIcon,
   vue: Vue,
-  node: NodeJS
+  node: NodeJS,
+  postgres: Postgres,
+  aws: Aws,
+  selenium: Selenium,
+  git: Git,
+  docker: Docker
 }
 
 const Component = map[name]
