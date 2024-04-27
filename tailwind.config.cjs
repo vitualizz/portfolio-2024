@@ -1,4 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
+const animations = require('@midudev/tailwind-animations')
 
 module.exports = {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
@@ -20,7 +21,7 @@ module.exports = {
       }
     }
   },
-  plugins: [require('daisyui')],
+  plugins: [animations, require('daisyui')],
   daisyui: {
     themes: [
       {

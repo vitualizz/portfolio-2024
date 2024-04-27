@@ -3,8 +3,9 @@ import Ruby from '../components/icons/Ruby.astro'
 import Javascript from '../components/icons/Javascript.astro'
 import Python from '../components/icons/Python.astro'
 import Typescript from '../components/icons/Typescript.astro'
+import Sql from '../components/icons/Sql.astro'
 
-export type IconType = 'ruby' | 'javascript' | 'typescript' | 'python'
+export type IconType = 'ruby' | 'javascript' | 'typescript' | 'python' | 'sql'
 export interface Props {
   name: IconType
 }
@@ -14,7 +15,8 @@ const map: Record<IconType, string> = {
   javascript: Javascript,
   ruby: Ruby,
   typescript: Typescript,
-  python: Python
+  python: Python,
+  sql: Sql
 }
 
 const Component = map[name]

@@ -1,5 +1,6 @@
 ---
 import Skill from '../components/Skill.astro'
+import CloseIcon from '../components/icons/Close.astro'
 import { getLangFromUrl, useTranslations } from '../i18n/utils.ts'
 import languages from '../data/languages.json'
 
@@ -30,11 +31,16 @@ const tAboutMe = t('about_me')
           tAboutMe.section_skills
         }<span class="text-custom-yellow">{'/>'}</span>
       </h2>
-      <div class="flex flex-col gap-4">
+      <div id="all-skills" class="flex flex-col gap-4">
         <div>
-          <p class="font-semibold"># {tAboutMe.skills_section_language}</p>
+          <div class="flex justify-between">
+            <p class="font-semibold"># {tAboutMe.skills_section_language}</p>
+            <a data-skill="languages" class="text-custom-yellow text-sm"
+              >View More</a
+            >
+          </div>
           <div class="mt-4 grid grid-cols-4 gap-2">
-            {languages.map((lang) => <Skill {...lang} />)}
+            {languages.slice(0, 4).map((lang) => <Skill {...lang} />)}
           </div>
         </div>
         <div>
@@ -44,6 +50,65 @@ const tAboutMe = t('about_me')
           <p># {tAboutMe.skills_section_others}</p>
         </div>
       </div>
+      <div id="list-languages" class="opacity-0 hidden"  client:visible>
+        <div class="flex justify-between">
+          <p class="font-semibold"># {tAboutMe.skills_section_language}</p>
+          <a data-skill="languages" class="fill-custom-yellow h-4 w-4">
+            <CloseIcon />
+          </a>
+        </div>
+        <div class="mt-4 grid grid-cols-4 gap-2">
+          {languages.map((lang) => <Skill {...lang} />)}
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<script is:inline>
+  const showMoreTargets = document.querySelectorAll('[data-skill]')
+  const allSkillsTarget = document.getElementById('all-skills')
+
+  showMoreTargets.forEach((target) => {
+    target.addEventListener('click', () => {
+      allSkillsTarget.classList.add(
+        'animate-fade-out',
+        'animate-delay-300',
+        'transition-opacity',
+        'ease-in',
+        'duration-700',
+        'opacity-0'
+      )
+      allSkillsTarget.dataset.skillSelect = target.dataset.skill
+    })
+  })
+
+  document.addEventListener('animationstart', (e) => {
+    const target = e.target
+    console.log(target.id)
+    if (target.id === 'list-languages') {
+      setTimeout(() => {
+        target.classList.remove('opacity-0')
+      }, 1000)
+    }
+  })
+
+  document.addEventListener('animationend', (e) => {
+    const target = e.target
+
+    if (target.id === 'all-skills') {
+      target.classList.add('hidden')
+      const listSkillTarget = document.getElementById(
+        `list-${target.dataset.skillSelect}`
+      )
+      listSkillTarget.classList.remove('hidden')
+      listSkillTarget.classList.add(
+        'animate-fade-in',
+        'animate-delay-350',
+        'ease-in',
+        'duration-700',
+        'opacity-100'
+      )
+    }
+  })
+</script>

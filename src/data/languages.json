@@ -4,15 +4,19 @@
     "icon": "ruby"
   },
   {
-    "title": "Javascript",
-    "icon": "javascript"
+    "title": "Typescript",
+    "icon": "typescript"
   },
   {
     "title": "Python",
     "icon": "python"
   },
   {
-    "title": "Typescript",
-    "icon": "typescript"
+    "title": "SQL",
+    "icon": "sql"
+  },
+  {
+    "title": "Javascript",
+    "icon": "javascript"
   }
 ]
