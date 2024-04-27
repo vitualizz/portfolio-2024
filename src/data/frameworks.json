@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Rails",
+    "icon": "rails"
+  },
+  {
+    "title": "React",
+    "icon": "react"
+  },
+  {
+    "title": "TailwindCSS",
+    "icon": "tailwind"
+  },
+  {
+    "title": "AstroJS",
+    "icon": "astro"
+  },
+  {
+    "title": "VueJS",
+    "icon": "vue"
+  },
+  {
+    "title": "NodeJS",
+    "icon": "node"
+  }
+]

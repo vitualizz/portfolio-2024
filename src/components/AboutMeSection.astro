@@ -1,8 +1,8 @@
 ---
 import Skill from '../components/Skill.astro'
-import CloseIcon from '../components/icons/Close.astro'
 import { getLangFromUrl, useTranslations } from '../i18n/utils.ts'
 import languages from '../data/languages.json'
+import frameworks from '../data/frameworks.json'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
@@ -13,6 +13,10 @@ const skillSections = [
   {
     key: 'languages',
     data: languages
+  },
+  {
+    key: 'frameworks',
+    data: frameworks
   }
 ]
 ---
@@ -135,9 +139,10 @@ const skillSections = [
       /* If checked is true === open/show */
       if (target.checked) {
         noCurrentSectionsTargets.forEach((s) => {
+          s.classList.remove('animate-slide-in-left', 'opacity-100')
           s.classList.add(
             'animate-slide-out-left',
-            'animate-delay-300',
+            'animate-delay-100',
             'transition-opacity',
             'ease-in',
             'duration-700',
@@ -145,17 +150,35 @@ const skillSections = [
           )
         })
         setTimeout(() => {
-          currentListTarget.classList.remove('hidden', 'animate-fade-out')
+          currentListTarget.classList.remove(
+            'hidden',
+            'opacity-100',
+            'animate-fade-out'
+          )
           currentListTarget.classList.add('animate-fade-in')
         }, 300)
       } else {
         currentListTarget.classList.add('animate-fade-out')
+        setTimeout(() => {
+          noCurrentSectionsTargets.forEach((s) => {
+            s.classList.remove('hidden', 'opacity-0', 'animate-slide-out-left')
+            s.classList.add(
+              'animate-slide-in-left',
+              'animate-delay-200',
+              'transition-opacity',
+              'ease-in',
+              'duration-700',
+              'opacity-100'
+            )
+          })
+        }, 250)
       }
     })
   })
 
   document.addEventListener('animationend', (e) => {
-    if (e.animationName === 'fade-out') {
+    console.log(e)
+    if (e.animationName === 'fade-out' || e.animationName === 'slide-out-left') {
       e.target.classList.add('hidden')
     }
   })

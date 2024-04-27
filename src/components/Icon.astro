@@ -1,11 +1,17 @@
 ---
+import type { IconType } from '../types/Icons.types.ts'
 import Ruby from '../components/icons/Ruby.astro'
 import Javascript from '../components/icons/Javascript.astro'
 import Python from '../components/icons/Python.astro'
 import Typescript from '../components/icons/Typescript.astro'
 import Sql from '../components/icons/Sql.astro'
+import Rails from '../components/icons/Rails.astro'
+import React from '../components/icons/React.astro'
+import Tailwind from '../components/icons/Tailwind.astro'
+import AstroIcon from '../components/icons/Astro.astro'
+import Vue from '../components/icons/Vue.astro'
+import NodeJS from '../components/icons/Node.astro'
 
-export type IconType = 'ruby' | 'javascript' | 'typescript' | 'python' | 'sql'
 export interface Props {
   name: IconType
 }
@@ -16,7 +22,13 @@ const map: Record<IconType, string> = {
   ruby: Ruby,
   typescript: Typescript,
   python: Python,
-  sql: Sql
+  sql: Sql,
+  rails: Rails,
+  react: React,
+  tailwind: Tailwind,
+  astro: AstroIcon,
+  vue: Vue,
+  node: NodeJS
 }
 
 const Component = map[name]
