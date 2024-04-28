@@ -30,6 +30,13 @@ export type LanguageLocale = {
   },
   projects: {
     section_projects: string
+  },
+  contact_me: {
+    tell_me: string
+    send_message_me: string
+  },
+  footer: {
+    thanks: string
   }
 }
 export const ui: Record<LanguagesCodes, LanguageLocale> = {

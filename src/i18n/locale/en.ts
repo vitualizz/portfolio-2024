@@ -20,6 +20,13 @@ const locale: LanguageLocale = {
   },
   projects: {
     section_projects: 'Projects'
+  },
+  contact_me: {
+    tell_me: "Let's chat</br>Tell me about your Project",
+    send_message_me: 'Send us a message ✨'
+  },
+  footer: {
+    thanks: 'With love @vitualizz'
   }
 }
 

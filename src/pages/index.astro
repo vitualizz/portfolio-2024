@@ -3,10 +3,26 @@ import Layout from '../layouts/Layout.astro'
 import PresentationSection from '../components/PresentationSection.astro'
 import AboutMeSection from '../components/AboutMeSection.astro'
 import ProjectsSection from '../components/ProjectsSection.astro'
+import ContactMeSection from '../components/ContactMeSection.astro'
+
+import { getLangFromUrl, useTranslations } from '../i18n/utils.ts'
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+const tFooter = t('footer')
 ---
 
 <Layout title="Lee Palacios - @vitualizz / Software Engineer">
-  <PresentationSection />
-  <AboutMeSection />
-  <ProjectsSection />
+  <main>
+    <PresentationSection />
+    <AboutMeSection />
+    <ProjectsSection />
+    <ContactMeSection />
+  </main>
+  <footer class="min-h-28 lg:min-h-30">
+    <h4 class="text-center text-xl font-bold lg:text-3xl">
+      {tFooter.thanks}{' '}
+      <span class="text-red-500">❤️</span>
+    </h4>
+  </footer>
 </Layout>
