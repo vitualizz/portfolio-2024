@@ -23,10 +23,16 @@ const locale: LanguageLocale = {
   },
   contact_me: {
     tell_me: "Let's chat</br>Tell me about your Project",
-    send_message_me: 'Send us a message ✨'
+    send_message_me: 'Send me a message ✨'
   },
   footer: {
     thanks: 'With love @vitualizz'
+  },
+  seo: {
+    title: "Software Developer | Experience in JavaScript and Ruby | Quality Projects | Contact Me",
+    description: "With over 7 years of programming experience, I'm a technology enthusiast software engineer! Working with JavaScript, Ruby, and more. Contact me for quality projects!",
+    image: "url_of_the_image.jpg",
+    url: "https://www.example.com"
   }
 }
 

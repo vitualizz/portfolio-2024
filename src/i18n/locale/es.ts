@@ -23,10 +23,16 @@ const locale: LanguageLocale = {
   },
   contact_me: {
     tell_me: "Hablemos</br>Cuéntame sobre tu Proyecto",
-    send_message_me: "Envíanos un mensaje ✨"
+    send_message_me: "Envíame un mensaje ✨"
   },
   footer: {
     thanks: "Con amor @vitualizz"
+  },
+  seo: {
+    title: "Desarrollador de Software | Experiencia en JavaScript y Ruby | Proyectos de Calidad | Contáctame",
+    description: "¡Con más de 7 años de experiencia en programación, soy un ingeniero de software apasionado por la tecnología! Trabajo con JavaScript, Ruby y más. ¡Contáctame para proyectos de calidad!",
+    image: "url_de_la_imagen.jpg",
+    url: "https://www.ejemplo.com"
   }
 }
 

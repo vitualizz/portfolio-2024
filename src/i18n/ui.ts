@@ -37,6 +37,12 @@ export type LanguageLocale = {
   },
   footer: {
     thanks: string
+  },
+  seo: {
+    title: string
+    description: string
+    image: string
+    url: string
   }
 }
 export const ui: Record<LanguagesCodes, LanguageLocale> = {
