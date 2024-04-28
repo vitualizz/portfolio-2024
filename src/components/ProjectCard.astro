@@ -5,7 +5,7 @@ import Icon from '../components/Icon.astro'
 
 const lang = getLangFromUrl(Astro.url)
 
-const { title, image, stack, ...descriptions } = Astro.props
+const { title, image, stack, demo, ...descriptions } = Astro.props
 ---
 
 <div
@@ -32,7 +32,61 @@ const { title, image, stack, ...descriptions } = Astro.props
     <img
       src={`/img/projects/${image}.webp`}
       alt={title}
-      class="absolute hidden h-full w-full rounded-lg object-cover object-[-15px] shadow-2xl transition group-odd:-right-16 group-even:-left-16 group-hover:-translate-x-3 group-hover:translate-y-3 group-hover:-rotate-2 group-hover:scale-[1.02] group-hover:drop-shadow-[0_35px_35px_rgba(0,0,0,0.25)] group-even:group-hover:translate-x-3 group-even:group-hover:translate-y-3 group-even:group-hover:rotate-2 lg:block"
+      class="absolute hidden h-full w-full rounded-lg object-cover object-[-15px] shadow-2xl transition group-odd:-right-16 group-even:-left-16 group-hover:-translate-x-3 group-hover:translate-y-3 group-hover:-rotate-2 group-hover:scale-[1.02] group-hover:blur-[1.5px] group-hover:brightness-[.40] group-even:group-hover:translate-x-3 group-even:group-hover:translate-y-3 group-even:group-hover:rotate-2 lg:block"
     />
+    <div
+      class="absolute top-[8rem] hidden group-odd:left-[9.5rem] group-even:right-[9.5rem] group-hover:block"
+    >
+      <div class="flex gap-2">
+        <div data-tip="Ver imagen" class="tooltip">
+          <a class="btn btn-circle" onclick={`${image}.showModal()`}>
+            <svg
+              class="h-6 w-6 fill-none stroke-current"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+              <path
+                d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+            </svg>
+          </a>
+        </div>
+        {
+          demo && (
+            <div data-tip="Live view" class="tooltip">
+              <a class="btn btn-circle" href={demo}>
+                <svg
+                  class="h-6 w-6 fill-none stroke-current"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M11 17H7q-2.075 0-3.537-1.463T2 12t1.463-3.537T7 7h4v2H7q-1.25 0-2.125.875T4 12t.875 2.125T7 15h4zm-3-4v-2h8v2zm5 4v-2h4q1.25 0 2.125-.875T20 12t-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.463T22 12t-1.463 3.538T17 17z"
+                  />
+                </svg>
+              </a>
+            </div>
+          )
+        }
+      </div>
+    </div>
   </div>
 </div>
+
+<dialog id={image} class="modal">
+  <div class="modal-box !max-w-[70%]">
+    <h3 class="text-lg font-bold">{title}</h3>
+    <img src={`/img/projects/${image}.webp`} alt={title} class="h-6/12 my-4" />
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
