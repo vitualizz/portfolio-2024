@@ -17,6 +17,9 @@ const locale: LanguageLocale = {
     skills_section_frameworks: 'Frameworks & Libraries',
     skills_section_others: 'Others',
     skills_section_languages: 'Languages'
+  },
+  projects: {
+    section_projects: 'Projects'
   }
 }
 

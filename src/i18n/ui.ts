@@ -27,6 +27,9 @@ export type LanguageLocale = {
     skills_section_languages: string
     skills_section_frameworks: string
     skills_section_others: string
+  },
+  projects: {
+    section_projects: string
   }
 }
 export const ui: Record<LanguagesCodes, LanguageLocale> = {

@@ -1,50 +1,27 @@
 ---
+import projects from '../data/projects.json'
+import { getLangFromUrl, useTranslations } from '../i18n/utils.ts'
+import ProjectCard from '../components/ProjectCard.astro'
 
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+const tProjects = t('projects')
 ---
 
 <section data-section="projects" id="projects" class="hero min-h-screen">
-  <div class="hero-content flex-col lg:flex-row-reverse">
-    <div class="text-center lg:text-left">
-      <h1 class="text-5xl font-bold">Login now!</h1>
-      <p class="py-6">
-        Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-        excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a
-        id nisi.
-      </p>
-    </div>
-    <div class="card w-full max-w-sm shrink-0 bg-base-100 shadow-2xl">
-      <form class="card-body">
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Email</span>
-          </label>
-          <input
-            type="email"
-            placeholder="email"
-            class="input input-bordered"
-            required
-          />
-        </div>
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Password</span>
-          </label>
-          <input
-            type="password"
-            placeholder="password"
-            class="input input-bordered"
-            required
-          />
-          <label class="label">
-            <a href="#" class="link-hover link label-text-alt"
-              >Forgot password?</a
-            >
-          </label>
-        </div>
-        <div class="form-control mt-6">
-          <button class="btn btn-primary">Login</button>
-        </div>
-      </form>
+  <div class="hero-content w-full">
+    <div class="w-10/12 md:w-full">
+      <h2 class="mb-3 text-center text-2xl font-semibold tracking-wider">
+        <span class="text-custom-yellow">{'<'}</span>{
+          tProjects.section_projects
+        }<span class="text-custom-yellow">{'/>'}</span>
+      </h2>
+      <div
+        class="mt-10 grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 [&>*:nth-child(even)]:flex-row-reverse md:[&>*:nth-child(even)]:pl-0 [&>*:nth-child(odd)]:flex-row md:[&>*:nth-child(odd)]:pr-0"
+      >
+        {projects.slice(0, 4).map((project) => <ProjectCard {...project} />)}
+      </div>
     </div>
   </div>
 </section>

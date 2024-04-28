@@ -1,0 +1,38 @@
+---
+import { Image } from 'astro:assets'
+import { getLangFromUrl } from '../i18n/utils.ts'
+import Icon from '../components/Icon.astro'
+
+const lang = getLangFromUrl(Astro.url)
+
+const { title, image, stack, ...descriptions } = Astro.props
+---
+
+<div
+  class="group relative flex w-full transform overflow-hidden rounded-lg bg-gray-400/20 px-10 py-8 transition-all duration-150 hover:bg-gray-400/40"
+>
+  <div class="flex flex-col justify-between">
+    <div class="flex flex-col gap-4">
+      <h3 class="text-lg font-semibold">{title}</h3>
+      <p class="text-xs md:text-sm lg:text-base">
+        {descriptions[`description_${lang}`]}
+      </p>
+    </div>
+    <div class="flex gap-2">
+      {
+        stack.map((s) => (
+          <div class="h-5 w-5 duration-150 ease-in hover:scale-125 lg:h-8 lg:w-8">
+            <Icon name={s} />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  <div class="relative lg:h-[17rem] lg:w-[100rem]">
+    <img
+      src={`/img/projects/${image}.webp`}
+      alt={title}
+      class="absolute hidden h-full w-full rounded-lg object-cover object-[-15px] shadow-2xl transition group-odd:-right-16 group-even:-left-16 group-hover:-translate-x-3 group-hover:translate-y-3 group-hover:-rotate-2 group-hover:scale-[1.02] group-hover:drop-shadow-[0_35px_35px_rgba(0,0,0,0.25)] group-even:group-hover:translate-x-3 group-even:group-hover:translate-y-3 group-even:group-hover:rotate-2 lg:block"
+    />
+  </div>
+</div>

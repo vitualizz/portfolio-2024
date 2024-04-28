@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Gojom",
+    "description_en": "As part of the team, I contributed as a web developer and software architect. Simplifying online business management from any device with our intuitive platform.",
+    "image": "gojom",
+    "stack": ["rails", "ruby"]
+  },
+  {
+    "title": "Sperant",
+    "description_en": "As part of the team, I contributed as a web developer and software architect. Simplifying online business management from any device with our intuitive platform.",
+    "image": "sperant",
+    "stack": ["rails", "ruby"]
+  },
+  {
+    "title": "App Sperant",
+    "description_en": "As part of the team, I contributed as a web developer and software architect. Simplifying online business management from any device with our intuitive platform.",
+    "image": "sperant_mobile",
+    "stack": ["rails", "ruby"]
+  },
+  {
+    "title": "AssistChat",
+    "description_en": "As part of the team, I contributed as a web developer and software architect. Simplifying online business management from any device with our intuitive platform.",
+    "image": "assistchat",
+    "stack": ["rails", "ruby"]
+  }
+]
