@@ -16,6 +16,10 @@ import Aws from '../components/icons/Aws.astro'
 import Selenium from '../components/icons/Selenium.astro'
 import Git from '../components/icons/Git.astro'
 import Docker from '../components/icons/Docker.astro'
+import ElasticSearch from '../components/icons/ElasticSearch.astro'
+import AwsLambda from '../components/icons/AwsLambda.astro'
+import DynamoDb from '../components/icons/Dynamodb.astro'
+import Redux from '../components/icons/Redux.astro'
 
 export interface Props {
   name: IconType
@@ -38,10 +42,14 @@ const map: Record<IconType, string> = {
   aws: Aws,
   selenium: Selenium,
   git: Git,
-  docker: Docker
+  docker: Docker,
+  elasticsearch: ElasticSearch,
+  lambda: AwsLambda,
+  dynamodb: DynamoDb,
+  redux: Redux
 }
 
 const Component = map[name]
 ---
 
-<Component />
+<Component class="rounded-lg" />

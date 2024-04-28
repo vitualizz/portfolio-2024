@@ -8,6 +8,14 @@
       {
         "icon": "rails",
         "tooltip": "Ruby on Rails"
+      },
+      {
+        "icon": "tailwind",
+        "tooltip": "TailwindCSS"
+      },
+      {
+        "icon": "elasticsearch",
+        "tooltip": "ElasticSearch"
       }
     ],
     "demo": "https://www.linkedin.com/company/gojom"
@@ -21,6 +29,14 @@
       {
         "icon": "rails",
         "tooltip": "Ruby on Rails"
+      },
+      {
+        "icon": "vue",
+        "tooltip": "VueJS"
+      },
+      {
+        "icon": "dynamodb",
+        "tooltip": "DynamoDB"
       }
     ],
     "demo": "https://sperant.com/"
@@ -32,8 +48,20 @@
     "image": "sperant_mobile",
     "stack": [
       {
-        "icon": "rails",
-        "tooltip": "Ruby on Rails"
+        "icon": "react",
+        "tooltip": "React Native"
+      },
+      {
+        "icon": "tailwind",
+        "tooltip": "TailwindCSS"
+      },
+      {
+        "icon": "lambda",
+        "tooltip": "AWS Lambda"
+      },
+      {
+        "icon": "redux",
+        "tooltip": "Redux"
       }
     ],
     "demo": "https://play.google.com/store/apps/details?id=com.sperant.postventa"
@@ -47,6 +75,18 @@
       {
         "icon": "rails",
         "tooltip": "Ruby on Rails"
+      },
+      {
+        "icon": "react",
+        "tooltip": "React Native"
+      },
+      {
+        "icon": "tailwind",
+        "tooltip": "TailwindCSS"
+      },
+      {
+        "icon": "typescript",
+        "tooltip": "Typescript"
       }
     ],
     "demo": "https://assistchat.onrender.com/"
