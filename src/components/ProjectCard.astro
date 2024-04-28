@@ -21,7 +21,7 @@ const { title, image, stack, demo, ...descriptions } = Astro.props
       {
         stack.map((s) => (
           <div class="h-6 w-6 duration-150 ease-in hover:scale-125 lg:h-8 lg:w-8">
-            <Icon name={s} />
+            <Icon name={s.icon} />
           </div>
         ))
       }

@@ -1,30 +1,54 @@
 [
   {
     "title": "Gojom",
-    "description_en": "As part of the team, I contributed as a web developer and software architect. Simplifying online business management from any device with our intuitive platform.",
+    "description_en": "I worked as a Backend, refining code for a property appraiser. Leveraging Typescript, AWS Lambda, and Serverless Framework. Additionally, as a DevOps, I optimized cloud infrastructure across AWS.",
+    "description_es": "Trabajé como Backend, optimizando código para un tasador de inmuebles. Utilizando TS, AWS Lambda y Serverless. Además, como DevOps, optimicé la infraestructura de AWS.",
     "image": "gojom",
-    "stack": ["rails", "ruby"],
+    "stack": [
+      {
+        "icon": "rails",
+        "tooltip": "Ruby on Rails"
+      }
+    ],
     "demo": "https://www.linkedin.com/company/gojom"
   },
   {
     "title": "Sperant",
-    "description_en": "As part of the team, I contributed as a web developer and software architect. Simplifying online business management from any device with our intuitive platform.",
+    "description_en": "As a FullStack Developer, I created a robust webhook system. Enhanced frontend with Vue.js, Atomic Design, and Tailwind CSS for efficient UI development, improving user experience.",
+    "description_es": "FullStack, creé un sistema de webhooks. Mejoré el frontend con Vue.js, Atomic Design y Tailwind CSS para un desarrollo de interfaz de usuario eficiente, mejorando la experiencia del usuario.",
     "image": "sperant",
-    "stack": ["rails", "ruby"],
+    "stack": [
+      {
+        "icon": "rails",
+        "tooltip": "Ruby on Rails"
+      }
+    ],
     "demo": "https://sperant.com/"
   },
   {
     "title": "App Sperant",
-    "description_en": "As part of the team, I contributed as a web developer and software architect. Simplifying online business management from any device with our intuitive platform.",
+    "description_en": "Contributed to Sperant's mobile app backend in AWS Lambda, frontend in React Native with Tailwind. Developed a custom SDK for  database handling, all in Typescript for clean, scalable code.",
+    "description_es": "Contribuí al backend de la app de Sperant en AWS Lambda, y al frontend en React Native con Tailwind. Desarrollé un SDK para el manejo de la base de datos, todo en Typescript para un código limpio y escalable.",
     "image": "sperant_mobile",
-    "stack": ["rails", "ruby"],
+    "stack": [
+      {
+        "icon": "rails",
+        "tooltip": "Ruby on Rails"
+      }
+    ],
     "demo": "https://play.google.com/store/apps/details?id=com.sperant.postventa"
   },
   {
     "title": "AssistChat",
-    "description_en": "As part of the team, I contributed as a web developer and software architect. Simplifying online business management from any device with our intuitive platform.",
+    "description_en": "Developed a personal project promoting the benefits of GPT chatbot implementation. Focus in crafting precise prompts for optimal model comprehension.",
+    "description_es": "Desarrollé un proyecto personal que promueve los beneficios de implementar un chatbot GPT. Me enfoqué en crear indicaciones precisas para una comprensión óptima del modelo.",
     "image": "assistchat",
-    "stack": ["rails", "ruby"],
+    "stack": [
+      {
+        "icon": "rails",
+        "tooltip": "Ruby on Rails"
+      }
+    ],
     "demo": "https://assistchat.onrender.com/"
   }
 ]

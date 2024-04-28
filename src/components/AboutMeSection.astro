@@ -26,7 +26,7 @@ const skillSections = [
 ]
 ---
 
-<section id="about_me" class="hero pt-[75px] min-h-[70vh]">
+<section id="about_me" class="hero min-h-[70vh] pt-[75px]">
   <div
     class="hero-content flex-col gap-16 lg:flex-row lg:items-start lg:!justify-around lg:gap-8"
     data-section="about_me"
@@ -59,7 +59,7 @@ const skillSections = [
                   # {tAboutMe[`skills_section_${section.key}`]}
                 </p>
                 <div class={section.data.length > 4 ? '' : 'hidden'}>
-                  <label class="swap">
+                  <label class="swap" aria-label={section.key}>
                     <input type="checkbox" data-skill-toggle={section.key} />
                     <svg
                       class="swap-off h-6 w-6 fill-none stroke-current"
