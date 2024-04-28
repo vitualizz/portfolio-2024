@@ -16,6 +16,10 @@
       {
         "icon": "elasticsearch",
         "tooltip": "ElasticSearch"
+      },
+      {
+        "icon": "postgres",
+        "tooltip": "Postgres"
       }
     ],
     "demo": "https://www.linkedin.com/company/gojom"
@@ -37,6 +41,10 @@
       {
         "icon": "dynamodb",
         "tooltip": "DynamoDB"
+      },
+      {
+        "icon": "postgres",
+        "tooltip": "Postgres"
       }
     ],
     "demo": "https://sperant.com/"
@@ -87,6 +95,10 @@
       {
         "icon": "typescript",
         "tooltip": "Typescript"
+      },
+      {
+        "icon": "gpt",
+        "tooltip": "OpenAI Gpt"
       }
     ],
     "demo": "https://assistchat.onrender.com/"

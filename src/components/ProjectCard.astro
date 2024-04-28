@@ -21,7 +21,7 @@ const { title, image, stack, demo, ...descriptions } = Astro.props
       {
         stack.map((s) => (
           <div
-            class="tooltip h-6 w-6 duration-150 ease-in hover:scale-125 lg:h-8 lg:w-8 rounded-lg"
+            class="tooltip h-6 w-6 duration-150 ease-in hover:scale-125 lg:h-8 lg:w-8"
             data-tip={s.tooltip}
           >
             <Icon name={s.icon} />

@@ -20,6 +20,7 @@ import ElasticSearch from '../components/icons/ElasticSearch.astro'
 import AwsLambda from '../components/icons/AwsLambda.astro'
 import DynamoDb from '../components/icons/Dynamodb.astro'
 import Redux from '../components/icons/Redux.astro'
+import Gpt from '../components/icons/Gpt.astro'
 
 export interface Props {
   name: IconType
@@ -46,7 +47,8 @@ const map: Record<IconType, string> = {
   elasticsearch: ElasticSearch,
   lambda: AwsLambda,
   dynamodb: DynamoDb,
-  redux: Redux
+  redux: Redux,
+  gpt: Gpt
 }
 
 const Component = map[name]
