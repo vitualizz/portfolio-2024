@@ -26,20 +26,37 @@ const tPresentation = t('presentation')
       <h1 class="text-xl font-bold text-custom-gray lg:text-2xl">@vitualizz</h1>
     </div>
     <h2
-      class="w-9/12 text-center lg:w-[55%]"
+      class="w-9/12 text-center text-xl md:text-2xl lg:w-[55%]"
       set:html={tPresentation.description}
     />
-    <div class="flex gap-3 lg:gap-5">
-      <a class="duration-y transform transition hover:scale-110">
+    <div class="mt-4 flex gap-3 lg:gap-5">
+      <a
+        data-tip={lang === 'en' ? 'Send email' : 'Enviar email'}
+        href="mailto:vitualizz@gmail.com"
+        class="duration-y tooltip transform cursor-pointer transition hover:scale-110"
+      >
         <Envelope class="w-10 lg:w-12" />
       </a>
-      <a class="duration-y transform transition hover:scale-110">
+      <a
+        data-tip={lang === 'en' ? 'Resume' : 'Curriculum'}
+        href={`/cv/${lang}.pdf`}
+        download={`LeePalacios_${lang}.pdf`}
+        class="duration-y tooltip transform cursor-pointer transition hover:scale-110"
+      >
         <DocumentText class="w-10 lg:w-12" />
       </a>
-      <a class="duration-y transform transition hover:scale-110">
+      <a
+        data-tip="Github"
+        href="https://github.com/vitualizz"
+        class="duration-y tooltip transform cursor-pointer transition hover:scale-110"
+      >
         <GithubIcon class="w-10 lg:w-12" />
       </a>
-      <a class="duration-y transform transition hover:scale-110">
+      <a
+        data-tip="Linkedin"
+        href="https://www.linkedin.com/in/vitualizz/"
+        class="duration-y tooltip transform cursor-pointer transition hover:scale-110"
+      >
         <LinkedinIcon class="w-10 lg:w-12" />
       </a>
     </div>

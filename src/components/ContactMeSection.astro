@@ -48,7 +48,11 @@ const tContactMe = t('contact_me')
           <p class="font-medium">Lee Palacios</p>
         </div>
       </a>
-      <a href="https://www.linkedin.com/in/vitualizz/" target="_blank">
+      <a
+        href={`/cv/${lang}.pdf`}
+        download={`LeePalacios_${lang}.pdf`}
+        target="_blank"
+      >
         <div
           class="mt-5 flex items-center gap-4 rounded-lg bg-gray-400/20 px-7 py-2 transition hover:scale-105"
         >
