@@ -35,7 +35,7 @@ const navItems: NavItem[] = [
 <div class="drawer">
   <input id="drawerNavbar" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content flex h-screen flex-col landscape:h-full">
-    <div class="navbar fixed z-50 w-full bg-base-100 shadow-md">
+    <div class="navbar fixed z-10 w-full bg-base-100 shadow-md">
       <div class="navbar-start md:invisible">
         <label
           id="drawerToggleOpen"
@@ -78,7 +78,7 @@ const navItems: NavItem[] = [
     </div>
   </div>
 
-  <div class="drawer-side">
+  <div class="drawer-side z-20">
     <label
       id="drawerToggleClose"
       htmlFor="drawerNavbar"
@@ -88,7 +88,7 @@ const navItems: NavItem[] = [
       <li>
         {
           navItems.map((item) => (
-            <a href={item.path} key={item.path}>
+            <a href={item.path} key={item.path} class="navbarMenuItem">
               {tNav[item.name]}
             </a>
           ))
@@ -103,6 +103,13 @@ const navItems: NavItem[] = [
   const drawerNavbar = document.getElementById('drawerNavbar')
   const drawerToggleOpen = document.getElementById('drawerToggleOpen')
   const drawerToggleClose = document.getElementById('drawerToggleClose')
+  const navbarMenuItems = document.querySelectorAll('.navbarMenuItem')
+
+  navbarMenuItems.forEach((x) => {
+    x.addEventListener('click', () => {
+      drawerNavbar.checked = false
+    })
+  })
 
   drawerToggleOpen.addEventListener('click', () => {
     drawerNavbar.checked = true
@@ -135,7 +142,8 @@ const navItems: NavItem[] = [
       })
     },
     {
-      rootMargin: '-250px'
+      rootMargin: '-50% 0% -50% 0%',
+      threshold: 0
     }
   )
 
