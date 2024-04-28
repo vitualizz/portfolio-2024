@@ -1,5 +1,4 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
-const animations = require('@midudev/tailwind-animations')
 
 module.exports = {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
@@ -7,11 +6,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: [
-          'Fredoka Variable',
-          'Bakbak One',
-          ...defaultTheme.fontFamily.sans
-        ]
+        sans: ['Fredoka Variable', ...defaultTheme.fontFamily.sans]
       },
       colors: {
         'custom-gray': '#A8A8A8',
@@ -21,7 +16,7 @@ module.exports = {
       }
     }
   },
-  plugins: [animations, require('daisyui')],
+  plugins: [require('daisyui')],
   daisyui: {
     themes: [
       {
