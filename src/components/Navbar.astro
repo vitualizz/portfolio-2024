@@ -72,10 +72,26 @@ const navItems: NavItem[] = [
         <a
           href={`/cv/${lang}.pdf`}
           download={`LeePalacios_${lang}.pdf`}
-          class="duration-y `btn btn transform cursor-pointer bg-gray-500/20 transition hover:scale-110 hover:bg-gray-500/40"
+          class="duration-y btn transform bg-gray-500/20 transition hover:scale-110 hover:bg-gray-500/40"
         >
           {lang === 'en' ? 'Resume' : 'Curriculum'}
         </a>
+        <div class="dropdown ml-4 mr-1">
+          <div
+            tabindex="0"
+            role="button"
+            class="btn bg-gray-500/20 hover:bg-gray-500/40"
+          >
+            {lang === 'en' ? 'Language' : 'Idioma'}
+          </div>
+          <ul
+            tabindex="0"
+            class="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow"
+          >
+            <li><a href="/es">Español</a></li>
+            <li><a href="/en">English</a></li>
+          </ul>
+        </div>
         <ThemeToggleBtn />
       </div>
     </div>
