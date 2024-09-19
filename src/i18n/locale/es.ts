@@ -5,7 +5,8 @@ const locale: LanguageLocale = {
     presentation: "Presentación",
     about_me: "Sobre mí",
     projects: "Proyectos",
-    contact_me: "Contáctame"
+    contact_me: "Contáctame",
+    blog: "Blog"
   },
   presentation: {
     description: "<span class='text-color-1'>+7 años</span> de experiencia en programación, ¡soy tu aliado amante de la tecnología listo para sacudir tu mundo digital!"

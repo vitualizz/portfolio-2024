@@ -1,18 +1,16 @@
 ---
 import '@fontsource-variable/fredoka'
-import NavBar from '../components/Navbar.astro'
-import { getLangFromUrl, useTranslation } from '../i18n/utils'
+import { getLangFromUrl, useTranslation } from 'src/i18n/utils'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslation(lang)
 
 interface Props {
-  title: string
+  title?: string
 }
 
 const tSeo = t('seo')
-// Improve when other pages available
-// const { title } = Astro.props
+const { title } = Astro.props
 ---
 
 <html lang={lang} data-theme="dark">
@@ -28,12 +26,10 @@ const tSeo = t('seo')
     <meta name="twitter:title" content={tSeo.title} />
     <meta name="twitter:description" content={tSeo.description} />
     <meta name="twitter:image" content="/img/seo/twitter-image.png" />
-    <title>{tSeo.title}</title>
+    <title>{title ?? tSeo.title}</title>
   </head>
   <body>
-    <NavBar>
-      <slot />
-    </NavBar>
+    <slot />
   </body>
 </html>
 

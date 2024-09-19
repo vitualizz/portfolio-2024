@@ -1,0 +1,23 @@
+---
+import BaseLayout from './BaseLayout.astro'
+import Navbar from '@components/Navbar.astro'
+
+interface Props {
+  title: string
+}
+
+const { title } = Astro.props
+---
+
+<BaseLayout title={`Lee Palacios - ${title}`}>
+  <Navbar>
+    <div
+      class="dark:prose-invert prose-h1:font-bold
+  prose-h1:text-xl prose-a:text-blue-600
+  prose-p:text-justify prose-img:rounded-xl prose-headings:underline
+  prose mx-auto mt-28 w-10/12 md:w-11/12 lg:w-full"
+    >
+      <slot />
+    </div>
+  </Navbar>
+</BaseLayout>

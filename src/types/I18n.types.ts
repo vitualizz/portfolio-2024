@@ -6,6 +6,7 @@ export type LanguageLocale = {
     about_me: string
     projects: string
     contact_me: string
+    blog: string
   },
   presentation: {
     description: string

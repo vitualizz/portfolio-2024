@@ -28,6 +28,10 @@ const navItems: NavItem[] = [
   {
     name: 'contact_me',
     path: '#contact_me'
+  },
+  {
+    name: 'blog',
+    path: '/blog'
   }
 ]
 ---
@@ -39,7 +43,6 @@ const navItems: NavItem[] = [
       <div class="navbar-start md:invisible">
         <label
           id="drawerToggleOpen"
-          for="drawerNavbar"
           aria-label="open sidebar"
           class="btn btn-square btn-ghost"
         >
@@ -47,7 +50,7 @@ const navItems: NavItem[] = [
         </label>
       </div>
 
-      <nav class="navbar-center grid grid-cols-4 bg-base-100 md:w-[480px]">
+      <nav class="navbar-center grid grid-cols-5 bg-base-100 md:w-[480px]">
         {
           navItems.map((item) => (
             <div class="items-cente group mx-2 flex flex-col items-center">
@@ -103,10 +106,8 @@ const navItems: NavItem[] = [
   <div class="drawer-side z-20">
     <label
       id="drawerToggleClose"
-      for="drawerNavbar"
       aria-label="close sidebar"
-      class="drawer-overlay"
-      for="drawerNavbar"></label>
+      class="drawer-overlay"></label>
     <ul class="menu min-h-full w-80 bg-base-100 p-3">
       <li>
         {

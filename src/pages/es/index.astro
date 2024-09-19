@@ -1,5 +1,5 @@
 ---
-import Layout from '@layouts/Layout.astro'
+import HomeLayout from 'src/layouts/HomeLayout.astro'
 import PresentationSection from '@components/PresentationSection.astro'
 import AboutMeSection from '@components/AboutMeSection.astro'
 import ProjectsSection from '@components/ProjectsSection.astro'
@@ -12,7 +12,7 @@ const t = useTranslation(lang)
 const tFooter = t('footer')
 ---
 
-<Layout title="Lee Palacios - @vitualizz / Software Engineer">
+<HomeLayout>
   <main>
     <PresentationSection />
     <AboutMeSection />
@@ -25,4 +25,4 @@ const tFooter = t('footer')
       <span class="text-red-500">❤️</span>
     </h4>
   </footer>
-</Layout>
+</HomeLayout>
