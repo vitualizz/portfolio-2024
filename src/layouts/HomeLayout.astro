@@ -1,10 +1,12 @@
 ---
 import BaseLayout from './BaseLayout.astro'
 import Navbar from '@components/Navbar.astro'
+import Footer from 'src/components/Footer.astro'
 ---
 
 <BaseLayout title="Lee Palacios - @vitualizz / Software Engineer">
   <Navbar>
     <slot />
+    <Footer />
   </Navbar>
 </BaseLayout>

@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content'
+import HomeLayout from 'src/layouts/HomeLayout.astro'
+import { getLangFromUrl } from 'src/i18n/utils.ts'
+
+export async function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'es' } }]
+}
+
+const lang = getLangFromUrl(Astro.url)
+const allPosts = await getCollection('blog')
+---
+
+<HomeLayout>
+  <main>
+    <h1>Blog</h1>
+    <ul>
+      {
+        allPosts.map((post) => (
+          <li>
+            <a href={`/${lang}/blog/${post.slug.split('/')[1]}`}>{post.data.title}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</HomeLayout>

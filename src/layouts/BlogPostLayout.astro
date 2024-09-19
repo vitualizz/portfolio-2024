@@ -1,6 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro'
 import Navbar from '@components/Navbar.astro'
+import Footer from 'src/components/Footer.astro'
 
 interface Props {
   title: string
@@ -12,12 +13,13 @@ const { title } = Astro.props
 <BaseLayout title={`Lee Palacios - ${title}`}>
   <Navbar>
     <div
-      class="dark:prose-invert prose-h1:font-bold
-  prose-h1:text-xl prose-a:text-blue-600
-  prose-p:text-justify prose-img:rounded-xl prose-headings:underline
-  prose mx-auto mt-28 w-10/12 md:w-11/12 lg:w-full"
+      class="prose mx-auto
+  w-10/12
+  dark:prose-invert prose-headings:underline prose-h1:text-xl
+  prose-h1:font-bold prose-p:text-justify prose-a:text-blue-600 prose-img:rounded-xl md:w-11/12 lg:w-full"
     >
       <slot />
     </div>
+    <Footer />
   </Navbar>
 </BaseLayout>

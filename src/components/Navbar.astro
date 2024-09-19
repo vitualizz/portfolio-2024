@@ -15,23 +15,23 @@ const tNav = t('nav')
 const navItems: NavItem[] = [
   {
     name: 'presentation',
-    path: '#presentation'
+    path: `/${lang}/#presentation`
   },
   {
     name: 'about_me',
-    path: '#about_me'
+    path: `/${lang}/#about_me`
   },
   {
     name: 'projects',
-    path: '#projects'
+    path: `/${lang}/#projects`
   },
   {
     name: 'contact_me',
-    path: '#contact_me'
+    path: `/${lang}/#contact_me`
   },
   {
     name: 'blog',
-    path: '/blog'
+    path: `/${lang}/blog`
   }
 ]
 ---
@@ -50,7 +50,7 @@ const navItems: NavItem[] = [
         </label>
       </div>
 
-      <nav class="navbar-center grid grid-cols-5 bg-base-100 md:w-[480px]">
+      <nav class="navbar-center grid grid-cols-5 bg-base-100 md:w-[500px]">
         {
           navItems.map((item) => (
             <div class="items-cente group mx-2 flex flex-col items-center">
@@ -98,7 +98,7 @@ const navItems: NavItem[] = [
       </div>
     </div>
 
-    <div class="h-full md:h-screen landscape:mt-10 landscape:md:mt-0">
+    <div class="mt-24 h-full md:h-screen">
       <slot />
     </div>
   </div>

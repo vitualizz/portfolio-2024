@@ -1,0 +1,15 @@
+---
+import { getLangFromUrl, useTranslation } from 'src/i18n/utils.ts'
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslation(lang)
+
+const tFooter = t('footer')
+---
+
+<footer class="lg:min-h-30 min-h-28">
+  <h4 class="text-center text-xl font-bold lg:text-3xl">
+    {tFooter.thanks}{' '}
+    <span class="text-red-500">❤️</span>
+  </h4>
+</footer>
