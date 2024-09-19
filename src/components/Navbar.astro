@@ -1,10 +1,10 @@
 ---
-import { getLangFromUrl, useTranslations } from '../i18n/utils'
+import { getLangFromUrl, useTranslation } from '../i18n/utils'
 import ThemeToggleBtn from '../components/ThemeToggleBtn.astro'
 import Bars3 from 'astro-heroicons/outline/Bars3.astro'
 
 const lang = getLangFromUrl(Astro.url)
-const t = useTranslations(lang)
+const t = useTranslation(lang)
 
 type NavItem = {
   name: string
@@ -39,7 +39,7 @@ const navItems: NavItem[] = [
       <div class="navbar-start md:invisible">
         <label
           id="drawerToggleOpen"
-          htmlFor="drawerNavbar"
+          for="drawerNavbar"
           aria-label="open sidebar"
           class="btn btn-square btn-ghost"
         >
@@ -53,11 +53,10 @@ const navItems: NavItem[] = [
             <div class="items-cente group mx-2 flex flex-col items-center">
               <a
                 href={item.path}
-                key={item.path}
                 class="hidden transition duration-300 group-hover:font-bold md:block"
                 data-nav-item={item.name}
               >
-                {tNav[item.name]}
+                {tNav[item.name as keyof typeof tNav]}
               </a>
               <span
                 data-nav-item={item.name}
@@ -104,7 +103,7 @@ const navItems: NavItem[] = [
   <div class="drawer-side z-20">
     <label
       id="drawerToggleClose"
-      htmlFor="drawerNavbar"
+      for="drawerNavbar"
       aria-label="close sidebar"
       class="drawer-overlay"
       for="drawerNavbar"></label>
@@ -112,8 +111,8 @@ const navItems: NavItem[] = [
       <li>
         {
           navItems.map((item) => (
-            <a href={item.path} key={item.path} class="navbarMenuItem">
-              {tNav[item.name]}
+            <a href={item.path} class="navbarMenuItem">
+              {tNav[item.name as keyof typeof tNav]}
             </a>
           ))
         }
@@ -124,9 +123,15 @@ const navItems: NavItem[] = [
 
 <script>
   /* Navbar Mobile */
-  const drawerNavbar = document.getElementById('drawerNavbar')
-  const drawerToggleOpen = document.getElementById('drawerToggleOpen')
-  const drawerToggleClose = document.getElementById('drawerToggleClose')
+  const drawerNavbar = document.getElementById(
+    'drawerNavbar'
+  ) as HTMLInputElement
+  const drawerToggleOpen = document.getElementById(
+    'drawerToggleOpen'
+  ) as HTMLLabelElement
+  const drawerToggleClose = document.getElementById(
+    'drawerToggleClose'
+  ) as HTMLLabelElement
   const navbarMenuItems = document.querySelectorAll('.navbarMenuItem')
 
   navbarMenuItems.forEach((x) => {
@@ -155,11 +160,11 @@ const navItems: NavItem[] = [
           aNavTargets.forEach((x) => x.classList.remove('font-bold'))
           spanNavTargets.forEach((x) => x.classList.remove('w-[80%]'))
           const aItemTarget = document.querySelector(
-            `a[data-nav-item=${entry.target.dataset.section}]`
-          )
+            `a[data-nav-item=${(entry.target as HTMLElement).dataset.section}]`
+          ) as HTMLAnchorElement
           const spanItemTarget = document.querySelector(
-            `span[data-nav-item=${entry.target.dataset.section}]`
-          )
+            `span[data-nav-item=${(entry.target as HTMLElement).dataset.section}]`
+          ) as HTMLSpanElement
           spanItemTarget.classList.add('w-[80%]')
           aItemTarget.classList.add('font-bold')
         }

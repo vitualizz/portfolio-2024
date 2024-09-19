@@ -1,27 +1,31 @@
 ---
-import Skill from '@components/Skill.astro'
-import { getLangFromUrl, useTranslations } from '@i18n/utils.ts'
-import languages from '../data/languages.json'
-import frameworks from '../data/frameworks.json'
-import others from '../data/others.json'
+import Skill from 'src/components/Skill.astro'
+import { getLangFromUrl, useTranslation } from 'src/i18n/utils.ts'
+import languages from 'src/data/languages.json'
+import frameworks from 'src/data/frameworks.json'
+import others from 'src/data/others.json'
+import type { IconType } from 'src/types/Icons.types'
 
 const lang = getLangFromUrl(Astro.url)
-const t = useTranslations(lang)
+const t = useTranslation(lang)
 
 const tAboutMe = t('about_me')
 
-const skillSections = [
+const skillSections: {
+  key: 'languages' | 'frameworks' | 'others'
+  data: { title: string; icon: IconType }[]
+}[] = [
   {
     key: 'languages',
-    data: languages
+    data: languages as { title: string; icon: IconType }[]
   },
   {
     key: 'frameworks',
-    data: frameworks
+    data: frameworks as { title: string; icon: IconType }[]
   },
   {
     key: 'others',
-    data: others
+    data: others as { title: string; icon: IconType }[]
   }
 ]
 ---
@@ -56,7 +60,12 @@ const skillSections = [
             <div>
               <div class="flex justify-between">
                 <p class="font-semibold md:text-xl">
-                  # {tAboutMe[`skills_section_${section.key}`]}
+                  #{' '}
+                  {
+                    tAboutMe[
+                      `skills_section_${section.key}` as keyof typeof tAboutMe
+                    ]
+                  }
                 </p>
                 <div class={section.data.length > 4 ? '' : 'hidden'}>
                   <label class="swap" aria-label={section.key}>
@@ -125,18 +134,18 @@ const skillSections = [
 <script>
   const skillsVisibilityToggleTargets = document.querySelectorAll(
     '[data-skill-toggle]'
-  )
+  ) as unknown as HTMLInputElement[]
   const skillsCollapseTargets = Array.from(
     document.querySelectorAll('[data-skill-collapse]')
-  )
+  ) as HTMLInputElement[]
 
   skillsVisibilityToggleTargets.forEach((t) => {
     t.addEventListener('change', (e) => {
-      const target = e.target
+      const target = e.target as HTMLInputElement
       const currentSection = target.dataset.skillToggle
       const collapseCurrent = skillsCollapseTargets.find(
         (x) => x.dataset.skillCollapse === currentSection
-      )
+      ) as HTMLInputElement
       collapseCurrent.checked = target.checked
 
       if (window.innerWidth > 1024 && target.checked) {

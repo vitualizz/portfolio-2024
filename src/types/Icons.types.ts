@@ -1,1 +1,1 @@
-export type IconType = 'ruby' | 'javascript' | 'typescript' | 'python'| 'sql' | 'rails' | 'react' | 'tailwind' | 'astro' | 'vue'
+export type IconType = 'ruby' | 'javascript' | 'typescript' | 'python'| 'sql' | 'rails' | 'react' | 'tailwind' | 'astro' | 'vue' | 'node' | 'postgres' | 'aws' | 'selenium' | 'git' | 'docker' | 'elasticsearch' | 'lambda' | 'dynamodb' | 'redux' | 'gpt'

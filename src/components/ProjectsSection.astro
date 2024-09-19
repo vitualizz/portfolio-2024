@@ -1,10 +1,10 @@
 ---
-import projects from '../data/projects.json'
-import { getLangFromUrl, useTranslations } from '@i18n/utils.ts'
-import ProjectCard from '@components/ProjectCard.astro'
+import projects from 'src/data/projects.json'
+import { getLangFromUrl, useTranslation } from 'src/i18n/utils.ts'
+import ProjectCard from 'src/components/ProjectCard.astro'
 
 const lang = getLangFromUrl(Astro.url)
-const t = useTranslations(lang)
+const t = useTranslation(lang)
 
 const tProjects = t('projects')
 ---

@@ -3,10 +3,10 @@ import Envelope from 'astro-heroicons/outline/Envelope.astro'
 import DocumentText from 'astro-heroicons/outline/DocumentText.astro'
 import GithubIcon from '../components/icons/Github.astro'
 import Linkedin from '../components/icons/Linkedin.astro'
-import { getLangFromUrl, useTranslations } from '../i18n/utils.ts'
+import { getLangFromUrl, useTranslation } from '../i18n/utils.ts'
 
 const lang = getLangFromUrl(Astro.url)
-const t = useTranslations(lang)
+const t = useTranslation(lang)
 
 const tContactMe = t('contact_me')
 ---

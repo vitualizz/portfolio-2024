@@ -1,6 +1,16 @@
 ---
-import { getLangFromUrl } from '../i18n/utils.ts'
-import Icon from '../components/Icon.astro'
+import { getLangFromUrl } from 'src/i18n/utils.ts'
+import Icon from 'src/components/Icon.astro'
+import type { IconType } from 'src/types/Icons.types'
+
+interface Props {
+  title: string
+  image: string
+  stack: { icon: string; tooltip: string }[]
+  demo: string
+  description_en: string
+  description_es: string
+}
 
 const lang = getLangFromUrl(Astro.url)
 
@@ -24,12 +34,12 @@ const { title, image, stack, demo, ...descriptions } = Astro.props
             class="tooltip h-6 w-6 duration-150 ease-in hover:scale-125 lg:h-8 lg:w-8"
             data-tip={s.tooltip}
           >
-            <Icon name={s.icon} />
+            <Icon name={s.icon as IconType} />
           </div>
         ))
       }
     </div>
-    <div class="mt-3 block flex gap-2 lg:hidden">
+    <div class="mt-3 flex gap-2 lg:hidden">
       <a role="button" class="btn btn-sm" onclick={`${image}.showModal()`}
         >{lang === 'en' ? 'Project' : 'Proyecto'}</a
       >

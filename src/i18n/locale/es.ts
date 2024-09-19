@@ -1,4 +1,4 @@
-import type { LanguageLocale } from '../ui'
+import type { LanguageLocale } from 'src/types/I18n.types'
 
 const locale: LanguageLocale = {
   nav: {

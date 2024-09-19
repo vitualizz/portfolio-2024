@@ -5,10 +5,10 @@ import DocumentText from 'astro-heroicons/outline/DocumentText.astro'
 import GithubIcon from '../components/icons/Github.astro'
 import LinkedinIcon from '../components/icons/Linkedin.astro'
 import ChevronDown from 'astro-heroicons/outline/ChevronDown.astro'
-import { getLangFromUrl, useTranslations } from '../i18n/utils.ts'
+import { getLangFromUrl, useTranslation } from '../i18n/utils.ts'
 
 const lang = getLangFromUrl(Astro.url)
-const t = useTranslations(lang)
+const t = useTranslation(lang)
 
 const tPresentation = t('presentation')
 ---

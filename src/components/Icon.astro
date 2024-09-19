@@ -1,33 +1,33 @@
 ---
-import type { IconType } from '../types/Icons.types.ts'
-import Ruby from '../components/icons/Ruby.astro'
-import Javascript from '../components/icons/Javascript.astro'
-import Python from '../components/icons/Python.astro'
-import Typescript from '../components/icons/Typescript.astro'
-import Sql from '../components/icons/Sql.astro'
-import Rails from '../components/icons/Rails.astro'
-import React from '../components/icons/React.astro'
-import Tailwind from '../components/icons/Tailwind.astro'
-import AstroIcon from '../components/icons/Astro.astro'
-import Vue from '../components/icons/Vue.astro'
-import NodeJS from '../components/icons/Node.astro'
-import Postgres from '../components/icons/Postgres.astro'
-import Aws from '../components/icons/Aws.astro'
-import Selenium from '../components/icons/Selenium.astro'
-import Git from '../components/icons/Git.astro'
-import Docker from '../components/icons/Docker.astro'
-import ElasticSearch from '../components/icons/ElasticSearch.astro'
-import AwsLambda from '../components/icons/AwsLambda.astro'
-import DynamoDb from '../components/icons/Dynamodb.astro'
-import Redux from '../components/icons/Redux.astro'
-import Gpt from '../components/icons/Gpt.astro'
+import type { IconType } from 'src/types/Icons.types.ts'
+import Ruby from 'src/components/icons/Ruby.astro'
+import Javascript from 'src/components/icons/Javascript.astro'
+import Python from 'src/components/icons/Python.astro'
+import Typescript from 'src/components/icons/Typescript.astro'
+import Sql from 'src/components/icons/Sql.astro'
+import Rails from 'src/components/icons/Rails.astro'
+import React from 'src/components/icons/React.astro'
+import Tailwind from 'src/components/icons/Tailwind.astro'
+import AstroIcon from 'src/components/icons/Astro.astro'
+import Vue from 'src/components/icons/Vue.astro'
+import NodeJS from 'src/components/icons/Node.astro'
+import Postgres from 'src/components/icons/Postgres.astro'
+import Aws from 'src/components/icons/Aws.astro'
+import Selenium from 'src/components/icons/Selenium.astro'
+import Git from 'src/components/icons/Git.astro'
+import Docker from 'src/components/icons/Docker.astro'
+import ElasticSearch from 'src/components/icons/ElasticSearch.astro'
+import AwsLambda from 'src/components/icons/AwsLambda.astro'
+import DynamoDb from 'src/components/icons/Dynamodb.astro'
+import Redux from 'src/components/icons/Redux.astro'
+import Gpt from 'src/components/icons/Gpt.astro'
 
 export interface Props {
   name: IconType
 }
 const { name } = Astro.props as Props
 
-const map: Record<IconType, string> = {
+const map: Record<IconType, any> = {
   javascript: Javascript,
   ruby: Ruby,
   typescript: Typescript,

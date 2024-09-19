@@ -5,9 +5,9 @@ import AboutMeSection from '@components/AboutMeSection.astro'
 import ProjectsSection from '@components/ProjectsSection.astro'
 import ContactMeSection from '@components/ContactMeSection.astro'
 
-import { getLangFromUrl, useTranslations } from '@i18n/utils.ts'
+import { getLangFromUrl, useTranslation } from '@i18n/utils.ts'
 const lang = getLangFromUrl(Astro.url)
-const t = useTranslations(lang)
+const t = useTranslation(lang)
 
 const tFooter = t('footer')
 ---
