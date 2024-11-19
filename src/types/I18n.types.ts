@@ -29,10 +29,13 @@ export type LanguageLocale = {
   footer: {
     thanks: string
   },
+  blog: {
+    title: string
+  },
   seo: {
     title: string
     description: string
     image: string
     url: string
-  }
+  },
 }

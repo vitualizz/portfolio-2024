@@ -29,6 +29,9 @@ const locale: LanguageLocale = {
   footer: {
     thanks: "Con amor @vitualizz"
   },
+  blog: {
+    title: 'Últimos Posts'
+  },
   seo: {
     title: "Desarrollador de Software | Experiencia en JavaScript y Ruby | Proyectos de Calidad | Contáctame",
     description: "¡Con más de 7 años de experiencia en programación, soy un ingeniero de software apasionado por la tecnología! Trabajo con JavaScript, Ruby y más. ¡Contáctame para proyectos de calidad!",

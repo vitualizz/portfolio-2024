@@ -13,12 +13,14 @@ const allPosts = await getCollection('blog')
 
 <HomeLayout>
   <main>
-    <h1>Blog</h1>
+    <h1></h1>
     <ul>
       {
         allPosts.map((post) => (
-          <li>
-            <a href={`/${lang}/blog/${post.slug.split('/')[1]}`}>{post.data.title}</a>
+          <li class=''>
+            <a href={`/${lang}/blog/${post.slug.split('/')[1]}`}>
+              <p>{post.data.title}</p>
+            </a>
           </li>
         ))
       }
