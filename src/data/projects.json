@@ -62,7 +62,8 @@
         "icon": "postgres",
         "tooltip": "Postgres"
       }
-    ]
+    ],
+    "demo": "https://influgo.co/"
   },
   {
     "title": "Gojom",

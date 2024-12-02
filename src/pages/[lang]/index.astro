@@ -4,6 +4,7 @@ import PresentationSection from 'src/components/PresentationSection.astro'
 import ProjectsSection from 'src/components/ProjectsSection.astro'
 import ContactMeSection from 'src/components/ContactMeSection.astro'
 import BlogSection from 'src/components/BlogSection.astro'
+import 'aos/dist/aos.css'
 
 export async function getStaticPaths() {
   return [{ params: { lang: 'en' } }, { params: { lang: 'es' } }]
@@ -18,3 +19,8 @@ export async function getStaticPaths() {
     <ContactMeSection />
   </main>
 </HomeLayout>
+
+<script>
+  import AOS from 'aos'
+  AOS.init()
+</script>

@@ -21,7 +21,19 @@ const tProjects = t('projects')
         data-section="projects"
         class="mt-10 grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 [&>*:nth-child(even)]:flex-row-reverse md:[&>*:nth-child(even)]:pl-0 [&>*:nth-child(odd)]:flex-row md:[&>*:nth-child(odd)]:pr-0"
       >
-        {projects.map((project) => <ProjectCard {...project} />)}
+        {
+          projects.map((project, index) => (
+            <ProjectCard
+              index={index}
+              title={project.title}
+              description_en={project.description_en}
+              description_es={project.description_es}
+              image={project.image}
+              demo={project.demo}
+              stack={project.stack}
+            />
+          ))
+        }
       </div>
     </div>
   </div>

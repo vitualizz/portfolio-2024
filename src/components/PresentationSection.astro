@@ -26,10 +26,16 @@ const tPresentation = t('presentation')
   >
     <img
       src="/img/Logo2.webp"
-      alt="Logo"
+      alt="Lee Palacios"
       class="mb-8 w-96 drop-shadow-[0px_-7px_15px_8px_rgba(0,_0,_0,_0.1)] lg:mb-0 lg:w-1/2"
+      data-aos="fade-left"
+      data-aos-delay="300"
     />
-    <div class="m-auto w-[80%] lg:w-full">
+    <div
+      class="m-auto w-[80%] lg:w-full"
+      data-aos="fade-right"
+      data-aos-delay="300"
+    >
       <p class="text-4xl font-bold lg:text-5xl">{tPresentation.hi}</p>
       <h1 class="mb-3 text-4xl lg:text-5xl" set:html={tPresentation.i_am} />
       <p class="mb-4 text-xl">{tPresentation.profession}</p>

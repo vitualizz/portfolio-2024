@@ -9,8 +9,14 @@ const posts = await getCollection('blog', (filter) => lang === filter.data.lang)
 const latestPosts = posts.slice(0, 3)
 ---
 
-<h1 class="mt-24 mb-12 text-center text-4xl font-bold">{t('blog').title}</h1>
-<section id="blog" class="hero">
+<h1 class="mb-12 mt-24 text-center text-4xl font-bold">{t('blog').title}</h1>
+<section
+  id="blog"
+  class="hero"
+  data-aos="fade-top"
+  data-aos-delay="300"
+  data-aos-once="true"
+>
   <div class="hero-content" data-section="blog">
     <div>
       {

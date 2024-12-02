@@ -3,7 +3,8 @@ import { getLangFromUrl } from 'src/i18n/utils.ts'
 import Icon from 'src/components/Icon.astro'
 import type { IconType } from 'src/types/Icons.types'
 
-interface Props {
+type Props = {
+  index: number
   title: string
   image: string
   stack: { icon: string; tooltip: string }[]
@@ -14,11 +15,14 @@ interface Props {
 
 const lang = getLangFromUrl(Astro.url)
 
-const { title, image, stack, demo, ...descriptions } = Astro.props
+const { title, index, image, stack, demo, ...descriptions } = Astro.props
 ---
 
 <div
   class="group relative flex w-full transform overflow-hidden rounded-lg bg-gray-400/20 px-10 py-8 transition-all duration-150 hover:bg-gray-400/40"
+  data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'}
+  data-aos-delay="300"
+  data-aos-once="true"
 >
   <div class="flex flex-col justify-between">
     <div class="flex flex-col gap-4">
