@@ -8,6 +8,7 @@ coverLink: https://cachyos.org
 date: 2024-09-19
 author: Lee Palacios
 tags: ['developer', 'gamer', 'os']
+lang: es
 ---
 # CachyOS: La distribución de Linux ideal para programar y jugar
 

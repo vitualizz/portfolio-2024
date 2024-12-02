@@ -22,8 +22,8 @@ const navItems: NavItem[] = [
     path: `/${lang}/#presentation`
   },
   {
-    name: 'about_me',
-    path: `/${lang}/#about_me`
+    name: 'blog',
+    path: `/${lang}/#blog`
   },
   {
     name: 'projects',
@@ -32,10 +32,6 @@ const navItems: NavItem[] = [
   {
     name: 'contact_me',
     path: `/${lang}/#contact_me`
-  },
-  {
-    name: 'blog',
-    path: `/${lang}/blog`
   }
 ]
 
@@ -191,7 +187,7 @@ const { isTransparent = false } = Astro.props
 
   sectionTargets.forEach((x) => observer.observe(x))
 
-  document.addEventListener('scroll', () => {
+  const scrollNavbarBg = () => {
     if (presentationSection === null) return
 
     if (window.scrollY < presentationSection.clientHeight) {
@@ -201,5 +197,8 @@ const { isTransparent = false } = Astro.props
       navbar.classList.remove('bg-transparent')
       navbar.classList.add('bg-base-100')
     }
-  })
+  }
+
+  document.addEventListener('scroll', scrollNavbarBg)
+  document.addEventListener('load', scrollNavbarBg)
 </script>

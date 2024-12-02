@@ -1,9 +1,9 @@
 ---
 import HomeLayout from 'src/layouts/HomeLayout.astro'
 import PresentationSection from 'src/components/PresentationSection.astro'
-import AboutMeSection from 'src/components/AboutMeSection.astro'
 import ProjectsSection from 'src/components/ProjectsSection.astro'
 import ContactMeSection from 'src/components/ContactMeSection.astro'
+import BlogSection from 'src/components/BlogSection.astro'
 
 export async function getStaticPaths() {
   return [{ params: { lang: 'en' } }, { params: { lang: 'es' } }]
@@ -13,7 +13,7 @@ export async function getStaticPaths() {
 <HomeLayout navbarTransparent>
   <main>
     <PresentationSection />
-    <AboutMeSection />
+    <BlogSection />
     <ProjectsSection />
     <ContactMeSection />
   </main>

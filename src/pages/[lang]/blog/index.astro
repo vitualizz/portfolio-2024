@@ -8,7 +8,9 @@ export async function getStaticPaths() {
 }
 
 const lang = getLangFromUrl(Astro.url)
-const allPosts = await getCollection('blog')
+const allPosts = await getCollection('blog', (filter) => {
+  return lang === filter.data.lang
+})
 ---
 
 <HomeLayout>

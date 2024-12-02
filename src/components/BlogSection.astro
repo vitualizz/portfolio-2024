@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content'
+import { getLangFromUrl, useTranslation } from 'src/i18n/utils.ts'
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslation(lang)
+
+const posts = await getCollection('blog', (filter) => lang === filter.data.lang)
+const latestPosts = posts.slice(0, 3)
+---
+
+<h1 class="mt-24 mb-12 text-center text-4xl font-bold">{t('blog').title}</h1>
+<section id="blog" class="hero">
+  <div class="hero-content" data-section="blog">
+    <div>
+      {
+        latestPosts.map((post) => (
+          <a
+            class="card w-96 bg-base-100 shadow-xl"
+            href={`/${lang}/blog/${post.slug.split('/')[0]}`}
+          >
+            <figure>
+              <img src={post.data.cover.src} alt={post.data.title} />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">{post.data.title}</h2>
+              <p>{post.data.shortDescription}</p>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>
