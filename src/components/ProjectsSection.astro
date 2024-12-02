@@ -21,7 +21,7 @@ const tProjects = t('projects')
         data-section="projects"
         class="mt-10 grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 [&>*:nth-child(even)]:flex-row-reverse md:[&>*:nth-child(even)]:pl-0 [&>*:nth-child(odd)]:flex-row md:[&>*:nth-child(odd)]:pr-0"
       >
-        {projects.slice(0, 4).map((project) => <ProjectCard {...project} />)}
+        {projects.map((project) => <ProjectCard {...project} />)}
       </div>
     </div>
   </div>

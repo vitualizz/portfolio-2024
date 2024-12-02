@@ -1,5 +1,70 @@
 [
   {
+    "title": "ComunidadFeliz",
+    "description_es": "Desarrollador FullStack, implementando mejoras en la plataforma de administración de condominios. Utilizando Ruby on Rails y React. Además de optimizar las consultas de la base de datos.",
+    "description_en": "FullStack Developer, implementing improvements in the condominium management platform. Using Ruby on Rails and React. Also, optimizing database queries.",
+    "image": "comunidadfeliz",
+    "stack": [
+      {
+        "icon": "rails",
+        "tooltip": "Ruby on Rails"
+      },
+      {
+        "icon": "react",
+        "tooltip": "React"
+      },
+      {
+        "icon": "tailwind",
+        "tooltip": "TailwindCSS"
+      },
+      {
+        "icon": "typescript",
+        "tooltip": "Typescript"
+      },
+      {
+        "icon": "redux",
+        "tooltip": "Redux"
+      },
+      {
+        "icon": "postgres",
+        "tooltip": "Postgres"
+      }
+    ],
+    "demo": "https://comunidadfeliz.cl/"
+  },
+  {
+    "title": "Influgo",
+    "description_en": "Senior Ruby on Rails Developer. Led the development of the project, a campaign/proposal management system for influencers. Implementing the back layer with rails and the front layer with React.",
+    "description_es": "Desarrollador Senior de Ruby on Rails. Lideré el desarrollo del proyecto, un sistema de gestión de campañas/propuestas para influencers. Implementando la capa de back con rails y la capa de front con React.",
+    "image": "influgo",
+    "stack": [
+      {
+        "icon": "rails",
+        "tooltip": "Ruby on Rails"
+      },
+      {
+        "icon": "react",
+        "tooltip": "React / React Native"
+      },
+      {
+        "icon": "tailwind",
+        "tooltip": "TailwindCSS"
+      },
+      {
+        "icon": "typescript",
+        "tooltip": "Typescript"
+      },
+      {
+        "icon": "lambda",
+        "tooltip": "AWS Lambda"
+      },
+      {
+        "icon": "postgres",
+        "tooltip": "Postgres"
+      }
+    ]
+  },
+  {
     "title": "Gojom",
     "description_en": "I worked as a Backend, refining code for a property appraiser. Leveraging Typescript, AWS Lambda, and Serverless Framework. Additionally, as a DevOps, I optimized cloud infrastructure across AWS.",
     "description_es": "Trabajé como Backend, optimizando código para un tasador de inmuebles. Utilizando TS, AWS Lambda y Serverless. Además, como DevOps, optimicé la infraestructura de AWS.",
