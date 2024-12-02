@@ -39,7 +39,7 @@ const navItems: NavItem[] = [
 <div class="drawer">
   <input id="drawerNavbar" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content flex h-screen flex-col landscape:h-full">
-    <div class="navbar fixed z-10 w-full bg-base-100 shadow-md">
+    <div class="navbar fixed z-10 w-full shadow-md">
       <div class="navbar-start md:invisible">
         <label
           id="drawerToggleOpen"
@@ -50,7 +50,7 @@ const navItems: NavItem[] = [
         </label>
       </div>
 
-      <nav class="navbar-center grid grid-cols-5 bg-base-100 md:w-[500px]">
+      <nav class="navbar-center grid grid-cols-5 md:w-[500px]">
         {
           navItems.map((item) => (
             <div class="items-cente group mx-2 flex flex-col items-center">
@@ -74,7 +74,7 @@ const navItems: NavItem[] = [
         <a
           href={`/cv/${lang}.pdf`}
           download={`LeePalacios_${lang}.pdf`}
-          class="duration-y btn transform bg-gray-500/20 transition hover:scale-110 hover:bg-gray-500/40"
+          class="duration-y btn transform border-none bg-gray-500/20 transition hover:scale-110 hover:bg-gray-500/40"
         >
           {lang === 'en' ? 'Resume' : 'Curriculum'}
         </a>
@@ -82,7 +82,7 @@ const navItems: NavItem[] = [
           <div
             tabindex="0"
             role="button"
-            class="btn bg-gray-500/20 hover:bg-gray-500/40"
+            class="btn border-none bg-gray-500/20 hover:bg-gray-500/40"
           >
             {lang === 'en' ? 'Language' : 'Idioma'}
           </div>
@@ -98,7 +98,7 @@ const navItems: NavItem[] = [
       </div>
     </div>
 
-    <div class="mt-auto h-full md:mt-12 md:h-screen">
+    <div class="mt-auto h-full md:h-screen">
       <slot />
     </div>
   </div>
@@ -134,6 +134,10 @@ const navItems: NavItem[] = [
     'drawerToggleClose'
   ) as HTMLLabelElement
   const navbarMenuItems = document.querySelectorAll('.navbarMenuItem')
+  const navbar = document.querySelector('.navbar') as HTMLElement
+  const presentationSection = document.getElementById(
+    'presentation'
+  ) as HTMLElement
 
   navbarMenuItems.forEach((x) => {
     x.addEventListener('click', () => {
@@ -178,4 +182,14 @@ const navItems: NavItem[] = [
   )
 
   sectionTargets.forEach((x) => observer.observe(x))
+
+  document.addEventListener('scroll', () => {
+    if (window.scrollY < presentationSection.clientHeight) {
+      navbar.classList.add('bg-transparent')
+      navbar.classList.remove('bg-base-100')
+    } else {
+      navbar.classList.remove('bg-transparent')
+      navbar.classList.add('bg-base-100')
+    }
+  })
 </script>

@@ -1,11 +1,7 @@
 ---
-import Logo from '../components/Logo.astro'
-import Envelope from 'astro-heroicons/outline/Envelope.astro'
-import DocumentText from 'astro-heroicons/outline/DocumentText.astro'
-import GithubIcon from '../components/icons/Github.astro'
-import LinkedinIcon from '../components/icons/Linkedin.astro'
-import ChevronDown from 'astro-heroicons/outline/ChevronDown.astro'
+import Logo from './Logo.astro'
 import { getLangFromUrl, useTranslation } from '../i18n/utils.ts'
+import PresentationActions from './PresentationActions.astro'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslation(lang)
@@ -13,57 +9,31 @@ const t = useTranslation(lang)
 const tPresentation = t('presentation')
 ---
 
-<section id="presentation" class="hero mt-6 min-h-screen md:mt-0">
+<section
+  id="presentation"
+  class="hero min-h-screen"
+  style='
+    background-image: url("/img/HeroBg.webp");
+    background-size: cover;
+    background-position: center;
+    mask-image: linear-gradient(black 80%, transparent);
+  '
+>
+  <div class="hero-overlay bg-opacity-60"></div>
   <div
-    class="hero-content flex-col gap-4 text-center md:gap-8"
     data-section="presentation"
+    class="hero-content flex-col lg:flex-row-reverse"
   >
-    <Logo
-      style="w-40 md:w-56 h-40 md:h-40 landscape:min-w-20 landscape:min-h-20"
+    <img
+      src="/img/Logo2.webp"
+      alt="Logo"
+      class="mb-8 w-96 drop-shadow-[0px_-7px_15px_8px_rgba(0,_0,_0,_0.1)] lg:mb-0 lg:w-1/2"
     />
-    <div class="flex flex-col items-center">
-      <h1 class="mt-4 text-2xl font-bold lg:text-3xl">Lee Palacios</h1>
-      <h1 class="text-xl font-bold text-custom-gray lg:text-2xl">@vitualizz</h1>
+    <div class="m-auto w-[80%] lg:w-full">
+      <p class="text-4xl font-bold lg:text-5xl">{tPresentation.hi}</p>
+      <h1 class="mb-3 text-4xl lg:text-5xl" set:html={tPresentation.i_am} />
+      <p class="mb-4 text-xl">{tPresentation.profession}</p>
+      <PresentationActions />
     </div>
-    <h2
-      class="w-9/12 text-center text-xl md:text-2xl lg:w-[55%]"
-      set:html={tPresentation.description}
-    />
-    <div class="mt-4 flex gap-3 lg:gap-5">
-      <a
-        data-tip={lang === 'en' ? 'Send email' : 'Enviar email'}
-        href="mailto:vitualizz@gmail.com"
-        class="duration-y tooltip transform cursor-pointer transition hover:scale-110"
-      >
-        <Envelope class="w-10 lg:w-12" />
-      </a>
-      <a
-        data-tip={lang === 'en' ? 'Resume' : 'Curriculum'}
-        href={`/cv/${lang}.pdf`}
-        download={`LeePalacios_${lang}.pdf`}
-        class="duration-y tooltip transform cursor-pointer transition hover:scale-110"
-      >
-        <DocumentText class="w-10 lg:w-12" />
-      </a>
-      <a
-        data-tip="Github"
-        href="https://github.com/vitualizz"
-        class="duration-y tooltip transform cursor-pointer transition hover:scale-110"
-      >
-        <GithubIcon class="w-10 lg:w-12" />
-      </a>
-      <a
-        data-tip="Linkedin"
-        href="https://www.linkedin.com/in/vitualizz/"
-        class="duration-y tooltip transform cursor-pointer transition hover:scale-110"
-      >
-        <LinkedinIcon class="w-10 lg:w-12" />
-      </a>
-    </div>
-    <a class="cursor-pointer" href="#about_me" aria-label="Scroll to about me">
-      <div class="mt-12 animate-bounce rounded-full border border-solid p-2">
-        <ChevronDown class="w-6" />
-      </div>
-    </a>
   </div>
 </section>

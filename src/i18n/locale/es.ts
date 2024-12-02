@@ -9,6 +9,9 @@ const locale: LanguageLocale = {
     blog: "Blog"
   },
   presentation: {
+    hi: "Hola, 🚀",
+    i_am: "Soy <span class='font-bold'>Lee Palacios</span>",
+    profession: "Ingeniero de Software y amante de los gatos 🐱",
     description: "<span class='text-color-1'>+7 años</span> de experiencia en programación, ¡soy tu aliado amante de la tecnología listo para sacudir tu mundo digital!"
   },
   about_me: {

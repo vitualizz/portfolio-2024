@@ -1,0 +1,42 @@
+---
+import Envelope from 'astro-heroicons/outline/Envelope.astro'
+import DocumentText from 'astro-heroicons/outline/DocumentText.astro'
+import GithubIcon from '../components/icons/Github.astro'
+import LinkedinIcon from '../components/icons/Linkedin.astro'
+
+import { getLangFromUrl } from '../i18n/utils.ts'
+
+const lang = getLangFromUrl(Astro.url)
+---
+
+<div class="mt-4 flex gap-3 lg:gap-5">
+  <a
+    data-tip="Github"
+    href="https://github.com/vitualizz"
+    class="duration-y tooltip transform cursor-pointer transition hover:scale-110"
+  >
+    <GithubIcon class="w-8 lg:w-12" />
+  </a>
+  <a
+    data-tip="Linkedin"
+    href="https://www.linkedin.com/in/vitualizz/"
+    class="duration-y tooltip transform cursor-pointer transition hover:scale-110"
+  >
+    <LinkedinIcon class="w-8 lg:w-12" />
+  </a>
+  <a
+    data-tip={lang === 'en' ? 'Send email' : 'Enviar email'}
+    href="mailto:vitualizz@gmail.com"
+    class="duration-y tooltip transform cursor-pointer transition hover:scale-110"
+  >
+    <Envelope class="w-8 lg:w-12" />
+  </a>
+  <a
+    data-tip={lang === 'en' ? 'Resume' : 'Curriculum'}
+    href={`/cv/${lang}.pdf`}
+    download={`LeePalacios_${lang}.pdf`}
+    class="duration-y tooltip transform cursor-pointer transition hover:scale-110"
+  >
+    <DocumentText class="w-8 lg:w-12" />
+  </a>
+</div>

@@ -9,6 +9,9 @@ export type LanguageLocale = {
     blog: string
   },
   presentation: {
+    hi: string
+    i_am: string
+    profession: string
     description: string
   },
   about_me: {
