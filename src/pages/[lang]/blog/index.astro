@@ -12,18 +12,22 @@ const allPosts = await getCollection('blog')
 ---
 
 <HomeLayout>
-  <main>
-    <h1></h1>
-    <ul>
-      {
-        allPosts.map((post) => (
-          <li class=''>
-            <a href={`/${lang}/blog/${post.slug.split('/')[1]}`}>
-              <p>{post.data.title}</p>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+  <main class="m-24">
+    {
+      allPosts.map((post) => (
+        <a
+          class="card w-96 bg-base-100 shadow-xl"
+          href={`/${lang}/blog/${post.slug.split('/')[0]}`}
+        >
+          <figure>
+            <img src={post.data.cover.src} alt={post.data.title} />
+          </figure>
+          <div class="card-body">
+            <h2 class="card-title">{post.data.title}</h2>
+            <p>{post.data.shortDescription}</p>
+          </div>
+        </a>
+      ))
+    }
   </main>
 </HomeLayout>

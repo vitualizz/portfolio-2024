@@ -23,10 +23,13 @@ export async function getStaticPaths() {
 const post: Props = Astro.props
 const { Content } = await post.render()
 const {
-  data: { title }
+  data: { title, cover, coverLink }
 } = post
 ---
 
 <BlogPostLayout title={title}>
+  <a href={coverLink} target="_blank">
+    <img src={cover.src} alt={title} />
+  </a>
   <Content />
 </BlogPostLayout>

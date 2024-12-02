@@ -2,10 +2,16 @@
 import BaseLayout from './BaseLayout.astro'
 import Navbar from '@components/Navbar.astro'
 import Footer from 'src/components/Footer.astro'
+
+type Props = {
+  navbarTransparent?: boolean
+}
+
+const { navbarTransparent = false } = Astro.props
 ---
 
 <BaseLayout title="Lee Palacios - @vitualizz / Software Engineer">
-  <Navbar>
+  <Navbar isTransparent={navbarTransparent}>
     <slot />
     <Footer />
   </Navbar>

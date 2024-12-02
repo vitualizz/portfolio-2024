@@ -6,6 +6,10 @@ import Bars3 from 'astro-heroicons/outline/Bars3.astro'
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslation(lang)
 
+type Props = {
+  isTransparent?: boolean
+}
+
 type NavItem = {
   name: string
   path: string
@@ -34,12 +38,16 @@ const navItems: NavItem[] = [
     path: `/${lang}/blog`
   }
 ]
+
+const { isTransparent = false } = Astro.props
 ---
 
 <div class="drawer">
   <input id="drawerNavbar" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content flex h-screen flex-col landscape:h-full">
-    <div class="navbar fixed z-10 w-full shadow-md">
+    <div
+      class={`navbar fixed z-10 w-full shadow-md ${!isTransparent && 'bg-base-100'}`}
+    >
       <div class="navbar-start md:invisible">
         <label
           id="drawerToggleOpen"
@@ -184,6 +192,8 @@ const navItems: NavItem[] = [
   sectionTargets.forEach((x) => observer.observe(x))
 
   document.addEventListener('scroll', () => {
+    if (presentationSection === null) return
+
     if (window.scrollY < presentationSection.clientHeight) {
       navbar.classList.add('bg-transparent')
       navbar.classList.remove('bg-base-100')
