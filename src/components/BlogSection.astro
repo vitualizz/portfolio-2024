@@ -18,23 +18,33 @@ const latestPosts = posts.slice(0, 3)
   data-aos-once="true"
 >
   <div class="hero-content" data-section="blog">
-    <div>
-      {
-        latestPosts.map((post) => (
-          <a
-            class="card w-96 bg-base-100 shadow-xl"
-            href={`/${lang}/blog/${post.slug.split('/')[0]}`}
-          >
-            <figure>
-              <img src={post.data.cover.src} alt={post.data.title} />
-            </figure>
-            <div class="card-body">
-              <h2 class="card-title">{post.data.title}</h2>
-              <p>{post.data.shortDescription}</p>
-            </div>
-          </a>
-        ))
-      }
+    <div class="text-center">
+      <div class="flex flex-wrap lg:flex-nowrap lg:gap-10">
+        {
+          latestPosts.map((post) => (
+            <a
+              class="card bg-base-100 shadow-lg hover:bg-base-200 hover:shadow-xl md:w-96"
+              href={`/${lang}/blog/${post.slug.split('/')[0]}`}
+            >
+              <figure>
+                <img src={post.data.cover.src} alt={post.data.title} />
+              </figure>
+              <div class="card-body text-left">
+                <h2 class="card-title">{post.data.title}</h2>
+                <p>{post.data.shortDescription}</p>
+                <div class="mt-3 flex gap-2">
+                  {post.data.tags.map((tag) => (
+                    <span class="badge badge-neutral">#{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+      <a href={`/${lang}/blog`} class="btn btn-md mt-8">
+        {t('blog').read_more}
+      </a>
     </div>
   </div>
 </section>

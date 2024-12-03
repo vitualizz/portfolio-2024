@@ -33,7 +33,8 @@ const locale: LanguageLocale = {
     thanks: "Con amor @vitualizz"
   },
   blog: {
-    title: 'Últimos Posts'
+    title: 'Últimos Posts',
+    read_more: 'Leer más'
   },
   seo: {
     title: "Desarrollador de Software | Experiencia en JavaScript y Ruby | Proyectos de Calidad | Contáctame",

@@ -22,5 +22,7 @@ export async function getStaticPaths() {
 
 <script>
   import AOS from 'aos'
-  AOS.init()
+  AOS.init({
+    disable: 'mobile'
+  })
 </script>

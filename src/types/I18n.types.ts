@@ -34,6 +34,7 @@ export type LanguageLocale = {
   },
   blog: {
     title: string
+    read_more: string
   },
   seo: {
     title: string
