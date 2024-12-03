@@ -29,7 +29,7 @@ const lang = getLangFromUrl(Astro.url)
     href="mailto:vitualizz@gmail.com"
     class="duration-y tooltip transform cursor-pointer transition hover:scale-110"
   >
-    <Envelope class="w-8 lg:w-12" />
+    <Envelope class="w-8 stroke-white lg:w-12" />
   </a>
   <a
     data-tip={lang === 'en' ? 'Resume' : 'Curriculum'}
@@ -37,6 +37,6 @@ const lang = getLangFromUrl(Astro.url)
     download={`LeePalacios_${lang}.pdf`}
     class="duration-y tooltip transform cursor-pointer transition hover:scale-110"
   >
-    <DocumentText class="w-8 lg:w-12" />
+    <DocumentText class="w-8 stroke-white lg:w-12" />
   </a>
 </div>

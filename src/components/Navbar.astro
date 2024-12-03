@@ -62,7 +62,7 @@ const { isTransparent = false } = Astro.props
             <div class="items-cente group mx-2 flex flex-col items-center">
               <a
                 href={item.path}
-                class="hidden transition duration-300 group-hover:font-bold md:block"
+                class="hidden text-white transition duration-300 group-hover:font-bold md:block"
                 data-nav-item={item.name}
               >
                 {tNav[item.name as keyof typeof tNav]}
@@ -80,7 +80,7 @@ const { isTransparent = false } = Astro.props
         <a
           href={`/cv/${lang}.pdf`}
           download={`LeePalacios_${lang}.pdf`}
-          class="duration-y btn transform border-none bg-gray-500/20 transition hover:scale-110 hover:bg-gray-500/40"
+          class="duration-y btn transform border-none bg-gray-500/20 text-white transition hover:scale-110 hover:bg-gray-500/40"
         >
           {lang === 'en' ? 'Resume' : 'Curriculum'}
         </a>
@@ -90,7 +90,7 @@ const { isTransparent = false } = Astro.props
             role="button"
             class="btn inline-flex items-center border-none bg-gray-500/20 hover:bg-gray-500/40"
           >
-            <span class="hidden lg:block">
+            <span class="hidden text-white lg:block">
               {lang === 'en' ? 'ENG' : 'ESP'}
             </span>
             <div>
@@ -105,7 +105,7 @@ const { isTransparent = false } = Astro.props
           </div>
           <ul
             tabindex="0"
-            class="menu dropdown-content z-[1] w-[6.5rem] rounded-box bg-base-100 shadow"
+            class="menu dropdown-content z-[1] w-[6.5rem] rounded-box bg-gray-600 shadow"
           >
             <li>
               <a href="/es">
@@ -162,6 +162,7 @@ const { isTransparent = false } = Astro.props
   ) as HTMLLabelElement
   const navbarMenuItems = document.querySelectorAll('.navbarMenuItem')
   const navbar = document.querySelector('.navbar') as HTMLElement
+  const navbarLinks = document.querySelectorAll('.navbar a')
   const presentationSection = document.getElementById(
     'presentation'
   ) as HTMLElement
@@ -219,6 +220,12 @@ const { isTransparent = false } = Astro.props
     } else {
       navbar.classList.remove('bg-transparent')
       navbar.classList.add('bg-base-100')
+    }
+
+    if (window.scrollY + 100 < presentationSection.clientHeight) {
+      navbarLinks.forEach((x) => x.classList.add('text-white'))
+    } else {
+      navbarLinks.forEach((x) => x.classList.remove('text-white'))
     }
   }
 
