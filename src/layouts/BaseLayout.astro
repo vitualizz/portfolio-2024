@@ -25,6 +25,8 @@ const twitterImage = new URL('/img/seo/twitter-image.png', Astro.url)
     <meta property="og:title" content={tSeo.title} />
     <meta property="og:description" content={tSeo.description} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
     <meta name="twitter:title" content={tSeo.title} />
     <meta name="twitter:description" content={tSeo.description} />
     <meta name="twitter:image" content={twitterImage} />
