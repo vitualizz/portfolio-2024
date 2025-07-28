@@ -1,5 +1,34 @@
 [
   {
+    "title": "Inmology",
+    "description_es": "Founder de Inmology, una pequeña empresa que se dedica a la creación de agentes IA para automatizar tareas en la industria inmobiliaria. Entendiendo los modelos de aprendizade de IA con la herramienta de N8N.",
+    "description_en": "Founder of Inmology, a small company dedicated to creating AI agents for automating tasks in the in-home industry. Understanding AI models with N8N tool.",
+    "image": "inmology",
+    "stack": [
+      {
+        "icon": "gpt",
+        "tooltip": "GPT / Others AI"
+      },
+      {
+        "icon": "python",
+        "tooltip": "Python"
+      },
+      {
+        "icon": "javascript",
+        "tooltip": "Javascript"
+      },
+      {
+        "icon": "postgres",
+        "tooltip": "Postgres"
+      },
+      {
+        "icon": "lambda",
+        "tooltip": "AWS Lambda"
+      }
+    ],
+    "demo": "https://inmology.vercel.app/"
+  },
+  {
     "title": "ComunidadFeliz",
     "description_es": "Desarrollador FullStack, implementando mejoras en la plataforma de administración de condominios. Utilizando Ruby on Rails y React. Además de optimizar las consultas de la base de datos.",
     "description_en": "FullStack Developer, implementing improvements in the condominium management platform. Using Ruby on Rails and React. Also, optimizing database queries.",

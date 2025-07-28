@@ -11,7 +11,7 @@ const tProjects = t('projects')
 
 <section id="projects" class="hero min-h-screen">
   <div class="hero-content">
-    <div class="w-10/12 md:w-full">
+    <div class="w-12/12 md:w-full">
       <h2 class="mb-3 text-center text-2xl font-semibold tracking-wider">
         <span class="text-custom-yellow">{'<'}</span>{
           tProjects.section_projects
@@ -19,7 +19,7 @@ const tProjects = t('projects')
       </h2>
       <div
         data-section="projects"
-        class="mt-10 grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 [&>*:nth-child(even)]:flex-row-reverse md:[&>*:nth-child(even)]:pl-0 [&>*:nth-child(odd)]:flex-row md:[&>*:nth-child(odd)]:pr-0"
+        class="mt-10 grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 [&>*:nth-child(even)]:flex-row-reverse lg:[&>*:nth-child(even)]:pl-0 [&>*:nth-child(odd)]:flex-row lg:[&>*:nth-child(odd)]:pr-0"
       >
         {
           projects.map((project, index) => (
