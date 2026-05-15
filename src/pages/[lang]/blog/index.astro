@@ -4,10 +4,6 @@ import { Image } from 'astro:assets'
 import HomeLayout from 'src/layouts/HomeLayout.astro'
 import { getLangFromUrl } from 'src/i18n/utils.ts'
 
-export async function getStaticPaths() {
-  return [{ params: { lang: 'en' } }, { params: { lang: 'es' } }]
-}
-
 const lang = getLangFromUrl(Astro.url)
 const allPosts = await getCollection('blog', (filter) => {
   return lang === filter.data.lang
