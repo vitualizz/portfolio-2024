@@ -47,7 +47,7 @@ const { title, index, image, stack, demo, ...descriptions } = Astro.props
       <a role="button" class="btn btn-sm" onclick={`${image}.showModal()`}
         >{lang === 'en' ? 'Project' : 'Proyecto'}</a
       >
-      <a role="button" class="btn btn-sm" href={demo} target="_blank"
+      <a role="button" class="btn btn-sm" href={demo} target="_blank" rel="noopener noreferrer"
         >{lang === 'en' ? 'Live Preview' : 'Vista Previa'}</a
       >
     </div>
@@ -89,7 +89,7 @@ const { title, index, image, stack, demo, ...descriptions } = Astro.props
         {
           demo && (
             <div data-tip="Live view" class="tooltip">
-              <a class="btn btn-circle" href={demo} target="_blank">
+              <a class="btn btn-circle" href={demo} target="_blank" rel="noopener noreferrer">
                 <svg
                   class="h-6 w-6 fill-none stroke-current"
                   xmlns="http://www.w3.org/2000/svg"

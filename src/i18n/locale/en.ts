@@ -2,7 +2,7 @@ import type { LanguageLocale } from 'src/types/I18n.types'
 
 const locale: LanguageLocale = {
   nav: {
-    presentation: 'Presentiation',
+    presentation: 'Presentation',
     about_me: 'About me',
     projects: 'Projects',
     contact_me: 'Contact me',

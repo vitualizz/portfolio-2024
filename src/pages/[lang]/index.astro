@@ -6,9 +6,6 @@ import ContactMeSection from 'src/components/ContactMeSection.astro'
 import BlogSection from 'src/components/BlogSection.astro'
 import 'aos/dist/aos.css'
 
-export async function getStaticPaths() {
-  return [{ params: { lang: 'en' } }, { params: { lang: 'es' } }]
-}
 ---
 
 <HomeLayout navbarTransparent>
