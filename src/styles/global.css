@@ -21,10 +21,10 @@
   --text-6xl: clamp(3.5rem, 8vw, 6.5rem);
   --text-display: clamp(4rem, 12vw, 9rem);
 
-  /* Accent (only color used semantically) */
-  --color-accent: #6EE7B7;
-  --color-accent-soft: color-mix(in oklab, #6EE7B7 18%, transparent);
-  --color-accent-strong: #34D399;
+  /* Accent */
+  --color-accent: #f3d463;
+  --color-accent-soft: color-mix(in oklab, #f3d463 18%, transparent);
+  --color-accent-strong: #e6c040;
 
   /* Neutrals — light theme defaults */
   --color-bg: #F5F4F0;
@@ -64,11 +64,11 @@
   --color-base-200: #ECEAE4;
   --color-base-300: #E2DFD8;
   --color-base-content: #0A0B0D;
-  --color-primary: #6EE7B7;
+  --color-primary: #f3d463;
   --color-primary-content: #0A0B0D;
   --color-secondary: #0A0B0D;
   --color-secondary-content: #F5F4F0;
-  --color-accent: #6EE7B7;
+  --color-accent: #f3d463;
   --color-neutral: #0A0B0D;
   --color-neutral-content: #F5F4F0;
   --radius-box: 1rem;
@@ -84,11 +84,11 @@
   --color-base-200: #14161A;
   --color-base-300: #1F2226;
   --color-base-content: #F5F4F0;
-  --color-primary: #6EE7B7;
+  --color-primary: #f3d463;
   --color-primary-content: #0A0B0D;
   --color-secondary: #F5F4F0;
   --color-secondary-content: #0A0B0D;
-  --color-accent: #6EE7B7;
+  --color-accent: #f3d463;
   --color-neutral: #F5F4F0;
   --color-neutral-content: #0A0B0D;
 }
@@ -121,13 +121,13 @@
 }
 
 @layer components {
-  /* Legacy i18n highlight classes — mapped to design tokens */
+  /* i18n inline highlight classes */
   .text-color-1 {
-    color: var(--color-accent);
+    color: #9cef5a;
     font-weight: 600;
   }
   .text-color-2 {
-    color: var(--color-accent-strong);
+    color: #f38181;
   }
 
   .anim-fade-up,
