@@ -1,0 +1,22 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "daisyui";
+
+@theme {
+  --font-sans: "Fredoka Variable", ui-sans-serif, system-ui, sans-serif;
+  --color-custom-gray: #a8a8a8;
+  --color-color-1: #9cef5a;
+  --color-color-2: #f38181;
+  --color-custom-yellow: #f3d463;
+}
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+}
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  --color-base-100: #1d1c1a;
+  --color-base-content: #ffffff;
+}
