@@ -13,7 +13,7 @@ const locale: LanguageLocale = {
     hi: 'Hi, 🚀',
     i_am: "I'm <span class='font-bold'>Lee Palacios</span>",
     profession: 'Software Engineer and cat lover 🐱',
-    description: "<span class='text-color-1'>+7 years</span> of coding experience, I'm your tech-loving ally ready to rock your digital world!",
+    description: "<span class='text-color-1'>+7 years</span> of experience building product in Latin American startups. Today I'm the <strong>founder of Inmology</strong>, designing AI agents that automate real estate operations. Ready to rock your digital world!",
     tagline: 'I build interfaces that matter and systems that scale.',
     cta_primary: 'See my work',
     cta_secondary: 'Get in touch'
