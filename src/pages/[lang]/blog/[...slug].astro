@@ -1,7 +1,7 @@
 ---
 import BlogPostLayout from 'src/layouts/BlogPostLayout.astro'
 import { Image } from 'astro:assets'
-import { type CollectionEntry, getCollection } from 'astro:content'
+import { type CollectionEntry, getCollection, render } from 'astro:content'
 
 type Props = CollectionEntry<'blog'>
 
@@ -21,7 +21,7 @@ export async function getStaticPaths() {
 }
 
 const post: Props = Astro.props
-const { Content } = await post.render()
+const { Content } = await render(post)
 const {
   data: { title, cover, coverLink }
 } = post
