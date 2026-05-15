@@ -16,17 +16,7 @@ import Moon from 'astro-heroicons/outline/Moon.astro'
 </label>
 
 <script is:inline>
-  localStorage.setItem('theme', 'dark')
-  const theme = (() => {
-    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-      return localStorage.getItem('theme')
-    }
-
-    if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-      return 'light'
-    }
-    return 'dark'
-  })()
+  const theme = document.documentElement.getAttribute('data-theme') || 'dark'
 
   document
     .getElementById('moonIcon')
@@ -36,18 +26,15 @@ import Moon from 'astro-heroicons/outline/Moon.astro'
     .getElementById('sunIcon')
     .classList.add(theme === 'dark' ? 'swap-on' : 'swap-off')
 
-  document.documentElement.setAttribute('data-theme', theme)
-  document.documentElement.classList.add(theme)
-  document.documentElement.classList.remove(theme === 'dark' ? 'light' : 'dark')
-
   const handleToggleClick = () => {
     const element = document.documentElement
-    const isDark = element.getAttribute('data-theme') === 'dark'
+    const current = element.getAttribute('data-theme') || 'dark'
+    const next = current === 'dark' ? 'light' : 'dark'
 
-    localStorage.setItem('theme', isDark ? 'dark' : 'light')
+    localStorage.setItem('theme', next)
     element.removeAttribute('class')
-    element.classList.add(isDark ? 'light' : 'dark')
-    element.setAttribute('data-theme', isDark ? 'light' : 'dark')
+    element.classList.add(next)
+    element.setAttribute('data-theme', next)
   }
 
   document

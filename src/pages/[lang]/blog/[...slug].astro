@@ -1,5 +1,6 @@
 ---
 import BlogPostLayout from 'src/layouts/BlogPostLayout.astro'
+import { Image } from 'astro:assets'
 import { type CollectionEntry, getCollection } from 'astro:content'
 
 type Props = CollectionEntry<'blog'>
@@ -27,8 +28,8 @@ const {
 ---
 
 <BlogPostLayout title={title}>
-  <a href={coverLink} target="_blank">
-    <img src={cover.src} alt={title} />
+  <a href={coverLink} target="_blank" rel="noopener noreferrer">
+    <Image src={cover} alt={title} width={384} height={216} />
   </a>
   <Content />
 </BlogPostLayout>

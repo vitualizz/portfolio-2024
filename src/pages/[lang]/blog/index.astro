@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content'
+import { Image } from 'astro:assets'
 import HomeLayout from 'src/layouts/HomeLayout.astro'
 import { getLangFromUrl } from 'src/i18n/utils.ts'
 
@@ -22,7 +23,7 @@ const allPosts = await getCollection('blog', (filter) => {
           href={`/${lang}/blog/${post.slug.split('/')[0]}`}
         >
           <figure>
-            <img src={post.data.cover.src} alt={post.data.title} />
+            <Image src={post.data.cover} alt={post.data.title} width={384} height={216} />
           </figure>
           <div class="card-body">
             <h2 class="card-title">{post.data.title}</h2>
