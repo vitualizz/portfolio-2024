@@ -1,13 +1,16 @@
 import { defineConfig } from 'astro/config'
-import tailwind from '@astrojs/tailwind'
 import vercelServerless from '@astrojs/vercel/serverless'
+import tailwindcss from '@tailwindcss/vite'
 
 import playformCompress from '@playform/compress'
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://vitualizz.vercel.app',
-  integrations: [tailwind(), playformCompress()],
+  vite: {
+    plugins: [tailwindcss()]
+  },
+  integrations: [playformCompress()],
   output: 'server',
   adapter: vercelServerless({
     maxDuration: 6
