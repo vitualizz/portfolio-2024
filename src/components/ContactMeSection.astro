@@ -9,42 +9,36 @@ const lang = getLangFromUrl(Astro.url)
 const t = useTranslation(lang)
 
 const tContactMe = t('contact_me')
+const tForm = tContactMe.form
 ---
 
 <section
   data-section="contact_me"
   id="contact_me"
-  class="hero min-h-[80vh] bg-gradient-to-r"
+  class="bg-bg px-6 lg:px-16 py-32"
 >
-  <div
-    class="hero-content flex-col lg:flex-row lg:justify-around xl:justify-between"
-  >
-    <div class="w-10/12 text-center lg:w-4/12 lg:text-left">
+  <div class="max-w-6xl mx-auto flex flex-col lg:flex-row lg:justify-around xl:justify-between gap-16">
+    <div class="w-full lg:w-5/12 text-center lg:text-left">
       <h3
-        class="text-4xl font-bold md:text-5xl"
+        class="font-display text-4xl font-bold md:text-5xl mb-12"
         set:html={tContactMe.tell_me}
       />
-      <a href="mailto:vitualizz@gmail.com" class="">
-        <div
-          class="mt-10 flex items-center gap-4 rounded-lg bg-gray-400/20 px-7 py-2 transition hover:scale-105"
-        >
-          <Envelope class="h-8 w-8" />
+
+      <a href="mailto:vitualizz@gmail.com">
+        <div class="mt-5 flex items-center gap-4 rounded-lg bg-surface border border-border px-7 py-3 transition hover:bg-surface-2">
+          <Envelope class="h-8 w-8 shrink-0" />
           <p class="font-medium">vitualizz@gmail.com</p>
         </div>
       </a>
       <a href="https://github.com/vitualizz" target="_blank" rel="noopener noreferrer">
-        <div
-          class="mt-5 flex items-center gap-4 rounded-lg bg-gray-400/20 px-7 py-2 transition hover:scale-105"
-        >
-          <GithubIcon class="h-8 w-8" />
+        <div class="mt-4 flex items-center gap-4 rounded-lg bg-surface border border-border px-7 py-3 transition hover:bg-surface-2">
+          <GithubIcon class="h-8 w-8 shrink-0" />
           <p class="font-medium">vitualizz</p>
         </div>
       </a>
       <a href="https://www.linkedin.com/in/vitualizz/" target="_blank" rel="noopener noreferrer">
-        <div
-          class="mt-5 flex items-center gap-4 rounded-lg bg-gray-400/20 px-7 py-2 transition hover:scale-105"
-        >
-          <Linkedin class="h-8 w-8" />
+        <div class="mt-4 flex items-center gap-4 rounded-lg bg-surface border border-border px-7 py-3 transition hover:bg-surface-2">
+          <Linkedin class="h-8 w-8 shrink-0" />
           <p class="font-medium">Lee Palacios</p>
         </div>
       </a>
@@ -54,74 +48,93 @@ const tContactMe = t('contact_me')
         target="_blank"
         rel="noopener noreferrer"
       >
-        <div
-          class="mt-5 flex items-center gap-4 rounded-lg bg-gray-400/20 px-7 py-2 transition hover:scale-105"
-        >
-          <DocumentText class="h-8 w-8" />
-          <p class="font-medium">{lang === 'en' ? 'Resume' : 'Curriculum'}</p>
+        <div class="mt-4 flex items-center gap-4 rounded-lg bg-surface border border-border px-7 py-3 transition hover:bg-surface-2">
+          <DocumentText class="h-8 w-8 shrink-0" />
+          <p class="font-medium">{tContactMe.resume_label}</p>
         </div>
       </a>
     </div>
-    <div class="card w-full max-w-sm shrink-0 bg-base-100 shadow-2xl">
+
+    <div class="w-full max-w-sm shrink-0 bg-surface-2 border border-border rounded-xl">
       <form
         id="contactForm"
         action="/api/contact"
         method="POST"
-        class="card-body"
+        class="p-8"
+        data-i18n-submitting={tForm.submitting}
+        data-i18n-success={tForm.success}
+        data-i18n-error={tForm.error}
       >
-        <h3
-          class="card-title text-xl font-bold md:text-2xl"
-          set:html={tContactMe.send_message_me}
-        />
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Email</span>
+        <h3 class="font-display text-xl font-bold md:text-2xl mb-6" set:html={tContactMe.send_message_me} />
+
+        <div class="form-control mb-4">
+          <label class="label pb-1">
+            <span class="label-text font-medium">{tForm.name_label}</span>
+          </label>
+          <input
+            type="text"
+            placeholder={tForm.name_placeholder}
+            class="input input-bordered w-full"
+            name="name"
+            required
+          />
+        </div>
+
+        <div class="form-control mb-4">
+          <label class="label pb-1">
+            <span class="label-text font-medium">{tForm.email_label}</span>
           </label>
           <input
             type="email"
-            placeholder="Ingresa tu email para contactar"
-            class="input input-bordered"
+            placeholder={tForm.email_placeholder}
+            class="input input-bordered w-full"
             name="email"
             required
           />
         </div>
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Mensaje</span>
+
+        <div class="form-control mb-6">
+          <label class="label pb-1">
+            <span class="label-text font-medium">{tForm.message_label}</span>
           </label>
           <textarea
-            placeholder="Cuéntame sobre tu proyecto/trabajo"
-            class="textarea input-bordered min-h-28"
+            placeholder={tForm.message_placeholder}
+            class="textarea input-bordered min-h-28 w-full"
             name="description"
             required></textarea>
         </div>
-        <div class="form-control mt-6">
-          <button type="submit" class="btn">Enviar mensaje</button>
+
+        <div class="form-control">
+          <button type="submit" class="btn btn-primary w-full">{tForm.submit}</button>
         </div>
       </form>
     </div>
   </div>
 </section>
+
 <script>
   document
     .getElementById('contactForm')
     ?.addEventListener('submit', async function (e) {
       e.preventDefault()
 
-      const form = this
-      const button = form.querySelector('button[type="submit"]')
+      const form = this as HTMLFormElement
+      const button = form.querySelector('button[type="submit"]') as HTMLButtonElement
       const originalText = button.innerHTML
 
-      // Animación de envío
-      button.innerHTML = `
-      <svg class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-      </svg>
-      Enviando...
-    `
+      const submittingText = form.dataset.i18nSubmitting ?? 'Sending...'
+      const successText = form.dataset.i18nSuccess ?? 'Message sent!'
+      const errorText = form.dataset.i18nError ?? 'Failed to send.'
 
-      // Recoger datos
+      // Sending animation
+      button.innerHTML = `
+        <svg class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        ${submittingText}
+      `
+
       const formData = new FormData(form)
 
       try {
@@ -132,38 +145,27 @@ const tContactMe = t('contact_me')
 
         if (response.ok) {
           button.innerHTML = `
-          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-          </svg>
-          ¡Mensaje Enviado!
-        `
-          button.classList.remove('bg-primary-600', 'hover:bg-primary-700')
-          button.classList.add('bg-success-600', 'hover:bg-success-700')
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            ${successText}
+          `
           form.reset()
         } else {
-          throw new Error('No se pudo enviar')
+          throw new Error('send failed')
         }
       } catch (err) {
         button.innerHTML = `
-        <svg class="w-5 h-5 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-5v2H9v-2h2zm0-8v6H9V5h2z" clip-rule="evenodd"></path>
-        </svg>
-        Error al enviar
-      `
-        button.classList.remove('bg-primary-600', 'hover:bg-primary-700')
-        button.classList.add('bg-red-600', 'hover:bg-red-700')
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-5v2H9v-2h2zm0-8v6H9V5h2z" clip-rule="evenodd"></path>
+          </svg>
+          ${errorText}
+        `
       }
 
-      // Restaurar luego de 3 segundos
+      // Restore after 3 seconds
       setTimeout(() => {
         button.innerHTML = originalText
-        button.classList.remove(
-          'bg-success-600',
-          'hover:bg-success-700',
-          'bg-red-600',
-          'hover:bg-red-700'
-        )
-        button.classList.add('bg-primary-600', 'hover:bg-primary-700')
       }, 3000)
     })
 </script>

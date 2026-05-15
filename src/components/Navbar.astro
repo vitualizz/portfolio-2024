@@ -18,10 +18,19 @@ type NavItem = {
 }
 
 const tNav = t('nav')
+const tContactMe = t('contact_me')
 const navItems: NavItem[] = [
   {
     name: 'presentation',
     path: `/${lang}/#presentation`
+  },
+  {
+    name: 'about_me',
+    path: `/${lang}/#about_me`
+  },
+  {
+    name: 'work_experience',
+    path: `/${lang}/#work_experience`
   },
   {
     name: 'projects',
@@ -56,20 +65,20 @@ const { isTransparent = false } = Astro.props
         </label>
       </div>
 
-      <nav class="navbar-center grid grid-cols-5 md:w-[500px]">
+      <nav class="navbar-center hidden md:flex gap-1">
         {
           navItems.map((item) => (
-            <div class="items-cente group mx-2 flex flex-col items-center">
+            <div class="group flex flex-col items-center mx-1">
               <a
                 href={item.path}
-                class="hidden text-white transition duration-300 group-hover:font-bold md:block"
+                class="text-sm transition duration-300 group-hover:font-bold px-2 py-1"
                 data-nav-item={item.name}
               >
                 {tNav[item.name as keyof typeof tNav]}
               </a>
               <span
                 data-nav-item={item.name}
-                class="align-center block h-0.5 w-0 bg-custom-yellow transition-all duration-500 group-hover:w-[80%]"
+                class="block h-0.5 w-0 bg-accent transition-all duration-500 group-hover:w-[80%]"
               />
             </div>
           ))
@@ -80,17 +89,17 @@ const { isTransparent = false } = Astro.props
         <a
           href={`/cv/${lang}.pdf`}
           download={`LeePalacios_${lang}.pdf`}
-          class="duration-y btn transform border-none bg-gray-500/20 text-white transition hover:scale-110 hover:bg-gray-500/40"
+          class="btn transform border-none bg-surface-2 border border-border transition hover:scale-110 hover:bg-surface-2/80"
         >
-          {lang === 'en' ? 'Resume' : 'Curriculum'}
+          {tContactMe.resume_label}
         </a>
         <div class="dropdown ml-4 mr-1">
           <div
             tabindex="0"
             role="button"
-            class="btn inline-flex items-center border-none bg-gray-500/20 hover:bg-gray-500/40"
+            class="btn inline-flex items-center border border-border bg-surface-2 hover:bg-surface-2/80"
           >
-            <span class="hidden text-white lg:block">
+            <span class="hidden lg:block">
               {lang === 'en' ? 'ENG' : 'ESP'}
             </span>
             <div>
@@ -105,7 +114,7 @@ const { isTransparent = false } = Astro.props
           </div>
           <ul
             tabindex="0"
-            class="menu dropdown-content z-[1] w-[6.5rem] rounded-box bg-gray-600 shadow"
+            class="menu dropdown-content z-[1] w-[6.5rem] rounded-box bg-surface border border-border shadow"
           >
             <li>
               <a href="/es">
@@ -150,85 +159,90 @@ const { isTransparent = false } = Astro.props
 </div>
 
 <script>
-  /* Navbar Mobile */
-  const drawerNavbar = document.getElementById(
-    'drawerNavbar'
-  ) as HTMLInputElement
-  const drawerToggleOpen = document.getElementById(
-    'drawerToggleOpen'
-  ) as HTMLLabelElement
-  const drawerToggleClose = document.getElementById(
-    'drawerToggleClose'
-  ) as HTMLLabelElement
-  const navbarMenuItems = document.querySelectorAll('.navbarMenuItem')
-  const navbar = document.querySelector('.navbar') as HTMLElement
-  const navbarLinks = document.querySelectorAll('.navbar a')
-  const presentationSection = document.getElementById(
-    'presentation'
-  ) as HTMLElement
+  function initNavbar() {
+    /* Navbar Mobile */
+    const drawerNavbar = document.getElementById(
+      'drawerNavbar'
+    ) as HTMLInputElement
+    const drawerToggleOpen = document.getElementById(
+      'drawerToggleOpen'
+    ) as HTMLLabelElement
+    const drawerToggleClose = document.getElementById(
+      'drawerToggleClose'
+    ) as HTMLLabelElement
+    const navbarMenuItems = document.querySelectorAll('.navbarMenuItem')
+    const navbar = document.querySelector('.navbar') as HTMLElement
+    const navbarLinks = document.querySelectorAll('.navbar a')
+    const presentationSection = document.getElementById(
+      'presentation'
+    ) as HTMLElement
 
-  navbarMenuItems.forEach((x) => {
-    x.addEventListener('click', () => {
+    navbarMenuItems.forEach((x) => {
+      x.addEventListener('click', () => {
+        drawerNavbar.checked = false
+      })
+    })
+
+    drawerToggleOpen.addEventListener('click', () => {
+      drawerNavbar.checked = true
+    })
+
+    drawerToggleClose.addEventListener('click', () => {
       drawerNavbar.checked = false
     })
-  })
 
-  drawerToggleOpen.addEventListener('click', () => {
-    drawerNavbar.checked = true
-  })
+    /* Intersection Observer */
+    const sectionTargets = document.querySelectorAll('[data-section]')
+    const aNavTargets = document.querySelectorAll('a[data-nav-item]')
+    const spanNavTargets = document.querySelectorAll('span[data-nav-item]')
 
-  drawerToggleClose.addEventListener('click', () => {
-    drawerNavbar.checked = false
-  })
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            aNavTargets.forEach((x) => x.classList.remove('font-bold'))
+            spanNavTargets.forEach((x) => x.classList.remove('w-[80%]'))
+            const aItemTarget = document.querySelector(
+              `a[data-nav-item=${(entry.target as HTMLElement).dataset.section}]`
+            ) as HTMLAnchorElement
+            const spanItemTarget = document.querySelector(
+              `span[data-nav-item=${(entry.target as HTMLElement).dataset.section}]`
+            ) as HTMLSpanElement
+            if (spanItemTarget) spanItemTarget.classList.add('w-[80%]')
+            if (aItemTarget) aItemTarget.classList.add('font-bold')
+          }
+        })
+      },
+      {
+        rootMargin: '-50% 0% -50% 0%',
+        threshold: 0
+      }
+    )
 
-  /* Intersection Observer */
-  const sectionTargets = document.querySelectorAll('[data-section]')
-  const aNavTargets = document.querySelectorAll('a[data-nav-item]')
-  const spanNavTargets = document.querySelectorAll('span[data-nav-item]')
+    sectionTargets.forEach((x) => observer.observe(x))
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          aNavTargets.forEach((x) => x.classList.remove('font-bold'))
-          spanNavTargets.forEach((x) => x.classList.remove('w-[80%]'))
-          const aItemTarget = document.querySelector(
-            `a[data-nav-item=${(entry.target as HTMLElement).dataset.section}]`
-          ) as HTMLAnchorElement
-          const spanItemTarget = document.querySelector(
-            `span[data-nav-item=${(entry.target as HTMLElement).dataset.section}]`
-          ) as HTMLSpanElement
-          spanItemTarget.classList.add('w-[80%]')
-          aItemTarget.classList.add('font-bold')
-        }
-      })
-    },
-    {
-      rootMargin: '-50% 0% -50% 0%',
-      threshold: 0
-    }
-  )
+    const scrollNavbarBg = () => {
+      if (presentationSection === null) return
 
-  sectionTargets.forEach((x) => observer.observe(x))
+      if (window.scrollY < presentationSection.clientHeight) {
+        navbar.classList.add('bg-transparent')
+        navbar.classList.remove('bg-base-100')
+      } else {
+        navbar.classList.remove('bg-transparent')
+        navbar.classList.add('bg-base-100')
+      }
 
-  const scrollNavbarBg = () => {
-    if (presentationSection === null) return
-
-    if (window.scrollY < presentationSection.clientHeight) {
-      navbar.classList.add('bg-transparent')
-      navbar.classList.remove('bg-base-100')
-    } else {
-      navbar.classList.remove('bg-transparent')
-      navbar.classList.add('bg-base-100')
+      if (window.scrollY + 100 < presentationSection.clientHeight) {
+        navbarLinks.forEach((x) => x.classList.add('text-white'))
+      } else {
+        navbarLinks.forEach((x) => x.classList.remove('text-white'))
+      }
     }
 
-    if (window.scrollY + 100 < presentationSection.clientHeight) {
-      navbarLinks.forEach((x) => x.classList.add('text-white'))
-    } else {
-      navbarLinks.forEach((x) => x.classList.remove('text-white'))
-    }
+    document.addEventListener('scroll', scrollNavbarBg)
+    document.addEventListener('load', scrollNavbarBg)
   }
 
-  document.addEventListener('scroll', scrollNavbarBg)
-  document.addEventListener('load', scrollNavbarBg)
+  initNavbar()
+  document.addEventListener('astro:page-load', initNavbar)
 </script>

@@ -3,20 +3,224 @@
 @plugin "daisyui";
 
 @theme {
-  --font-sans: "Fredoka Variable", ui-sans-serif, system-ui, sans-serif;
-  --color-custom-gray: #a8a8a8;
-  --color-color-1: #9cef5a;
-  --color-color-2: #f38181;
-  --color-custom-yellow: #f3d463;
+  /* Typography */
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "JetBrains Mono", monospace;
+
+  /* Type scale */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 3rem;
+  --text-5xl: 4rem;
+  --text-6xl: clamp(3.5rem, 8vw, 6.5rem);
+  --text-display: clamp(4rem, 12vw, 9rem);
+
+  /* Accent (only color used semantically) */
+  --color-accent: #6EE7B7;
+  --color-accent-soft: color-mix(in oklab, #6EE7B7 18%, transparent);
+  --color-accent-strong: #34D399;
+
+  /* Neutrals — light theme defaults */
+  --color-bg: #F5F4F0;
+  --color-surface: #FFFFFF;
+  --color-surface-2: #ECEAE4;
+  --color-text: #0A0B0D;
+  --color-text-muted: #5A5A5A;
+  --color-border: #E2DFD8;
+
+  /* Spacing scale (named) */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  --spacing-2xl: 4rem;
+  --spacing-3xl: 6rem;
+  --spacing-section: 8rem;
+  --spacing-section-sm: 4rem;
+  --spacing-gutter: 1.5rem;
+
+  /* Radii */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
 }
 
+/* daisyUI LIGHT theme — consumes our tokens */
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
+  color-scheme: light;
+  --color-base-100: #F5F4F0;
+  --color-base-200: #ECEAE4;
+  --color-base-300: #E2DFD8;
+  --color-base-content: #0A0B0D;
+  --color-primary: #6EE7B7;
+  --color-primary-content: #0A0B0D;
+  --color-secondary: #0A0B0D;
+  --color-secondary-content: #F5F4F0;
+  --color-accent: #6EE7B7;
+  --color-neutral: #0A0B0D;
+  --color-neutral-content: #F5F4F0;
+  --radius-box: 1rem;
+  --radius-field: 0.5rem;
+  --radius-selector: 0.5rem;
 }
 
+/* daisyUI DARK theme */
 @plugin "daisyui/theme" {
   name: "dark";
-  --color-base-100: #1d1c1a;
-  --color-base-content: #ffffff;
+  color-scheme: dark;
+  --color-base-100: #0A0B0D;
+  --color-base-200: #14161A;
+  --color-base-300: #1F2226;
+  --color-base-content: #F5F4F0;
+  --color-primary: #6EE7B7;
+  --color-primary-content: #0A0B0D;
+  --color-secondary: #F5F4F0;
+  --color-secondary-content: #0A0B0D;
+  --color-accent: #6EE7B7;
+  --color-neutral: #F5F4F0;
+  --color-neutral-content: #0A0B0D;
+}
+
+/* Dark-theme overrides for our neutral tokens — keep components in sync */
+:root[data-theme="dark"] {
+  --color-bg: #0A0B0D;
+  --color-surface: #14161A;
+  --color-surface-2: #1F2226;
+  --color-text: #F5F4F0;
+  --color-text-muted: #9CA3AF;
+  --color-border: #26292E;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+}
+
+@layer components {
+  /* Legacy i18n highlight classes — mapped to design tokens */
+  .text-color-1 {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+  .text-color-2 {
+    color: var(--color-accent-strong);
+  }
+
+  .anim-fade-up,
+  .anim-fade-in,
+  .anim-slide-left,
+  .anim-slide-right {
+    opacity: 0;
+  }
+
+  @supports (animation-timeline: view()) {
+    .anim-fade-up {
+      animation: fade-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 35%;
+    }
+    .anim-fade-in {
+      animation: fade-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 35%;
+    }
+    .anim-slide-left {
+      animation: slide-left linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+    .anim-slide-right {
+      animation: slide-right linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+  }
+
+  /* Graceful fallback: if scroll-driven not supported, just show content */
+  @supports not (animation-timeline: view()) {
+    .anim-fade-up,
+    .anim-fade-in,
+    .anim-slide-left,
+    .anim-slide-right {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .anim-fade-up,
+    .anim-fade-in,
+    .anim-slide-left,
+    .anim-slide-right {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }

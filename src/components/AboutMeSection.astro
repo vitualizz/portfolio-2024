@@ -30,29 +30,24 @@ const skillSections: {
 ]
 ---
 
-<section id="about_me" class="hero min-h-[70vh] pt-[75px]">
+<section id="about_me" data-section="about_me" class="hero min-h-[70vh] pt-[75px]">
   <div
     class="hero-content flex-col gap-16 lg:flex-row lg:items-start lg:!justify-around lg:gap-8"
-    data-section="about_me"
   >
     <div
       class="flex min-h-[60vh] w-10/12 flex-col items-center text-center md:h-full lg:w-4/12"
     >
-      <h2 class="mb-3 text-2xl font-semibold tracking-wider">
-        <span class="text-custom-yellow">{'<'}</span>{
-          tAboutMe.section_about_me
-        }<span class="text-custom-yellow">{'/>'}</span>
+      <h2 class="font-display mb-3 text-2xl font-semibold">
+        {tAboutMe.section_about_me}
       </h2>
       <p
         set:html={tAboutMe.biography}
-        class="text-2xl font-thin md:text-3xl md:font-light"
+        class="text-lg lg:text-xl max-w-prose leading-relaxed"
       />
     </div>
     <div class="flex w-10/12 flex-col justify-center lg:w-4/12">
-      <h2 class="mb-3 text-center text-2xl font-semibold tracking-wider">
-        <span class="text-custom-yellow">{'<'}</span>{
-          tAboutMe.section_skills
-        }<span class="text-custom-yellow">{'/>'}</span>
+      <h2 class="font-display mb-3 text-center text-2xl font-semibold">
+        {tAboutMe.section_skills}
       </h2>
       <div class="flex flex-col gap-4">
         {
@@ -132,36 +127,41 @@ const skillSections: {
 </section>
 
 <script>
-  const skillsVisibilityToggleTargets = document.querySelectorAll(
-    '[data-skill-toggle]'
-  ) as unknown as HTMLInputElement[]
-  const skillsCollapseTargets = Array.from(
-    document.querySelectorAll('[data-skill-collapse]')
-  ) as HTMLInputElement[]
+  function initSkillsAccordion() {
+    const skillsVisibilityToggleTargets = document.querySelectorAll(
+      '[data-skill-toggle]'
+    ) as unknown as HTMLInputElement[]
+    const skillsCollapseTargets = Array.from(
+      document.querySelectorAll('[data-skill-collapse]')
+    ) as HTMLInputElement[]
 
-  skillsVisibilityToggleTargets.forEach((t) => {
-    t.addEventListener('change', (e) => {
-      const target = e.target as HTMLInputElement
-      const currentSection = target.dataset.skillToggle
-      const collapseCurrent = skillsCollapseTargets.find(
-        (x) => x.dataset.skillCollapse === currentSection
-      ) as HTMLInputElement
-      collapseCurrent.checked = target.checked
+    skillsVisibilityToggleTargets.forEach((t) => {
+      t.addEventListener('change', (e) => {
+        const target = e.target as HTMLInputElement
+        const currentSection = target.dataset.skillToggle
+        const collapseCurrent = skillsCollapseTargets.find(
+          (x) => x.dataset.skillCollapse === currentSection
+        ) as HTMLInputElement
+        collapseCurrent.checked = target.checked
 
-      if (window.innerWidth > 1024 && target.checked) {
-        const noToggleCurrent = Array.from(
-          skillsVisibilityToggleTargets
-        ).filter((x) => x.dataset.skillToggle !== currentSection)
-        const noCollapseCurrent = skillsCollapseTargets.filter(
-          (x) => x.dataset.skillCollapse !== currentSection
-        )
-        noCollapseCurrent.forEach((x) => {
-          x.checked = false
-        })
-        noToggleCurrent.forEach((x) => {
-          x.checked = false
-        })
-      }
+        if (window.innerWidth > 1024 && target.checked) {
+          const noToggleCurrent = Array.from(
+            skillsVisibilityToggleTargets
+          ).filter((x) => x.dataset.skillToggle !== currentSection)
+          const noCollapseCurrent = skillsCollapseTargets.filter(
+            (x) => x.dataset.skillCollapse !== currentSection
+          )
+          noCollapseCurrent.forEach((x) => {
+            x.checked = false
+          })
+          noToggleCurrent.forEach((x) => {
+            x.checked = false
+          })
+        }
+      })
     })
-  })
+  }
+
+  initSkillsAccordion()
+  document.addEventListener('astro:page-load', initSkillsAccordion)
 </script>

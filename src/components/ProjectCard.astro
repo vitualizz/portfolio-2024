@@ -1,5 +1,5 @@
 ---
-import { getLangFromUrl } from 'src/i18n/utils.ts'
+import { getLangFromUrl, useTranslation } from 'src/i18n/utils.ts'
 import Icon from 'src/components/Icon.astro'
 import type { IconType } from 'src/types/Icons.types'
 
@@ -11,24 +11,31 @@ type Props = {
   demo: string
   description_en: string
   description_es: string
+  githubUrl?: string
 }
 
 const lang = getLangFromUrl(Astro.url)
+const t = useTranslation(lang)
+const tProjects = t('projects')
 
-const { title, index, image, stack, demo, ...descriptions } = Astro.props
+const { title, index, image, stack, demo, githubUrl, ...descriptions } = Astro.props
 ---
 
 <div
-  class="group relative flex w-full transform overflow-hidden rounded-lg bg-gray-400/20 px-10 py-8 transition-all duration-150 hover:bg-gray-400/40"
-  data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'}
-  data-aos-delay="300"
-  data-aos-once="true"
+  class="anim-fade-up group relative flex flex-col lg:flex-row w-full transform overflow-hidden rounded-lg bg-surface border border-border px-10 py-8 transition-all duration-150 hover:bg-surface-2"
 >
-  <div class="flex flex-col justify-between">
+  <!-- Mobile image (visible below lg) -->
+  <img
+    src={`/img/projects/${image}.webp`}
+    alt={title}
+    class="block lg:hidden w-full rounded-lg mb-4 aspect-video object-cover"
+  />
+
+  <div class="flex flex-col justify-between w-full">
     <div class="flex flex-col gap-4">
       <h3 class="text-lg font-semibold">{title}</h3>
       <p class="text-xs md:text-sm lg:text-base">
-        {descriptions[`description_${lang}`]}
+        {descriptions[`description_${lang}` as keyof typeof descriptions]}
       </p>
     </div>
     <div class="mt-5 flex gap-2 lg:mt-0">
@@ -44,14 +51,21 @@ const { title, index, image, stack, demo, ...descriptions } = Astro.props
       }
     </div>
     <div class="mt-3 flex gap-2 lg:hidden">
-      <a role="button" class="btn btn-sm" onclick={`${image}.showModal()`}
-        >{lang === 'en' ? 'Project' : 'Proyecto'}</a
-      >
-      <a role="button" class="btn btn-sm" href={demo} target="_blank" rel="noopener noreferrer"
-        >{lang === 'en' ? 'Live Preview' : 'Vista Previa'}</a
-      >
+      <a role="button" class="btn btn-sm" onclick={`${image}.showModal()`}>
+        {tProjects.view_image}
+      </a>
+      <a role="button" class="btn btn-sm" href={demo} target="_blank" rel="noopener noreferrer">
+        {tProjects.live_preview}
+      </a>
+      {githubUrl && (
+        <a role="button" class="btn btn-sm" href={githubUrl} target="_blank" rel="noopener noreferrer">
+          {tProjects.github_label}
+        </a>
+      )}
     </div>
   </div>
+
+  <!-- Desktop image overlay (hidden below lg) -->
   <div class="relative lg:h-[17rem] lg:w-[100rem]">
     <img
       src={`/img/projects/${image}.webp`}
@@ -62,7 +76,7 @@ const { title, index, image, stack, demo, ...descriptions } = Astro.props
       class="absolute top-[8rem] hidden group-odd:left-[9.5rem] group-even:right-[9.5rem] group-hover:block"
     >
       <div class="flex gap-2">
-        <div data-tip="Ver imagen" class="tooltip">
+        <div data-tip={tProjects.view_image} class="tooltip">
           <a
             role="button"
             class="btn btn-circle"
@@ -86,27 +100,42 @@ const { title, index, image, stack, demo, ...descriptions } = Astro.props
             </svg>
           </a>
         </div>
-        {
-          demo && (
-            <div data-tip="Live view" class="tooltip">
-              <a class="btn btn-circle" href={demo} target="_blank" rel="noopener noreferrer">
-                <svg
-                  class="h-6 w-6 fill-none stroke-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M11 17H7q-2.075 0-3.537-1.463T2 12t1.463-3.537T7 7h4v2H7q-1.25 0-2.125.875T4 12t.875 2.125T7 15h4zm-3-4v-2h8v2zm5 4v-2h4q1.25 0 2.125-.875T20 12t-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.463T22 12t-1.463 3.538T17 17z"
-                  />
-                </svg>
-              </a>
-            </div>
-          )
-        }
+        {demo && (
+          <div data-tip={tProjects.live_preview} class="tooltip">
+            <a class="btn btn-circle" href={demo} target="_blank" rel="noopener noreferrer">
+              <svg
+                class="h-6 w-6 fill-none stroke-current"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M11 17H7q-2.075 0-3.537-1.463T2 12t1.463-3.537T7 7h4v2H7q-1.25 0-2.125.875T4 12t.875 2.125T7 15h4zm-3-4v-2h8v2zm5 4v-2h4q1.25 0 2.125-.875T20 12t-.875-2.125T17 9h-4V7h4q2.075 0 3.538 1.463T22 12t-1.463 3.538T17 17z"
+                />
+              </svg>
+            </a>
+          </div>
+        )}
+        {githubUrl && (
+          <div data-tip={tProjects.github_label} class="tooltip">
+            <a class="btn btn-circle" href={githubUrl} target="_blank" rel="noopener noreferrer">
+              <svg
+                class="h-6 w-6 fill-none stroke-current"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                />
+              </svg>
+            </a>
+          </div>
+        )}
       </div>
     </div>
   </div>
+
   <dialog id={image} class="modal">
     <div class="modal-box !max-w-[90%] md:!max-w-[70%]">
       <h3 class="text-lg font-bold">{title}</h3>

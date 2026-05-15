@@ -12,10 +12,8 @@ const tProjects = t('projects')
 <section id="projects" class="hero min-h-screen">
   <div class="hero-content">
     <div class="w-12/12 md:w-full">
-      <h2 class="mb-3 text-center text-2xl font-semibold tracking-wider">
-        <span class="text-custom-yellow">{'<'}</span>{
-          tProjects.section_projects
-        }<span class="text-custom-yellow">{'/>'}</span>
+      <h2 class="font-display mb-8 text-center text-4xl font-bold">
+        {tProjects.section_projects}
       </h2>
       <div
         data-section="projects"
@@ -31,6 +29,7 @@ const tProjects = t('projects')
               image={project.image}
               demo={project.demo}
               stack={project.stack}
+              githubUrl={'githubUrl' in project ? (project as any).githubUrl : undefined}
             />
           ))
         }

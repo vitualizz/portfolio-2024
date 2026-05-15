@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config'
 import vercelServerless from '@astrojs/vercel/serverless'
 import tailwindcss from '@tailwindcss/vite'
+import sitemap from '@astrojs/sitemap'
 
 import playformCompress from '@playform/compress'
 
@@ -10,7 +11,18 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-  integrations: [playformCompress()],
+  integrations: [
+    sitemap({
+      i18n: {
+        defaultLocale: 'es',
+        locales: {
+          es: 'es-ES',
+          en: 'en-US'
+        }
+      }
+    }),
+    playformCompress()
+  ],
   output: 'server',
   adapter: vercelServerless({
     maxDuration: 6
