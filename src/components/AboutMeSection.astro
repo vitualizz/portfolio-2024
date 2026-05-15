@@ -46,9 +46,26 @@ const skillSections: {
       />
     </div>
     <div class="flex w-10/12 flex-col justify-center lg:w-4/12">
-      <h2 class="font-display mb-3 text-center text-2xl font-semibold">
+      <h2 class="font-display mb-5 text-center text-2xl font-semibold">
         {tAboutMe.section_skills}
       </h2>
+
+      <!-- Stats row -->
+      <div class="grid grid-cols-3 mb-8 rounded-xl border border-border overflow-hidden">
+        <div class="flex flex-col items-center py-4 px-2 bg-surface">
+          <span class="font-display text-2xl font-bold text-accent">7+</span>
+          <span class="text-xs text-text-muted mt-0.5 text-center">{tAboutMe.stat_years}</span>
+        </div>
+        <div class="flex flex-col items-center py-4 px-2 bg-surface border-x border-border">
+          <span class="font-display text-2xl font-bold text-accent">20+</span>
+          <span class="text-xs text-text-muted mt-0.5 text-center">{tAboutMe.stat_projects}</span>
+        </div>
+        <div class="flex flex-col items-center py-4 px-2 bg-surface">
+          <span class="font-display text-2xl font-bold text-accent">FS</span>
+          <span class="text-xs text-text-muted mt-0.5 text-center">{tAboutMe.stat_stack}</span>
+        </div>
+      </div>
+
       <div class="flex flex-col gap-4">
         {
           skillSections.map((section) => (

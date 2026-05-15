@@ -45,6 +45,9 @@ export type LanguageLocale = {
     skills_section_languages: string
     skills_section_frameworks: string
     skills_section_others: string
+    stat_years: string
+    stat_projects: string
+    stat_stack: string
   },
   work_experience: WorkExperienceLocale,
   projects: {

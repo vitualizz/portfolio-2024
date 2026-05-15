@@ -24,7 +24,10 @@ const locale: LanguageLocale = {
     biography: "Soy un <span class='text-color-2'>ingeniero de software</span>, adentrándome en un emocionante universo <span class='text-color-2'>tecnológico</span> donde cada línea de código es un trazo de creatividad. Mi corazón late al ritmo de <span class='text-color-1'>Javascript</span> y <span class='text-color-1'>Ruby</span>, pero mi curiosidad me ha llevado a explorar un arcoíris de lenguajes. En cada proyecto, busco la excelencia y <span class='text-color-2'>calidad</span>, convirtiendo el proceso de codificación en una aventura <span class='text-color-2'>emocionante</span> y <span class='text-color-2'>gratificante</span>.",
     skills_section_frameworks: "Frameworks y Bibliotecas",
     skills_section_others: "Otros",
-    skills_section_languages: "Lenguajes"
+    skills_section_languages: "Lenguajes",
+    stat_years: "Años de exp.",
+    stat_projects: "Proyectos",
+    stat_stack: "Full Stack"
   },
   work_experience: {
     title: "Experiencia",
