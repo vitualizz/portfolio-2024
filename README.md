@@ -1,54 +1,113 @@
-# Astro Starter Kit: Basics
+# Lee Palacios — Portfolio
 
-```sh
-npm create astro@latest -- --template basics
+Personal portfolio and blog built with Astro 5 and TypeScript. Live at **https://vitualizz.vercel.app**.
+
+## Stack
+
+| Technology | Version | Role |
+| :--- | :--- | :--- |
+| Astro | 5.12 | Framework / SSR |
+| TypeScript | 5.4 | Language |
+| Tailwind CSS | 3.4 | Styling |
+| DaisyUI | 4.10 | Component layer |
+| Vercel (serverless) | — | Hosting / adapter |
+| Resend | — | Contact form email delivery |
+| AOS | 2.3 | Scroll animations |
+| Fredoka (variable font) | — | Typography |
+
+## Routes
+
+The site is fully internationalized. `astro.config.mjs` sets `defaultLocale: 'es'`.
+
+> **Known inconsistency**: `src/i18n/ui.ts` declares `defaultLang: 'en'` while `astro.config.mjs` uses `defaultLocale: 'es'`. The Astro routing follows `astro.config.mjs`.
+
+| Path | Description |
+| :--- | :--- |
+| `/` | Redirects to `/es/` |
+| `/es/` | Home page — Spanish |
+| `/en/` | Home page — English |
+| `/[lang]/blog/[slug]` | Individual blog post (e.g. `/es/blog/rails-queries-practices`) |
+
+## Project Structure
+
+```
+src/
+├── components/       # Astro and UI components
+├── content/
+│   └── blog/         # Blog posts (one folder per post)
+│       └── <slug>/
+│           ├── cover.webp
+│           ├── en.md
+│           └── es.md
+├── data/             # Static data files
+├── i18n/             # Translation strings and locale helpers
+├── layouts/          # Page layouts
+├── pages/
+│   ├── api/
+│   │   └── contact.ts  # Contact form endpoint (uses Resend)
+│   ├── [lang]/
+│   │   ├── index.astro
+│   │   └── blog/
+│   └── index.astro     # Root redirect
+└── types/
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## Getting Started
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### Environment variables
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+| Variable | Required | Description |
+| :--- | :--- | :--- |
+| `RESEND_API_KEY` | Yes | API key for the contact form. Get one at [resend.com](https://resend.com). |
 
-## 🚀 Project Structure
+Copy `.env.example` to `.env` and fill in the values.
 
-Inside of your Astro project, you'll see the following folders and files:
+### Commands
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+All commands run from the project root:
+
+| Command | Action |
+| :--- | :--- |
+| `pnpm install` | Install dependencies |
+| `pnpm dev` | Start local dev server at `localhost:4321` |
+| `pnpm build` | Type-check and build for production |
+| `pnpm preview` | Preview the production build locally |
+| `pnpm astro check` | Run Astro type checking |
+
+## Blog
+
+Posts use [Astro Content Collections](https://docs.astro.build/en/guides/content-collections/). Each post lives in its own folder under `src/content/blog/<slug>/` and contains three files:
+
+```
+src/content/blog/<slug>/
+├── cover.webp   # Post cover image
+├── en.md        # English content
+└── es.md        # Spanish content
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Frontmatter schema (from `src/content/config.ts`):
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```ts
+{
+  title: string
+  seoTitle: string
+  cover: image()
+  coverLink: string
+  shortDescription: string
+  longDescription: string
+  author: string
+  date: date
+  tags: string[]
+  lang: string
+}
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Deployment
 
-## 🧞 Commands
+The site is deployed to Vercel using the `@astrojs/vercel` serverless adapter (`output: 'server'`).
 
-All commands are run from the root of the project, from a terminal:
+Set the following environment variable in the Vercel dashboard under **Settings → Environment Variables**:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+| Variable | Description |
+| :--- | :--- |
+| `RESEND_API_KEY` | Required for the contact form to send emails |
