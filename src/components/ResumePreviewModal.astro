@@ -8,80 +8,32 @@ const t = useTranslation(lang)
 
 <section
   id="resumePreviewModal"
-  class="resume-modal"
+  class="resume-modal fixed inset-0 z-[90] grid place-items-center p-[clamp(8px,2vw,20px)] max-sm:p-0"
   role="dialog"
   aria-modal="true"
   aria-labelledby="resumePreviewTitle"
   hidden
   data-resume-modal
 >
-  <div class="resume-modal__backdrop" data-resume-close></div>
-  <div class="resume-modal__panel" role="document">
-    <div class="resume-modal__header">
-      <h3 id="resumePreviewTitle">{t('resume_actions').preview_modal_title}</h3>
-      <button type="button" aria-label={t('resume_actions').preview_modal_close_aria} data-resume-close>
+  <div class="resume-modal__backdrop absolute inset-0 bg-[rgba(0,0,0,0.65)]" data-resume-close></div>
+  <div class="resume-modal__panel relative z-[1] grid h-[min(94vh,1200px)] w-[min(1400px,100%)] grid-rows-[auto_1fr_auto] gap-3 rounded-2xl border border-line bg-bg-2 p-4 max-lg:h-[95vh] max-lg:w-full max-sm:h-screen max-sm:w-screen max-sm:max-h-none max-sm:gap-[10px] max-sm:rounded-none max-sm:border-x-0 max-sm:border-b-0 max-sm:p-[10px]" role="document">
+    <div class="resume-modal__header flex items-center justify-between gap-3">
+      <h3 id="resumePreviewTitle" class="m-0 text-[20px] text-ink max-sm:text-[16px]">{t('resume_actions').preview_modal_title}</h3>
+      <button type="button" class="min-h-9 min-w-9 cursor-pointer rounded-[10px] border border-line bg-bg text-ink" aria-label={t('resume_actions').preview_modal_close_aria} data-resume-close>
         ✕
       </button>
     </div>
 
-    <iframe title={t('resume_actions').preview_modal_title} data-resume-iframe class="resume-modal__iframe"></iframe>
+    <iframe title={t('resume_actions').preview_modal_title} data-resume-iframe class="resume-modal__iframe h-full min-h-0 w-full rounded-xl border-0 bg-white"></iframe>
 
-    <p class="resume-modal__fallback" data-resume-fallback hidden>
-      <a data-resume-fallback-link target="_blank" rel="noopener noreferrer">{t('resume_actions').preview_modal_fallback}</a>
+    <p class="resume-modal__fallback m-0" data-resume-fallback hidden>
+      <a class="font-semibold text-accent" data-resume-fallback-link target="_blank" rel="noopener noreferrer">{t('resume_actions').preview_modal_fallback}</a>
     </p>
   </div>
 </section>
 
 <style>
-  .resume-modal { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: clamp(8px, 2vw, 20px); }
-  .resume-modal__backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.65); }
-  .resume-modal__panel {
-    position: relative;
-    z-index: 1;
-    width: min(1400px, 100%);
-    height: min(94vh, 1200px);
-    border-radius: 16px;
-    background: var(--bg-2);
-    border: 1px solid var(--line);
-    padding: 16px;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    gap: 12px;
-  }
-  .resume-modal__header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .resume-modal__header h3 { margin: 0; font-size: 20px; color: var(--ink); }
-  .resume-modal__header button {
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    background: var(--bg);
-    color: var(--ink);
-    min-width: 36px;
-    min-height: 36px;
-    cursor: pointer;
-  }
-  .resume-modal__iframe { width: 100%; height: 100%; min-height: 0; border: 0; border-radius: 12px; background: #fff; }
-  .resume-modal__fallback { margin: 0; }
-  .resume-modal__fallback a { color: var(--accent); font-weight: 600; }
-
-  @media (max-width: 1024px) {
-    .resume-modal__panel { width: 100%; height: 95vh; padding: 12px; }
-  }
-
-  @media (max-width: 640px) {
-    .resume-modal { padding: 0; }
-    .resume-modal__panel {
-      width: 100vw;
-      height: 100vh;
-      max-height: none;
-      border-radius: 0;
-      border-left: 0;
-      border-right: 0;
-      border-bottom: 0;
-      padding: 10px;
-      gap: 10px;
-    }
-    .resume-modal__header h3 { font-size: 16px; }
-  }
+  .resume-modal[hidden] { display: none !important; }
 </style>
 
 <script>
@@ -100,7 +52,8 @@ const t = useTranslation(lang)
 
     const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-    const closeModal = () => {
+    // Central unlock routine: every close path must pass here.
+    const unlockAndCloseModal = () => {
       modal.hidden = true;
       document.body.style.overflow = '';
       lastTrigger?.focus();
@@ -109,7 +62,7 @@ const t = useTranslation(lang)
     const trapFocus = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault();
-        closeModal();
+        unlockAndCloseModal();
         return;
       }
       if (event.key !== 'Tab') return;
@@ -130,7 +83,8 @@ const t = useTranslation(lang)
     };
 
     modal.addEventListener('keydown', trapFocus);
-    closeButtons.forEach((btn) => btn.addEventListener('click', closeModal));
+    closeButtons.forEach((btn) => btn.addEventListener('click', unlockAndCloseModal));
+    modal.addEventListener('resume:close', unlockAndCloseModal as EventListener);
 
     window.addEventListener('resume:preview', (event: Event) => {
       const detail = (event as CustomEvent).detail as { lang?: 'es' | 'en'; triggerId?: string };
@@ -156,6 +110,10 @@ const t = useTranslation(lang)
       document.body.style.overflow = 'hidden';
       const firstFocusable = modal.querySelector<HTMLElement>(focusableSelector);
       firstFocusable?.focus();
+    });
+
+    modal.addEventListener('close', () => {
+      document.body.style.overflow = '';
     });
   }
 
