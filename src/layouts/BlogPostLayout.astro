@@ -2,24 +2,20 @@
 import BaseLayout from './BaseLayout.astro'
 import Navbar from '@components/Navbar.astro'
 import Footer from 'src/components/Footer.astro'
+import { getLangFromUrl } from 'src/i18n/utils'
 
 interface Props {
   title: string
 }
 
 const { title } = Astro.props
+const lang = getLangFromUrl(Astro.url)
 ---
 
 <BaseLayout title={`Lee Palacios - ${title}`}>
-  <Navbar>
-    <div
-      class="prose mx-auto
-  mt-24 w-10/12
-  dark:prose-invert prose-headings:underline prose-h1:text-xl
-  prose-h1:font-bold prose-p:text-justify prose-a:text-blue-600 prose-img:rounded-xl md:w-11/12 lg:w-full"
-    >
-      <slot />
-    </div>
-    <Footer />
-  </Navbar>
+  <Navbar />
+  <div class="prose mx-auto mt-24 w-10/12 dark:prose-invert prose-headings:underline prose-h1:text-xl prose-h1:font-bold prose-p:text-justify prose-a:text-blue-600 prose-img:rounded-xl md:w-11/12 lg:w-full">
+    <slot />
+  </div>
+  <Footer lang={lang} />
 </BaseLayout>

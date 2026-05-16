@@ -2,17 +2,33 @@
 import BaseLayout from './BaseLayout.astro'
 import Navbar from '@components/Navbar.astro'
 import Footer from 'src/components/Footer.astro'
+import { useTranslation } from 'src/i18n/utils'
 
-type Props = {
-  navbarTransparent?: boolean
-}
-
-const { navbarTransparent = false } = Astro.props
+interface Props { lang: 'es' | 'en' }
+const { lang } = Astro.props
+const t = useTranslation(lang)
 ---
 
-<BaseLayout title="Lee Palacios - @vitualizz / Software Engineer">
-  <Navbar isTransparent={navbarTransparent}>
-    <slot />
-    <Footer />
-  </Navbar>
+<BaseLayout title={t('seo').title} description={t('seo').description}>
+  <Navbar />
+  <slot />
+  <Footer lang={lang} />
 </BaseLayout>
+
+<script>
+  function initReveal() {
+    const els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(el => obs.observe(el));
+  }
+  initReveal();
+  document.addEventListener('astro:page-load', initReveal);
+</script>

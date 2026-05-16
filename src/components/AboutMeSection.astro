@@ -1,167 +1,125 @@
 ---
-import Skill from 'src/components/Skill.astro'
-import { getLangFromUrl, useTranslation } from 'src/i18n/utils.ts'
-import languages from 'src/data/languages.json'
-import frameworks from 'src/data/frameworks.json'
-import others from 'src/data/others.json'
-import type { IconType } from 'src/types/Icons.types'
+import { skillGroups } from 'src/data/skills.ts'
+import { useTranslation } from 'src/i18n/utils'
 
-const lang = getLangFromUrl(Astro.url)
+interface Props { lang: 'es' | 'en' }
+const { lang } = Astro.props
 const t = useTranslation(lang)
-
-const tAboutMe = t('about_me')
-
-const skillSections: {
-  key: 'languages' | 'frameworks' | 'others'
-  data: { title: string; icon: IconType }[]
-}[] = [
-  {
-    key: 'languages',
-    data: languages as { title: string; icon: IconType }[]
-  },
-  {
-    key: 'frameworks',
-    data: frameworks as { title: string; icon: IconType }[]
-  },
-  {
-    key: 'others',
-    data: others as { title: string; icon: IconType }[]
-  }
-]
 ---
 
-<section id="about_me" class="hero min-h-[70vh] pt-[75px]">
-  <div
-    class="hero-content flex-col gap-16 lg:flex-row lg:items-start lg:!justify-around lg:gap-8"
-    data-section="about_me"
-  >
-    <div
-      class="flex min-h-[60vh] w-10/12 flex-col items-center text-center md:h-full lg:w-4/12"
-    >
-      <h2 class="mb-3 text-2xl font-semibold tracking-wider">
-        <span class="text-custom-yellow">{'<'}</span>{
-          tAboutMe.section_about_me
-        }<span class="text-custom-yellow">{'/>'}</span>
-      </h2>
-      <p
-        set:html={tAboutMe.biography}
-        class="text-2xl font-thin md:text-3xl md:font-light"
-      />
+<section class="s" id="about">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="s-eyebrow">{t('home').about_eyebrow}</span>
+      <h2 class="s-title" set:html={t('home').about_title} />
+      <p class="s-sub">{t('home').about_subtitle}</p>
     </div>
-    <div class="flex w-10/12 flex-col justify-center lg:w-4/12">
-      <h2 class="mb-3 text-center text-2xl font-semibold tracking-wider">
-        <span class="text-custom-yellow">{'<'}</span>{
-          tAboutMe.section_skills
-        }<span class="text-custom-yellow">{'/>'}</span>
-      </h2>
-      <div class="flex flex-col gap-4">
-        {
-          skillSections.map((section) => (
-            <div>
-              <div class="flex justify-between">
-                <p class="font-semibold md:text-xl">
-                  #{' '}
-                  {
-                    tAboutMe[
-                      `skills_section_${section.key}` as keyof typeof tAboutMe
-                    ]
-                  }
-                </p>
-                <div class={section.data.length > 4 ? '' : 'hidden'}>
-                  <label class="swap" aria-label={section.key}>
-                    <input type="checkbox" data-skill-toggle={section.key} />
-                    <svg
-                      class="swap-off h-6 w-6 fill-none stroke-current"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
 
-                    <svg
-                      class="swap-on h-6 w-6 fill-none stroke-current"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M2.99902 3L20.999 21M9.8433 9.91364C9.32066 10.4536 8.99902 11.1892 8.99902 12C8.99902 13.6569 10.3422 15 11.999 15C12.8215 15 13.5667 14.669 14.1086 14.133M6.49902 6.64715C4.59972 7.90034 3.15305 9.78394 2.45703 12C3.73128 16.0571 7.52159 19 11.9992 19C13.9881 19 15.8414 18.4194 17.3988 17.4184M10.999 5.04939C11.328 5.01673 11.6617 5 11.9992 5C16.4769 5 20.2672 7.94291 21.5414 12C21.2607 12.894 20.8577 13.7338 20.3522 14.5"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </label>
-                </div>
-              </div>
-              <div class="mt-5">
-                <div class="grid grid-cols-4 justify-center gap-2">
-                  {section.data.slice(0, 4).map((lang) => (
-                    <Skill {...lang} />
-                  ))}
-                </div>
-                <div class="collapse mt-5">
-                  <input
-                    data-skill-collapse={section.key}
-                    type="checkbox"
-                    class="hidden"
-                  />
-                  <div class="collapse-content grid grid-cols-4 justify-center gap-2 !p-0">
-                    {section.data.slice(4).map((lang) => (
-                      <Skill {...lang} />
-                    ))}
-                  </div>
-                </div>
-              </div>
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="about-body text-ink-soft text-[clamp(16px,1.25vw,18px)] leading-[1.75]">
+          <p>Soy un <b class="text-coral">ingeniero de software</b> peruano con <b class="text-coral">7+ años</b> entre Tech Lead y Senior Fullstack en startups LATAM. Hoy en <b>Patrimore</b>.</p>
+          <p>Mi pasión es el <b class="text-coral">backend</b>: SQL afinado, arquitecturas que escalan, modelos de datos honestos. El frontend lo manejo cuando hace falta — React, React Native, Tailwind — pero donde encuentro el zen es en una query bien optimizada y una API que no rompe.</p>
+          <p>En el último año he construido seriamente con <span class="text-mint font-semibold">LLMs y agentes</span> — orquestación con N8N, prompts productivos, Python como pegamento. Es la herramienta más interesante que ha aparecido en mi carrera, y todavía estoy raspando la superficie.</p>
+          <p class="about-mini text-muted-custom text-[14px] mt-[1.6em] pt-[1.1em] flex items-center gap-2 border-t border-dashed border-line">
+            <span class="cat-emoji inline-block origin-bottom">🐱</span> Vivo en Lima con tres gatos que aprueban todo mi código.
+          </p>
+        </div>
+
+        <div class="stats border border-line grid grid-cols-3 mt-9 rounded-[18px] overflow-hidden bg-[color-mix(in_oklab,var(--bg-2)_80%,transparent)]">
+          <div class="stat border-r border-line px-[18px] py-[22px] text-center">
+            <div class="num text-accent font-display text-[32px] font-bold tracking-[-0.02em] leading-none">7+</div>
+            <div class="lbl text-muted-custom mt-[6px] text-[12px] uppercase tracking-[0.05em] font-mono">{t('about_me').stat_years}</div>
+          </div>
+          <div class="stat border-r border-line px-[18px] py-[22px] text-center">
+            <div class="num text-accent font-display text-[32px] font-bold tracking-[-0.02em] leading-none">20+</div>
+            <div class="lbl text-muted-custom mt-[6px] text-[12px] uppercase tracking-[0.05em] font-mono">{t('about_me').stat_projects}</div>
+          </div>
+          <div class="stat px-[18px] py-[22px] text-center">
+            <div class="num text-accent font-display text-[32px] font-bold tracking-[-0.02em] leading-none">3</div>
+            <div class="lbl text-muted-custom mt-[6px] text-[12px] uppercase tracking-[0.05em] font-mono">{t('about_me').stat_stack}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="skills-block flex flex-col gap-7 reveal">
+        {skillGroups.map(group => (
+          <div class={`skill-group${group.primary ? ' skill-primary' : ''}`}>
+            <h4 class={`text-ink font-display font-semibold mb-[14px] inline-flex items-baseline gap-2${group.primary ? ' text-[20px]' : ' text-[18px]'}`}>{group.label}</h4>
+            <div class="skill-chips flex flex-wrap gap-2">
+              {group.items.map(item => (
+                <span class={`chip bg-bg-2 border border-line text-ink-soft inline-flex items-center gap-2 px-[14px] py-2 rounded-[12px] text-[14px] font-medium transition-transform transition-colors duration-200${group.chipVariant === 'strong' ? ' chip-strong' : ''}`}>
+                  <span class={`dot w-2 h-2 rounded-full${group.dotColor === 'coral' ? ' bg-coral' : group.dotColor === 'mint' ? ' bg-mint' : ' bg-accent'}`}></span>
+                  {item.label}
+                </span>
+              ))}
             </div>
-          ))
-        }
+          </div>
+        ))}
       </div>
     </div>
   </div>
 </section>
 
+<style>
+  .about-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(40px,6vw,96px); align-items: start; }
+  .about-body p + p { margin-top: 1.1em; }
+
+  .skill-group h4::before { content: "#"; color: var(--accent); font-weight: 700; }
+  .chip:hover { transform: translateY(-2px); border-color: var(--accent); color: var(--ink); }
+  .chip.chip-strong { background: linear-gradient(135deg, color-mix(in oklab, var(--accent) 18%, var(--bg-2)), var(--bg-2)); border-color: color-mix(in oklab, var(--accent) 35%, var(--line)); color: var(--ink); font-weight: 600; }
+  .chip.chip-strong:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 16px color-mix(in oklab, var(--accent) 18%, transparent); }
+
+  .cat-emoji { animation: catBob 3s ease-in-out infinite; }
+
+  @media (max-width: 820px) { .about-grid { grid-template-columns: 1fr; } }
+</style>
+
 <script>
-  const skillsVisibilityToggleTargets = document.querySelectorAll(
-    '[data-skill-toggle]'
-  ) as unknown as HTMLInputElement[]
-  const skillsCollapseTargets = Array.from(
-    document.querySelectorAll('[data-skill-collapse]')
-  ) as HTMLInputElement[]
+  function initAbout() {
+    // Animated counters
+    const stats = document.querySelectorAll<HTMLElement>('.stat .num');
+    const counterObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting || (e.target as HTMLElement).dataset.done) return;
+        const el = e.target as HTMLElement;
+        const raw = (el.textContent || '').trim();
+        const m = raw.match(/^(\d+)(.*)$/);
+        if (!m) return;
+        const target = parseInt(m[1], 10);
+        const suffix = m[2] || '';
+        el.dataset.done = '1';
+        const dur = 1400;
+        const start = performance.now();
+        function step(now: number) {
+          const t = Math.min(1, (now - start) / dur);
+          const eased = 1 - Math.pow(1 - t, 3);
+          el.textContent = Math.round(target * eased) + suffix;
+          if (t < 1) requestAnimationFrame(step);
+          else el.textContent = target + suffix;
+        }
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0.4 });
+    stats.forEach(s => counterObs.observe(s));
 
-  skillsVisibilityToggleTargets.forEach((t) => {
-    t.addEventListener('change', (e) => {
-      const target = e.target as HTMLInputElement
-      const currentSection = target.dataset.skillToggle
-      const collapseCurrent = skillsCollapseTargets.find(
-        (x) => x.dataset.skillCollapse === currentSection
-      ) as HTMLInputElement
-      collapseCurrent.checked = target.checked
-
-      if (window.innerWidth > 1024 && target.checked) {
-        const noToggleCurrent = Array.from(
-          skillsVisibilityToggleTargets
-        ).filter((x) => x.dataset.skillToggle !== currentSection)
-        const noCollapseCurrent = skillsCollapseTargets.filter(
-          (x) => x.dataset.skillCollapse !== currentSection
-        )
-        noCollapseCurrent.forEach((x) => {
-          x.checked = false
-        })
-        noToggleCurrent.forEach((x) => {
-          x.checked = false
-        })
-      }
-    })
-  })
+    // Chip stagger
+    const groups = document.querySelectorAll<HTMLElement>('.skill-chips');
+    const chipObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        [...(e.target as HTMLElement).children].forEach((c, i) => {
+          (c as HTMLElement).style.transitionDelay = (i * 40) + 'ms';
+          c.classList.add('chip-in');
+        });
+        chipObs.unobserve(e.target);
+      });
+    }, { threshold: 0.3 });
+    groups.forEach(g => {
+      [...g.children].forEach(c => c.classList.add('chip-prep'));
+      chipObs.observe(g);
+    });
+  }
+  initAbout();
+  document.addEventListener('astro:page-load', initAbout);
 </script>

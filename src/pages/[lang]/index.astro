@@ -1,25 +1,39 @@
 ---
+import { getCollection } from 'astro:content'
 import HomeLayout from 'src/layouts/HomeLayout.astro'
 import PresentationSection from 'src/components/PresentationSection.astro'
+import AboutMeSection from 'src/components/AboutMeSection.astro'
+import AskAISection from 'src/components/AskAISection.astro'
 import ProjectsSection from 'src/components/ProjectsSection.astro'
-import ContactMeSection from 'src/components/ContactMeSection.astro'
+import WorkExperienceSection from 'src/components/WorkExperienceSection.astro'
 import BlogSection from 'src/components/BlogSection.astro'
-import 'aos/dist/aos.css'
+import ContactMeSection from 'src/components/ContactMeSection.astro'
+import ResumePreviewModal from 'src/components/ResumePreviewModal.astro'
+import { getLangFromUrl } from 'src/i18n/utils'
+import { LANG_CODES } from 'src/i18n/constants'
 
+export const prerender = true
+
+export function getStaticPaths() {
+  return LANG_CODES.map((lang) => ({ params: { lang } }))
+}
+
+const lang = getLangFromUrl(Astro.url)
+const allPosts = await getCollection('blog')
+const posts = allPosts
+  .filter(p => p.data.lang === lang)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 ---
 
-<HomeLayout navbarTransparent>
+<HomeLayout lang={lang}>
   <main>
-    <PresentationSection />
+    <PresentationSection lang={lang} />
+    <AboutMeSection lang={lang} />
+    <AskAISection lang={lang} />
     <ProjectsSection />
-    <BlogSection />
-    <ContactMeSection />
+    <WorkExperienceSection />
+    <BlogSection posts={posts} lang={lang} />
+    <ContactMeSection lang={lang} />
+    <ResumePreviewModal lang={lang} />
   </main>
 </HomeLayout>
-
-<script>
-  import AOS from 'aos'
-  AOS.init({
-    disable: 'mobile'
-  })
-</script>

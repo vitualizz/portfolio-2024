@@ -1,169 +1,131 @@
 ---
-import Envelope from 'astro-heroicons/outline/Envelope.astro'
-import DocumentText from 'astro-heroicons/outline/DocumentText.astro'
-import GithubIcon from '../components/icons/Github.astro'
-import Linkedin from '../components/icons/Linkedin.astro'
-import { getLangFromUrl, useTranslation } from '../i18n/utils.ts'
+import { useTranslation } from 'src/i18n/utils'
+import ResumeActions from 'src/components/ResumeActions.astro'
 
-const lang = getLangFromUrl(Astro.url)
+interface Props { lang: 'es' | 'en' }
+const { lang } = Astro.props
 const t = useTranslation(lang)
-
-const tContactMe = t('contact_me')
 ---
 
-<section
-  data-section="contact_me"
-  id="contact_me"
-  class="hero min-h-[80vh] bg-gradient-to-r"
->
-  <div
-    class="hero-content flex-col lg:flex-row lg:justify-around xl:justify-between"
-  >
-    <div class="w-10/12 text-center lg:w-4/12 lg:text-left">
-      <h3
-        class="text-4xl font-bold md:text-5xl"
-        set:html={tContactMe.tell_me}
-      />
-      <a href="mailto:vitualizz@gmail.com" class="">
-        <div
-          class="mt-10 flex items-center gap-4 rounded-lg bg-gray-400/20 px-7 py-2 transition hover:scale-105"
-        >
-          <Envelope class="h-8 w-8" />
-          <p class="font-medium">vitualizz@gmail.com</p>
-        </div>
-      </a>
-      <a href="https://github.com/vitualizz" target="_blank" rel="noopener noreferrer">
-        <div
-          class="mt-5 flex items-center gap-4 rounded-lg bg-gray-400/20 px-7 py-2 transition hover:scale-105"
-        >
-          <GithubIcon class="h-8 w-8" />
-          <p class="font-medium">vitualizz</p>
-        </div>
-      </a>
-      <a href="https://www.linkedin.com/in/vitualizz/" target="_blank" rel="noopener noreferrer">
-        <div
-          class="mt-5 flex items-center gap-4 rounded-lg bg-gray-400/20 px-7 py-2 transition hover:scale-105"
-        >
-          <Linkedin class="h-8 w-8" />
-          <p class="font-medium">Lee Palacios</p>
-        </div>
-      </a>
-      <a
-        href={`/cv/${lang}.pdf`}
-        download={`LeePalacios_${lang}.pdf`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <div
-          class="mt-5 flex items-center gap-4 rounded-lg bg-gray-400/20 px-7 py-2 transition hover:scale-105"
-        >
-          <DocumentText class="h-8 w-8" />
-          <p class="font-medium">{lang === 'en' ? 'Resume' : 'Curriculum'}</p>
-        </div>
-      </a>
-    </div>
-    <div class="card w-full max-w-sm shrink-0 bg-base-100 shadow-2xl">
-      <form
-        id="contactForm"
-        action="/api/contact"
-        method="POST"
-        class="card-body"
-      >
-        <h3
-          class="card-title text-xl font-bold md:text-2xl"
-          set:html={tContactMe.send_message_me}
-        />
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Email</span>
-          </label>
-          <input
-            type="email"
-            placeholder="Ingresa tu email para contactar"
-            class="input input-bordered"
-            name="email"
-            required
-          />
-        </div>
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Mensaje</span>
-          </label>
-          <textarea
-            placeholder="Cuéntame sobre tu proyecto/trabajo"
-            class="textarea input-bordered min-h-28"
-            name="description"
-            required></textarea>
-        </div>
-        <div class="form-control mt-6">
-          <button type="submit" class="btn">Enviar mensaje</button>
-        </div>
-      </form>
+<!-- Contact section -->
+<section class="s" id="contact">
+  <div class="wrap">
+    <div class="contact-card reveal relative overflow-visible text-center rounded-[28px] mx-auto border max-w-[920px] p-[clamp(40px,6vw,80px)] bg-[linear-gradient(160deg,color-mix(in_oklab,var(--accent)_12%,var(--bg-2)),var(--bg-2))] border-[color-mix(in_oklab,var(--accent)_30%,var(--line))]">
+      <div class="contact-card-glow" aria-hidden="true"></div>
+      <h2 class="contact-title font-bold tracking-[-0.03em] leading-[1.02] mb-4 relative text-[clamp(36px,5.5vw,64px)]" set:html={t('home').contact_title} />
+      <p class="text-ink-soft text-[17px] mx-auto mb-8 leading-[1.6] relative max-w-[52ch]">{t('home').contact_subtitle}</p>
+      <div class="flex gap-3 justify-center flex-wrap relative">
+        <button class="inline-flex items-center gap-[10px] px-[26px] py-[14px] bg-accent rounded-full text-[15px] font-semibold border-none cursor-pointer font-[inherit] text-[#0B0C10] transition-[transform,box-shadow] duration-200" id="openContactModal">{t('contact_modal').submit} <span>✉</span></button>
+        <ResumeActions lang={lang} variant="contact" triggerId="resume-actions-contact" />
+      </div>
     </div>
   </div>
 </section>
+
+<!-- Contact modal -->
+<dialog class="modal" id="contactModal" aria-labelledby="contactTitle" data-i18n={JSON.stringify(t('contact_modal'))}>
+  <div class="modal-panel">
+    <button class="modal-close" id="closeContactModal" aria-label={t('contact_modal').close_aria}>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
+    </button>
+    <div class="modal-eyebrow">{t('contact_modal').eyebrow}</div>
+    <h3 id="contactTitle">{t('contact_modal').title}</h3>
+    <p class="modal-sub">{t('contact_modal').subtitle}</p>
+
+    <form class="contact-form" id="contactForm" action="/api/contact" method="POST" novalidate>
+      <div class="field">
+        <label for="cf-name">{t('contact_modal').name_label}</label>
+        <input id="cf-name" type="text" name="name" required placeholder={t('contact_modal').name_placeholder} />
+      </div>
+      <div class="field">
+        <label for="cf-email">{t('contact_modal').email_label}</label>
+        <input id="cf-email" type="email" name="email" required placeholder={t('contact_modal').email_placeholder} />
+      </div>
+      <div class="field">
+        <label for="cf-message">{t('contact_modal').message_label}</label>
+        <textarea id="cf-message" name="description" required placeholder={t('contact_modal').message_placeholder}></textarea>
+      </div>
+      <div class="field">
+        <button type="submit" class="form-submit">
+          {t('contact_modal').submit}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </form>
+
+    <div class="form-success" id="contactSuccess" hidden>
+      <div class="check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h4>{t('contact_modal').success_title}</h4>
+      <p>{t('contact_modal').success_text}</p>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .contact-card-glow { content: ""; position: absolute; top: -60%; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, color-mix(in oklab, var(--accent) 30%, transparent), transparent 70%); pointer-events: none; filter: blur(20px); }
+  button[id="openContactModal"]:hover { transform: translateY(-2px); box-shadow: 0 12px 32px color-mix(in oklab, var(--accent) 40%, transparent); }
+  .btn-ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
+</style>
+
 <script>
-  document
-    .getElementById('contactForm')
-    ?.addEventListener('submit', async function (e) {
-      e.preventDefault()
+  function initContact() {
+    const modal = document.getElementById('contactModal') as HTMLDialogElement | null;
+    const openBtn = document.getElementById('openContactModal');
+    const closeBtn = document.getElementById('closeContactModal');
+    const form = document.getElementById('contactForm') as HTMLFormElement | null;
+    const success = document.getElementById('contactSuccess');
 
-      const form = this
-      const button = form.querySelector('button[type="submit"]')
-      const originalText = button.innerHTML
+    // Also wire up any [data-open-modal="contact"] buttons (from hero)
+    document.querySelectorAll('[data-open-modal="contact"]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal?.showModal();
+        document.body.style.overflow = 'hidden';
+      });
+    });
 
-      // Animación de envío
-      button.innerHTML = `
-      <svg class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-      </svg>
-      Enviando...
-    `
+    if (openBtn && modal) {
+      openBtn.addEventListener('click', () => { modal.showModal(); document.body.style.overflow = 'hidden'; });
+    }
+    if (closeBtn && modal) {
+      closeBtn.addEventListener('click', () => { modal.close(); document.body.style.overflow = ''; });
+      modal.addEventListener('click', (e) => {
+        const r = modal.getBoundingClientRect();
+        const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+        if (!inside) { modal.close(); document.body.style.overflow = ''; }
+      });
+      modal.addEventListener('close', () => { document.body.style.overflow = ''; });
+    }
 
-      // Recoger datos
-      const formData = new FormData(form)
-
-      try {
-        const response = await fetch('/api/contact', {
-          method: 'POST',
-          body: formData
-        })
-
-        if (response.ok) {
-          button.innerHTML = `
-          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-          </svg>
-          ¡Mensaje Enviado!
-        `
-          button.classList.remove('bg-primary-600', 'hover:bg-primary-700')
-          button.classList.add('bg-success-600', 'hover:bg-success-700')
-          form.reset()
-        } else {
-          throw new Error('No se pudo enviar')
+    if (form && success) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('.form-submit') as HTMLButtonElement;
+        btn.disabled = true;
+        const messages = JSON.parse(modal?.dataset.i18n || '{}');
+        btn.textContent = messages.submitting || 'Sending...';
+        const formData = new FormData(form);
+        try {
+          const res = await fetch('/api/contact', { method: 'POST', body: formData });
+          if (res.ok) {
+            form.hidden = true;
+            success.hidden = false;
+            setTimeout(() => {
+              form.reset(); form.hidden = false; success.hidden = true;
+              btn.disabled = false;
+               btn.textContent = messages.submit || 'Send message';
+            }, 6000);
+          } else throw new Error('failed');
+        } catch {
+          btn.disabled = false;
+           btn.textContent = messages.submit_error || 'Error';
+           setTimeout(() => { btn.textContent = messages.submit || 'Send message'; }, 3000);
         }
-      } catch (err) {
-        button.innerHTML = `
-        <svg class="w-5 h-5 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-5v2H9v-2h2zm0-8v6H9V5h2z" clip-rule="evenodd"></path>
-        </svg>
-        Error al enviar
-      `
-        button.classList.remove('bg-primary-600', 'hover:bg-primary-700')
-        button.classList.add('bg-red-600', 'hover:bg-red-700')
-      }
-
-      // Restaurar luego de 3 segundos
-      setTimeout(() => {
-        button.innerHTML = originalText
-        button.classList.remove(
-          'bg-success-600',
-          'hover:bg-success-700',
-          'bg-red-600',
-          'hover:bg-red-700'
-        )
-        button.classList.add('bg-primary-600', 'hover:bg-primary-700')
-      }, 3000)
-    })
+      });
+    }
+  }
+  initContact();
+  document.addEventListener('astro:page-load', initContact);
 </script>

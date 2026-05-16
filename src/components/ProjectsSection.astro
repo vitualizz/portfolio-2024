@@ -1,40 +1,81 @@
 ---
 import projects from 'src/data/projects.json'
-import { getLangFromUrl, useTranslation } from 'src/i18n/utils.ts'
-import ProjectCard from 'src/components/ProjectCard.astro'
+import Icon from 'src/components/Icon.astro'
+import { getLangFromUrl } from 'src/i18n/utils'
+import { useTranslation } from 'src/i18n/utils'
+import type { IconType } from 'src/types/Icons.types.ts'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslation(lang)
 
-const tProjects = t('projects')
+const VALID_ICONS = new Set<string>([
+  'javascript','ruby','typescript','python','sql','rails','react','tailwind',
+  'astro','vue','node','postgres','aws','selenium','git','docker',
+  'elasticsearch','lambda','dynamodb','redux','gpt'
+])
 ---
 
-<section id="projects" class="hero min-h-screen">
-  <div class="hero-content">
-    <div class="w-12/12 md:w-full">
-      <h2 class="mb-3 text-center text-2xl font-semibold tracking-wider">
-        <span class="text-custom-yellow">{'<'}</span>{
-          tProjects.section_projects
-        }<span class="text-custom-yellow">{'/>'}</span>
-      </h2>
-      <div
-        data-section="projects"
-        class="mt-10 grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 [&>*:nth-child(even)]:flex-row-reverse lg:[&>*:nth-child(even)]:pl-0 [&>*:nth-child(odd)]:flex-row lg:[&>*:nth-child(odd)]:pr-0"
-      >
-        {
-          projects.map((project, index) => (
-            <ProjectCard
-              index={index}
-              title={project.title}
-              description_en={project.description_en}
-              description_es={project.description_es}
-              image={project.image}
-              demo={project.demo}
-              stack={project.stack}
-            />
-          ))
-        }
-      </div>
+<section class="s" id="projects">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="s-eyebrow">{t('home').projects_eyebrow}</span>
+      <h2 class="s-title" set:html={t('home').projects_title} />
+      <p class="s-sub">{t('home').projects_subtitle}</p>
+    </div>
+
+    <div class="projects grid grid-cols-2 gap-6 max-[720px]:grid-cols-1">
+      {projects.map(project => {
+        const href = project.demo ?? project.githubUrl ?? '#'
+        const description = lang === 'es' ? project.description_es : project.description_en
+        return (
+          <a class="project bg-bg-2 border border-line text-ink rounded-[20px] overflow-hidden flex flex-col transition-[transform,border-color,box-shadow] duration-300 ease-[ease] reveal [transform-style:preserve-3d] [will-change:transform]" href={href} target="_blank" rel="noopener noreferrer">
+            <div class="project-img bg-bg-3 relative overflow-hidden aspect-[16/10]">
+              <img src={`/img/projects/${project.image}.webp`} alt={project.title} loading="lazy" class="w-full h-full object-cover transition-transform duration-[600ms] ease-[ease]" />
+            </div>
+            <div class="project-body flex flex-col flex-1 px-6 pt-6 pb-[26px]">
+              <div class="flex justify-between items-baseline gap-3 mb-2">
+                <h3 class="text-[22px] font-bold tracking-[-0.02em]">{project.title}</h3>
+              </div>
+              <p class="text-muted-custom text-[14.5px] leading-[1.6] mb-[18px] flex-1">{description}</p>
+              <div class="project-foot flex justify-between items-center gap-3">
+                <div class="flex flex-wrap gap-[5px] items-center">
+                  {project.stack.map(s => (
+                    VALID_ICONS.has(s.icon)
+                      ? <span title={s.tooltip} class="inline-flex items-center"><Icon name={s.icon as IconType} /></span>
+                      : <span class="stack-text text-ink-soft border border-line font-mono text-[10.5px] py-[3px] px-2 rounded-full bg-[color-mix(in_oklab,var(--bg)_70%,transparent)]">{s.tooltip}</span>
+                  ))}
+                </div>
+                <span class="project-link text-accent inline-flex items-center gap-[6px] font-mono text-[12px] whitespace-nowrap">{t('projects').live_preview} <span class="arrow transition-transform duration-200">↗</span></span>
+              </div>
+            </div>
+          </a>
+        )
+      })}
     </div>
   </div>
 </section>
+
+<style>
+  .project:hover { transform: translateY(-6px); border-color: color-mix(in oklab, var(--accent) 40%, var(--line)); box-shadow: 0 24px 50px rgba(0,0,0,.3); }
+  .project-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(11,12,16,.55), transparent 40%); }
+  .project:hover .project-img img { transform: scale(1.04); }
+  .project:hover .project-link .arrow { transform: translate(3px,-3px); }
+</style>
+
+<script>
+  function initProjects() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia('(hover: none)').matches) return;
+    document.querySelectorAll<HTMLElement>('.project').forEach(card => {
+      card.addEventListener('pointermove', (e: PointerEvent) => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = `translateY(-6px) rotateX(${(-y*4).toFixed(2)}deg) rotateY(${(x*6).toFixed(2)}deg)`;
+      });
+      card.addEventListener('pointerleave', () => { card.style.transform = ''; });
+    });
+  }
+  initProjects();
+  document.addEventListener('astro:page-load', initProjects);
+</script>

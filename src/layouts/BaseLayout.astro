@@ -1,35 +1,38 @@
 ---
-import '@fontsource-variable/fredoka'
+import '@fontsource-variable/bricolage-grotesque'
+import '@fontsource-variable/dm-sans'
+import bricolageUrl from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url'
+import dmSansUrl from '@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2?url'
 import '../styles/global.css'
 import { getLangFromUrl, useTranslation } from 'src/i18n/utils'
+import { ClientRouter } from 'astro:transitions'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslation(lang)
 
 interface Props {
   title?: string
+  description?: string
 }
 
 const tSeo = t('seo')
-const { title } = Astro.props
+const { title, description } = Astro.props
 const ogImage = new URL('/img/seo/og-image.png', Astro.url)
 const twitterImage = new URL('/img/seo/twitter-image.png', Astro.url)
 ---
 
-<html lang={lang}>
+<html lang={lang} data-theme="dark">
   <head>
     <script is:inline>
       (function() {
-        const stored = localStorage.getItem('theme');
-        const theme = stored ?? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-        document.documentElement.setAttribute('data-theme', theme);
-        document.documentElement.classList.add(theme);
+        const stored = localStorage.getItem('portfolio-theme');
+        if (stored) document.documentElement.setAttribute('data-theme', stored);
       })();
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={tSeo.description} />
+    <meta name="description" content={description ?? tSeo.description} />
     <meta property="og:title" content={tSeo.title} />
     <meta property="og:description" content={tSeo.description} />
     <meta property="og:image" content={ogImage} />
@@ -39,15 +42,16 @@ const twitterImage = new URL('/img/seo/twitter-image.png', Astro.url)
     <meta name="twitter:description" content={tSeo.description} />
     <meta name="twitter:image" content={twitterImage} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href={bricolageUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={dmSansUrl} as="font" type="font/woff2" crossorigin />
     <title>{title ?? tSeo.title}</title>
+    <ClientRouter />
   </head>
   <body>
+    <div class="cosmos"></div>
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
     <slot />
   </body>
 </html>
-
-<style>
-  :global(html) {
-    scroll-behavior: smooth;
-  }
-</style>

@@ -4,6 +4,7 @@
     "description_es": "Founder de Inmology, una pequeña empresa que se dedica a la creación de agentes IA para automatizar tareas en la industria inmobiliaria. Entendiendo los modelos de aprendizade de IA con la herramienta de N8N.",
     "description_en": "Founder of Inmology, a small company dedicated to creating AI agents for automating tasks in the in-home industry. Understanding AI models with N8N tool.",
     "image": "inmology",
+    "githubUrl": "https://github.com/vitualizz/inmology",
     "stack": [
       {
         "icon": "gpt",
@@ -174,6 +175,7 @@
     "description_en": "Developed a personal project promoting the benefits of GPT chatbot implementation. Focus in crafting precise prompts for optimal model comprehension.",
     "description_es": "Desarrollé un proyecto personal que promueve los beneficios de implementar un chatbot GPT. Me enfoqué en crear indicaciones precisas para una comprensión óptima del modelo.",
     "image": "assistchat",
+    "githubUrl": "https://github.com/vitualizz/assistchat",
     "stack": [
       {
         "icon": "rails",

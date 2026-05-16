@@ -1,0 +1,34 @@
+[
+  {
+    "company": "Patrimore",
+    "role": "Senior Fullstack Engineer",
+    "period": { "start": "2025-01", "end": null },
+    "description_es": "Construyendo y refinando features de plataforma con foco en backend: arquitectura, queries optimizadas, y modelos de datos que aguantan. Stack moderno full-stack con React en el front.",
+    "description_en": "Building and refining platform features with a strong backend focus: architecture, optimized queries, and data models that hold up. Modern full-stack with React on the front.",
+    "tech": ["Backend-heavy", "Postgres", "TypeScript", "React"]
+  },
+  {
+    "company": "ComunidadFeliz",
+    "role": "Senior Fullstack Engineer",
+    "period": { "start": "2022-06", "end": "2024-08" },
+    "description_en": "Owned features across a condominium management platform serving thousands of buildings. Ruby on Rails + React + Postgres; led query optimization and cross-team refactors.",
+    "description_es": "Lideré features en una plataforma de administración de condominios usada por miles de edificios. Ruby on Rails + React + Postgres; optimización de queries y refactors entre equipos.",
+    "tech": ["Ruby on Rails", "React", "TypeScript", "Redux", "TailwindCSS", "Postgres"]
+  },
+  {
+    "company": "Influgo",
+    "role": "Tech Lead",
+    "period": { "start": "2020-01", "end": "2022-05" },
+    "description_en": "Led the build of a campaign and proposal management system for influencers. Architected the Rails API and React/React Native clients; set conventions still in use today.",
+    "description_es": "Lideré la construcción de un sistema de gestión de campañas y propuestas para influencers. Diseñé la API en Rails y los clientes React/React Native; establecí convenciones aún vigentes.",
+    "tech": ["Ruby on Rails", "React", "React Native", "TypeScript", "AWS Lambda", "Postgres"]
+  },
+  {
+    "company": "Inmology",
+    "role": "Founder & AI Engineer",
+    "period": { "start": "2024-09", "end": "2025-01" },
+    "description_en": "Building AI agents for real-estate automation. End-to-end product: prompt design, agent orchestration with N8N, data infrastructure on Postgres + AWS Lambda.",
+    "description_es": "Construyendo agentes de IA para automatizar tareas inmobiliarias. Producto end-to-end: diseño de prompts, orquestación de agentes con N8N, infraestructura en Postgres + AWS Lambda.",
+    "tech": ["GPT", "N8N", "Python", "JavaScript", "Postgres", "AWS Lambda"]
+  }
+]
