@@ -109,8 +109,15 @@ const t = useTranslation(lang)
   .blob-spark.s4 { animation-delay: 3.2s; }
 
   @media (max-width: 820px) {
+    /* Mobile overflow baseline:
+       - decorative inline offsets (left/right negativos)
+       - overflow: clip poco predecible en algunos Safari */
     .hero-grid { grid-template-columns: 1fr; gap: 48px; }
-    .hero-figure { max-width: 340px; margin: 0 auto; order: -1; }
+    .hero-figure { max-width: 340px; margin: 0 auto; order: -1; overflow-x: hidden; overflow-y: visible; }
+    .blob-spark.s2 { left: 2% !important; }
+    .blob-spark.s3 { right: 2% !important; }
+    .blob-tag { right: 4% !important; }
+    .hero-character { filter: drop-shadow(0 18px 24px rgba(0,0,0,.35)); }
     .hero { min-height: auto; padding-top: 32px; }
   }
 </style>

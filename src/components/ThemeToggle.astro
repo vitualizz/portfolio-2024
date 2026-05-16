@@ -1,0 +1,88 @@
+---
+import Moon from 'astro-heroicons/outline/Moon.astro'
+import Sun from 'astro-heroicons/outline/Sun.astro'
+---
+
+<button
+  class="border-line bg-bg-2 hover:border-accent inline-flex h-[38px] w-[38px] cursor-pointer items-center justify-center rounded-full border transition-colors"
+  aria-label="Cambiar tema"
+  data-theme-toggle
+  type="button"
+>
+  <span class="relative h-[18px] w-[18px]">
+    <span
+      class="pointer-events-none absolute inset-0 transition-all duration-300 ease-out"
+      data-icon="moon"
+    >
+      <Moon class="text-ink-soft h-[18px] w-[18px]" />
+    </span>
+    <span
+      class="pointer-events-none absolute inset-0 transition-all duration-300 ease-out"
+      data-icon="sun"
+    >
+      <Sun class="text-ink-soft h-[18px] w-[18px]" />
+    </span>
+  </span>
+</button>
+
+<script>
+  const THEME_STORAGE_KEY = 'portfolio-theme'
+  const THEME_TOGGLE_LISTENER_FLAG = 'themeToggleBound'
+  const THEME_PAGELOAD_FLAG = 'themeTogglePageLoadBound'
+
+  function setIconState(button: HTMLElement, theme: string) {
+    const moon = button.querySelector<HTMLElement>('[data-icon="moon"]')
+    const sun = button.querySelector<HTMLElement>('[data-icon="sun"]')
+    const dark = theme === 'dark'
+
+    moon?.classList.toggle('opacity-100', dark)
+    moon?.classList.toggle('scale-100', dark)
+    moon?.classList.toggle('rotate-0', dark)
+    moon?.classList.toggle('opacity-0', !dark)
+    moon?.classList.toggle('scale-75', !dark)
+    moon?.classList.toggle('-rotate-45', !dark)
+
+    sun?.classList.toggle('opacity-100', !dark)
+    sun?.classList.toggle('scale-100', !dark)
+    sun?.classList.toggle('rotate-0', !dark)
+    sun?.classList.toggle('opacity-0', dark)
+    sun?.classList.toggle('scale-75', dark)
+    sun?.classList.toggle('rotate-45', dark)
+  }
+
+  function applyTheme(next: 'light' | 'dark') {
+    document.documentElement.setAttribute('data-theme', next)
+    localStorage.setItem(THEME_STORAGE_KEY, next)
+
+    document.querySelectorAll<HTMLElement>('[data-theme-toggle]').forEach((btn) => {
+      setIconState(btn, next)
+    })
+  }
+
+  function initThemeToggle() {
+    const currentTheme =
+      document.documentElement.getAttribute('data-theme') ||
+      localStorage.getItem(THEME_STORAGE_KEY) ||
+      'dark'
+
+    document.querySelectorAll<HTMLElement>('[data-theme-toggle]').forEach((btn) => {
+      if (btn.dataset[THEME_TOGGLE_LISTENER_FLAG] !== 'true') {
+        btn.addEventListener('click', () => {
+          const current = document.documentElement.getAttribute('data-theme') || 'dark'
+          const next = current === 'dark' ? 'light' : 'dark'
+          applyTheme(next)
+        })
+        btn.dataset[THEME_TOGGLE_LISTENER_FLAG] = 'true'
+      }
+
+      setIconState(btn, currentTheme)
+    })
+  }
+
+  initThemeToggle()
+
+  if (document.documentElement.dataset[THEME_PAGELOAD_FLAG] !== 'true') {
+    document.addEventListener('astro:page-load', initThemeToggle)
+    document.documentElement.dataset[THEME_PAGELOAD_FLAG] = 'true'
+  }
+</script>

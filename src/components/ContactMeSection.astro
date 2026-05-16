@@ -67,6 +67,24 @@ const t = useTranslation(lang)
   .contact-card-glow { content: ""; position: absolute; top: -60%; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, color-mix(in oklab, var(--accent) 30%, transparent), transparent 70%); pointer-events: none; filter: blur(20px); }
   button[id="openContactModal"]:hover { transform: translateY(-2px); box-shadow: 0 12px 32px color-mix(in oklab, var(--accent) 40%, transparent); }
   .btn-ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+  @media (max-width: 820px) {
+    [data-contact-root] {
+      overflow-x: clip;
+    }
+
+    .contact-card {
+      overflow: visible !important;
+    }
+
+    .contact-card-glow {
+      width: clamp(340px, 88vw, 520px);
+      height: clamp(340px, 88vw, 520px);
+      top: -42%;
+      opacity: 0.7;
+      filter: blur(26px);
+    }
+  }
 </style>
 
 <script>
