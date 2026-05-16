@@ -20,14 +20,12 @@ const ogImage = new URL('/img/seo/og-image.png', Astro.url)
 const twitterImage = new URL('/img/seo/twitter-image.png', Astro.url)
 ---
 
-<html lang={lang}>
+<html lang={lang} data-theme="dark">
   <head>
     <script is:inline>
       (function() {
-        const stored = localStorage.getItem('theme');
-        const theme = stored ?? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-        document.documentElement.setAttribute('data-theme', theme);
-        document.documentElement.classList.add(theme);
+        const stored = localStorage.getItem('portfolio-theme');
+        if (stored) document.documentElement.setAttribute('data-theme', stored);
       })();
     </script>
     <meta charset="UTF-8" />
@@ -49,6 +47,10 @@ const twitterImage = new URL('/img/seo/twitter-image.png', Astro.url)
     <ClientRouter />
   </head>
   <body>
+    <div class="cosmos"></div>
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
     <slot />
   </body>
 </html>

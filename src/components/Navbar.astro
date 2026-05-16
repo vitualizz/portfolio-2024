@@ -1,248 +1,127 @@
 ---
-import PeruFlag from 'src/components/icons/PeruFlag.astro'
-import UnitedStatesFlag from 'src/components/icons/UnitedStatesFlag.astro'
-import { getLangFromUrl, useTranslation } from '../i18n/utils'
-import ThemeToggleBtn from '../components/ThemeToggleBtn.astro'
-import Bars3 from 'astro-heroicons/outline/Bars3.astro'
-
+import { getLangFromUrl } from '../i18n/utils'
 const lang = getLangFromUrl(Astro.url)
-const t = useTranslation(lang)
-
-type Props = {
-  isTransparent?: boolean
-}
-
-type NavItem = {
-  name: string
-  path: string
-}
-
-const tNav = t('nav')
-const tContactMe = t('contact_me')
-const navItems: NavItem[] = [
-  {
-    name: 'presentation',
-    path: `/${lang}/#presentation`
-  },
-  {
-    name: 'about_me',
-    path: `/${lang}/#about_me`
-  },
-  {
-    name: 'work_experience',
-    path: `/${lang}/#work_experience`
-  },
-  {
-    name: 'projects',
-    path: `/${lang}/#projects`
-  },
-  {
-    name: 'blog',
-    path: `/${lang}/#blog`
-  },
-  {
-    name: 'contact_me',
-    path: `/${lang}/#contact_me`
-  }
-]
-
-const { isTransparent = false } = Astro.props
 ---
 
-<div class="drawer">
-  <input id="drawerNavbar" type="checkbox" class="drawer-toggle" />
-  <div class="drawer-content flex h-screen flex-col landscape:h-full">
-    <div
-      class={`navbar fixed z-10 w-full shadow-md ${!isTransparent && 'bg-base-100'}`}
-    >
-      <div class="navbar-start md:invisible">
-        <label
-          id="drawerToggleOpen"
-          aria-label="open sidebar"
-          class="btn btn-square btn-ghost"
-        >
-          <Bars3 class="w-6" />
-        </label>
-      </div>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#top">
+      <span class="blob"></span>
+      <span>vitualizz</span>
+    </a>
 
-      <nav class="navbar-center hidden md:flex gap-1">
-        {
-          navItems.map((item) => (
-            <div class="group flex flex-col items-center mx-1">
-              <a
-                href={item.path}
-                class="text-sm transition duration-300 group-hover:font-bold px-2 py-1"
-                data-nav-item={item.name}
-              >
-                {tNav[item.name as keyof typeof tNav]}
-              </a>
-              <span
-                data-nav-item={item.name}
-                class="block h-0.5 w-0 bg-accent transition-all duration-500 group-hover:w-[80%]"
-              />
-            </div>
-          ))
-        }
-      </nav>
+    <nav class="nav-links">
+      <a href="#top" class="active" data-nav>Presentación</a>
+      <a href="#about" data-nav>Sobre mí</a>
+      <a href="#ai" data-nav>Pregúntale</a>
+      <a href="#projects" data-nav>Proyectos</a>
+      <a href="#xp" data-nav>Experiencia</a>
+      <a href="#blog" data-nav>Blog</a>
+      <a href="#contact" data-nav>Contacto</a>
+    </nav>
 
-      <div class="navbar-end text-gray-700 dark:text-gray-200">
-        <a
-          href={`/cv/${lang}.pdf`}
-          download={`LeePalacios_${lang}.pdf`}
-          class="btn transform border-none bg-surface-2 border border-border transition hover:scale-110 hover:bg-surface-2/80"
-        >
-          {tContactMe.resume_label}
-        </a>
-        <div class="dropdown ml-4 mr-1">
-          <div
-            tabindex="0"
-            role="button"
-            class="btn inline-flex items-center border border-border bg-surface-2 hover:bg-surface-2/80"
-          >
-            <span class="hidden lg:block">
-              {lang === 'en' ? 'ENG' : 'ESP'}
-            </span>
-            <div>
-              {
-                lang === 'en' ? (
-                  <UnitedStatesFlag class="w-6" />
-                ) : (
-                  <PeruFlag class="w-6" />
-                )
-              }
-            </div>
-          </div>
-          <ul
-            tabindex="0"
-            class="menu dropdown-content z-[1] w-[6.5rem] rounded-box bg-surface border border-border shadow"
-          >
-            <li>
-              <a href="/es">
-                <span class="hidden lg:block">ESP</span>
-                <PeruFlag class="w-6" />
-              </a>
-            </li>
-            <li>
-              <a href="/en">
-                <span class="hidden lg:block">ENG</span>
-                <UnitedStatesFlag class="w-6" />
-              </a>
-            </li>
-          </ul>
-        </div>
-        <ThemeToggleBtn />
-      </div>
-    </div>
-
-    <div class="mt-auto h-full md:h-screen">
-      <slot />
+    <div class="nav-right">
+      <a class="pill" href="/cv/es.pdf">Curriculum</a>
+      <a class="pill" href={lang === 'es' ? '/en' : '/es'} aria-label="Cambiar idioma">
+        {lang === 'es' ? 'ESP' : 'ENG'}
+        <span class="flag flag-pe" aria-hidden="true"></span>
+      </a>
+      <button class="theme-toggle" aria-label="Cambiar tema" id="themeToggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
     </div>
   </div>
+</header>
 
-  <div class="drawer-side z-20">
-    <label
-      id="drawerToggleClose"
-      aria-label="close sidebar"
-      class="drawer-overlay"></label>
-    <ul class="menu min-h-full w-80 bg-base-100 p-3">
-      <li>
-        {
-          navItems.map((item) => (
-            <a href={item.path} class="navbarMenuItem">
-              {tNav[item.name as keyof typeof tNav]}
-            </a>
-          ))
-        }
-      </li>
-    </ul>
-  </div>
-</div>
+<style>
+  .topbar {
+    position: sticky; top: 0; z-index: 30;
+    background: color-mix(in oklab, var(--bg) 75%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid color-mix(in oklab, var(--line) 80%, transparent);
+  }
+  .topbar-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 72px; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter);
+  }
+  .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em; font-size: 17px;
+    color: var(--ink);
+  }
+  .brand .blob {
+    width: 28px; height: 28px;
+    background: var(--accent);
+    border-radius: 56% 44% 40% 60% / 60% 50% 50% 40%;
+    box-shadow: 0 0 24px color-mix(in oklab, var(--accent) 30%, transparent);
+    animation: morph 9s ease-in-out infinite;
+  }
+  .nav-links { display: flex; gap: 36px; font-size: 15px; font-weight: 500; }
+  .nav-links a { position: relative; padding: 6px 0; color: var(--ink-soft); transition: color .2s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a.active { color: var(--ink); }
+  .nav-links a.active::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -2px;
+    height: 3px; background: var(--accent); border-radius: 999px;
+  }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px;
+    border: 1px solid var(--line); border-radius: 999px; font-size: 14px; font-weight: 500;
+    background: color-mix(in oklab, var(--bg-2) 80%, transparent);
+    transition: border-color .2s, background .2s, transform .2s; color: var(--ink);
+  }
+  .pill:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .flag { width: 18px; height: 12px; border-radius: 2px; overflow: hidden; display: inline-block; }
+  .flag-pe { background: linear-gradient(90deg, #D91023 33%, #fff 33% 66%, #D91023 66%); }
+  .theme-toggle {
+    width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line);
+    background: var(--bg-2); display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: border-color .2s, transform .2s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); transform: rotate(-15deg); }
+  .theme-toggle svg { width: 18px; height: 18px; color: var(--ink-soft); }
+
+  @media (max-width: 1080px) { .nav-links { gap: 22px; font-size: 14px; } }
+  @media (max-width: 940px) { .nav-links { display: none; } }
+</style>
 
 <script>
   function initNavbar() {
-    /* Navbar Mobile */
-    const drawerNavbar = document.getElementById(
-      'drawerNavbar'
-    ) as HTMLInputElement
-    const drawerToggleOpen = document.getElementById(
-      'drawerToggleOpen'
-    ) as HTMLLabelElement
-    const drawerToggleClose = document.getElementById(
-      'drawerToggleClose'
-    ) as HTMLLabelElement
-    const navbarMenuItems = document.querySelectorAll('.navbarMenuItem')
-    const navbar = document.querySelector('.navbar') as HTMLElement
-    const navbarLinks = document.querySelectorAll('.navbar a')
-    const presentationSection = document.getElementById(
-      'presentation'
-    ) as HTMLElement
-
-    navbarMenuItems.forEach((x) => {
-      x.addEventListener('click', () => {
-        drawerNavbar.checked = false
-      })
-    })
-
-    drawerToggleOpen.addEventListener('click', () => {
-      drawerNavbar.checked = true
-    })
-
-    drawerToggleClose.addEventListener('click', () => {
-      drawerNavbar.checked = false
-    })
-
-    /* Intersection Observer */
-    const sectionTargets = document.querySelectorAll('[data-section]')
-    const aNavTargets = document.querySelectorAll('a[data-nav-item]')
-    const spanNavTargets = document.querySelectorAll('span[data-nav-item]')
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            aNavTargets.forEach((x) => x.classList.remove('font-bold'))
-            spanNavTargets.forEach((x) => x.classList.remove('w-[80%]'))
-            const aItemTarget = document.querySelector(
-              `a[data-nav-item=${(entry.target as HTMLElement).dataset.section}]`
-            ) as HTMLAnchorElement
-            const spanItemTarget = document.querySelector(
-              `span[data-nav-item=${(entry.target as HTMLElement).dataset.section}]`
-            ) as HTMLSpanElement
-            if (spanItemTarget) spanItemTarget.classList.add('w-[80%]')
-            if (aItemTarget) aItemTarget.classList.add('font-bold')
-          }
-        })
-      },
-      {
-        rootMargin: '-50% 0% -50% 0%',
-        threshold: 0
-      }
-    )
-
-    sectionTargets.forEach((x) => observer.observe(x))
-
-    const scrollNavbarBg = () => {
-      if (presentationSection === null) return
-
-      if (window.scrollY < presentationSection.clientHeight) {
-        navbar.classList.add('bg-transparent')
-        navbar.classList.remove('bg-base-100')
-      } else {
-        navbar.classList.remove('bg-transparent')
-        navbar.classList.add('bg-base-100')
-      }
-
-      if (window.scrollY + 100 < presentationSection.clientHeight) {
-        navbarLinks.forEach((x) => x.classList.add('text-white'))
-      } else {
-        navbarLinks.forEach((x) => x.classList.remove('text-white'))
-      }
+    // Theme toggle
+    const btn = document.getElementById('themeToggle');
+    if (btn) {
+      btn.addEventListener('click', () => {
+        const cur = document.documentElement.getAttribute('data-theme');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('portfolio-theme', next);
+        // show/hide stars
+        const stars = document.querySelectorAll('.stars, .stars2, .stars3');
+        stars.forEach(s => (s as HTMLElement).style.display = next === 'dark' ? '' : 'none');
+      });
     }
 
-    document.addEventListener('scroll', scrollNavbarBg)
-    document.addEventListener('load', scrollNavbarBg)
-  }
+    // Active nav highlight on scroll
+    const navLinks = document.querySelectorAll<HTMLAnchorElement>('[data-nav]');
+    const sectionMap = Array.from(navLinks).map(a => ({
+      a, target: document.querySelector(a.getAttribute('href') || '') as HTMLElement | null
+    })).filter(x => x.target);
 
-  initNavbar()
-  document.addEventListener('astro:page-load', initNavbar)
+    function updateActive() {
+      const y = window.scrollY + 120;
+      let active = sectionMap[0];
+      for (const item of sectionMap) {
+        if (item.target && item.target.offsetTop <= y) active = item;
+      }
+      navLinks.forEach(a => a.classList.toggle('active', a === active?.a));
+    }
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+  }
+  initNavbar();
+  document.addEventListener('astro:page-load', initNavbar);
 </script>

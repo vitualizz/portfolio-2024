@@ -1,171 +1,130 @@
 ---
-import Envelope from 'astro-heroicons/outline/Envelope.astro'
-import DocumentText from 'astro-heroicons/outline/DocumentText.astro'
-import GithubIcon from '../components/icons/Github.astro'
-import Linkedin from '../components/icons/Linkedin.astro'
-import { getLangFromUrl, useTranslation } from '../i18n/utils.ts'
-
-const lang = getLangFromUrl(Astro.url)
-const t = useTranslation(lang)
-
-const tContactMe = t('contact_me')
-const tForm = tContactMe.form
 ---
 
-<section
-  data-section="contact_me"
-  id="contact_me"
-  class="bg-bg px-6 lg:px-16 py-32"
->
-  <div class="max-w-6xl mx-auto flex flex-col lg:flex-row lg:justify-around xl:justify-between gap-16">
-    <div class="w-full lg:w-5/12 text-center lg:text-left">
-      <h3
-        class="font-display text-4xl font-bold md:text-5xl mb-12"
-        set:html={tContactMe.tell_me}
-      />
-
-      <a href="mailto:vitualizz@gmail.com">
-        <div class="mt-5 flex items-center gap-4 rounded-lg bg-surface border border-border px-7 py-3 transition hover:bg-surface-2">
-          <Envelope class="h-8 w-8 shrink-0" />
-          <p class="font-medium">vitualizz@gmail.com</p>
-        </div>
-      </a>
-      <a href="https://github.com/vitualizz" target="_blank" rel="noopener noreferrer">
-        <div class="mt-4 flex items-center gap-4 rounded-lg bg-surface border border-border px-7 py-3 transition hover:bg-surface-2">
-          <GithubIcon class="h-8 w-8 shrink-0" />
-          <p class="font-medium">vitualizz</p>
-        </div>
-      </a>
-      <a href="https://www.linkedin.com/in/vitualizz/" target="_blank" rel="noopener noreferrer">
-        <div class="mt-4 flex items-center gap-4 rounded-lg bg-surface border border-border px-7 py-3 transition hover:bg-surface-2">
-          <Linkedin class="h-8 w-8 shrink-0" />
-          <p class="font-medium">Lee Palacios</p>
-        </div>
-      </a>
-      <a
-        href={`/cv/${lang}.pdf`}
-        download={`LeePalacios_${lang}.pdf`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <div class="mt-4 flex items-center gap-4 rounded-lg bg-surface border border-border px-7 py-3 transition hover:bg-surface-2">
-          <DocumentText class="h-8 w-8 shrink-0" />
-          <p class="font-medium">{tContactMe.resume_label}</p>
-        </div>
-      </a>
-    </div>
-
-    <div class="w-full max-w-sm shrink-0 bg-surface-2 border border-border rounded-xl">
-      <form
-        id="contactForm"
-        action="/api/contact"
-        method="POST"
-        class="p-8"
-        data-i18n-submitting={tForm.submitting}
-        data-i18n-success={tForm.success}
-        data-i18n-error={tForm.error}
-      >
-        <h3 class="font-display text-xl font-bold md:text-2xl mb-6" set:html={tContactMe.send_message_me} />
-
-        <div class="form-control mb-4">
-          <label class="label pb-1">
-            <span class="label-text font-medium">{tForm.name_label}</span>
-          </label>
-          <input
-            type="text"
-            placeholder={tForm.name_placeholder}
-            class="input input-bordered w-full"
-            name="name"
-            required
-          />
-        </div>
-
-        <div class="form-control mb-4">
-          <label class="label pb-1">
-            <span class="label-text font-medium">{tForm.email_label}</span>
-          </label>
-          <input
-            type="email"
-            placeholder={tForm.email_placeholder}
-            class="input input-bordered w-full"
-            name="email"
-            required
-          />
-        </div>
-
-        <div class="form-control mb-6">
-          <label class="label pb-1">
-            <span class="label-text font-medium">{tForm.message_label}</span>
-          </label>
-          <textarea
-            placeholder={tForm.message_placeholder}
-            class="textarea input-bordered min-h-28 w-full"
-            name="description"
-            required></textarea>
-        </div>
-
-        <div class="form-control">
-          <button type="submit" class="btn btn-primary w-full">{tForm.submit}</button>
-        </div>
-      </form>
+<!-- Contact section -->
+<section class="s" id="contact">
+  <div class="wrap">
+    <div class="contact-card reveal">
+      <h2 class="contact-title">Hablemos<br/>Cuéntame sobre tu <em>Proyecto</em> ✨</h2>
+      <p class="contact-sub">Si tienes una idea que necesita manos expertas — código limpio, escalable y enviado a tiempo — me encantaría escucharte. Respondo en menos de 24 horas hábiles.</p>
+      <div class="contact-actions">
+        <button class="btn-primary" id="openContactModal">Enviar mensaje <span>✉</span></button>
+        <a class="btn-ghost" href="/cv/es.pdf">Descargar CV <span>↓</span></a>
+      </div>
     </div>
   </div>
 </section>
 
+<!-- Contact modal -->
+<dialog class="modal" id="contactModal" aria-labelledby="contactTitle">
+  <div class="modal-panel">
+    <button class="modal-close" id="closeContactModal" aria-label="Cerrar">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
+    </button>
+    <div class="modal-eyebrow">// Hablemos</div>
+    <h3 id="contactTitle">Cuéntame sobre tu proyecto</h3>
+    <p class="modal-sub">Respondo en menos de 24 horas hábiles. Para algo urgente, ping también por LinkedIn.</p>
+
+    <form class="contact-form" id="contactForm" action="/api/contact" method="POST" novalidate>
+      <div class="field">
+        <label for="cf-name">Tu nombre</label>
+        <input id="cf-name" type="text" name="name" required placeholder="ej. Ana Pérez" />
+      </div>
+      <div class="field">
+        <label for="cf-email">Email</label>
+        <input id="cf-email" type="email" name="email" required placeholder="tu@email.com" />
+      </div>
+      <div class="field">
+        <label for="cf-message">Mensaje</label>
+        <textarea id="cf-message" name="description" required placeholder="Cuéntame qué necesitas, qué stack tienes, plazos..."></textarea>
+      </div>
+      <div class="field">
+        <button type="submit" class="form-submit">
+          Enviar mensaje
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </form>
+
+    <div class="form-success" id="contactSuccess" hidden>
+      <div class="check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h4>¡Mensaje enviado!</h4>
+      <p>Te contesto en menos de 24h hábiles.</p>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .contact-card { max-width: 920px; margin: 0 auto; background: linear-gradient(160deg, color-mix(in oklab, var(--accent) 12%, var(--bg-2)), var(--bg-2)); border: 1px solid color-mix(in oklab, var(--accent) 30%, var(--line)); border-radius: 28px; padding: clamp(40px,6vw,80px); text-align: center; position: relative; overflow: hidden; }
+  .contact-card::before { content: ""; position: absolute; top: -60%; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, color-mix(in oklab, var(--accent) 30%, transparent), transparent 70%); pointer-events: none; filter: blur(20px); }
+  .contact-title { font-size: clamp(36px,5.5vw,64px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.02; margin: 0 0 16px; position: relative; }
+  .contact-title em { font-style: normal; color: var(--accent); }
+  .contact-sub { color: var(--ink-soft); font-size: 17px; max-width: 52ch; margin: 0 auto 32px; line-height: 1.6; position: relative; }
+  .contact-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 10px; padding: 14px 26px; background: var(--accent); color: #0B0C10; border-radius: 999px; font-size: 15px; font-weight: 600; transition: transform .2s, box-shadow .2s; border: none; cursor: pointer; font-family: inherit; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px color-mix(in oklab, var(--accent) 40%, transparent); }
+  .btn-ghost { display: inline-flex; align-items: center; gap: 10px; padding: 14px 26px; border: 1px solid var(--line); color: var(--ink); border-radius: 999px; font-size: 15px; font-weight: 500; background: color-mix(in oklab, var(--bg) 50%, transparent); transition: border-color .2s, transform .2s; }
+  .btn-ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
+</style>
+
 <script>
-  document
-    .getElementById('contactForm')
-    ?.addEventListener('submit', async function (e) {
-      e.preventDefault()
+  function initContact() {
+    const modal = document.getElementById('contactModal') as HTMLDialogElement | null;
+    const openBtn = document.getElementById('openContactModal');
+    const closeBtn = document.getElementById('closeContactModal');
+    const form = document.getElementById('contactForm') as HTMLFormElement | null;
+    const success = document.getElementById('contactSuccess');
 
-      const form = this as HTMLFormElement
-      const button = form.querySelector('button[type="submit"]') as HTMLButtonElement
-      const originalText = button.innerHTML
+    // Also wire up any [data-open-modal="contact"] buttons (from hero)
+    document.querySelectorAll('[data-open-modal="contact"]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal?.showModal();
+        document.body.style.overflow = 'hidden';
+      });
+    });
 
-      const submittingText = form.dataset.i18nSubmitting ?? 'Sending...'
-      const successText = form.dataset.i18nSuccess ?? 'Message sent!'
-      const errorText = form.dataset.i18nError ?? 'Failed to send.'
+    if (openBtn && modal) {
+      openBtn.addEventListener('click', () => { modal.showModal(); document.body.style.overflow = 'hidden'; });
+    }
+    if (closeBtn && modal) {
+      closeBtn.addEventListener('click', () => { modal.close(); document.body.style.overflow = ''; });
+      modal.addEventListener('click', (e) => {
+        const r = modal.getBoundingClientRect();
+        const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+        if (!inside) { modal.close(); document.body.style.overflow = ''; }
+      });
+      modal.addEventListener('close', () => { document.body.style.overflow = ''; });
+    }
 
-      // Sending animation
-      button.innerHTML = `
-        <svg class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        ${submittingText}
-      `
-
-      const formData = new FormData(form)
-
-      try {
-        const response = await fetch('/api/contact', {
-          method: 'POST',
-          body: formData
-        })
-
-        if (response.ok) {
-          button.innerHTML = `
-            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-            </svg>
-            ${successText}
-          `
-          form.reset()
-        } else {
-          throw new Error('send failed')
+    if (form && success) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('.form-submit') as HTMLButtonElement;
+        btn.disabled = true;
+        btn.textContent = 'Enviando...';
+        const formData = new FormData(form);
+        try {
+          const res = await fetch('/api/contact', { method: 'POST', body: formData });
+          if (res.ok) {
+            form.hidden = true;
+            success.hidden = false;
+            setTimeout(() => {
+              form.reset(); form.hidden = false; success.hidden = true;
+              btn.disabled = false;
+              btn.textContent = 'Enviar mensaje';
+            }, 6000);
+          } else throw new Error('failed');
+        } catch {
+          btn.disabled = false;
+          btn.textContent = 'Error — intenta de nuevo';
+          setTimeout(() => { btn.textContent = 'Enviar mensaje'; }, 3000);
         }
-      } catch (err) {
-        button.innerHTML = `
-          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-5v2H9v-2h2zm0-8v6H9V5h2z" clip-rule="evenodd"></path>
-          </svg>
-          ${errorText}
-        `
-      }
-
-      // Restore after 3 seconds
-      setTimeout(() => {
-        button.innerHTML = originalText
-      }, 3000)
-    })
+      });
+    }
+  }
+  initContact();
+  document.addEventListener('astro:page-load', initContact);
 </script>

@@ -2,18 +2,20 @@
 import HomeLayout from 'src/layouts/HomeLayout.astro'
 import PresentationSection from 'src/components/PresentationSection.astro'
 import AboutMeSection from 'src/components/AboutMeSection.astro'
-import WorkExperienceSection from 'src/components/WorkExperienceSection.astro'
+import AskAISection from 'src/components/AskAISection.astro'
 import ProjectsSection from 'src/components/ProjectsSection.astro'
-import ContactMeSection from 'src/components/ContactMeSection.astro'
+import WorkExperienceSection from 'src/components/WorkExperienceSection.astro'
 import BlogSection from 'src/components/BlogSection.astro'
+import ContactMeSection from 'src/components/ContactMeSection.astro'
 ---
 
-<HomeLayout navbarTransparent>
+<HomeLayout>
   <main>
     <PresentationSection />
     <AboutMeSection />
-    <WorkExperienceSection />
+    <AskAISection />
     <ProjectsSection />
+    <WorkExperienceSection />
     <BlogSection />
     <ContactMeSection />
   </main>

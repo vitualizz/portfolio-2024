@@ -1,0 +1,185 @@
+---
+---
+
+<section class="s" id="ai">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="s-eyebrow">// 02 · Lab</span>
+      <h2 class="s-title">Pregúntale a Lee <span class="y">↳ vía IA</span></h2>
+      <p class="s-sub">
+        Una IA entrenada con mi CV, stacks y proyectos. Hazle preguntas técnicas, sobre mi experiencia, o lo que sea.
+        <span class="ai-built">(construido con <code>Claude Haiku</code> · via API)</span>
+      </p>
+    </div>
+
+    <div class="ai-shell reveal">
+      <div class="ai-header">
+        <div class="ai-status">
+          <span class="ai-dot"></span>
+          <span class="ai-label">lee-ai · v1</span>
+          <span class="ai-model">claude-haiku-4-5</span>
+        </div>
+        <div class="ai-tabs">
+          <button class="ai-tab" data-suggest="¿Cuál ha sido tu proyecto backend más complejo y qué aprendiste de él?">backend ↗</button>
+          <button class="ai-tab" data-suggest="Cuéntame sobre tu experiencia construyendo con LLMs y agentes de IA. ¿Qué stack usas?">ai builder ↗</button>
+          <button class="ai-tab" data-suggest="Si te pidiera optimizar una query lenta de Postgres en producción, ¿por dónde empezarías?">postgres ↗</button>
+          <button class="ai-tab" data-suggest="¿Qué buscas en tu próximo equipo? ¿Qué tipo de cultura te hace feliz?">cultura ↗</button>
+        </div>
+      </div>
+
+      <div class="ai-conv" id="aiConv">
+        <div class="ai-msg ai-msg-bot">
+          <div class="ai-avatar">L</div>
+          <div class="ai-bubble">
+            <p>¡Hola! Soy una versión IA de Lee. Pregúntame sobre <b>backend</b>, <b>arquitectura</b>, <b>AI agents</b>, <b>Postgres</b>, mis proyectos, o por qué tengo 3 gatos 🐱. Lo que quieras.</p>
+            <p class="ai-hint">Tip: prueba un atajo arriba ↑ o escribe tu propia pregunta abajo ↓</p>
+          </div>
+        </div>
+      </div>
+
+      <form class="ai-form" id="aiForm">
+        <span class="ai-prompt-icon">›</span>
+        <input id="aiInput" type="text" placeholder="Escribe tu pregunta para Lee..." autocomplete="off" maxlength="280" />
+        <button class="ai-send" type="submit" aria-label="Enviar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ai-built { font-family: var(--font-mono); font-size: 12px; color: var(--muted); display: block; margin-top: 10px; }
+  .ai-built code { background: color-mix(in oklab, var(--accent) 12%, transparent); color: var(--accent); padding: 2px 6px; border-radius: 4px; font-size: 11.5px; }
+  .ai-shell { max-width: 900px; margin: 0 auto; background: linear-gradient(180deg, var(--bg-2) 0%, color-mix(in oklab, var(--bg-2) 80%, var(--bg)) 100%); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,.35); position: relative; }
+  .ai-shell::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), var(--coral), var(--mint), transparent); opacity: .8; }
+  .ai-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line); background: color-mix(in oklab, var(--bg) 60%, transparent); flex-wrap: wrap; gap: 12px; }
+  .ai-status { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 12px; }
+  .ai-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 4px color-mix(in oklab, var(--mint) 25%, transparent); animation: pulse 2s ease-in-out infinite; }
+  .ai-label { color: var(--ink); }
+  .ai-model { color: var(--muted); background: color-mix(in oklab, var(--bg) 70%, transparent); padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); font-size: 11px; }
+  .ai-tabs { display: flex; flex-wrap: wrap; gap: 4px; }
+  .ai-tab { font-family: var(--font-mono); font-size: 11px; padding: 5px 10px; border-radius: 8px; background: transparent; border: 1px solid var(--line); color: var(--ink-soft); cursor: pointer; transition: all .2s; }
+  .ai-tab:hover { background: color-mix(in oklab, var(--accent) 12%, var(--bg-2)); border-color: color-mix(in oklab, var(--accent) 40%, var(--line)); color: var(--ink); transform: translateY(-1px); }
+  .ai-conv { padding: 24px 22px 12px; max-height: 420px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; scroll-behavior: smooth; }
+  .ai-conv::-webkit-scrollbar { width: 6px; }
+  .ai-conv::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .ai-msg { display: grid; grid-template-columns: 32px 1fr; gap: 12px; align-items: start; animation: msgIn .45s cubic-bezier(.2,.7,.3,1) both; }
+  .ai-msg.ai-msg-user { grid-template-columns: 1fr 32px; }
+  .ai-msg.ai-msg-user .ai-avatar { order: 2; }
+  .ai-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 14px; background: var(--accent); color: #0B0C10; flex-shrink: 0; }
+  .ai-msg-user .ai-avatar { background: color-mix(in oklab, var(--coral) 80%, transparent); color: #fff; }
+  .ai-bubble { padding: 14px 18px; background: color-mix(in oklab, var(--bg) 60%, transparent); border: 1px solid var(--line); border-radius: 14px; font-size: 14.5px; line-height: 1.6; color: var(--ink); }
+  .ai-msg-user .ai-bubble { background: color-mix(in oklab, var(--coral) 12%, var(--bg-2)); border-color: color-mix(in oklab, var(--coral) 30%, var(--line)); }
+  .ai-bubble p { margin: 0; }
+  .ai-bubble p + p { margin-top: 0.7em; }
+  .ai-bubble b { color: var(--accent); font-weight: 600; }
+  .ai-bubble code { font-family: var(--font-mono); font-size: 0.9em; background: color-mix(in oklab, var(--accent) 10%, transparent); color: var(--accent); padding: 1px 5px; border-radius: 4px; }
+  .ai-hint { margin-top: 8px; font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); }
+  .ai-thinking { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+  .ai-thinking .d { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: bounce 1.2s infinite; }
+  .ai-thinking .d:nth-child(2) { animation-delay: .15s; }
+  .ai-thinking .d:nth-child(3) { animation-delay: .3s; }
+  .ai-form { display: flex; align-items: center; padding: 12px 14px; border-top: 1px solid var(--line); background: color-mix(in oklab, var(--bg) 80%, transparent); }
+  .ai-prompt-icon { font-family: var(--font-mono); color: var(--accent); font-weight: 700; padding: 0 10px; font-size: 18px; }
+  #aiInput { flex: 1; border: none; background: transparent; outline: none; color: var(--ink); font-family: var(--font-sans); font-size: 15px; padding: 10px 4px; }
+  #aiInput::placeholder { color: var(--muted); }
+  .ai-send { width: 38px; height: 38px; background: var(--accent); color: #0B0C10; border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform .2s, background .2s; }
+  .ai-send:hover { transform: translateX(2px); background: var(--coral); color: #fff; }
+  .ai-send:disabled { background: var(--bg-3); color: var(--muted); cursor: wait; transform: none; }
+  .ai-send svg { width: 18px; height: 18px; }
+</style>
+
+<script>
+  const LEE_SYSTEM = `You are "Lee-AI", a portfolio assistant that speaks AS IF you were Lee Palacios. Be warm, concise, and direct. Match the asker's language (Spanish or English) automatically.
+
+FACTS ABOUT LEE PALACIOS:
+- Software Engineer based in Lima, Peru. 7+ years of experience.
+- Currently: Senior Fullstack Engineer at Patrimore (2025—present).
+- Previous: Senior Fullstack Engineer at ComunidadFeliz (Jun 2022—Aug 2024) — Ruby on Rails + React + Postgres SaaS for thousands of buildings.
+- Previous: Tech Lead at Influgo (Jan 2020—May 2022) — campaign management system from scratch, Rails + React + React Native + AWS Lambda.
+- Side project (paused): Inmology — AI agents for real estate automation (GPT, N8N, Python, Postgres, AWS Lambda).
+- Backend at heart: loves Ruby, Python, Postgres, SQL, AWS Lambda, optimized queries.
+- AI Builder: actively explores LLMs, agent orchestration with N8N, prompt engineering, Claude/GPT.
+- Frontend when needed: TypeScript, React, React Native, Tailwind.
+- Three cats. Will mention them charmingly when asked about personal life.
+- Languages: Spanish (native), English (fluent).
+
+STYLE RULES:
+- 1-3 short paragraphs MAX.
+- Be honest and concrete. Drop real examples (e.g. "una vez optimicé una query de 8s a 30ms").
+- End with one short follow-up question when natural.
+- Never break character.`;
+
+  function initAI() {
+    const form = document.getElementById('aiForm') as HTMLFormElement | null;
+    const input = document.getElementById('aiInput') as HTMLInputElement | null;
+    const conv = document.getElementById('aiConv') as HTMLElement | null;
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.ai-tab');
+    if (!form || !input || !conv) return;
+
+    const history: {role: string; content: string}[] = [];
+
+    function escHtml(s: string) {
+      return s.replace(/[&<>"']/g, (c: string) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c as '&'] || c));
+    }
+    function renderMd(s: string) {
+      return escHtml(s)
+        .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .split(/\n\n+/)
+        .map((p: string) => `<p>${p.replace(/\n/g, '<br/>')}</p>`)
+        .join('');
+    }
+    function addMsg(role: string, text: string) {
+      const wrap = document.createElement('div');
+      wrap.className = 'ai-msg ' + (role === 'user' ? 'ai-msg-user' : 'ai-msg-bot');
+      wrap.innerHTML = `<div class="ai-avatar">${role === 'user' ? 'TÚ' : 'L'}</div><div class="ai-bubble">${role === 'user' ? `<p>${escHtml(text)}</p>` : renderMd(text)}</div>`;
+      conv!.appendChild(wrap);
+      conv!.scrollTop = conv!.scrollHeight;
+      return wrap;
+    }
+    function addThinking() {
+      const wrap = document.createElement('div');
+      wrap.className = 'ai-msg ai-msg-bot';
+      wrap.innerHTML = `<div class="ai-avatar">L</div><div class="ai-bubble"><div class="ai-thinking"><span class="d"></span><span class="d"></span><span class="d"></span><span style="margin-left:6px;">pensando...</span></div></div>`;
+      conv!.appendChild(wrap);
+      conv!.scrollTop = conv!.scrollHeight;
+      return wrap;
+    }
+
+    async function ask(question: string) {
+      if (!question.trim()) return;
+      addMsg('user', question);
+      history.push({ role: 'user', content: question });
+      const sendBtn = form!.querySelector('.ai-send') as HTMLButtonElement;
+      sendBtn.disabled = true;
+      input!.value = '';
+      const thinking = addThinking();
+      try {
+        const res = await fetch('/api/ask-lee', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: history.slice(-6), system: LEE_SYSTEM })
+        });
+        const data = await res.json();
+        thinking.remove();
+        const answer = data.answer || 'No pude procesar tu pregunta. Intenta de nuevo.';
+        addMsg('assistant', answer);
+        history.push({ role: 'assistant', content: answer });
+      } catch {
+        thinking.querySelector('.ai-bubble')!.innerHTML = `<p>Ups, algo se cayó. Escríbeme directo por el formulario de contacto.</p>`;
+      } finally {
+        sendBtn.disabled = false;
+        input!.focus();
+      }
+    }
+
+    form.addEventListener('submit', (e) => { e.preventDefault(); ask(input!.value); });
+    tabs.forEach(t => t.addEventListener('click', () => ask(t.dataset.suggest || '')));
+  }
+  initAI();
+  document.addEventListener('astro:page-load', initAI);
+</script>

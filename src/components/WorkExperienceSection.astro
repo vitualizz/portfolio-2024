@@ -1,58 +1,75 @@
 ---
-import type { ExperienceEntry } from '../types/Experience.types'
-import experience from '../data/experience.json'
-import { getLangFromUrl, useTranslation } from '../i18n/utils'
-
-const lang = getLangFromUrl(Astro.url)
-const t = useTranslation(lang)
-const tWx = t('work_experience')
-
-const entries = experience as ExperienceEntry[]
 ---
 
-<section
-  id="work_experience"
-  data-section="work_experience"
-  class="px-6 lg:px-16 py-32 max-w-6xl mx-auto"
->
-  <div class="mb-16 anim-fade-up">
-    <h2 class="font-display text-4xl lg:text-5xl font-bold mb-4">{tWx.title}</h2>
-    <div class="w-16 h-1 bg-accent rounded-full"></div>
+<section class="s" id="xp">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="s-eyebrow">// 04 · Experiencia</span>
+      <h2 class="s-title">Mi <span class="y">recorrido</span></h2>
+      <p class="s-sub">Cuatro paradas profesionales, una constante: producto que se envía.</p>
+    </div>
+
+    <div class="xp">
+      <div class="xp-item current reveal">
+        <div class="xp-bullet"><span class="core"></span></div>
+        <div class="xp-content">
+          <div class="xp-meta"><span class="xp-period">2025 — <span class="now">Actualidad</span></span></div>
+          <h4>Patrimore</h4>
+          <div class="xp-role">Senior Fullstack Engineer</div>
+          <p class="xp-summary">Construyendo y refinando features de plataforma. Foco fuerte en <b>backend</b>: arquitectura, queries optimizadas, y modelos de datos que aguantan. Stack moderno full-stack con React en el front.</p>
+          <div class="xp-tech"><span>Backend-heavy</span><span>Postgres</span><span>TypeScript</span><span>React</span></div>
+        </div>
+      </div>
+
+      <div class="xp-item reveal">
+        <div class="xp-bullet"><span class="core"></span></div>
+        <div class="xp-content">
+          <div class="xp-meta"><span class="xp-period">Jun 2022 — Ago 2024</span></div>
+          <h4>ComunidadFeliz</h4>
+          <div class="xp-role">Senior Fullstack Engineer</div>
+          <p class="xp-summary">Lideré features en una plataforma de administración de condominios usada por miles de edificios. Ruby on Rails + React + Postgres; <b>optimización de queries</b> y refactors entre equipos.</p>
+          <div class="xp-tech"><span>Rails</span><span>React</span><span>TypeScript</span><span>Redux</span><span>Tailwind</span><span>Postgres</span></div>
+        </div>
+      </div>
+
+      <div class="xp-item reveal">
+        <div class="xp-bullet"><span class="core"></span></div>
+        <div class="xp-content">
+          <div class="xp-meta"><span class="xp-period">Ene 2020 — May 2022</span></div>
+          <h4>Influgo</h4>
+          <div class="xp-role">Tech Lead</div>
+          <p class="xp-summary">Lideré desde cero un sistema de gestión de campañas para influencers. API en Rails y clientes React/React Native. Establecí convenciones que siguen vigentes hoy.</p>
+          <div class="xp-tech"><span>Rails</span><span>React</span><span>React Native</span><span>TypeScript</span><span>AWS Lambda</span><span>Postgres</span></div>
+        </div>
+      </div>
+
+      <div class="xp-item reveal">
+        <div class="xp-bullet"><span class="core"></span></div>
+        <div class="xp-content">
+          <div class="xp-meta"><span class="xp-period">2024 — 2025 · <span style="color:var(--coral);">Side project</span></span></div>
+          <h4>Inmology <span style="color:var(--muted);font-weight:500;font-size:0.7em;">— pausado</span></h4>
+          <div class="xp-role">AI Engineer · Personal venture</div>
+          <p class="xp-summary">Experimento personal con agentes de IA para automatizar tareas inmobiliarias. End-to-end con GPT + N8N + Postgres + Lambda. Aprendí mucho sobre LLM orchestration aplicado a operaciones reales.</p>
+          <div class="xp-tech"><span>GPT</span><span>N8N</span><span>Python</span><span>Postgres</span><span>AWS Lambda</span></div>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <ol class="relative border-l border-border ml-4">
-    {entries.map((entry, i) => (
-      <li class="mb-12 ml-10 anim-fade-up" style={`animation-delay: ${i * 0.1}s`}>
-        <!-- Timeline dot -->
-        <span class="absolute -left-[1.125rem] flex items-center justify-center w-9 h-9 rounded-full bg-bg border-2 border-accent">
-          <span class="w-2 h-2 rounded-full bg-accent"></span>
-        </span>
-
-        <!-- Period -->
-        <time class="block mb-1 text-sm font-medium text-accent">
-          {entry.period.start} — {entry.period.end ?? tWx.present}
-        </time>
-
-        <!-- Role + Company -->
-        <h3 class="font-display text-2xl font-semibold mb-1">{entry.role}</h3>
-        <p class="text-text-muted font-medium mb-3">{entry.company}</p>
-
-        <!-- Description -->
-        <p class="text-base leading-relaxed mb-4">
-          {lang === 'en' ? entry.description_en : entry.description_es}
-        </p>
-
-        <!-- Tech pills -->
-        <ul class="flex flex-wrap gap-2" aria-label="Technologies used">
-          {entry.tech.map(tech => (
-            <li>
-              <span class="text-xs font-medium px-3 py-1 rounded-full bg-surface border border-border text-text-muted">
-                {tech}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </li>
-    ))}
-  </ol>
 </section>
+
+<style>
+  .xp { display: flex; flex-direction: column; max-width: 880px; margin: 0 auto; position: relative; }
+  .xp::before { content: ""; position: absolute; left: 11px; top: 18px; bottom: 18px; width: 2px; background: linear-gradient(to bottom, var(--accent), transparent 90%); opacity: .4; }
+  .xp-item { display: grid; grid-template-columns: 24px 1fr; gap: 28px; padding: 22px 0; position: relative; }
+  .xp-bullet { width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center; margin-top: 4px; flex-shrink: 0; }
+  .xp-bullet .core { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+  .xp-item.current .xp-bullet .core { box-shadow: 0 0 0 5px color-mix(in oklab, var(--accent) 30%, transparent); }
+  .xp-meta { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; flex-wrap: wrap; }
+  .xp-period { font-family: var(--font-mono); font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .xp-period .now { color: var(--accent); font-weight: 500; }
+  .xp-content h4 { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin: 4px 0 4px; }
+  .xp-role { color: var(--pink); font-size: 15px; font-weight: 500; margin-bottom: 10px; }
+  .xp-summary { color: var(--ink-soft); font-size: 15px; line-height: 1.65; max-width: 60ch; margin-bottom: 12px; }
+  .xp-tech { display: flex; flex-wrap: wrap; gap: 5px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+  .xp-tech span { padding: 3px 8px; border: 1px solid var(--line); border-radius: 999px; }
+</style>

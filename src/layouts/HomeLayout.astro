@@ -2,17 +2,28 @@
 import BaseLayout from './BaseLayout.astro'
 import Navbar from '@components/Navbar.astro'
 import Footer from 'src/components/Footer.astro'
-
-type Props = {
-  navbarTransparent?: boolean
-}
-
-const { navbarTransparent = false } = Astro.props
 ---
 
-<BaseLayout title="Lee Palacios - @vitualizz / Software Engineer">
-  <Navbar isTransparent={navbarTransparent}>
-    <slot />
-    <Footer />
-  </Navbar>
+<BaseLayout title="Lee Palacios — @vitualizz / Software Engineer">
+  <Navbar />
+  <slot />
+  <Footer />
 </BaseLayout>
+
+<script>
+  function initReveal() {
+    const els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(el => obs.observe(el));
+  }
+  initReveal();
+  document.addEventListener('astro:page-load', initReveal);
+</script>
