@@ -1,4 +1,16 @@
 ---
+import projects from 'src/data/projects.json'
+import Icon from 'src/components/Icon.astro'
+import { getLangFromUrl } from 'src/i18n/utils'
+import type { IconType } from 'src/types/Icons.types.ts'
+
+const lang = getLangFromUrl(Astro.url)
+
+const VALID_ICONS = new Set<string>([
+  'javascript','ruby','typescript','python','sql','rails','react','tailwind',
+  'astro','vue','node','postgres','aws','selenium','git','docker',
+  'elasticsearch','lambda','dynamodb','redux','gpt'
+])
 ---
 
 <section class="s" id="projects">
@@ -10,98 +22,52 @@
     </div>
 
     <div class="projects">
-      <a class="project" href="https://comunidadfeliz.cl/" target="_blank" rel="noopener noreferrer">
-        <div class="project-img"><img src="/img/projects/comunidadfeliz.webp" alt="ComunidadFeliz" loading="lazy" /></div>
-        <div class="project-body">
-          <div class="project-head"><h3>ComunidadFeliz</h3><span class="yr">2022 — 24</span></div>
-          <p>Senior Fullstack en una plataforma SaaS de administración de condominios usada por miles de edificios. Optimicé queries críticas y lideré refactors entre equipos.</p>
-          <div class="project-foot">
-            <div class="project-stack"><span>Rails</span><span>React</span><span>Redux</span><span>Postgres</span></div>
-            <span class="project-link">Ver sitio <span class="arrow">↗</span></span>
-          </div>
-        </div>
-      </a>
-
-      <a class="project" href="https://influgo.co/" target="_blank" rel="noopener noreferrer">
-        <div class="project-img"><img src="/img/projects/influgo.webp" alt="Influgo" loading="lazy" /></div>
-        <div class="project-body">
-          <div class="project-head"><h3>Influgo</h3><span class="yr">2020 — 22</span></div>
-          <p>Tech Lead en un sistema de gestión de campañas para influencers. Arquitecté API en Rails y clientes React / React Native. Conventions still in use today.</p>
-          <div class="project-foot">
-            <div class="project-stack"><span>Rails</span><span>React Native</span><span>TS</span><span>Lambda</span></div>
-            <span class="project-link">Ver sitio <span class="arrow">↗</span></span>
-          </div>
-        </div>
-      </a>
-
-      <a class="project" href="https://sperant.com/" target="_blank" rel="noopener noreferrer">
-        <div class="project-img"><img src="/img/projects/sperant.webp" alt="Sperant" loading="lazy" /></div>
-        <div class="project-body">
-          <div class="project-head"><h3>Sperant</h3><span class="yr">FullStack</span></div>
-          <p>Sistema de webhooks robusto y refactor del frontend con Vue + Atomic Design. UX más limpia, deploys más confiables.</p>
-          <div class="project-foot">
-            <div class="project-stack"><span>Rails</span><span>Vue</span><span>DynamoDB</span></div>
-            <span class="project-link">Ver sitio <span class="arrow">↗</span></span>
-          </div>
-        </div>
-      </a>
-
-      <a class="project" href="#" target="_blank" rel="noopener noreferrer">
-        <div class="project-img"><img src="/img/projects/sperant_mobile.webp" alt="App Sperant mobile" loading="lazy" /></div>
-        <div class="project-body">
-          <div class="project-head"><h3>App Sperant</h3><span class="yr">Mobile</span></div>
-          <p>Backend en Lambda + frontend React Native con Tailwind. Desarrollé un SDK propio en TypeScript para acceso limpio a la base de datos.</p>
-          <div class="project-foot">
-            <div class="project-stack"><span>React Native</span><span>Lambda</span><span>TS</span><span>Redux</span></div>
-            <span class="project-link">Play Store <span class="arrow">↗</span></span>
-          </div>
-        </div>
-      </a>
-
-      <a class="project" href="#" target="_blank" rel="noopener noreferrer">
-        <div class="project-img"><img src="/img/projects/gojom.webp" alt="Gojom" loading="lazy" /></div>
-        <div class="project-body">
-          <div class="project-head"><h3>Gojom</h3><span class="yr">Backend · DevOps</span></div>
-          <p>Optimicé el backend de un tasador inmobiliario en TS + Serverless. Como DevOps reduje costos en AWS y mejoré tiempos de respuesta.</p>
-          <div class="project-foot">
-            <div class="project-stack"><span>Rails</span><span>ElasticSearch</span><span>Postgres</span></div>
-            <span class="project-link">LinkedIn <span class="arrow">↗</span></span>
-          </div>
-        </div>
-      </a>
-
-      <a class="project" href="https://assistchat.onrender.com/" target="_blank" rel="noopener noreferrer">
-        <div class="project-img"><img src="/img/projects/assistchat.webp" alt="AssistChat" loading="lazy" /></div>
-        <div class="project-body">
-          <div class="project-head"><h3>AssistChat</h3><span class="yr">Side project</span></div>
-          <p>Proyecto personal demostrando los beneficios de un chatbot GPT en soporte. Foco en prompts precisos y experiencia conversacional.</p>
-          <div class="project-foot">
-            <div class="project-stack"><span>Rails</span><span>RN</span><span>GPT</span><span>TS</span></div>
-            <span class="project-link">Ver demo <span class="arrow">↗</span></span>
-          </div>
-        </div>
-      </a>
+      {projects.map(project => {
+        const href = project.demo ?? project.githubUrl ?? '#'
+        const description = lang === 'es' ? project.description_es : project.description_en
+        return (
+          <a class="project reveal" href={href} target="_blank" rel="noopener noreferrer">
+            <div class="project-img">
+              <img src={`/img/projects/${project.image}.webp`} alt={project.title} loading="lazy" />
+            </div>
+            <div class="project-body">
+              <div class="project-head"><h3>{project.title}</h3></div>
+              <p>{description}</p>
+              <div class="project-foot">
+                <div class="project-stack">
+                  {project.stack.map(s => (
+                    VALID_ICONS.has(s.icon)
+                      ? <span title={s.tooltip}><Icon name={s.icon as IconType} /></span>
+                      : <span class="stack-text">{s.tooltip}</span>
+                  ))}
+                </div>
+                <span class="project-link">Ver sitio <span class="arrow">↗</span></span>
+              </div>
+            </div>
+          </a>
+        )
+      })}
     </div>
   </div>
 </section>
 
 <style>
   .projects { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; }
-  .project { background: var(--bg-2); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease; transform-style: preserve-3d; will-change: transform; color: var(--ink); }
+  .project { @apply bg-bg-2 border border-line text-ink; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease; transform-style: preserve-3d; will-change: transform; }
   .project:hover { transform: translateY(-6px); border-color: color-mix(in oklab, var(--accent) 40%, var(--line)); box-shadow: 0 24px 50px rgba(0,0,0,.3); }
-  .project-img { position: relative; aspect-ratio: 16/10; overflow: hidden; background: var(--bg-3); }
+  .project-img { @apply bg-bg-3; position: relative; aspect-ratio: 16/10; overflow: hidden; }
   .project-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
   .project:hover .project-img img { transform: scale(1.04); }
   .project-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(11,12,16,.55), transparent 40%); }
   .project-body { padding: 24px 24px 26px; display: flex; flex-direction: column; flex: 1; }
   .project-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px; }
   .project h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
-  .project .yr { font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
-  .project p { color: var(--muted); font-size: 14.5px; line-height: 1.6; margin: 0 0 18px; flex: 1; }
+  .project p { @apply text-muted-custom; font-size: 14.5px; line-height: 1.6; margin: 0 0 18px; flex: 1; }
   .project-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-  .project-stack { display: flex; flex-wrap: wrap; gap: 5px; }
-  .project-stack span { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-soft); padding: 3px 8px; background: color-mix(in oklab, var(--bg) 70%, transparent); border: 1px solid var(--line); border-radius: 999px; }
-  .project-link { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 12px; color: var(--accent); white-space: nowrap; }
+  .project-stack { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .project-stack span { display: inline-flex; align-items: center; }
+  .project-stack .stack-text { @apply text-ink-soft border border-line; font-family: var(--font-mono); font-size: 10.5px; padding: 3px 8px; background: color-mix(in oklab, var(--bg) 70%, transparent); border-radius: 999px; }
+  .project-link { @apply text-accent; display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 12px; white-space: nowrap; }
   .project-link .arrow { transition: transform .2s; }
   .project:hover .project-link .arrow { transform: translate(3px,-3px); }
   @media (max-width: 720px) { .projects { grid-template-columns: 1fr; } }

@@ -1,4 +1,17 @@
 ---
+import { getLangFromUrl } from 'src/i18n/utils'
+import experienceData from 'src/data/experience.json'
+
+const lang = getLangFromUrl(Astro.url)
+
+const MONTHS_ES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
+const MONTHS_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+
+function formatPeriod(dateStr: string): string {
+  const [year, month] = dateStr.split('-')
+  const months = lang === 'es' ? MONTHS_ES : MONTHS_EN
+  return `${months[parseInt(month) - 1]} ${year}`
+}
 ---
 
 <section class="s" id="xp">
@@ -10,49 +23,28 @@
     </div>
 
     <div class="xp">
-      <div class="xp-item current reveal">
-        <div class="xp-bullet"><span class="core"></span></div>
-        <div class="xp-content">
-          <div class="xp-meta"><span class="xp-period">2025 — <span class="now">Actualidad</span></span></div>
-          <h4>Patrimore</h4>
-          <div class="xp-role">Senior Fullstack Engineer</div>
-          <p class="xp-summary">Construyendo y refinando features de plataforma. Foco fuerte en <b>backend</b>: arquitectura, queries optimizadas, y modelos de datos que aguantan. Stack moderno full-stack con React en el front.</p>
-          <div class="xp-tech"><span>Backend-heavy</span><span>Postgres</span><span>TypeScript</span><span>React</span></div>
+      {experienceData.map((entry, i) => (
+        <div class={`xp-item reveal${entry.period.end === null ? ' current' : ''}`}>
+          <div class="xp-bullet"><span class="core"></span></div>
+          <div class="xp-content">
+            <div class="xp-meta">
+              <span class="xp-period">
+                {formatPeriod(entry.period.start)} — {
+                  entry.period.end === null
+                    ? <span class="now">{lang === 'es' ? 'Actualidad' : 'Present'}</span>
+                    : formatPeriod(entry.period.end)
+                }
+              </span>
+            </div>
+            <h4>{entry.company}{i === experienceData.length - 1 && <span style="color:var(--muted);font-weight:500;font-size:0.7em;"> — pausado</span>}</h4>
+            <div class="xp-role">{entry.role}</div>
+            <p class="xp-summary" set:html={lang === 'es' ? entry.description_es : entry.description_en} />
+            <div class="xp-tech">
+              {entry.tech.map(t => <span>{t}</span>)}
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div class="xp-item reveal">
-        <div class="xp-bullet"><span class="core"></span></div>
-        <div class="xp-content">
-          <div class="xp-meta"><span class="xp-period">Jun 2022 — Ago 2024</span></div>
-          <h4>ComunidadFeliz</h4>
-          <div class="xp-role">Senior Fullstack Engineer</div>
-          <p class="xp-summary">Lideré features en una plataforma de administración de condominios usada por miles de edificios. Ruby on Rails + React + Postgres; <b>optimización de queries</b> y refactors entre equipos.</p>
-          <div class="xp-tech"><span>Rails</span><span>React</span><span>TypeScript</span><span>Redux</span><span>Tailwind</span><span>Postgres</span></div>
-        </div>
-      </div>
-
-      <div class="xp-item reveal">
-        <div class="xp-bullet"><span class="core"></span></div>
-        <div class="xp-content">
-          <div class="xp-meta"><span class="xp-period">Ene 2020 — May 2022</span></div>
-          <h4>Influgo</h4>
-          <div class="xp-role">Tech Lead</div>
-          <p class="xp-summary">Lideré desde cero un sistema de gestión de campañas para influencers. API en Rails y clientes React/React Native. Establecí convenciones que siguen vigentes hoy.</p>
-          <div class="xp-tech"><span>Rails</span><span>React</span><span>React Native</span><span>TypeScript</span><span>AWS Lambda</span><span>Postgres</span></div>
-        </div>
-      </div>
-
-      <div class="xp-item reveal">
-        <div class="xp-bullet"><span class="core"></span></div>
-        <div class="xp-content">
-          <div class="xp-meta"><span class="xp-period">2024 — 2025 · <span style="color:var(--coral);">Side project</span></span></div>
-          <h4>Inmology <span style="color:var(--muted);font-weight:500;font-size:0.7em;">— pausado</span></h4>
-          <div class="xp-role">AI Engineer · Personal venture</div>
-          <p class="xp-summary">Experimento personal con agentes de IA para automatizar tareas inmobiliarias. End-to-end con GPT + N8N + Postgres + Lambda. Aprendí mucho sobre LLM orchestration aplicado a operaciones reales.</p>
-          <div class="xp-tech"><span>GPT</span><span>N8N</span><span>Python</span><span>Postgres</span><span>AWS Lambda</span></div>
-        </div>
-      </div>
+      ))}
     </div>
   </div>
 </section>
@@ -61,15 +53,15 @@
   .xp { display: flex; flex-direction: column; max-width: 880px; margin: 0 auto; position: relative; }
   .xp::before { content: ""; position: absolute; left: 11px; top: 18px; bottom: 18px; width: 2px; background: linear-gradient(to bottom, var(--accent), transparent 90%); opacity: .4; }
   .xp-item { display: grid; grid-template-columns: 24px 1fr; gap: 28px; padding: 22px 0; position: relative; }
-  .xp-bullet { width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center; margin-top: 4px; flex-shrink: 0; }
-  .xp-bullet .core { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+  .xp-bullet { @apply bg-bg border-2 border-accent; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 4px; flex-shrink: 0; }
+  .xp-bullet .core { @apply bg-accent; width: 8px; height: 8px; border-radius: 50%; }
   .xp-item.current .xp-bullet .core { box-shadow: 0 0 0 5px color-mix(in oklab, var(--accent) 30%, transparent); }
   .xp-meta { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; flex-wrap: wrap; }
-  .xp-period { font-family: var(--font-mono); font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
-  .xp-period .now { color: var(--accent); font-weight: 500; }
+  .xp-period { @apply text-muted-custom; font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .xp-period .now { @apply text-accent; font-weight: 500; }
   .xp-content h4 { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin: 4px 0 4px; }
-  .xp-role { color: var(--pink); font-size: 15px; font-weight: 500; margin-bottom: 10px; }
-  .xp-summary { color: var(--ink-soft); font-size: 15px; line-height: 1.65; max-width: 60ch; margin-bottom: 12px; }
-  .xp-tech { display: flex; flex-wrap: wrap; gap: 5px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
-  .xp-tech span { padding: 3px 8px; border: 1px solid var(--line); border-radius: 999px; }
+  .xp-role { @apply text-coral; font-size: 15px; font-weight: 500; margin-bottom: 10px; }
+  .xp-summary { @apply text-ink-soft; font-size: 15px; line-height: 1.65; max-width: 60ch; margin-bottom: 12px; }
+  .xp-tech { @apply text-muted-custom; display: flex; flex-wrap: wrap; gap: 5px; font-family: var(--font-mono); font-size: 11px; }
+  .xp-tech span { @apply border border-line; padding: 3px 8px; border-radius: 999px; }
 </style>

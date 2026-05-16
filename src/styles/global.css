@@ -6,6 +6,18 @@
   --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, monospace;
+
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-bg-3: var(--bg-3);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted-custom: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-coral: var(--coral);
+  --color-mint: var(--mint);
 }
 
 /* ===== PORTFOLIO DESIGN SYSTEM ===== */

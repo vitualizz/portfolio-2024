@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content'
 import HomeLayout from 'src/layouts/HomeLayout.astro'
 import PresentationSection from 'src/components/PresentationSection.astro'
 import AboutMeSection from 'src/components/AboutMeSection.astro'
@@ -7,6 +8,13 @@ import ProjectsSection from 'src/components/ProjectsSection.astro'
 import WorkExperienceSection from 'src/components/WorkExperienceSection.astro'
 import BlogSection from 'src/components/BlogSection.astro'
 import ContactMeSection from 'src/components/ContactMeSection.astro'
+import { getLangFromUrl } from 'src/i18n/utils'
+
+const lang = getLangFromUrl(Astro.url)
+const allPosts = await getCollection('blog')
+const posts = allPosts
+  .filter(p => p.data.lang === lang)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 ---
 
 <HomeLayout>
@@ -16,7 +24,7 @@ import ContactMeSection from 'src/components/ContactMeSection.astro'
     <AskAISection />
     <ProjectsSection />
     <WorkExperienceSection />
-    <BlogSection />
+    <BlogSection posts={posts} lang={lang} />
     <ContactMeSection />
   </main>
 </HomeLayout>
