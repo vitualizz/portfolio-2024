@@ -5,19 +5,19 @@ const lang = getLangFromUrl(Astro.url)
 
 <header class="topbar sticky top-0 z-30" style="background:color-mix(in oklab, var(--bg) 75%, transparent);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid color-mix(in oklab, var(--line) 80%, transparent)">
   <div class="topbar-inner flex items-center justify-between h-[72px] mx-auto px-[var(--gutter)]" style="max-width:var(--max)">
-    <a class="brand inline-flex items-center gap-[10px] font-display font-bold tracking-[-0.02em] text-[17px] text-ink" href="#top">
+    <a class="brand inline-flex items-center gap-[10px] font-display font-bold tracking-[-0.02em] text-[17px] text-ink" href={`/${lang}`}>
       <span class="blob w-7 h-7 bg-accent" style="border-radius:56% 44% 40% 60% / 60% 50% 50% 40%;box-shadow:0 0 24px color-mix(in oklab, var(--accent) 30%, transparent)"></span>
       <span>vitualizz</span>
     </a>
 
     <nav class="nav-links flex gap-9 text-[15px] font-medium">
-      <a href="#top" class="active" data-nav>Presentación</a>
-      <a href="#about" data-nav>Sobre mí</a>
-      <a href="#ai" data-nav>Pregúntale</a>
-      <a href="#projects" data-nav>Proyectos</a>
-      <a href="#xp" data-nav>Experiencia</a>
-      <a href="#blog" data-nav>Blog</a>
-      <a href="#contact" data-nav>Contacto</a>
+      <a href={`/${lang}/#top`} class="active" data-nav>Presentación</a>
+      <a href={`/${lang}/#about`} data-nav>Sobre mí</a>
+      <a href={`/${lang}/#ai`} data-nav>Pregúntale</a>
+      <a href={`/${lang}/#projects`} data-nav>Proyectos</a>
+      <a href={`/${lang}/#xp`} data-nav>Experiencia</a>
+      <a href={`/${lang}/#blog`} data-nav>Blog</a>
+      <a href={`/${lang}/#contact`} data-nav>Contacto</a>
     </nav>
 
     <div class="nav-right flex items-center gap-[14px]">
@@ -73,7 +73,7 @@ const lang = getLangFromUrl(Astro.url)
     // Active nav highlight on scroll
     const navLinks = document.querySelectorAll<HTMLAnchorElement>('[data-nav]');
     const sectionMap = Array.from(navLinks).map(a => ({
-      a, target: document.querySelector(a.getAttribute('href') || '') as HTMLElement | null
+      a, target: document.querySelector(a.hash || '') as HTMLElement | null
     })).filter(x => x.target);
 
     function updateActive() {
