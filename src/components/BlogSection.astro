@@ -14,21 +14,21 @@ const { posts, lang } = Astro.props
       <p class="s-sub">Notas técnicas sobre lo que voy aprendiendo.</p>
     </div>
 
-    <div class="blog-grid">
+    <div class="blog-grid grid gap-5" style="grid-template-columns:repeat(3,1fr)">
       {posts.map(post => {
         const slug = post.slug.split('/')[0]
         const date = post.data.date.toLocaleDateString('es-PE', { day: 'numeric', month: 'short', year: 'numeric' })
         return (
-          <a class="blog-card reveal" href={`/${lang}/blog/${slug}`}>
-            <div class="blog-meta">
-              <span class="blog-tag">{post.data.tags[0]}</span>
-              <span class="blog-time">{date}</span>
+          <a class="blog-card bg-bg-2 border border-line text-ink text-left rounded-[18px] px-[26px] pt-[26px] pb-[22px] cursor-pointer flex flex-col relative overflow-hidden reveal" href={`/${lang}/blog/${slug}`} style="transition:transform .35s cubic-bezier(.2,.7,.3,1), border-color .3s, box-shadow .3s">
+            <div class="flex gap-3 items-center font-mono text-[11px] text-muted-custom uppercase tracking-[0.04em] mb-4" style="letter-spacing:0.04em">
+              <span class="blog-tag text-accent py-[2px] px-2 rounded-full" style="border:1px solid color-mix(in oklab, var(--accent) 35%, var(--line));background:color-mix(in oklab, var(--accent) 8%, transparent)">{post.data.tags[0]}</span>
+              <span class="text-muted-custom">{date}</span>
             </div>
-            <h3>{post.data.title}</h3>
-            <p>{post.data.shortDescription}</p>
-            <div class="blog-foot">
+            <h3 class="text-[22px] font-bold tracking-[-0.02em] mb-[10px] leading-[1.15]">{post.data.title}</h3>
+            <p class="text-muted-custom text-[14.5px] leading-[1.6] mb-[18px] flex-1">{post.data.shortDescription}</p>
+            <div class="blog-foot text-accent flex justify-between items-center font-mono text-[12px]">
               <span>Leer artículo</span>
-              <span class="arrow">↗</span>
+              <span class="arrow transition-transform duration-[250ms]">↗</span>
             </div>
           </a>
         )
@@ -38,18 +38,9 @@ const { posts, lang } = Astro.props
 </section>
 
 <style>
-  .blog-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-  @media (max-width: 920px) { .blog-grid { grid-template-columns: 1fr; } }
-  .blog-card { @apply bg-bg-2 border border-line text-ink; text-align: left; border-radius: 18px; padding: 26px 26px 22px; cursor: pointer; transition: transform .35s cubic-bezier(.2,.7,.3,1), border-color .3s, box-shadow .3s; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+  @media (max-width: 920px) { .blog-grid { grid-template-columns: 1fr !important; } }
   .blog-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .4s ease; }
   .blog-card:hover::before { transform: scaleX(1); }
   .blog-card:hover { transform: translateY(-6px); border-color: color-mix(in oklab, var(--accent) 40%, var(--line)); box-shadow: 0 24px 40px rgba(0,0,0,.3); }
-  .blog-meta { @apply text-muted-custom; display: flex; gap: 12px; align-items: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 16px; }
-  .blog-meta .blog-tag { @apply text-accent; border: 1px solid color-mix(in oklab, var(--accent) 35%, var(--line)); padding: 2px 8px; border-radius: 999px; background: color-mix(in oklab, var(--accent) 8%, transparent); }
-  .blog-card h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 10px; line-height: 1.15; }
-  .blog-card p { @apply text-muted-custom; font-size: 14.5px; line-height: 1.6; margin: 0 0 18px; flex: 1; }
-  .blog-foot { @apply text-accent; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 12px; }
-  .blog-foot .arrow { transition: transform .25s; }
   .blog-card:hover .blog-foot .arrow { transform: translate(4px,-4px); }
-  .blog-time { @apply text-muted-custom; }
 </style>
