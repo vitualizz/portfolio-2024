@@ -59,6 +59,7 @@ src/
 | Variable | Required | Description |
 | :--- | :--- | :--- |
 | `RESEND_API_KEY` | Yes | API key for the contact form. Get one at [resend.com](https://resend.com). |
+| `ANTHROPIC_API_KEY` | Yes | API key used by `/api/ask-lee` to generate AskAISection responses. |
 
 Copy `.env.example` to `.env` and fill in the values.
 
@@ -111,3 +112,4 @@ Set the following environment variable in the Vercel dashboard under **Settings 
 | Variable | Description |
 | :--- | :--- |
 | `RESEND_API_KEY` | Required for the contact form to send emails |
+| `ANTHROPIC_API_KEY` | Required for AskAISection AI responses |
