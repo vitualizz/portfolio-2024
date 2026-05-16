@@ -1,13 +1,19 @@
 ---
+import { useTranslation } from 'src/i18n/utils'
+
+interface Props { lang: 'es' | 'en' }
+const { lang } = Astro.props
+const t = useTranslation(lang)
+const aiT = t('ai')
 ---
 
 <section class="s" id="ai">
   <div class="wrap">
     <div class="s-head reveal">
-      <span class="s-eyebrow">// 02 · Lab</span>
-      <h2 class="s-title">Pregúntale a Lee <span class="y">↳ vía IA</span></h2>
+      <span class="s-eyebrow">{t('home').ai_eyebrow}</span>
+      <h2 class="s-title" set:html={t('home').ai_title} />
       <p class="s-sub">
-        Una IA entrenada con mi CV, stacks y proyectos. Hazle preguntas técnicas, sobre mi experiencia, o lo que sea.
+        {t('home').ai_subtitle}
         <span class="ai-built font-mono text-[12px] text-[color:var(--muted)] block mt-[10px]">(construido con <code class="rounded px-[6px] py-[2px] text-[11.5px] text-accent" style="background:color-mix(in oklab, var(--accent) 12%, transparent)">Claude Haiku</code> · via API)</span>
       </p>
     </div>
@@ -21,10 +27,10 @@
           <span class="ai-model text-[color:var(--muted)] px-2 py-[2px] rounded-full border border-line text-[11px]" style="background:color-mix(in oklab, var(--bg) 70%, transparent)">claude-haiku-4-5</span>
         </div>
         <div class="flex flex-wrap gap-1">
-          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer" data-suggest="¿Cuál ha sido tu proyecto backend más complejo y qué aprendiste de él?">backend ↗</button>
-          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer" data-suggest="Cuéntame sobre tu experiencia construyendo con LLMs y agentes de IA. ¿Qué stack usas?">ai builder ↗</button>
-          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer" data-suggest="Si te pidiera optimizar una query lenta de Postgres en producción, ¿por dónde empezarías?">postgres ↗</button>
-          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer" data-suggest="¿Qué buscas en tu próximo equipo? ¿Qué tipo de cultura te hace feliz?">cultura ↗</button>
+          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer" data-suggest={aiT.tabs.backend}>{aiT.tab_labels.backend}</button>
+          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer" data-suggest={aiT.tabs.ai_builder}>{aiT.tab_labels.ai_builder}</button>
+          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer" data-suggest={aiT.tabs.postgres}>{aiT.tab_labels.postgres}</button>
+          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer" data-suggest={aiT.tabs.culture}>{aiT.tab_labels.culture}</button>
         </div>
       </div>
 
@@ -32,16 +38,16 @@
         <div class="ai-msg ai-msg-bot grid gap-3 items-start" style="grid-template-columns:32px 1fr">
           <div class="ai-avatar w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-[14px] shrink-0 bg-accent" style="color:#0B0C10">L</div>
           <div class="ai-bubble px-[18px] py-[14px] rounded-[14px] text-[14.5px] leading-[1.6] text-ink border border-line" style="background:color-mix(in oklab, var(--bg) 60%, transparent)">
-            <p>¡Hola! Soy una versión IA de Lee. Pregúntame sobre <b>backend</b>, <b>arquitectura</b>, <b>AI agents</b>, <b>Postgres</b>, mis proyectos, o por qué tengo 3 gatos 🐱. Lo que quieras.</p>
-            <p class="ai-hint mt-2 font-mono text-[11.5px] text-[color:var(--muted)]">Tip: prueba un atajo arriba ↑ o escribe tu propia pregunta abajo ↓</p>
+            <p set:html={aiT.greeting} />
+            <p class="ai-hint mt-2 font-mono text-[11.5px] text-[color:var(--muted)]">{aiT.hint}</p>
           </div>
         </div>
       </div>
 
-      <form class="ai-form flex items-center px-[14px] py-3 border-t border-line" id="aiForm" style="background:color-mix(in oklab, var(--bg) 80%, transparent)">
+      <form class="ai-form flex items-center px-[14px] py-3 border-t border-line" id="aiForm" style="background:color-mix(in oklab, var(--bg) 80%, transparent)" data-ai={JSON.stringify(aiT)}>
         <span class="font-mono text-accent font-bold px-[10px] text-[18px]">›</span>
-        <input id="aiInput" type="text" placeholder="Escribe tu pregunta para Lee..." autocomplete="off" maxlength="280" class="flex-1 border-none bg-transparent outline-none text-ink font-sans text-[15px] px-1 py-[10px]" />
-        <button class="ai-send w-[38px] h-[38px] bg-accent border-none rounded-[10px] cursor-pointer flex items-center justify-center" type="submit" aria-label="Enviar" style="color:#0B0C10">
+        <input id="aiInput" type="text" placeholder={aiT.input_placeholder} autocomplete="off" maxlength="280" class="flex-1 border-none bg-transparent outline-none text-ink font-sans text-[15px] px-1 py-[10px]" />
+        <button class="ai-send w-[38px] h-[38px] bg-accent border-none rounded-[10px] cursor-pointer flex items-center justify-center" type="submit" aria-label={aiT.send_aria} style="color:#0B0C10">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px]">
             <path d="M5 12h14M13 6l6 6-6 6"/>
           </svg>
@@ -103,6 +109,7 @@ STYLE RULES:
     const conv = document.getElementById('aiConv') as HTMLElement | null;
     const tabs = document.querySelectorAll<HTMLButtonElement>('.ai-tab');
     if (!form || !input || !conv) return;
+    const msg = JSON.parse(form.dataset.ai || '{}');
 
     const history: {role: string; content: string}[] = [];
 
@@ -121,7 +128,7 @@ STYLE RULES:
       const wrap = document.createElement('div');
       wrap.className = 'ai-msg grid gap-3 items-start ' + (role === 'user' ? 'ai-msg-user' : 'ai-msg-bot');
       wrap.style.gridTemplateColumns = role === 'user' ? '1fr 32px' : '32px 1fr';
-      wrap.innerHTML = `<div class="ai-avatar w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-[14px] shrink-0 bg-accent" style="color:#0B0C10">${role === 'user' ? 'TÚ' : 'L'}</div><div class="ai-bubble px-[18px] py-[14px] rounded-[14px] text-[14.5px] leading-[1.6] text-ink border border-line" style="background:color-mix(in oklab, var(--bg) 60%, transparent)">${role === 'user' ? `<p>${escHtml(text)}</p>` : renderMd(text)}</div>`;
+      wrap.innerHTML = `<div class="ai-avatar w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-[14px] shrink-0 bg-accent" style="color:#0B0C10">${role === 'user' ? (msg.user_avatar || 'YOU') : 'L'}</div><div class="ai-bubble px-[18px] py-[14px] rounded-[14px] text-[14.5px] leading-[1.6] text-ink border border-line" style="background:color-mix(in oklab, var(--bg) 60%, transparent)">${role === 'user' ? `<p>${escHtml(text)}</p>` : renderMd(text)}</div>`;
       conv!.appendChild(wrap);
       conv!.scrollTop = conv!.scrollHeight;
       return wrap;
@@ -130,7 +137,7 @@ STYLE RULES:
       const wrap = document.createElement('div');
       wrap.className = 'ai-msg ai-msg-bot grid gap-3 items-start';
       wrap.style.gridTemplateColumns = '32px 1fr';
-      wrap.innerHTML = `<div class="ai-avatar w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-[14px] shrink-0 bg-accent" style="color:#0B0C10">L</div><div class="ai-bubble px-[18px] py-[14px] rounded-[14px] text-[14.5px] leading-[1.6] text-ink border border-line" style="background:color-mix(in oklab, var(--bg) 60%, transparent)"><div class="ai-thinking"><span class="d"></span><span class="d"></span><span class="d"></span><span style="margin-left:6px;">pensando...</span></div></div>`;
+      wrap.innerHTML = `<div class="ai-avatar w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-[14px] shrink-0 bg-accent" style="color:#0B0C10">L</div><div class="ai-bubble px-[18px] py-[14px] rounded-[14px] text-[14.5px] leading-[1.6] text-ink border border-line" style="background:color-mix(in oklab, var(--bg) 60%, transparent)"><div class="ai-thinking"><span class="d"></span><span class="d"></span><span class="d"></span><span style="margin-left:6px;">${msg.thinking || 'thinking...'}</span></div></div>`;
       conv!.appendChild(wrap);
       conv!.scrollTop = conv!.scrollHeight;
       return wrap;
@@ -152,11 +159,11 @@ STYLE RULES:
         });
         const data = await res.json();
         thinking.remove();
-        const answer = data.answer || 'No pude procesar tu pregunta. Intenta de nuevo.';
+        const answer = data.answer || msg.error_fallback || 'Error';
         addMsg('assistant', answer);
         history.push({ role: 'assistant', content: answer });
       } catch {
-        thinking.querySelector('.ai-bubble')!.innerHTML = `<p>Ups, algo se cayó. Escríbeme directo por el formulario de contacto.</p>`;
+        thinking.querySelector('.ai-bubble')!.innerHTML = `<p>${msg.crash_fallback || 'Error'}</p>`;
       } finally {
         sendBtn.disabled = false;
         input!.focus();

@@ -1,13 +1,18 @@
 ---
 import { skillGroups } from 'src/data/skills.ts'
+import { useTranslation } from 'src/i18n/utils'
+
+interface Props { lang: 'es' | 'en' }
+const { lang } = Astro.props
+const t = useTranslation(lang)
 ---
 
 <section class="s" id="about">
   <div class="wrap">
     <div class="s-head reveal">
-      <span class="s-eyebrow">// 01 · Sobre mí</span>
-      <h2 class="s-title">Acerca de <span class="y">mí</span></h2>
-      <p class="s-sub">El humano detrás del código — qué me mueve, qué hago, y qué tengo en la caja de herramientas.</p>
+      <span class="s-eyebrow">{t('home').about_eyebrow}</span>
+      <h2 class="s-title" set:html={t('home').about_title} />
+      <p class="s-sub">{t('home').about_subtitle}</p>
     </div>
 
     <div class="about-grid">
@@ -24,15 +29,15 @@ import { skillGroups } from 'src/data/skills.ts'
         <div class="stats border border-line grid mt-9 rounded-[18px] overflow-hidden" style="grid-template-columns:repeat(3,1fr);background:color-mix(in oklab, var(--bg-2) 80%, transparent)">
           <div class="stat border-r border-line px-[18px] py-[22px] text-center">
             <div class="num text-accent font-display text-[32px] font-bold tracking-[-0.02em] leading-none">7+</div>
-            <div class="lbl text-muted-custom mt-[6px] text-[12px] uppercase tracking-[0.05em] font-mono">Años de exp.</div>
+            <div class="lbl text-muted-custom mt-[6px] text-[12px] uppercase tracking-[0.05em] font-mono">{t('about_me').stat_years}</div>
           </div>
           <div class="stat border-r border-line px-[18px] py-[22px] text-center">
             <div class="num text-accent font-display text-[32px] font-bold tracking-[-0.02em] leading-none">20+</div>
-            <div class="lbl text-muted-custom mt-[6px] text-[12px] uppercase tracking-[0.05em] font-mono">Proyectos</div>
+            <div class="lbl text-muted-custom mt-[6px] text-[12px] uppercase tracking-[0.05em] font-mono">{t('about_me').stat_projects}</div>
           </div>
           <div class="stat px-[18px] py-[22px] text-center">
             <div class="num text-accent font-display text-[32px] font-bold tracking-[-0.02em] leading-none">3</div>
-            <div class="lbl text-muted-custom mt-[6px] text-[12px] uppercase tracking-[0.05em] font-mono">Gatos 🐱</div>
+            <div class="lbl text-muted-custom mt-[6px] text-[12px] uppercase tracking-[0.05em] font-mono">{t('about_me').stat_stack}</div>
           </div>
         </div>
       </div>

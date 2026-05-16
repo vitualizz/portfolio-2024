@@ -17,14 +17,14 @@ const posts = allPosts
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 ---
 
-<HomeLayout>
+<HomeLayout lang={lang}>
   <main>
-    <PresentationSection />
-    <AboutMeSection />
-    <AskAISection />
+    <PresentationSection lang={lang} />
+    <AboutMeSection lang={lang} />
+    <AskAISection lang={lang} />
     <ProjectsSection />
     <WorkExperienceSection />
     <BlogSection posts={posts} lang={lang} />
-    <ContactMeSection />
+    <ContactMeSection lang={lang} />
   </main>
 </HomeLayout>

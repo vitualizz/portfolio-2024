@@ -28,6 +28,33 @@ export type LanguageLocale = {
     contact_me: string
     blog: string
     work_experience: string
+    ask_ai: string
+    resume_label: string
+    switch_language: string
+    language_name: string
+    language_option: string
+  },
+  home: {
+    about_eyebrow: string
+    about_title: string
+    about_subtitle: string
+    ai_eyebrow: string
+    ai_title: string
+    ai_subtitle: string
+    projects_eyebrow: string
+    projects_title: string
+    projects_subtitle: string
+    xp_eyebrow: string
+    xp_title: string
+    xp_subtitle: string
+    blog_eyebrow: string
+    blog_title: string
+    blog_subtitle: string
+    contact_title: string
+    contact_subtitle: string
+    contact_download_cv: string
+    paused_label: string
+    footer_location_line: string
   },
   presentation: {
     hi: string
@@ -68,7 +95,47 @@ export type LanguageLocale = {
   blog: {
     title: string
     read_more: string
+    read_article: string
   },
+  ai: {
+    greeting: string
+    hint: string
+    input_placeholder: string
+    send_aria: string
+    thinking: string
+    error_fallback: string
+    crash_fallback: string
+    user_avatar: string
+    tabs: {
+      backend: string
+      ai_builder: string
+      postgres: string
+      culture: string
+    }
+    tab_labels: {
+      backend: string
+      ai_builder: string
+      postgres: string
+      culture: string
+    }
+  }
+  contact_modal: {
+    close_aria: string
+    eyebrow: string
+    title: string
+    subtitle: string
+    name_label: string
+    name_placeholder: string
+    email_label: string
+    email_placeholder: string
+    message_label: string
+    message_placeholder: string
+    submit: string
+    submitting: string
+    submit_error: string
+    success_title: string
+    success_text: string
+  }
   seo: {
     title: string
     description: string

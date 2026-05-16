@@ -1,4 +1,10 @@
 ---
+import { useTranslation } from 'src/i18n/utils'
+import { CV_PATH_BY_LANG } from 'src/i18n/constants'
+
+interface Props { lang: 'es' | 'en' }
+const { lang } = Astro.props
+const t = useTranslation(lang)
 ---
 
 <!-- Contact section -->
@@ -6,42 +12,42 @@
   <div class="wrap">
     <div class="contact-card reveal relative overflow-hidden text-center rounded-[28px] mx-auto border" style="max-width:920px;padding:clamp(40px,6vw,80px);background:linear-gradient(160deg, color-mix(in oklab, var(--accent) 12%, var(--bg-2)), var(--bg-2));border-color:color-mix(in oklab, var(--accent) 30%, var(--line))">
       <div class="contact-card-glow" aria-hidden="true"></div>
-      <h2 class="contact-title font-bold tracking-[-0.03em] leading-[1.02] mb-4 relative" style="font-size:clamp(36px,5.5vw,64px)">Hablemos<br/>Cuéntame sobre tu <em class="not-italic text-accent">Proyecto</em> ✨</h2>
-      <p class="text-ink-soft text-[17px] mx-auto mb-8 leading-[1.6] relative" style="max-width:52ch">Si tienes una idea que necesita manos expertas — código limpio, escalable y enviado a tiempo — me encantaría escucharte. Respondo en menos de 24 horas hábiles.</p>
+      <h2 class="contact-title font-bold tracking-[-0.03em] leading-[1.02] mb-4 relative" style="font-size:clamp(36px,5.5vw,64px)" set:html={t('home').contact_title} />
+      <p class="text-ink-soft text-[17px] mx-auto mb-8 leading-[1.6] relative" style="max-width:52ch">{t('home').contact_subtitle}</p>
       <div class="flex gap-3 justify-center flex-wrap relative">
-        <button class="inline-flex items-center gap-[10px] px-[26px] py-[14px] bg-accent rounded-full text-[15px] font-semibold border-none cursor-pointer font-[inherit]" style="color:#0B0C10;transition:transform .2s, box-shadow .2s" id="openContactModal">Enviar mensaje <span>✉</span></button>
-        <a class="btn-ghost inline-flex items-center gap-[10px] px-[26px] py-[14px] border border-line text-ink rounded-full text-[15px] font-medium" href="/cv/es.pdf" style="background:color-mix(in oklab, var(--bg) 50%, transparent);transition:border-color .2s, transform .2s">Descargar CV <span>↓</span></a>
+        <button class="inline-flex items-center gap-[10px] px-[26px] py-[14px] bg-accent rounded-full text-[15px] font-semibold border-none cursor-pointer font-[inherit]" style="color:#0B0C10;transition:transform .2s, box-shadow .2s" id="openContactModal">{t('contact_modal').submit} <span>✉</span></button>
+        <a class="btn-ghost inline-flex items-center gap-[10px] px-[26px] py-[14px] border border-line text-ink rounded-full text-[15px] font-medium" href={CV_PATH_BY_LANG[lang]} style="background:color-mix(in oklab, var(--bg) 50%, transparent);transition:border-color .2s, transform .2s">{t('home').contact_download_cv} <span>↓</span></a>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Contact modal -->
-<dialog class="modal" id="contactModal" aria-labelledby="contactTitle">
+<dialog class="modal" id="contactModal" aria-labelledby="contactTitle" data-i18n={JSON.stringify(t('contact_modal'))}>
   <div class="modal-panel">
-    <button class="modal-close" id="closeContactModal" aria-label="Cerrar">
+    <button class="modal-close" id="closeContactModal" aria-label={t('contact_modal').close_aria}>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
     </button>
-    <div class="modal-eyebrow">// Hablemos</div>
-    <h3 id="contactTitle">Cuéntame sobre tu proyecto</h3>
-    <p class="modal-sub">Respondo en menos de 24 horas hábiles. Para algo urgente, ping también por LinkedIn.</p>
+    <div class="modal-eyebrow">{t('contact_modal').eyebrow}</div>
+    <h3 id="contactTitle">{t('contact_modal').title}</h3>
+    <p class="modal-sub">{t('contact_modal').subtitle}</p>
 
     <form class="contact-form" id="contactForm" action="/api/contact" method="POST" novalidate>
       <div class="field">
-        <label for="cf-name">Tu nombre</label>
-        <input id="cf-name" type="text" name="name" required placeholder="ej. Ana Pérez" />
+        <label for="cf-name">{t('contact_modal').name_label}</label>
+        <input id="cf-name" type="text" name="name" required placeholder={t('contact_modal').name_placeholder} />
       </div>
       <div class="field">
-        <label for="cf-email">Email</label>
-        <input id="cf-email" type="email" name="email" required placeholder="tu@email.com" />
+        <label for="cf-email">{t('contact_modal').email_label}</label>
+        <input id="cf-email" type="email" name="email" required placeholder={t('contact_modal').email_placeholder} />
       </div>
       <div class="field">
-        <label for="cf-message">Mensaje</label>
-        <textarea id="cf-message" name="description" required placeholder="Cuéntame qué necesitas, qué stack tienes, plazos..."></textarea>
+        <label for="cf-message">{t('contact_modal').message_label}</label>
+        <textarea id="cf-message" name="description" required placeholder={t('contact_modal').message_placeholder}></textarea>
       </div>
       <div class="field">
         <button type="submit" class="form-submit">
-          Enviar mensaje
+          {t('contact_modal').submit}
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         </button>
       </div>
@@ -51,8 +57,8 @@
       <div class="check">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
-      <h4>¡Mensaje enviado!</h4>
-      <p>Te contesto en menos de 24h hábiles.</p>
+      <h4>{t('contact_modal').success_title}</h4>
+      <p>{t('contact_modal').success_text}</p>
     </div>
   </div>
 </dialog>
@@ -98,7 +104,8 @@
         e.preventDefault();
         const btn = form.querySelector('.form-submit') as HTMLButtonElement;
         btn.disabled = true;
-        btn.textContent = 'Enviando...';
+        const messages = JSON.parse(modal?.dataset.i18n || '{}');
+        btn.textContent = messages.submitting || 'Sending...';
         const formData = new FormData(form);
         try {
           const res = await fetch('/api/contact', { method: 'POST', body: formData });
@@ -108,13 +115,13 @@
             setTimeout(() => {
               form.reset(); form.hidden = false; success.hidden = true;
               btn.disabled = false;
-              btn.textContent = 'Enviar mensaje';
+               btn.textContent = messages.submit || 'Send message';
             }, 6000);
           } else throw new Error('failed');
         } catch {
           btn.disabled = false;
-          btn.textContent = 'Error — intenta de nuevo';
-          setTimeout(() => { btn.textContent = 'Enviar mensaje'; }, 3000);
+           btn.textContent = messages.submit_error || 'Error';
+           setTimeout(() => { btn.textContent = messages.submit || 'Send message'; }, 3000);
         }
       });
     }

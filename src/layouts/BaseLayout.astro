@@ -12,10 +12,11 @@ const t = useTranslation(lang)
 
 interface Props {
   title?: string
+  description?: string
 }
 
 const tSeo = t('seo')
-const { title } = Astro.props
+const { title, description } = Astro.props
 const ogImage = new URL('/img/seo/og-image.png', Astro.url)
 const twitterImage = new URL('/img/seo/twitter-image.png', Astro.url)
 ---
@@ -31,7 +32,7 @@ const twitterImage = new URL('/img/seo/twitter-image.png', Astro.url)
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={tSeo.description} />
+    <meta name="description" content={description ?? tSeo.description} />
     <meta property="og:title" content={tSeo.title} />
     <meta property="og:description" content={tSeo.description} />
     <meta property="og:image" content={ogImage} />

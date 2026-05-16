@@ -1,6 +1,10 @@
 ---
 import { getLangFromUrl } from '../i18n/utils'
+import { useTranslation } from 'src/i18n/utils'
+import { CV_PATH_BY_LANG, LANG_CODES, SECTION_IDS, withLangPath } from 'src/i18n/constants'
 const lang = getLangFromUrl(Astro.url)
+const t = useTranslation(lang)
+
 ---
 
 <header class="topbar sticky top-0 z-30" style="background:color-mix(in oklab, var(--bg) 75%, transparent);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid color-mix(in oklab, var(--line) 80%, transparent)">
@@ -11,21 +15,29 @@ const lang = getLangFromUrl(Astro.url)
     </a>
 
     <nav class="nav-links flex gap-9 text-[15px] font-medium">
-      <a href={`/${lang}/#top`} class="active" data-nav>Presentación</a>
-      <a href={`/${lang}/#about`} data-nav>Sobre mí</a>
-      <a href={`/${lang}/#ai`} data-nav>Pregúntale</a>
-      <a href={`/${lang}/#projects`} data-nav>Proyectos</a>
-      <a href={`/${lang}/#xp`} data-nav>Experiencia</a>
-      <a href={`/${lang}/#blog`} data-nav>Blog</a>
-      <a href={`/${lang}/#contact`} data-nav>Contacto</a>
+      <a href={withLangPath(lang, `#${SECTION_IDS.top}`)} class="active" data-nav>{t('nav').presentation}</a>
+      <a href={withLangPath(lang, `#${SECTION_IDS.about}`)} data-nav>{t('nav').about_me}</a>
+      <a href={withLangPath(lang, `#${SECTION_IDS.ai}`)} data-nav>{t('nav').ask_ai}</a>
+      <a href={withLangPath(lang, `#${SECTION_IDS.projects}`)} data-nav>{t('nav').projects}</a>
+      <a href={withLangPath(lang, `#${SECTION_IDS.xp}`)} data-nav>{t('nav').work_experience}</a>
+      <a href={withLangPath(lang, `#${SECTION_IDS.blog}`)} data-nav>{t('nav').blog}</a>
+      <a href={withLangPath(lang, `#${SECTION_IDS.contact}`)} data-nav>{t('nav').contact_me}</a>
     </nav>
 
     <div class="nav-right flex items-center gap-[14px]">
-      <a class="pill inline-flex items-center gap-2 px-4 py-[9px] border border-line rounded-full text-[14px] font-medium text-ink" href="/cv/es.pdf" style="background:color-mix(in oklab, var(--bg-2) 80%, transparent)">Curriculum</a>
-      <a class="pill inline-flex items-center gap-2 px-4 py-[9px] border border-line rounded-full text-[14px] font-medium text-ink" href={lang === 'es' ? '/en' : '/es'} aria-label="Cambiar idioma" style="background:color-mix(in oklab, var(--bg-2) 80%, transparent)">
-        {lang === 'es' ? 'ESP' : 'ENG'}
-        <span class="flag flag-pe w-[18px] h-3 rounded-sm overflow-hidden inline-block" aria-hidden="true"></span>
-      </a>
+      <a class="pill inline-flex items-center gap-2 px-4 py-[9px] border border-line rounded-full text-[14px] font-medium text-ink" href={CV_PATH_BY_LANG[lang]} style="background:color-mix(in oklab, var(--bg-2) 80%, transparent)">{t('nav').resume_label}</a>
+      <details class="lang-menu relative">
+        <summary class="pill inline-flex items-center gap-2 px-4 py-[9px] border border-line rounded-full text-[14px] font-medium text-ink list-none cursor-pointer" aria-label={t('nav').switch_language} style="background:color-mix(in oklab, var(--bg-2) 80%, transparent)">
+          {lang.toUpperCase()}
+        </summary>
+        <div class="absolute right-0 top-[calc(100%+8px)] min-w-[130px] rounded-[12px] border border-line bg-bg-2 p-1 z-20">
+          {LANG_CODES.map(code => (
+            <a href={withLangPath(code)} class={`block rounded-[8px] px-3 py-2 text-[13px] ${code === lang ? 'text-accent' : 'text-ink-soft hover:text-ink'}`} aria-label={t('nav').language_option.replace('{language}', code === 'es' ? 'Español' : 'English')}>
+              {code === 'es' ? 'Español' : 'English'}
+            </a>
+          ))}
+        </div>
+      </details>
       <button class="theme-toggle w-[38px] h-[38px] rounded-full border border-line bg-bg-2 inline-flex items-center justify-center cursor-pointer" aria-label="Cambiar tema" id="themeToggle">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px] text-ink-soft">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>

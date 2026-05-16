@@ -2,9 +2,11 @@
 import projects from 'src/data/projects.json'
 import Icon from 'src/components/Icon.astro'
 import { getLangFromUrl } from 'src/i18n/utils'
+import { useTranslation } from 'src/i18n/utils'
 import type { IconType } from 'src/types/Icons.types.ts'
 
 const lang = getLangFromUrl(Astro.url)
+const t = useTranslation(lang)
 
 const VALID_ICONS = new Set<string>([
   'javascript','ruby','typescript','python','sql','rails','react','tailwind',
@@ -16,9 +18,9 @@ const VALID_ICONS = new Set<string>([
 <section class="s" id="projects">
   <div class="wrap">
     <div class="s-head reveal">
-      <span class="s-eyebrow">// 03 · Proyectos</span>
-      <h2 class="s-title">Selected <span class="y">work</span></h2>
-      <p class="s-sub">Trabajo enviado a producción. Click para ver demo o código.</p>
+      <span class="s-eyebrow">{t('home').projects_eyebrow}</span>
+      <h2 class="s-title" set:html={t('home').projects_title} />
+      <p class="s-sub">{t('home').projects_subtitle}</p>
     </div>
 
     <div class="projects grid gap-6" style="grid-template-columns:repeat(2,1fr)">
@@ -43,7 +45,7 @@ const VALID_ICONS = new Set<string>([
                       : <span class="stack-text text-ink-soft border border-line font-mono text-[10.5px] py-[3px] px-2 rounded-full" style="background:color-mix(in oklab, var(--bg) 70%, transparent)">{s.tooltip}</span>
                   ))}
                 </div>
-                <span class="project-link text-accent inline-flex items-center gap-[6px] font-mono text-[12px] whitespace-nowrap">Ver sitio <span class="arrow transition-transform duration-200">↗</span></span>
+                <span class="project-link text-accent inline-flex items-center gap-[6px] font-mono text-[12px] whitespace-nowrap">{t('projects').live_preview} <span class="arrow transition-transform duration-200">↗</span></span>
               </div>
             </div>
           </a>

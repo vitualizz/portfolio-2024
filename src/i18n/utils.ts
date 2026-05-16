@@ -1,9 +1,10 @@
 import type { LanguageLocale, LanguagesCodes } from 'src/types/I18n.types';
 import { ui, defaultLang } from './ui';
+import { LANG_CODES } from './constants';
 
 export function getLangFromUrl(url: URL) {
   const [, lang] = url.pathname.split('/');
-  if (lang in ui) return lang as keyof typeof ui;
+  if (LANG_CODES.includes(lang as LanguagesCodes)) return lang as keyof typeof ui;
   return defaultLang;
 }
 

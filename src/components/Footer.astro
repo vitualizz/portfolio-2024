@@ -1,10 +1,15 @@
 ---
+import { useTranslation } from 'src/i18n/utils'
+
+interface Props { lang: 'es' | 'en' }
+const { lang } = Astro.props
+const t = useTranslation(lang)
 ---
 
 <footer class="foot">
   <div class="wrap">
-    <div>Con <span class="heart">♥</span> @vitualizz · 2026</div>
-    <div>Lima · UTC −5 · ES / EN</div>
+    <div>{t('footer').thanks} · 2026</div>
+    <div>{t('home').footer_location_line}</div>
   </div>
 </footer>
 

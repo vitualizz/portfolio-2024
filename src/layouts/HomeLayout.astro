@@ -2,12 +2,17 @@
 import BaseLayout from './BaseLayout.astro'
 import Navbar from '@components/Navbar.astro'
 import Footer from 'src/components/Footer.astro'
+import { useTranslation } from 'src/i18n/utils'
+
+interface Props { lang: 'es' | 'en' }
+const { lang } = Astro.props
+const t = useTranslation(lang)
 ---
 
-<BaseLayout title="Lee Palacios — @vitualizz / Software Engineer">
+<BaseLayout title={t('seo').title} description={t('seo').description}>
   <Navbar />
   <slot />
-  <Footer />
+  <Footer lang={lang} />
 </BaseLayout>
 
 <script>

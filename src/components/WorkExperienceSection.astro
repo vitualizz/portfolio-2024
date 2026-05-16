@@ -1,8 +1,10 @@
 ---
 import { getLangFromUrl } from 'src/i18n/utils'
+import { useTranslation } from 'src/i18n/utils'
 import experienceData from 'src/data/experience.json'
 
 const lang = getLangFromUrl(Astro.url)
+const t = useTranslation(lang)
 
 const MONTHS_ES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
 const MONTHS_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
@@ -17,9 +19,9 @@ function formatPeriod(dateStr: string): string {
 <section class="s" id="xp">
   <div class="wrap">
     <div class="s-head reveal">
-      <span class="s-eyebrow">// 04 · Experiencia</span>
-      <h2 class="s-title">Mi <span class="y">recorrido</span></h2>
-      <p class="s-sub">Cuatro paradas profesionales, una constante: producto que se envía.</p>
+      <span class="s-eyebrow">{t('home').xp_eyebrow}</span>
+      <h2 class="s-title" set:html={t('home').xp_title} />
+      <p class="s-sub">{t('home').xp_subtitle}</p>
     </div>
 
     <div class="xp flex flex-col relative" style="max-width:880px;margin:0 auto">
@@ -38,7 +40,7 @@ function formatPeriod(dateStr: string): string {
                 }
               </span>
             </div>
-            <h4 class="text-[24px] font-bold tracking-[-0.02em] my-1">{entry.company}{i === experienceData.length - 1 && <span style="color:var(--muted);font-weight:500;font-size:0.7em;"> — pausado</span>}</h4>
+            <h4 class="text-[24px] font-bold tracking-[-0.02em] my-1">{entry.company}{i === experienceData.length - 1 && <span style="color:var(--muted);font-weight:500;font-size:0.7em;"> — {t('home').paused_label}</span>}</h4>
             <div class="text-coral text-[15px] font-medium mb-[10px]">{entry.role}</div>
             <p class="text-ink-soft text-[15px] leading-[1.65] max-w-[60ch] mb-3" set:html={lang === 'es' ? entry.description_es : entry.description_en} />
             <div class="flex flex-wrap gap-[5px] font-mono text-[11px] text-muted-custom">
