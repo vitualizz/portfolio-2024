@@ -2,104 +2,195 @@
 import { getLangFromUrl } from '../i18n/utils'
 import { useTranslation } from 'src/i18n/utils'
 import ResumeActions from 'src/components/ResumeActions.astro'
+import ThemeToggle from 'src/components/ThemeToggle.astro'
 import { LANG_CODES, SECTION_IDS, withLangPath } from 'src/i18n/constants'
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslation(lang)
-
 ---
 
-<header class="topbar sticky top-0 z-30" style="background:color-mix(in oklab, var(--bg) 75%, transparent);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid color-mix(in oklab, var(--line) 80%, transparent)">
-  <div class="topbar-inner flex items-center justify-between h-[72px] mx-auto px-[var(--gutter)]" style="max-width:var(--max)">
-    <a class="brand inline-flex items-center gap-[10px] font-display font-bold tracking-[-0.02em] text-[17px] text-ink" href={`/${lang}`}>
-      <span class="blob w-7 h-7 bg-accent" style="border-radius:56% 44% 40% 60% / 60% 50% 50% 40%;box-shadow:0 0 24px color-mix(in oklab, var(--accent) 30%, transparent)"></span>
+<portfolio-navbar>
+  <header
+    class="topbar sticky top-0 z-30"
+    style="background:color-mix(in oklab, var(--bg) 75%, transparent);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid color-mix(in oklab, var(--line) 80%, transparent)"
+  >
+  <div
+    class="topbar-inner mx-auto flex h-[72px] items-center justify-between px-[var(--gutter)]"
+    style="max-width:var(--max)"
+  >
+    <a
+      class="brand font-display text-ink inline-flex items-center gap-[10px] text-[17px] font-bold tracking-[-0.02em]"
+      href={`/${lang}`}
+    >
+      <span
+        class="blob bg-accent h-7 w-7"
+        style="border-radius:56% 44% 40% 60% / 60% 50% 50% 40%;box-shadow:0 0 24px color-mix(in oklab, var(--accent) 30%, transparent)"
+      ></span>
       <span>vitualizz</span>
     </a>
 
     <nav class="nav-links flex gap-9 text-[15px] font-medium">
-      <a href={withLangPath(lang, `#${SECTION_IDS.top}`)} class="active" data-nav>{t('nav').presentation}</a>
-      <a href={withLangPath(lang, `#${SECTION_IDS.about}`)} data-nav>{t('nav').about_me}</a>
-      <a href={withLangPath(lang, `#${SECTION_IDS.ai}`)} data-nav>{t('nav').ask_ai}</a>
-      <a href={withLangPath(lang, `#${SECTION_IDS.projects}`)} data-nav>{t('nav').projects}</a>
-      <a href={withLangPath(lang, `#${SECTION_IDS.xp}`)} data-nav>{t('nav').work_experience}</a>
-      <a href={withLangPath(lang, `#${SECTION_IDS.blog}`)} data-nav>{t('nav').blog}</a>
-      <a href={withLangPath(lang, `#${SECTION_IDS.contact}`)} data-nav>{t('nav').contact_me}</a>
+      <a
+        href={withLangPath(lang, `#${SECTION_IDS.top}`)}
+        class="active"
+        data-nav>{t('nav').presentation}</a
+      >
+      <a href={withLangPath(lang, `#${SECTION_IDS.about}`)} data-nav
+        >{t('nav').about_me}</a
+      >
+      <a href={withLangPath(lang, `#${SECTION_IDS.ai}`)} data-nav
+        >{t('nav').ask_ai}</a
+      >
+      <a href={withLangPath(lang, `#${SECTION_IDS.projects}`)} data-nav
+        >{t('nav').projects}</a
+      >
+      <a href={withLangPath(lang, `#${SECTION_IDS.xp}`)} data-nav
+        >{t('nav').work_experience}</a
+      >
+      <a href={withLangPath(lang, `#${SECTION_IDS.blog}`)} data-nav
+        >{t('nav').blog}</a
+      >
+      <a href={withLangPath(lang, `#${SECTION_IDS.contact}`)} data-nav
+        >{t('nav').contact_me}</a
+      >
     </nav>
 
     <div class="nav-right flex items-center gap-[14px]">
-      <ResumeActions lang={lang} variant="navbar" triggerId="resume-actions-navbar" />
+      <ResumeActions
+        lang={lang}
+        variant="navbar"
+        triggerId="resume-actions-navbar"
+      />
       <details class="lang-menu relative">
-        <summary class="pill inline-flex items-center gap-2 px-4 py-[9px] border border-line rounded-full text-[14px] font-medium text-ink list-none cursor-pointer" aria-label={t('nav').switch_language} style="background:color-mix(in oklab, var(--bg-2) 80%, transparent)">
+        <summary
+          class="pill border-line text-ink inline-flex cursor-pointer list-none items-center gap-2 rounded-full border px-4 py-[9px] text-[14px] font-medium"
+          aria-label={t('nav').switch_language}
+          style="background:color-mix(in oklab, var(--bg-2) 80%, transparent)"
+        >
           {lang.toUpperCase()}
         </summary>
-        <div class="absolute right-0 top-[calc(100%+8px)] min-w-[130px] rounded-[12px] border border-line bg-bg-2 p-1 z-20">
-          {LANG_CODES.map(code => (
-            <a href={withLangPath(code)} class={`block rounded-[8px] px-3 py-2 text-[13px] ${code === lang ? 'text-accent' : 'text-ink-soft hover:text-ink'}`} aria-label={t('nav').language_option.replace('{language}', code === 'es' ? 'Español' : 'English')}>
-              {code === 'es' ? 'Español' : 'English'}
-            </a>
-          ))}
+        <div
+          class="border-line bg-bg-2 absolute top-[calc(100%+8px)] right-0 z-20 min-w-[130px] rounded-[12px] border p-1"
+        >
+          {
+            LANG_CODES.map((code) => (
+              <a
+                href={withLangPath(code)}
+                class={`block rounded-[8px] px-3 py-2 text-[13px] ${code === lang ? 'text-accent' : 'text-ink-soft hover:text-ink'}`}
+                aria-label={t('nav').language_option.replace(
+                  '{language}',
+                  code === 'es' ? 'Español' : 'English'
+                )}
+              >
+                {code === 'es' ? 'Español' : 'English'}
+              </a>
+            ))
+          }
         </div>
       </details>
-      <button class="theme-toggle w-[38px] h-[38px] rounded-full border border-line bg-bg-2 inline-flex items-center justify-center cursor-pointer" aria-label="Cambiar tema" id="themeToggle">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px] text-ink-soft">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-      </button>
+      <ThemeToggle />
     </div>
   </div>
-</header>
+  </header>
+</portfolio-navbar>
 
 <style>
-  .blob { animation: morph 9s ease-in-out infinite; }
-  .nav-links a { position: relative; padding: 6px 0; color: var(--ink-soft); transition: color .2s; white-space: nowrap; }
-  .nav-links a:hover { color: var(--ink); }
-  .nav-links a.active { color: var(--ink); }
-  .nav-links a.active::after {
-    content: ""; position: absolute; left: 0; right: 0; bottom: -2px;
-    height: 3px; background: var(--accent); border-radius: 999px;
+  .blob {
+    animation: morph 9s ease-in-out infinite;
   }
-  .pill { transition: border-color .2s, background .2s, transform .2s; }
-  .pill:hover { border-color: var(--accent); transform: translateY(-1px); }
-  .flag-pe { background: linear-gradient(90deg, #D91023 33%, #fff 33% 66%, #D91023 66%); }
-  .theme-toggle { transition: border-color .2s, transform .2s; }
-  .theme-toggle:hover { border-color: var(--accent); transform: rotate(-15deg); }
-
-  @media (max-width: 1080px) { .nav-links { gap: 22px; font-size: 14px; } }
-  @media (max-width: 940px) { .nav-links { display: none; } }
+  .nav-links a {
+    position: relative;
+    padding: 6px 0;
+    color: var(--ink-soft);
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
+  .nav-links a:hover {
+    color: var(--ink);
+  }
+  .nav-links a.active {
+    color: var(--ink);
+  }
+  .nav-links a.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 999px;
+  }
+  .pill {
+    transition:
+      border-color 0.2s,
+      background 0.2s,
+      transform 0.2s;
+  }
+  .pill:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .flag-pe {
+    background: linear-gradient(90deg, #d91023 33%, #fff 33% 66%, #d91023 66%);
+  }
+  @media (max-width: 1080px) {
+    .nav-links {
+      gap: 22px;
+      font-size: 14px;
+    }
+  }
+  @media (max-width: 940px) {
+    .nav-links {
+      display: none;
+    }
+  }
 </style>
 
 <script>
-  function initNavbar() {
-    // Theme toggle
-    const btn = document.getElementById('themeToggle');
-    if (btn) {
-      btn.addEventListener('click', () => {
-        const cur = document.documentElement.getAttribute('data-theme');
-        const next = cur === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('portfolio-theme', next);
-        // show/hide stars
-        const stars = document.querySelectorAll('.stars, .stars2, .stars3');
-        stars.forEach(s => (s as HTMLElement).style.display = next === 'dark' ? '' : 'none');
-      });
-    }
-
-    // Active nav highlight on scroll
-    const navLinks = document.querySelectorAll<HTMLAnchorElement>('[data-nav]');
-    const sectionMap = Array.from(navLinks).map(a => ({
-      a, target: document.querySelector(a.hash || '') as HTMLElement | null
-    })).filter(x => x.target);
-
-    function updateActive() {
-      const y = window.scrollY + 120;
-      let active = sectionMap[0];
-      for (const item of sectionMap) {
-        if (item.target && item.target.offsetTop <= y) active = item;
-      }
-      navLinks.forEach(a => a.classList.toggle('active', a === active?.a));
-    }
-    window.addEventListener('scroll', updateActive, { passive: true });
-    updateActive();
+  type NavbarItem = {
+    a: HTMLAnchorElement
+    target: HTMLElement | null
   }
-  initNavbar();
-  document.addEventListener('astro:page-load', initNavbar);
+
+  class PortfolioNavbarElement extends HTMLElement {
+    private navLinks: HTMLAnchorElement[] = []
+    private sectionMap: NavbarItem[] = []
+    private onScroll = () => this.updateActive()
+
+    connectedCallback() {
+      this.navLinks = Array.from(this.querySelectorAll<HTMLAnchorElement>('[data-nav]'))
+      this.sectionMap = this.navLinks
+        .map((a) => ({
+          a,
+          target: document.querySelector(a.hash || '') as HTMLElement | null
+        }))
+        .filter((item): item is NavbarItem => Boolean(item.target))
+
+      window.addEventListener('scroll', this.onScroll, { passive: true })
+      this.updateActive()
+    }
+
+    disconnectedCallback() {
+      window.removeEventListener('scroll', this.onScroll)
+      this.navLinks = []
+      this.sectionMap = []
+    }
+
+    private updateActive() {
+      if (!this.sectionMap.length) return
+
+      const y = window.scrollY + 120
+      let active = this.sectionMap[0]
+
+      for (const item of this.sectionMap) {
+        if (item.target && item.target.offsetTop <= y) active = item
+      }
+
+      this.navLinks.forEach((a) => a.classList.toggle('active', a === active?.a))
+    }
+  }
+
+  if (!customElements.get('portfolio-navbar')) {
+    customElements.define('portfolio-navbar', PortfolioNavbarElement)
+  }
 </script>

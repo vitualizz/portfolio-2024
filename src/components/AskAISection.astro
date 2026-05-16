@@ -7,24 +7,24 @@ const t = useTranslation(lang)
 const aiT = t('ai')
 ---
 
-<section class="s" id="ai">
+<section class="s" id="ai" data-ai-root>
   <div class="wrap">
     <div class="s-head reveal">
       <span class="s-eyebrow">{t('home').ai_eyebrow}</span>
       <h2 class="s-title" set:html={t('home').ai_title} />
       <p class="s-sub">
         {t('home').ai_subtitle}
-        <span class="ai-built font-mono text-[12px] text-[color:var(--muted)] block mt-[10px]">(construido con <code class="rounded px-[6px] py-[2px] text-[11.5px] text-accent" style="background:color-mix(in oklab, var(--accent) 12%, transparent)">Claude Haiku</code> · via API)</span>
+        <span class="ai-built mt-[10px] block font-mono text-[12px] text-[color:var(--muted)]">(construido con <code class="rounded bg-[color:color-mix(in_oklab,var(--accent)_12%,transparent)] px-[6px] py-[2px] text-[11.5px] text-accent">Claude Haiku</code> · via API)</span>
       </p>
     </div>
 
-    <div class="ai-shell reveal relative rounded-[18px] overflow-hidden mx-auto" style="max-width:900px;background:linear-gradient(180deg, var(--bg-2) 0%, color-mix(in oklab, var(--bg-2) 80%, var(--bg)) 100%);border:1px solid var(--line);box-shadow:0 24px 60px rgba(0,0,0,.35)">
+    <div class="ai-shell reveal relative mx-auto max-w-[900px] overflow-hidden rounded-[18px] border border-line bg-[linear-gradient(180deg,var(--bg-2)_0%,color-mix(in_oklab,var(--bg-2)_80%,var(--bg))_100%)] shadow-[0_24px_60px_rgba(0,0,0,.35)]">
       <div class="ai-shell-bar" aria-hidden="true"></div>
-      <div class="ai-header flex justify-between items-center px-[18px] py-[14px] border-b border-line flex-wrap gap-3" style="background:color-mix(in oklab, var(--bg) 60%, transparent)">
+      <div class="ai-header flex flex-wrap items-center justify-between gap-3 border-b border-line bg-[color:color-mix(in_oklab,var(--bg)_60%,transparent)] px-[18px] py-[14px]">
         <div class="ai-status flex items-center gap-[10px] font-mono text-[12px]">
-          <span class="ai-dot w-2 h-2 rounded-full" style="background:var(--mint);box-shadow:0 0 0 4px color-mix(in oklab, var(--mint) 25%, transparent)"></span>
+          <span class="ai-dot h-2 w-2 rounded-full bg-mint shadow-[0_0_0_4px_color-mix(in_oklab,var(--mint)_25%,transparent)]"></span>
           <span class="text-ink ai-label">lee-ai · v1</span>
-          <span class="ai-model text-[color:var(--muted)] px-2 py-[2px] rounded-full border border-line text-[11px]" style="background:color-mix(in oklab, var(--bg) 70%, transparent)">claude-haiku-4-5</span>
+          <span class="ai-model rounded-full border border-line bg-[color:color-mix(in_oklab,var(--bg)_70%,transparent)] px-2 py-[2px] text-[11px] text-[color:var(--muted)]">claude-haiku-4-5</span>
         </div>
         <div class="flex flex-wrap gap-1">
           <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer" data-suggest={aiT.tabs.backend}>{aiT.tab_labels.backend}</button>
@@ -34,20 +34,20 @@ const aiT = t('ai')
         </div>
       </div>
 
-      <div class="ai-conv px-[22px] pt-6 pb-3 flex flex-col gap-[18px] overflow-y-auto" id="aiConv" style="max-height:420px;scroll-behavior:smooth">
-        <div class="ai-msg ai-msg-bot grid gap-3 items-start" style="grid-template-columns:32px 1fr">
-          <div class="ai-avatar w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-[14px] shrink-0 bg-accent" style="color:#0B0C10">L</div>
-          <div class="ai-bubble px-[18px] py-[14px] rounded-[14px] text-[14.5px] leading-[1.6] text-ink border border-line" style="background:color-mix(in oklab, var(--bg) 60%, transparent)">
+      <div class="ai-conv flex max-h-[420px] flex-col gap-[18px] overflow-y-auto px-[22px] pb-3 pt-6 scroll-smooth" id="aiConv">
+        <div class="ai-msg ai-msg-bot grid grid-cols-[32px_1fr] items-start gap-3">
+          <div class="ai-avatar flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent font-display text-[14px] font-bold text-[#0B0C10]">L</div>
+          <div class="ai-bubble rounded-[14px] border border-line bg-[color:color-mix(in_oklab,var(--bg)_60%,transparent)] px-[18px] py-[14px] text-[14.5px] leading-[1.6] text-ink">
             <p set:html={aiT.greeting} />
             <p class="ai-hint mt-2 font-mono text-[11.5px] text-[color:var(--muted)]">{aiT.hint}</p>
           </div>
         </div>
       </div>
 
-      <form class="ai-form flex items-center px-[14px] py-3 border-t border-line" id="aiForm" style="background:color-mix(in oklab, var(--bg) 80%, transparent)" data-ai={JSON.stringify(aiT)}>
+      <form class="ai-form flex items-center border-t border-line bg-[color:color-mix(in_oklab,var(--bg)_80%,transparent)] px-[14px] py-3" id="aiForm" data-ai={JSON.stringify(aiT)}>
         <span class="font-mono text-accent font-bold px-[10px] text-[18px]">›</span>
         <input id="aiInput" type="text" placeholder={aiT.input_placeholder} autocomplete="off" maxlength="280" class="flex-1 border-none bg-transparent outline-none text-ink font-sans text-[15px] px-1 py-[10px]" />
-        <button class="ai-send w-[38px] h-[38px] bg-accent border-none rounded-[10px] cursor-pointer flex items-center justify-center" type="submit" aria-label={aiT.send_aria} style="color:#0B0C10">
+        <button class="ai-send flex h-[38px] w-[38px] cursor-pointer items-center justify-center rounded-[10px] border-none bg-accent text-[#0B0C10]" type="submit" aria-label={aiT.send_aria}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px]">
             <path d="M5 12h14M13 6l6 6-6 6"/>
           </svg>
@@ -84,10 +84,15 @@ const aiT = t('ai')
 
 <script>
   function initAI() {
-    const form = document.getElementById('aiForm') as HTMLFormElement | null;
-    const input = document.getElementById('aiInput') as HTMLInputElement | null;
-    const conv = document.getElementById('aiConv') as HTMLElement | null;
-    const tabs = document.querySelectorAll<HTMLButtonElement>('.ai-tab');
+    const root = document.querySelector<HTMLElement>('[data-ai-root]');
+    // Astro ClientRouter can replay lifecycle events; this guard keeps init idempotent per mounted root.
+    if (!root || root.dataset.ready === 'true') return;
+    root.dataset.ready = 'true';
+
+    const form = root.querySelector<HTMLFormElement>('#aiForm');
+    const input = root.querySelector<HTMLInputElement>('#aiInput');
+    const conv = root.querySelector<HTMLElement>('#aiConv');
+    const tabs = root.querySelectorAll<HTMLButtonElement>('.ai-tab');
     if (!form || !input || !conv) return;
     const msg = JSON.parse(form.dataset.ai || '{}');
 
@@ -106,20 +111,18 @@ const aiT = t('ai')
     }
     function addMsg(role: string, text: string) {
       const wrap = document.createElement('div');
-      wrap.className = 'ai-msg grid gap-3 items-start ' + (role === 'user' ? 'ai-msg-user' : 'ai-msg-bot');
-      wrap.style.gridTemplateColumns = role === 'user' ? '1fr 32px' : '32px 1fr';
-      wrap.innerHTML = `<div class="ai-avatar w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-[14px] shrink-0 bg-accent" style="color:#0B0C10">${role === 'user' ? (msg.user_avatar || 'YOU') : 'L'}</div><div class="ai-bubble px-[18px] py-[14px] rounded-[14px] text-[14.5px] leading-[1.6] text-ink border border-line" style="background:color-mix(in oklab, var(--bg) 60%, transparent)">${role === 'user' ? `<p>${escHtml(text)}</p>` : renderMd(text)}</div>`;
-      conv!.appendChild(wrap);
-      conv!.scrollTop = conv!.scrollHeight;
+      wrap.className = 'ai-msg grid items-start gap-3 ' + (role === 'user' ? 'ai-msg-user grid-cols-[1fr_32px]' : 'ai-msg-bot grid-cols-[32px_1fr]');
+      wrap.innerHTML = `<div class="ai-avatar flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent font-display text-[14px] font-bold text-[#0B0C10]">${role === 'user' ? (msg.user_avatar || 'YOU') : 'L'}</div><div class="ai-bubble rounded-[14px] border border-line bg-[color:color-mix(in_oklab,var(--bg)_60%,transparent)] px-[18px] py-[14px] text-[14.5px] leading-[1.6] text-ink">${role === 'user' ? `<p>${escHtml(text)}</p>` : renderMd(text)}</div>`;
+      conv.appendChild(wrap);
+      conv.scrollTop = conv.scrollHeight;
       return wrap;
     }
     function addThinking() {
       const wrap = document.createElement('div');
-      wrap.className = 'ai-msg ai-msg-bot grid gap-3 items-start';
-      wrap.style.gridTemplateColumns = '32px 1fr';
-      wrap.innerHTML = `<div class="ai-avatar w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-[14px] shrink-0 bg-accent" style="color:#0B0C10">L</div><div class="ai-bubble px-[18px] py-[14px] rounded-[14px] text-[14.5px] leading-[1.6] text-ink border border-line" style="background:color-mix(in oklab, var(--bg) 60%, transparent)"><div class="ai-thinking"><span class="d"></span><span class="d"></span><span class="d"></span><span style="margin-left:6px;">${msg.thinking || 'thinking...'}</span></div></div>`;
-      conv!.appendChild(wrap);
-      conv!.scrollTop = conv!.scrollHeight;
+      wrap.className = 'ai-msg ai-msg-bot grid grid-cols-[32px_1fr] items-start gap-3';
+      wrap.innerHTML = `<div class="ai-avatar flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent font-display text-[14px] font-bold text-[#0B0C10]">L</div><div class="ai-bubble rounded-[14px] border border-line bg-[color:color-mix(in_oklab,var(--bg)_60%,transparent)] px-[18px] py-[14px] text-[14.5px] leading-[1.6] text-ink"><div class="ai-thinking"><span class="d"></span><span class="d"></span><span class="d"></span><span class="ml-[6px]">${msg.thinking || 'thinking...'}</span></div></div>`;
+      conv.appendChild(wrap);
+      conv.scrollTop = conv.scrollHeight;
       return wrap;
     }
 

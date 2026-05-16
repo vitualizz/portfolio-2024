@@ -7,10 +7,11 @@ const { lang } = Astro.props
 const t = useTranslation(lang)
 ---
 
-<section class="hero" id="top">
-  <div class="hero-spotlight" id="heroSpotlight"></div>
-  <div class="wrap">
-    <div class="hero-grid">
+<presentation-section>
+  <section class="hero" id="top">
+    <div class="hero-spotlight" id="heroSpotlight"></div>
+    <div class="wrap">
+      <div class="hero-grid">
 
       <!-- Left: text -->
       <div>
@@ -66,9 +67,10 @@ const t = useTranslation(lang)
         <span class="blob-spark s4 absolute z-[2]" style="bottom:6%;right:18%;color:var(--accent);font-size:18px">✨</span>
       </div>
 
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+</presentation-section>
 
 <style>
   .hero-spotlight {
@@ -109,59 +111,169 @@ const t = useTranslation(lang)
   .blob-spark.s4 { animation-delay: 3.2s; }
 
   @media (max-width: 820px) {
+    /* Mobile overflow baseline:
+       - decorative inline offsets (left/right negativos)
+       - overflow: clip poco predecible en algunos Safari */
     .hero-grid { grid-template-columns: 1fr; gap: 48px; }
-    .hero-figure { max-width: 340px; margin: 0 auto; order: -1; }
+    .hero-figure { max-width: 340px; margin: 0 auto; order: -1; overflow-x: hidden; overflow-y: visible; }
+    .blob-spark.s2 { left: 2% !important; }
+    .blob-spark.s3 { right: 2% !important; }
+    .blob-tag { right: 4% !important; }
+    .hero-character { filter: drop-shadow(0 18px 24px rgba(0,0,0,.35)); }
     .hero { min-height: auto; padding-top: 32px; }
   }
 </style>
 
 <script>
-  function initHero() {
-    // Typewriter
-    const el = document.getElementById('typewriter');
-    if (el) {
-      const words = (el.dataset.words || '').split('|').filter(Boolean);
-      let w = 0, c = 0, deleting = false;
-      function tick() {
-        const word = words[w];
-        if (!deleting) {
-          c++; el.textContent = word.slice(0, c);
-          if (c >= word.length) { deleting = true; setTimeout(tick, 1600); return; }
-        } else {
-          c--; el.textContent = word.slice(0, c);
-          if (c <= 0) { deleting = false; w = (w + 1) % words.length; setTimeout(tick, 220); return; }
-        }
-        setTimeout(tick, deleting ? 28 : 60 + Math.random() * 40);
+  class PresentationSectionElement extends HTMLElement {
+    private typewriterEl: HTMLElement | null = null
+    private heroEl: HTMLElement | null = null
+    private spotlightEl: HTMLElement | null = null
+    private typeTimeoutId: number | undefined
+    private buttonCleanup: Array<() => void> = []
+
+    private onHeroPointerMove = (e: PointerEvent) => {
+      if (!this.heroEl || !this.spotlightEl) return
+      const r = this.heroEl.getBoundingClientRect()
+      this.spotlightEl.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`)
+      this.spotlightEl.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`)
+      this.spotlightEl.style.opacity = '1'
+    }
+
+    private onHeroPointerLeave = () => {
+      if (this.spotlightEl) this.spotlightEl.style.opacity = '0'
+    }
+
+    connectedCallback() {
+      this.typewriterEl = this.querySelector<HTMLElement>('#typewriter')
+      this.heroEl = this.querySelector<HTMLElement>('.hero')
+      this.spotlightEl = this.querySelector<HTMLElement>('#heroSpotlight')
+
+      this.startTypewriter()
+      this.bindSpotlight()
+      this.bindMagneticButtons()
+    }
+
+    disconnectedCallback() {
+      this.clearTypewriterTimer()
+
+      if (this.heroEl) {
+        this.heroEl.removeEventListener('pointermove', this.onHeroPointerMove)
+        this.heroEl.removeEventListener('pointerleave', this.onHeroPointerLeave)
       }
-      setTimeout(tick, 900);
+
+      if (this.spotlightEl) {
+        this.spotlightEl.style.opacity = ''
+        this.spotlightEl.style.removeProperty('--mx')
+        this.spotlightEl.style.removeProperty('--my')
+      }
+
+      this.buttonCleanup.forEach((cleanup) => cleanup())
+      this.buttonCleanup = []
+
+      this.typewriterEl = null
+      this.heroEl = null
+      this.spotlightEl = null
     }
 
-    // Cursor spotlight
-    const hero = document.querySelector('.hero') as HTMLElement | null;
-    const spot = document.getElementById('heroSpotlight');
-    if (hero && spot && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      hero.addEventListener('pointermove', (e: PointerEvent) => {
-        const r = hero.getBoundingClientRect();
-        spot.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
-        spot.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
-        spot.style.opacity = '1';
-      });
-      hero.addEventListener('pointerleave', () => { spot.style.opacity = '0'; });
+    private scheduleTypewriter(nextTick: () => void, delay: number) {
+      this.clearTypewriterTimer()
+      this.typeTimeoutId = window.setTimeout(nextTick, delay)
     }
 
-    // Magnetic icon buttons
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && !window.matchMedia('(hover: none)').matches) {
-      document.querySelectorAll<HTMLElement>('.icon-btn').forEach(btn => {
-        btn.addEventListener('pointermove', (e: PointerEvent) => {
-          const r = btn.getBoundingClientRect();
-          const x = (e.clientX - r.left - r.width / 2) * 0.35;
-          const y = (e.clientY - r.top - r.height / 2) * 0.35;
-          btn.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`;
-        });
-        btn.addEventListener('pointerleave', () => { btn.style.transform = ''; });
-      });
+    private clearTypewriterTimer() {
+      if (this.typeTimeoutId !== undefined) {
+        clearTimeout(this.typeTimeoutId)
+        this.typeTimeoutId = undefined
+      }
+    }
+
+    private startTypewriter() {
+      if (!this.typewriterEl) return
+
+      const words = (this.typewriterEl.dataset.words || '').split('|').filter(Boolean)
+      if (!words.length) return
+
+      let wordIndex = 0
+      let charIndex = 0
+      let deleting = false
+
+      const tick = () => {
+        const word = words[wordIndex] || ''
+
+        if (!deleting) {
+          charIndex += 1
+          this.typewriterEl!.textContent = word.slice(0, charIndex)
+
+          if (charIndex >= word.length) {
+            deleting = true
+            this.scheduleTypewriter(tick, 1600)
+            return
+          }
+        } else {
+          charIndex -= 1
+          this.typewriterEl!.textContent = word.slice(0, charIndex)
+
+          if (charIndex <= 0) {
+            deleting = false
+            wordIndex = (wordIndex + 1) % words.length
+            this.scheduleTypewriter(tick, 220)
+            return
+          }
+        }
+
+        this.scheduleTypewriter(tick, deleting ? 28 : 60 + Math.random() * 40)
+      }
+
+      this.scheduleTypewriter(tick, 900)
+    }
+
+    private bindSpotlight() {
+      if (
+        !this.heroEl ||
+        !this.spotlightEl ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ) {
+        return
+      }
+
+      this.heroEl.addEventListener('pointermove', this.onHeroPointerMove)
+      this.heroEl.addEventListener('pointerleave', this.onHeroPointerLeave)
+    }
+
+    private bindMagneticButtons() {
+      if (
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+        window.matchMedia('(hover: none)').matches
+      ) {
+        return
+      }
+
+      this.querySelectorAll<HTMLElement>('.icon-btn').forEach((btn) => {
+        const onPointerMove = (e: PointerEvent) => {
+          const r = btn.getBoundingClientRect()
+          const x = (e.clientX - r.left - r.width / 2) * 0.35
+          const y = (e.clientY - r.top - r.height / 2) * 0.35
+          btn.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`
+        }
+
+        const onPointerLeave = () => {
+          btn.style.transform = ''
+        }
+
+        btn.addEventListener('pointermove', onPointerMove)
+        btn.addEventListener('pointerleave', onPointerLeave)
+
+        this.buttonCleanup.push(() => {
+          btn.removeEventListener('pointermove', onPointerMove)
+          btn.removeEventListener('pointerleave', onPointerLeave)
+          btn.style.transform = ''
+        })
+      })
     }
   }
-  initHero();
-  document.addEventListener('astro:page-load', initHero);
+
+  if (!customElements.get('presentation-section')) {
+    customElements.define('presentation-section', PresentationSectionElement)
+  }
 </script>
