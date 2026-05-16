@@ -8,10 +8,11 @@ const lang = getLangFromUrl(Astro.url)
 const t = useTranslation(lang)
 ---
 
-<header
-  class="topbar sticky top-0 z-30"
-  style="background:color-mix(in oklab, var(--bg) 75%, transparent);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid color-mix(in oklab, var(--line) 80%, transparent)"
->
+<portfolio-navbar>
+  <header
+    class="topbar sticky top-0 z-30"
+    style="background:color-mix(in oklab, var(--bg) 75%, transparent);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid color-mix(in oklab, var(--line) 80%, transparent)"
+  >
   <div
     class="topbar-inner mx-auto flex h-[72px] items-center justify-between px-[var(--gutter)]"
     style="max-width:var(--max)"
@@ -89,7 +90,8 @@ const t = useTranslation(lang)
       <ThemeToggle />
     </div>
   </div>
-</header>
+  </header>
+</portfolio-navbar>
 
 <style>
   .blob {
@@ -145,75 +147,50 @@ const t = useTranslation(lang)
 </style>
 
 <script>
-  const NAVBAR_INIT_FLAG = 'navbarPageLoadBound'
-
   type NavbarItem = {
     a: HTMLAnchorElement
     target: HTMLElement | null
   }
 
-  type NavbarState = {
-    navLinks: HTMLAnchorElement[]
-    sectionMap: NavbarItem[]
-    updateActive: () => void
-  }
+  class PortfolioNavbarElement extends HTMLElement {
+    private navLinks: HTMLAnchorElement[] = []
+    private sectionMap: NavbarItem[] = []
+    private onScroll = () => this.updateActive()
 
-  declare global {
-    interface Window {
-      __navbarScrollBound?: boolean
-      __navbarState?: NavbarState
-    }
-  }
+    connectedCallback() {
+      this.navLinks = Array.from(this.querySelectorAll<HTMLAnchorElement>('[data-nav]'))
+      this.sectionMap = this.navLinks
+        .map((a) => ({
+          a,
+          target: document.querySelector(a.hash || '') as HTMLElement | null
+        }))
+        .filter((item): item is NavbarItem => Boolean(item.target))
 
-  function initNavbar() {
-    const navLinks = Array.from(
-      document.querySelectorAll<HTMLAnchorElement>('[data-nav]')
-    )
-    const sectionMap = navLinks
-      .map((a) => ({
-        a,
-        target: document.querySelector(a.hash || '') as HTMLElement | null
-      }))
-      .filter((x) => x.target)
-
-    const state = window.__navbarState || {
-      navLinks: [],
-      sectionMap: [],
-      updateActive: () => {}
+      window.addEventListener('scroll', this.onScroll, { passive: true })
+      this.updateActive()
     }
 
-    state.navLinks = navLinks
-    state.sectionMap = sectionMap
+    disconnectedCallback() {
+      window.removeEventListener('scroll', this.onScroll)
+      this.navLinks = []
+      this.sectionMap = []
+    }
 
-    state.updateActive = function updateActive() {
+    private updateActive() {
+      if (!this.sectionMap.length) return
+
       const y = window.scrollY + 120
-      let active = state.sectionMap[0]
-      for (const item of state.sectionMap) {
+      let active = this.sectionMap[0]
+
+      for (const item of this.sectionMap) {
         if (item.target && item.target.offsetTop <= y) active = item
       }
-      state.navLinks.forEach((a) => a.classList.toggle('active', a === active?.a))
+
+      this.navLinks.forEach((a) => a.classList.toggle('active', a === active?.a))
     }
-
-    window.__navbarState = state
-
-    if (!window.__navbarScrollBound) {
-      window.addEventListener(
-        'scroll',
-        () => {
-          window.__navbarState?.updateActive()
-        },
-        { passive: true }
-      )
-      window.__navbarScrollBound = true
-    }
-
-    state.updateActive()
   }
 
-  initNavbar()
-
-  if (document.documentElement.dataset[NAVBAR_INIT_FLAG] !== 'true') {
-    document.addEventListener('astro:page-load', initNavbar)
-    document.documentElement.dataset[NAVBAR_INIT_FLAG] = 'true'
+  if (!customElements.get('portfolio-navbar')) {
+    customElements.define('portfolio-navbar', PortfolioNavbarElement)
   }
 </script>

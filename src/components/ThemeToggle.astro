@@ -3,32 +3,32 @@ import Moon from 'astro-heroicons/outline/Moon.astro'
 import Sun from 'astro-heroicons/outline/Sun.astro'
 ---
 
-<button
-  class="border-line bg-bg-2 hover:border-accent inline-flex h-[38px] w-[38px] cursor-pointer items-center justify-center rounded-full border transition-colors"
-  aria-label="Cambiar tema"
-  data-theme-toggle
-  type="button"
->
-  <span class="relative h-[18px] w-[18px]">
-    <span
-      class="pointer-events-none absolute inset-0 transition-all duration-300 ease-out"
-      data-icon="moon"
-    >
-      <Moon class="text-ink-soft h-[18px] w-[18px]" />
+<theme-toggle>
+  <button
+    class="border-line bg-bg-2 hover:border-accent inline-flex h-[38px] w-[38px] cursor-pointer items-center justify-center rounded-full border transition-colors"
+    aria-label="Cambiar tema"
+    data-theme-toggle
+    type="button"
+  >
+    <span class="relative h-[18px] w-[18px]">
+      <span
+        class="pointer-events-none absolute inset-0 transition-all duration-300 ease-out"
+        data-icon="moon"
+      >
+        <Moon class="text-ink-soft h-[18px] w-[18px]" />
+      </span>
+      <span
+        class="pointer-events-none absolute inset-0 transition-all duration-300 ease-out"
+        data-icon="sun"
+      >
+        <Sun class="text-ink-soft h-[18px] w-[18px]" />
+      </span>
     </span>
-    <span
-      class="pointer-events-none absolute inset-0 transition-all duration-300 ease-out"
-      data-icon="sun"
-    >
-      <Sun class="text-ink-soft h-[18px] w-[18px]" />
-    </span>
-  </span>
-</button>
+  </button>
+</theme-toggle>
 
 <script>
   const THEME_STORAGE_KEY = 'portfolio-theme'
-  const THEME_TOGGLE_LISTENER_FLAG = 'themeToggleBound'
-  const THEME_PAGELOAD_FLAG = 'themeTogglePageLoadBound'
 
   function setIconState(button: HTMLElement, theme: string) {
     const moon = button.querySelector<HTMLElement>('[data-icon="moon"]')
@@ -54,35 +54,53 @@ import Sun from 'astro-heroicons/outline/Sun.astro'
     document.documentElement.setAttribute('data-theme', next)
     localStorage.setItem(THEME_STORAGE_KEY, next)
 
-    document.querySelectorAll<HTMLElement>('[data-theme-toggle]').forEach((btn) => {
-      setIconState(btn, next)
-    })
+    document.dispatchEvent(new CustomEvent('theme-changed', { detail: next }))
   }
 
-  function initThemeToggle() {
-    const currentTheme =
-      document.documentElement.getAttribute('data-theme') ||
-      localStorage.getItem(THEME_STORAGE_KEY) ||
-      'dark'
+  class ThemeToggleElement extends HTMLElement {
+    private button: HTMLElement | null = null
+    private onClick = () => {
+      const current = document.documentElement.dataset.theme || 'dark'
+      const next = current === 'dark' ? 'light' : 'dark'
+      applyTheme(next)
+    }
 
-    document.querySelectorAll<HTMLElement>('[data-theme-toggle]').forEach((btn) => {
-      if (btn.dataset[THEME_TOGGLE_LISTENER_FLAG] !== 'true') {
-        btn.addEventListener('click', () => {
-          const current = document.documentElement.getAttribute('data-theme') || 'dark'
-          const next = current === 'dark' ? 'light' : 'dark'
-          applyTheme(next)
-        })
-        btn.dataset[THEME_TOGGLE_LISTENER_FLAG] = 'true'
+    private onThemeChanged = (event: Event) => {
+      const customEvent = event as CustomEvent<'light' | 'dark'>
+      const theme =
+        customEvent.detail ||
+        document.documentElement.dataset.theme ||
+        localStorage.getItem(THEME_STORAGE_KEY) ||
+        'dark'
+
+      if (this.button) setIconState(this.button, theme)
+    }
+
+    connectedCallback() {
+      this.button = this.querySelector<HTMLElement>('[data-theme-toggle]')
+      if (!this.button) return
+
+      this.button.addEventListener('click', this.onClick)
+      document.addEventListener('theme-changed', this.onThemeChanged)
+
+      const currentTheme =
+        document.documentElement.dataset.theme ||
+        localStorage.getItem(THEME_STORAGE_KEY) ||
+        'dark'
+
+      setIconState(this.button, currentTheme)
+    }
+
+    disconnectedCallback() {
+      if (this.button) {
+        this.button.removeEventListener('click', this.onClick)
       }
-
-      setIconState(btn, currentTheme)
-    })
+      document.removeEventListener('theme-changed', this.onThemeChanged)
+      this.button = null
+    }
   }
 
-  initThemeToggle()
-
-  if (document.documentElement.dataset[THEME_PAGELOAD_FLAG] !== 'true') {
-    document.addEventListener('astro:page-load', initThemeToggle)
-    document.documentElement.dataset[THEME_PAGELOAD_FLAG] = 'true'
+  if (!customElements.get('theme-toggle')) {
+    customElements.define('theme-toggle', ThemeToggleElement)
   }
 </script>
