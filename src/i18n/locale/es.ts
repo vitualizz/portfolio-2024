@@ -132,6 +132,14 @@ const locale: LanguageLocale = {
     success_title: "¡Mensaje enviado!",
     success_text: "Te contesto en menos de 24h hábiles."
   },
+  resume_actions: {
+    preview: 'Vista previa',
+    download: 'Descargar',
+    menu_aria: 'Abrir acciones del currículum',
+    preview_modal_title: 'Vista previa del currículum',
+    preview_modal_close_aria: 'Cerrar vista previa del currículum',
+    preview_modal_fallback: 'Abrir currículum en una nueva pestaña'
+  },
   seo: {
     title: "Desarrollador de Software | Experiencia en JavaScript y Ruby | Proyectos de Calidad | Contáctame",
     description: "¡Con más de 7 años de experiencia en programación, soy un ingeniero de software apasionado por la tecnología! Trabajo con JavaScript, Ruby y más. ¡Contáctame para proyectos de calidad!",

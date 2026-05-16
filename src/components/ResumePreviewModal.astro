@@ -1,0 +1,143 @@
+---
+import { useTranslation } from 'src/i18n/utils'
+
+interface Props { lang: 'es' | 'en' }
+const { lang } = Astro.props
+const t = useTranslation(lang)
+---
+
+<section
+  id="resumePreviewModal"
+  class="resume-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="resumePreviewTitle"
+  hidden
+  data-resume-modal
+>
+  <div class="resume-modal__backdrop" data-resume-close></div>
+  <div class="resume-modal__panel" role="document">
+    <div class="resume-modal__header">
+      <h3 id="resumePreviewTitle">{t('resume_actions').preview_modal_title}</h3>
+      <button type="button" aria-label={t('resume_actions').preview_modal_close_aria} data-resume-close>
+        ✕
+      </button>
+    </div>
+
+    <iframe title={t('resume_actions').preview_modal_title} data-resume-iframe class="resume-modal__iframe"></iframe>
+
+    <p class="resume-modal__fallback" data-resume-fallback hidden>
+      <a data-resume-fallback-link target="_blank" rel="noopener noreferrer">{t('resume_actions').preview_modal_fallback}</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .resume-modal { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 20px; }
+  .resume-modal__backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.65); }
+  .resume-modal__panel {
+    position: relative;
+    z-index: 1;
+    width: min(960px, 100%);
+    max-height: 92vh;
+    border-radius: 16px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    padding: 16px;
+    display: grid;
+    gap: 12px;
+  }
+  .resume-modal__header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .resume-modal__header h3 { margin: 0; font-size: 20px; color: var(--ink); }
+  .resume-modal__header button {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--bg);
+    color: var(--ink);
+    min-width: 36px;
+    min-height: 36px;
+    cursor: pointer;
+  }
+  .resume-modal__iframe { width: 100%; height: min(78vh, 900px); border: 0; border-radius: 12px; background: #fff; }
+  .resume-modal__fallback { margin: 0; }
+  .resume-modal__fallback a { color: var(--accent); font-weight: 600; }
+</style>
+
+<script>
+  const CV_PATH_BY_LANG = { es: '/cv/es.pdf', en: '/cv/en.pdf' } as const;
+
+  function initResumePreviewModal() {
+    const modal = document.querySelector<HTMLElement>('[data-resume-modal]');
+    if (!modal || modal.dataset.ready === 'true') return;
+    modal.dataset.ready = 'true';
+
+    const iframe = modal.querySelector<HTMLIFrameElement>('[data-resume-iframe]');
+    const fallback = modal.querySelector<HTMLElement>('[data-resume-fallback]');
+    const fallbackLink = modal.querySelector<HTMLAnchorElement>('[data-resume-fallback-link]');
+    const closeButtons = modal.querySelectorAll<HTMLElement>('[data-resume-close]');
+    let lastTrigger: HTMLElement | null = null;
+
+    const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+    const closeModal = () => {
+      modal.hidden = true;
+      document.body.style.overflow = '';
+      lastTrigger?.focus();
+    };
+
+    const trapFocus = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeModal();
+        return;
+      }
+      if (event.key !== 'Tab') return;
+
+      const focusables = Array.from(modal.querySelectorAll<HTMLElement>(focusableSelector));
+      if (focusables.length === 0) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    modal.addEventListener('keydown', trapFocus);
+    closeButtons.forEach((btn) => btn.addEventListener('click', closeModal));
+
+    window.addEventListener('resume:preview', (event: Event) => {
+      const detail = (event as CustomEvent).detail as { lang?: 'es' | 'en'; triggerId?: string };
+      const lang = detail?.lang === 'en' ? 'en' : 'es';
+      const src = CV_PATH_BY_LANG[lang];
+      lastTrigger = detail?.triggerId ? document.getElementById(detail.triggerId) : null;
+
+      if (iframe) iframe.src = src;
+      if (fallback && fallbackLink) {
+        fallback.hidden = true;
+        fallbackLink.href = src;
+      }
+
+      if (iframe && fallback) {
+        const onError = () => { fallback.hidden = false; };
+        iframe.onerror = onError;
+        window.setTimeout(() => {
+          if (iframe.contentDocument?.body?.childElementCount === 0) fallback.hidden = false;
+        }, 1800);
+      }
+
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+      const firstFocusable = modal.querySelector<HTMLElement>(focusableSelector);
+      firstFocusable?.focus();
+    });
+  }
+
+  initResumePreviewModal();
+  document.addEventListener('astro:page-load', initResumePreviewModal);
+</script>

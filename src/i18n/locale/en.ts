@@ -132,6 +132,14 @@ const locale: LanguageLocale = {
     success_title: 'Message sent!',
     success_text: 'I will reply within 24 business hours.'
   },
+  resume_actions: {
+    preview: 'Preview',
+    download: 'Download',
+    menu_aria: 'Open resume actions',
+    preview_modal_title: 'Resume preview',
+    preview_modal_close_aria: 'Close resume preview',
+    preview_modal_fallback: 'Open resume in a new tab'
+  },
   seo: {
     title: "Software Developer | Experience in JavaScript and Ruby | Quality Projects | Contact Me",
     description: "With over 7 years of programming experience, I'm a technology enthusiast software engineer! Working with JavaScript, Ruby, and more. Contact me for quality projects!",

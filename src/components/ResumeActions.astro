@@ -1,0 +1,160 @@
+---
+import { CV_PATH_BY_LANG } from 'src/i18n/constants'
+import { useTranslation } from 'src/i18n/utils'
+
+interface Props {
+  lang: 'es' | 'en'
+  variant: 'hero' | 'navbar' | 'contact'
+  triggerId: string
+}
+
+const { lang, variant, triggerId } = Astro.props
+const t = useTranslation(lang)
+const menuId = `${triggerId}-menu`
+const sourceId = variant
+---
+
+<div class={`resume-actions resume-actions--${variant}`} data-resume-actions-root>
+  <button
+    class={`resume-actions__trigger ${variant === 'hero' ? 'icon-btn w-12 h-12 rounded-[14px] bg-bg-2 border border-line inline-flex items-center justify-center text-ink cursor-pointer' : variant === 'navbar' ? 'pill inline-flex items-center gap-2 px-4 py-[9px] border border-line rounded-full text-[14px] font-medium text-ink' : 'btn-ghost inline-flex items-center gap-[10px] px-[26px] py-[14px] border border-line text-ink rounded-full text-[15px] font-medium'}`}
+    id={triggerId}
+    type="button"
+    aria-haspopup="menu"
+    aria-expanded="false"
+    aria-controls={menuId}
+    aria-label={t('resume_actions').menu_aria}
+    data-resume-trigger
+  >
+    {variant === 'hero' ? (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[22px] h-[22px]"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+    ) : (
+      <>
+        <span>{t('nav').resume_label}</span>
+        <span aria-hidden="true">▾</span>
+      </>
+    )}
+  </button>
+
+  <div class="resume-actions__menu-wrap" data-resume-menu-wrap>
+    <ul id={menuId} class="resume-actions__menu" role="menu" hidden data-resume-menu>
+      <li role="none">
+        <button
+          type="button"
+          role="menuitem"
+          class="resume-actions__item"
+          data-resume-preview
+          data-lang={lang}
+          data-source={sourceId}
+          data-trigger-id={triggerId}
+        >
+          {t('resume_actions').preview}
+        </button>
+      </li>
+      <li role="none">
+        <a role="menuitem" class="resume-actions__item" href={CV_PATH_BY_LANG[lang]}>
+          {t('resume_actions').download}
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<style>
+  .resume-actions { position: relative; }
+  .resume-actions__menu-wrap { position: absolute; z-index: 40; top: calc(100% + 8px); right: 0; }
+  .resume-actions--hero .resume-actions__menu-wrap { left: 0; right: auto; }
+  .resume-actions__menu {
+    list-style: none;
+    margin: 0;
+    padding: 6px;
+    min-width: 160px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+  }
+  .resume-actions__item {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    color: var(--ink);
+    padding: 10px 12px;
+    border-radius: 8px;
+    display: block;
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .resume-actions__item:hover,
+  .resume-actions__item:focus-visible {
+    background: color-mix(in oklab, var(--accent) 18%, var(--bg-2));
+    outline: none;
+  }
+</style>
+
+<script>
+  function initResumeActions() {
+    document.querySelectorAll<HTMLElement>('[data-resume-actions-root]').forEach((root) => {
+      if (root.dataset.ready === 'true') return;
+      root.dataset.ready = 'true';
+
+      const trigger = root.querySelector<HTMLButtonElement>('[data-resume-trigger]');
+      const menu = root.querySelector<HTMLElement>('[data-resume-menu]');
+      const previewBtn = root.querySelector<HTMLButtonElement>('[data-resume-preview]');
+
+      if (!trigger || !menu || !previewBtn) return;
+
+      const closeMenu = () => {
+        menu.hidden = true;
+        trigger.setAttribute('aria-expanded', 'false');
+      };
+
+      const openMenu = () => {
+        menu.hidden = false;
+        trigger.setAttribute('aria-expanded', 'true');
+      };
+
+      trigger.addEventListener('click', () => {
+        if (menu.hidden) openMenu();
+        else closeMenu();
+      });
+
+      trigger.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openMenu();
+          const firstItem = menu.querySelector<HTMLElement>('[role="menuitem"]');
+          firstItem?.focus();
+        }
+        if (event.key === 'Escape') {
+          closeMenu();
+        }
+      });
+
+      menu.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          closeMenu();
+          trigger.focus();
+        }
+      });
+
+      document.addEventListener('click', (event) => {
+        if (!root.contains(event.target as Node)) closeMenu();
+      });
+
+      previewBtn.addEventListener('click', () => {
+        const detail = {
+          lang: previewBtn.dataset.lang,
+          sourceId: previewBtn.dataset.source,
+          triggerId: previewBtn.dataset.triggerId,
+        };
+        window.dispatchEvent(new CustomEvent('resume:preview', { detail }));
+        closeMenu();
+      });
+    });
+  }
+
+  initResumeActions();
+  document.addEventListener('astro:page-load', initResumeActions);
+</script>

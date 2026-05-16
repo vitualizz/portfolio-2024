@@ -1,7 +1,8 @@
 ---
 import { getLangFromUrl } from '../i18n/utils'
 import { useTranslation } from 'src/i18n/utils'
-import { CV_PATH_BY_LANG, LANG_CODES, SECTION_IDS, withLangPath } from 'src/i18n/constants'
+import ResumeActions from 'src/components/ResumeActions.astro'
+import { LANG_CODES, SECTION_IDS, withLangPath } from 'src/i18n/constants'
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslation(lang)
 
@@ -25,7 +26,7 @@ const t = useTranslation(lang)
     </nav>
 
     <div class="nav-right flex items-center gap-[14px]">
-      <a class="pill inline-flex items-center gap-2 px-4 py-[9px] border border-line rounded-full text-[14px] font-medium text-ink" href={CV_PATH_BY_LANG[lang]} style="background:color-mix(in oklab, var(--bg-2) 80%, transparent)">{t('nav').resume_label}</a>
+      <ResumeActions lang={lang} variant="navbar" triggerId="resume-actions-navbar" />
       <details class="lang-menu relative">
         <summary class="pill inline-flex items-center gap-2 px-4 py-[9px] border border-line rounded-full text-[14px] font-medium text-ink list-none cursor-pointer" aria-label={t('nav').switch_language} style="background:color-mix(in oklab, var(--bg-2) 80%, transparent)">
           {lang.toUpperCase()}

@@ -1,6 +1,6 @@
 ---
 import { useTranslation } from 'src/i18n/utils'
-import { CV_PATH_BY_LANG } from 'src/i18n/constants'
+import ResumeActions from 'src/components/ResumeActions.astro'
 
 interface Props { lang: 'es' | 'en' }
 const { lang } = Astro.props
@@ -16,7 +16,7 @@ const t = useTranslation(lang)
       <p class="text-ink-soft text-[17px] mx-auto mb-8 leading-[1.6] relative" style="max-width:52ch">{t('home').contact_subtitle}</p>
       <div class="flex gap-3 justify-center flex-wrap relative">
         <button class="inline-flex items-center gap-[10px] px-[26px] py-[14px] bg-accent rounded-full text-[15px] font-semibold border-none cursor-pointer font-[inherit]" style="color:#0B0C10;transition:transform .2s, box-shadow .2s" id="openContactModal">{t('contact_modal').submit} <span>✉</span></button>
-        <a class="btn-ghost inline-flex items-center gap-[10px] px-[26px] py-[14px] border border-line text-ink rounded-full text-[15px] font-medium" href={CV_PATH_BY_LANG[lang]} style="background:color-mix(in oklab, var(--bg) 50%, transparent);transition:border-color .2s, transform .2s">{t('home').contact_download_cv} <span>↓</span></a>
+        <ResumeActions lang={lang} variant="contact" triggerId="resume-actions-contact" />
       </div>
     </div>
   </div>

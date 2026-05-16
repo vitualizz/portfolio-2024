@@ -136,6 +136,14 @@ export type LanguageLocale = {
     success_title: string
     success_text: string
   }
+  resume_actions: {
+    preview: string
+    download: string
+    menu_aria: string
+    preview_modal_title: string
+    preview_modal_close_aria: string
+    preview_modal_fallback: string
+  }
   seo: {
     title: string
     description: string
