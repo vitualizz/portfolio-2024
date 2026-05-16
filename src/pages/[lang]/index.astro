@@ -10,6 +10,13 @@ import BlogSection from 'src/components/BlogSection.astro'
 import ContactMeSection from 'src/components/ContactMeSection.astro'
 import ResumePreviewModal from 'src/components/ResumePreviewModal.astro'
 import { getLangFromUrl } from 'src/i18n/utils'
+import { LANG_CODES } from 'src/i18n/constants'
+
+export const prerender = true
+
+export function getStaticPaths() {
+  return LANG_CODES.map((lang) => ({ params: { lang } }))
+}
 
 const lang = getLangFromUrl(Astro.url)
 const allPosts = await getCollection('blog')

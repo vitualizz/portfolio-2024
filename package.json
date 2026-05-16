@@ -29,7 +29,6 @@
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.7",
     "@types/eslint__js": "^8.42.3",
-    "daisyui": "^5.0.35",
     "eslint": "^9.1.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-astro": "^0.34.0",

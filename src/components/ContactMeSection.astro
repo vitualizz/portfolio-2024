@@ -10,12 +10,12 @@ const t = useTranslation(lang)
 <!-- Contact section -->
 <section class="s" id="contact">
   <div class="wrap">
-    <div class="contact-card reveal relative overflow-hidden text-center rounded-[28px] mx-auto border" style="max-width:920px;padding:clamp(40px,6vw,80px);background:linear-gradient(160deg, color-mix(in oklab, var(--accent) 12%, var(--bg-2)), var(--bg-2));border-color:color-mix(in oklab, var(--accent) 30%, var(--line))">
+    <div class="contact-card reveal relative overflow-visible text-center rounded-[28px] mx-auto border max-w-[920px] p-[clamp(40px,6vw,80px)] bg-[linear-gradient(160deg,color-mix(in_oklab,var(--accent)_12%,var(--bg-2)),var(--bg-2))] border-[color-mix(in_oklab,var(--accent)_30%,var(--line))]">
       <div class="contact-card-glow" aria-hidden="true"></div>
-      <h2 class="contact-title font-bold tracking-[-0.03em] leading-[1.02] mb-4 relative" style="font-size:clamp(36px,5.5vw,64px)" set:html={t('home').contact_title} />
-      <p class="text-ink-soft text-[17px] mx-auto mb-8 leading-[1.6] relative" style="max-width:52ch">{t('home').contact_subtitle}</p>
+      <h2 class="contact-title font-bold tracking-[-0.03em] leading-[1.02] mb-4 relative text-[clamp(36px,5.5vw,64px)]" set:html={t('home').contact_title} />
+      <p class="text-ink-soft text-[17px] mx-auto mb-8 leading-[1.6] relative max-w-[52ch]">{t('home').contact_subtitle}</p>
       <div class="flex gap-3 justify-center flex-wrap relative">
-        <button class="inline-flex items-center gap-[10px] px-[26px] py-[14px] bg-accent rounded-full text-[15px] font-semibold border-none cursor-pointer font-[inherit]" style="color:#0B0C10;transition:transform .2s, box-shadow .2s" id="openContactModal">{t('contact_modal').submit} <span>✉</span></button>
+        <button class="inline-flex items-center gap-[10px] px-[26px] py-[14px] bg-accent rounded-full text-[15px] font-semibold border-none cursor-pointer font-[inherit] text-[#0B0C10] transition-[transform,box-shadow] duration-200" id="openContactModal">{t('contact_modal').submit} <span>✉</span></button>
         <ResumeActions lang={lang} variant="contact" triggerId="resume-actions-contact" />
       </div>
     </div>

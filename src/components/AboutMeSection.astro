@@ -17,16 +17,16 @@ const t = useTranslation(lang)
 
     <div class="about-grid">
       <div class="reveal">
-        <div class="about-body text-ink-soft" style="font-size:clamp(16px,1.25vw,18px);line-height:1.75">
+        <div class="about-body text-ink-soft text-[clamp(16px,1.25vw,18px)] leading-[1.75]">
           <p>Soy un <b class="text-coral">ingeniero de software</b> peruano con <b class="text-coral">7+ años</b> entre Tech Lead y Senior Fullstack en startups LATAM. Hoy en <b>Patrimore</b>.</p>
           <p>Mi pasión es el <b class="text-coral">backend</b>: SQL afinado, arquitecturas que escalan, modelos de datos honestos. El frontend lo manejo cuando hace falta — React, React Native, Tailwind — pero donde encuentro el zen es en una query bien optimizada y una API que no rompe.</p>
-          <p>En el último año he construido seriamente con <span class="g">LLMs y agentes</span> — orquestación con N8N, prompts productivos, Python como pegamento. Es la herramienta más interesante que ha aparecido en mi carrera, y todavía estoy raspando la superficie.</p>
-          <p class="about-mini text-muted-custom text-[14px] mt-[1.6em] pt-[1.1em] flex items-center gap-2" style="border-top:1px dashed var(--line)">
-            <span class="cat-emoji inline-block" style="transform-origin:bottom center">🐱</span> Vivo en Lima con tres gatos que aprueban todo mi código.
+          <p>En el último año he construido seriamente con <span class="text-mint font-semibold">LLMs y agentes</span> — orquestación con N8N, prompts productivos, Python como pegamento. Es la herramienta más interesante que ha aparecido en mi carrera, y todavía estoy raspando la superficie.</p>
+          <p class="about-mini text-muted-custom text-[14px] mt-[1.6em] pt-[1.1em] flex items-center gap-2 border-t border-dashed border-line">
+            <span class="cat-emoji inline-block origin-bottom">🐱</span> Vivo en Lima con tres gatos que aprueban todo mi código.
           </p>
         </div>
 
-        <div class="stats border border-line grid mt-9 rounded-[18px] overflow-hidden" style="grid-template-columns:repeat(3,1fr);background:color-mix(in oklab, var(--bg-2) 80%, transparent)">
+        <div class="stats border border-line grid grid-cols-3 mt-9 rounded-[18px] overflow-hidden bg-[color-mix(in_oklab,var(--bg-2)_80%,transparent)]">
           <div class="stat border-r border-line px-[18px] py-[22px] text-center">
             <div class="num text-accent font-display text-[32px] font-bold tracking-[-0.02em] leading-none">7+</div>
             <div class="lbl text-muted-custom mt-[6px] text-[12px] uppercase tracking-[0.05em] font-mono">{t('about_me').stat_years}</div>

@@ -23,13 +23,13 @@ const VALID_ICONS = new Set<string>([
       <p class="s-sub">{t('home').projects_subtitle}</p>
     </div>
 
-    <div class="projects grid gap-6" style="grid-template-columns:repeat(2,1fr)">
+    <div class="projects grid grid-cols-2 gap-6 max-[720px]:grid-cols-1">
       {projects.map(project => {
         const href = project.demo ?? project.githubUrl ?? '#'
         const description = lang === 'es' ? project.description_es : project.description_en
         return (
-          <a class="project bg-bg-2 border border-line text-ink rounded-[20px] overflow-hidden flex flex-col transition-[transform,border-color,box-shadow] duration-300 ease-[ease] reveal" href={href} target="_blank" rel="noopener noreferrer" style="transform-style:preserve-3d;will-change:transform">
-            <div class="project-img bg-bg-3 relative overflow-hidden" style="aspect-ratio:16/10">
+          <a class="project bg-bg-2 border border-line text-ink rounded-[20px] overflow-hidden flex flex-col transition-[transform,border-color,box-shadow] duration-300 ease-[ease] reveal [transform-style:preserve-3d] [will-change:transform]" href={href} target="_blank" rel="noopener noreferrer">
+            <div class="project-img bg-bg-3 relative overflow-hidden aspect-[16/10]">
               <img src={`/img/projects/${project.image}.webp`} alt={project.title} loading="lazy" class="w-full h-full object-cover transition-transform duration-[600ms] ease-[ease]" />
             </div>
             <div class="project-body flex flex-col flex-1 px-6 pt-6 pb-[26px]">
@@ -42,7 +42,7 @@ const VALID_ICONS = new Set<string>([
                   {project.stack.map(s => (
                     VALID_ICONS.has(s.icon)
                       ? <span title={s.tooltip} class="inline-flex items-center"><Icon name={s.icon as IconType} /></span>
-                      : <span class="stack-text text-ink-soft border border-line font-mono text-[10.5px] py-[3px] px-2 rounded-full" style="background:color-mix(in oklab, var(--bg) 70%, transparent)">{s.tooltip}</span>
+                      : <span class="stack-text text-ink-soft border border-line font-mono text-[10.5px] py-[3px] px-2 rounded-full bg-[color-mix(in_oklab,var(--bg)_70%,transparent)]">{s.tooltip}</span>
                   ))}
                 </div>
                 <span class="project-link text-accent inline-flex items-center gap-[6px] font-mono text-[12px] whitespace-nowrap">{t('projects').live_preview} <span class="arrow transition-transform duration-200">↗</span></span>
@@ -60,7 +60,6 @@ const VALID_ICONS = new Set<string>([
   .project-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(11,12,16,.55), transparent 40%); }
   .project:hover .project-img img { transform: scale(1.04); }
   .project:hover .project-link .arrow { transform: translate(3px,-3px); }
-  @media (max-width: 720px) { .projects { grid-template-columns: 1fr !important; } }
 </style>
 
 <script>
