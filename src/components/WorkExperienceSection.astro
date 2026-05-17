@@ -7,8 +7,34 @@ import { safeI18nHtml } from 'src/components/shared/i18nRichText'
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslation(lang)
 
-const MONTHS_ES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
-const MONTHS_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+const MONTHS_ES = [
+  'Ene',
+  'Feb',
+  'Mar',
+  'Abr',
+  'May',
+  'Jun',
+  'Jul',
+  'Ago',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dic'
+]
+const MONTHS_EN = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec'
+]
 
 function formatPeriod(dateStr: string): string {
   const [year, month] = dateStr.split('-')
@@ -25,36 +51,77 @@ function formatPeriod(dateStr: string): string {
       <p class="s-sub">{t('home').xp_subtitle}</p>
     </div>
 
-    <div class="xp flex flex-col relative" style="max-width:880px;margin:0 auto">
-      {experienceData.map((entry, i) => (
-        <div class={`xp-item grid gap-7 py-[22px] relative reveal${entry.period.end === null ? ' current' : ''}`} style="grid-template-columns:24px 1fr">
-          <div class="xp-bullet bg-bg border-2 border-accent w-6 h-6 rounded-full flex items-center justify-center mt-1 shrink-0">
-            <span class="core bg-accent w-2 h-2 rounded-full"></span>
-          </div>
-          <div class="xp-content">
-            <div class="flex items-baseline gap-3 mb-1 flex-wrap">
-              <span class="xp-period text-muted-custom font-mono text-[12px] uppercase tracking-[0.05em]">
-                {formatPeriod(entry.period.start)} — {
-                  entry.period.end === null
-                    ? <span class="text-accent font-medium">{lang === 'es' ? 'Actualidad' : 'Present'}</span>
-                    : formatPeriod(entry.period.end)
-                }
-              </span>
+    <div
+      class="xp relative flex flex-col"
+      style="max-width:880px;margin:0 auto"
+    >
+      {
+        experienceData.map((entry, i) => (
+          <div
+            class={`xp-item relative grid gap-7 py-[22px] reveal${entry.period.end === null ? ' current' : ''}`}
+            style="grid-template-columns:24px 1fr"
+          >
+            <div class="xp-bullet bg-bg border-accent mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2">
+              <span class="core bg-accent h-2 w-2 rounded-full" />
             </div>
-            <h4 class="text-[24px] font-bold tracking-[-0.02em] my-1">{entry.company}{i === experienceData.length - 1 && <span style="color:var(--muted);font-weight:500;font-size:0.7em;"> — {t('home').paused_label}</span>}</h4>
-            <div class="text-coral text-[15px] font-medium mb-[10px]">{entry.role}</div>
-            <p class="text-ink-soft text-[15px] leading-[1.65] max-w-[60ch] mb-3" set:html={safeI18nHtml(lang === 'es' ? entry.description_es : entry.description_en)} />
-            <div class="flex flex-wrap gap-[5px] font-mono text-[11px] text-muted-custom">
-              {entry.tech.map(t => <span class="border border-line py-[3px] px-2 rounded-full">{t}</span>)}
+            <div class="xp-content">
+              <div class="mb-1 flex flex-wrap items-baseline gap-3">
+                <span class="xp-period text-muted-custom font-mono text-[12px] tracking-[0.05em] uppercase">
+                  {formatPeriod(entry.period.start)} —{' '}
+                  {entry.period.end === null ? (
+                    <span class="text-accent font-medium">
+                      {lang === 'es' ? 'Actualidad' : 'Present'}
+                    </span>
+                  ) : (
+                    formatPeriod(entry.period.end)
+                  )}
+                </span>
+              </div>
+              <h4 class="my-1 text-[24px] font-bold tracking-[-0.02em]">
+                {entry.company}
+                {i === experienceData.length - 1 && (
+                  <span style="color:var(--muted);font-weight:500;font-size:0.7em;">
+                    {' '}
+                    — {t('home').paused_label}
+                  </span>
+                )}
+              </h4>
+              <div class="text-coral mb-[10px] text-[15px] font-medium">
+                {entry.role}
+              </div>
+              <p
+                class="text-ink-soft mb-3 max-w-[60ch] text-[15px] leading-[1.65]"
+                set:html={safeI18nHtml(
+                  lang === 'es' ? entry.description_es : entry.description_en
+                )}
+              />
+              <div class="text-muted-custom flex flex-wrap gap-[5px] font-mono text-[11px]">
+                {entry.tech.map((t) => (
+                  <span class="border-line rounded-full border px-2 py-[3px]">
+                    {t}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))
+      }
     </div>
   </div>
 </section>
 
 <style>
-  .xp::before { content: ""; position: absolute; left: 11px; top: 18px; bottom: 18px; width: 2px; background: linear-gradient(to bottom, var(--accent), transparent 90%); opacity: .4; }
-  .xp-item.current .xp-bullet .core { box-shadow: 0 0 0 5px color-mix(in oklab, var(--accent) 30%, transparent); }
+  .xp::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 18px;
+    bottom: 18px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), transparent 90%);
+    opacity: 0.4;
+  }
+  .xp-item.current .xp-bullet .core {
+    box-shadow: 0 0 0 5px color-mix(in oklab, var(--accent) 30%, transparent);
+  }
 </style>

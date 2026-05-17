@@ -10,62 +10,147 @@ const lang = getLangFromUrl(Astro.url)
 const t = useTranslation(lang)
 
 const VALID_ICONS = new Set<string>([
-  'javascript','ruby','typescript','python','sql','rails','react','tailwind',
-  'astro','vue','node','postgres','aws','selenium','git','docker',
-  'elasticsearch','lambda','dynamodb','redux','gpt'
+  'javascript',
+  'ruby',
+  'typescript',
+  'python',
+  'sql',
+  'rails',
+  'react',
+  'tailwind',
+  'astro',
+  'vue',
+  'node',
+  'postgres',
+  'aws',
+  'selenium',
+  'git',
+  'docker',
+  'elasticsearch',
+  'lambda',
+  'dynamodb',
+  'redux',
+  'gpt'
 ])
 ---
 
 <projects-section>
-<section class="s" id="projects">
-  <div class="wrap">
-    <div class="s-head reveal">
-      <span class="s-eyebrow">{t('home').projects_eyebrow}</span>
-      <h2 class="s-title" set:html={safeI18nHtml(t('home').projects_title)} />
-      <p class="s-sub">{t('home').projects_subtitle}</p>
-    </div>
+  <section class="s" id="projects">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <span class="s-eyebrow">{t('home').projects_eyebrow}</span>
+        <h2 class="s-title" set:html={safeI18nHtml(t('home').projects_title)} />
+        <p class="s-sub">{t('home').projects_subtitle}</p>
+      </div>
 
-    <div class="projects grid grid-cols-2 gap-6 max-[720px]:grid-cols-1">
-      {projects.map(project => {
-        const href = project.demo ?? project.githubUrl ?? '#'
-        const description = lang === 'es' ? project.description_es : project.description_en
-        return (
-          <a class="project bg-bg-2 border border-line text-ink rounded-[20px] overflow-hidden flex flex-col transition-[transform,border-color,box-shadow] duration-300 ease-[ease] reveal relative [transform-style:preserve-3d] [will-change:transform]" href={href} target="_blank" rel="noopener noreferrer">
-            <span class="project-glow" aria-hidden="true"></span>
-            <div class="project-img bg-bg-3 relative overflow-hidden aspect-[16/10]">
-              <img src={`/img/projects/${project.image}.webp`} alt={project.title} loading="lazy" class="w-full h-full object-cover transition-transform duration-[600ms] ease-[ease]" />
-            </div>
-            <div class="project-body flex flex-col flex-1 px-6 pt-6 pb-[26px] relative">
-              <div class="flex justify-between items-baseline gap-3 mb-2">
-                <h3 class="text-[22px] font-bold tracking-[-0.02em]">{project.title}</h3>
-              </div>
-              <p class="text-muted-custom text-[14.5px] leading-[1.6] mb-[18px] flex-1">{description}</p>
-              <div class="project-foot flex justify-between items-center gap-3">
-                <div class="flex flex-wrap gap-[5px] items-center">
-                  {project.stack.map(s => (
-                    VALID_ICONS.has(s.icon)
-                      ? <span title={s.tooltip} class="inline-flex items-center"><Icon name={s.icon as IconType} /></span>
-                      : <span class="stack-text text-ink-soft border border-line font-mono text-[10.5px] py-[3px] px-2 rounded-full bg-[color-mix(in_oklab,var(--bg)_70%,transparent)]">{s.tooltip}</span>
-                  ))}
+      <div class="projects grid grid-cols-2 gap-6 max-[720px]:grid-cols-1">
+        {
+          projects.map((project) => {
+            const href = project.demo ?? project.githubUrl ?? '#'
+            const description =
+              lang === 'es' ? project.description_es : project.description_en
+            return (
+              <a
+                class="project bg-bg-2 border-line text-ink reveal relative flex flex-col overflow-hidden rounded-[20px] border transition-[transform,border-color,box-shadow] duration-300 ease-[ease] [will-change:transform] [transform-style:preserve-3d]"
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="project-glow" aria-hidden="true" />
+                <div class="project-img bg-bg-3 relative aspect-[16/10] overflow-hidden">
+                  <img
+                    src={`/img/projects/${project.image}.webp`}
+                    alt={project.title}
+                    loading="lazy"
+                    class="h-full w-full object-cover transition-transform duration-[600ms] ease-[ease]"
+                  />
                 </div>
-                <span class="project-link text-accent inline-flex items-center gap-[6px] font-mono text-[12px] whitespace-nowrap">{t('projects').live_preview} <span class="arrow transition-transform duration-200">↗</span></span>
-              </div>
-            </div>
-          </a>
-        )
-      })}
+                <div class="project-body relative flex flex-1 flex-col px-6 pt-6 pb-[26px]">
+                  <div class="mb-2 flex items-baseline justify-between gap-3">
+                    <h3 class="text-[22px] font-bold tracking-[-0.02em]">
+                      {project.title}
+                    </h3>
+                  </div>
+                  <p class="text-muted-custom mb-[18px] flex-1 text-[14.5px] leading-[1.6]">
+                    {description}
+                  </p>
+                  <div class="project-foot flex items-center justify-between gap-3">
+                    <div class="flex flex-wrap items-center gap-[5px]">
+                      {project.stack.map((s) =>
+                        VALID_ICONS.has(s.icon) ? (
+                          <span
+                            title={s.tooltip}
+                            class="inline-flex items-center"
+                          >
+                            <Icon name={s.icon as IconType} />
+                          </span>
+                        ) : (
+                          <span class="stack-text text-ink-soft border-line rounded-full border bg-[color-mix(in_oklab,var(--bg)_70%,transparent)] px-2 py-[3px] font-mono text-[10.5px]">
+                            {s.tooltip}
+                          </span>
+                        )
+                      )}
+                    </div>
+                    <span class="project-link text-accent inline-flex items-center gap-[6px] font-mono text-[12px] whitespace-nowrap">
+                      {t('projects').live_preview}{' '}
+                      <span class="arrow transition-transform duration-200">
+                        ↗
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </a>
+            )
+          })
+        }
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 </projects-section>
 
 <style>
-  .project:hover { transform: translateY(-6px); border-color: color-mix(in oklab, var(--accent) 40%, var(--line)); box-shadow: 0 24px 50px rgba(0,0,0,.3); }
-  .project-glow { position: absolute; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(280px circle at 50% 0%, color-mix(in oklab, var(--accent) 12%, transparent), transparent 70%); opacity: .45; transition: opacity .25s ease; }
-  .project-glow.is-glow-active { background: radial-gradient(280px circle at var(--glow-x, 50%) var(--glow-y, 50%), color-mix(in oklab, var(--accent) 22%, transparent), transparent 68%); opacity: 1; }
-  .project-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(11,12,16,.55), transparent 40%); }
-  .project:hover .project-img img { transform: scale(1.04); }
-  .project:hover .project-link .arrow { transform: translate(3px,-3px); }
+  .project:hover {
+    transform: translateY(-6px);
+    border-color: color-mix(in oklab, var(--accent) 40%, var(--line));
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.3);
+  }
+  .project-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(
+      280px circle at 50% 0%,
+      color-mix(in oklab, var(--accent) 12%, transparent),
+      transparent 70%
+    );
+    opacity: 0.45;
+    transition: opacity 0.25s ease;
+  }
+  .project-glow.is-glow-active {
+    background: radial-gradient(
+      280px circle at var(--glow-x, 50%) var(--glow-y, 50%),
+      color-mix(in oklab, var(--accent) 22%, transparent),
+      transparent 68%
+    );
+    opacity: 1;
+  }
+  .project-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(11, 12, 16, 0.55),
+      transparent 40%
+    );
+  }
+  .project:hover .project-img img {
+    transform: scale(1.04);
+  }
+  .project:hover .project-link .arrow {
+    transform: translate(3px, -3px);
+  }
 </style>
 
 <script>
@@ -79,14 +164,20 @@ const VALID_ICONS = new Set<string>([
       this.bindCards()
     }
 
-    disconnectedCallback() { this.cleanup() }
+    disconnectedCallback() {
+      this.cleanup()
+    }
 
     private bindCards() {
-      const motionDisabled = window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.matchMedia('(hover: none)').matches
+      const motionDisabled =
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+        window.matchMedia('(hover: none)').matches
 
       this.querySelectorAll<HTMLElement>('.project').forEach((card) => {
         const glow = card.querySelector<HTMLElement>('.project-glow')
-        this.cleanupCallbacks.push(glow ? initPointerGlow(card, glow) : () => {})
+        this.cleanupCallbacks.push(
+          glow ? initPointerGlow(card, glow) : () => {}
+        )
         if (motionDisabled) return
 
         const onPointerMove = (event: PointerEvent) => {
@@ -95,7 +186,9 @@ const VALID_ICONS = new Set<string>([
           const y = (event.clientY - r.top) / r.height - 0.5
           card.style.transform = `translateY(-6px) rotateX(${(-y * 4).toFixed(2)}deg) rotateY(${(x * 6).toFixed(2)}deg)`
         }
-        const onPointerLeave = () => { card.style.transform = '' }
+        const onPointerLeave = () => {
+          card.style.transform = ''
+        }
 
         card.addEventListener('pointermove', onPointerMove, { passive: true })
         card.addEventListener('pointerleave', onPointerLeave, { passive: true })
@@ -113,5 +206,6 @@ const VALID_ICONS = new Set<string>([
     }
   }
 
-  if (!customElements.get('projects-section')) customElements.define('projects-section', ProjectsSectionElement)
+  if (!customElements.get('projects-section'))
+    customElements.define('projects-section', ProjectsSectionElement)
 </script>

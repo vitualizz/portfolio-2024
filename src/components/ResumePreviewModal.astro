@@ -1,7 +1,9 @@
 ---
 import { useTranslation } from 'src/i18n/utils'
 
-interface Props { lang: 'es' | 'en' }
+interface Props {
+  lang: 'es' | 'en'
+}
 const { lang } = Astro.props
 const t = useTranslation(lang)
 ---
@@ -15,108 +17,156 @@ const t = useTranslation(lang)
   hidden
   data-resume-modal
 >
-  <div class="resume-modal__backdrop absolute inset-0 bg-[rgba(0,0,0,0.65)]" data-resume-close></div>
-  <div class="resume-modal__panel relative z-[1] grid h-[min(94vh,1200px)] w-[min(1400px,100%)] grid-rows-[auto_1fr_auto] gap-3 rounded-2xl border border-line bg-bg-2 p-4 max-lg:h-[95vh] max-lg:w-full max-sm:h-screen max-sm:w-screen max-sm:max-h-none max-sm:gap-[10px] max-sm:rounded-none max-sm:border-x-0 max-sm:border-b-0 max-sm:p-[10px]" role="document">
+  <div
+    class="resume-modal__backdrop absolute inset-0 bg-[rgba(0,0,0,0.65)]"
+    data-resume-close
+  >
+  </div>
+  <div
+    class="resume-modal__panel border-line bg-bg-2 relative z-[1] grid h-[min(94vh,1200px)] w-[min(1400px,100%)] grid-rows-[auto_1fr_auto] gap-3 rounded-2xl border p-4 max-lg:h-[95vh] max-lg:w-full max-sm:h-screen max-sm:max-h-none max-sm:w-screen max-sm:gap-[10px] max-sm:rounded-none max-sm:border-x-0 max-sm:border-b-0 max-sm:p-[10px]"
+    role="document"
+  >
     <div class="resume-modal__header flex items-center justify-between gap-3">
-      <h3 id="resumePreviewTitle" class="m-0 text-[20px] text-ink max-sm:text-[16px]">{t('resume_actions').preview_modal_title}</h3>
-      <button type="button" class="min-h-9 min-w-9 cursor-pointer rounded-[10px] border border-line bg-bg text-ink" aria-label={t('resume_actions').preview_modal_close_aria} data-resume-close>
+      <h3
+        id="resumePreviewTitle"
+        class="text-ink m-0 text-[20px] max-sm:text-[16px]"
+      >
+        {t('resume_actions').preview_modal_title}
+      </h3>
+      <button
+        type="button"
+        class="border-line bg-bg text-ink min-h-9 min-w-9 cursor-pointer rounded-[10px] border"
+        aria-label={t('resume_actions').preview_modal_close_aria}
+        data-resume-close
+      >
         ✕
       </button>
     </div>
 
-    <iframe title={t('resume_actions').preview_modal_title} data-resume-iframe class="resume-modal__iframe h-full min-h-0 w-full rounded-xl border-0 bg-white"></iframe>
+    <iframe
+      title={t('resume_actions').preview_modal_title}
+      data-resume-iframe
+      class="resume-modal__iframe h-full min-h-0 w-full rounded-xl border-0 bg-white"
+    ></iframe>
 
     <p class="resume-modal__fallback m-0" data-resume-fallback hidden>
-      <a class="font-semibold text-accent" data-resume-fallback-link target="_blank" rel="noopener noreferrer">{t('resume_actions').preview_modal_fallback}</a>
+      <a
+        class="text-accent font-semibold"
+        data-resume-fallback-link
+        target="_blank"
+        rel="noopener noreferrer"
+        >{t('resume_actions').preview_modal_fallback}</a
+      >
     </p>
   </div>
 </section>
 
 <style>
-  .resume-modal[hidden] { display: none !important; }
+  .resume-modal[hidden] {
+    display: none !important;
+  }
 </style>
 
 <script>
-  const CV_PATH_BY_LANG = { es: '/cv/es.pdf', en: '/cv/en.pdf' } as const;
+  const CV_PATH_BY_LANG = { es: '/cv/es.pdf', en: '/cv/en.pdf' } as const
 
   function initResumePreviewModal() {
-    const modal = document.querySelector<HTMLElement>('[data-resume-modal]');
-    if (!modal || modal.dataset.ready === 'true') return;
-    modal.dataset.ready = 'true';
+    const modal = document.querySelector<HTMLElement>('[data-resume-modal]')
+    if (!modal || modal.dataset.ready === 'true') return
+    modal.dataset.ready = 'true'
 
-    const iframe = modal.querySelector<HTMLIFrameElement>('[data-resume-iframe]');
-    const fallback = modal.querySelector<HTMLElement>('[data-resume-fallback]');
-    const fallbackLink = modal.querySelector<HTMLAnchorElement>('[data-resume-fallback-link]');
-    const closeButtons = modal.querySelectorAll<HTMLElement>('[data-resume-close]');
-    let lastTrigger: HTMLElement | null = null;
+    const iframe = modal.querySelector<HTMLIFrameElement>(
+      '[data-resume-iframe]'
+    )
+    const fallback = modal.querySelector<HTMLElement>('[data-resume-fallback]')
+    const fallbackLink = modal.querySelector<HTMLAnchorElement>(
+      '[data-resume-fallback-link]'
+    )
+    const closeButtons = modal.querySelectorAll<HTMLElement>(
+      '[data-resume-close]'
+    )
+    let lastTrigger: HTMLElement | null = null
 
-    const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const focusableSelector =
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
     // Central unlock routine: every close path must pass here.
     const unlockAndCloseModal = () => {
-      modal.hidden = true;
-      document.body.style.overflow = '';
-      lastTrigger?.focus();
-    };
+      modal.hidden = true
+      document.body.style.overflow = ''
+      lastTrigger?.focus()
+    }
 
     const trapFocus = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        event.preventDefault();
-        unlockAndCloseModal();
-        return;
+        event.preventDefault()
+        unlockAndCloseModal()
+        return
       }
-      if (event.key !== 'Tab') return;
+      if (event.key !== 'Tab') return
 
-      const focusables = Array.from(modal.querySelectorAll<HTMLElement>(focusableSelector));
-      if (focusables.length === 0) return;
+      const focusables = Array.from(
+        modal.querySelectorAll<HTMLElement>(focusableSelector)
+      )
+      if (focusables.length === 0) return
 
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
+      const first = focusables[0]
+      const last = focusables[focusables.length - 1]
 
       if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
+        event.preventDefault()
+        last.focus()
       } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
+        event.preventDefault()
+        first.focus()
       }
-    };
+    }
 
-    modal.addEventListener('keydown', trapFocus);
-    closeButtons.forEach((btn) => btn.addEventListener('click', unlockAndCloseModal));
-    modal.addEventListener('resume:close', unlockAndCloseModal as EventListener);
+    modal.addEventListener('keydown', trapFocus)
+    closeButtons.forEach((btn) =>
+      btn.addEventListener('click', unlockAndCloseModal)
+    )
+    modal.addEventListener('resume:close', unlockAndCloseModal as EventListener)
 
     window.addEventListener('resume:preview', (event: Event) => {
-      const detail = (event as CustomEvent).detail as { lang?: 'es' | 'en'; triggerId?: string };
-      const lang = detail?.lang === 'en' ? 'en' : 'es';
-      const src = CV_PATH_BY_LANG[lang];
-      lastTrigger = detail?.triggerId ? document.getElementById(detail.triggerId) : null;
+      const detail = (event as CustomEvent).detail as {
+        lang?: 'es' | 'en'
+        triggerId?: string
+      }
+      const lang = detail?.lang === 'en' ? 'en' : 'es'
+      const src = CV_PATH_BY_LANG[lang]
+      lastTrigger = detail?.triggerId
+        ? document.getElementById(detail.triggerId)
+        : null
 
-      if (iframe) iframe.src = src;
+      if (iframe) iframe.src = src
       if (fallback && fallbackLink) {
-        fallback.hidden = true;
-        fallbackLink.href = src;
+        fallback.hidden = true
+        fallbackLink.href = src
       }
 
       if (iframe && fallback) {
-        const onError = () => { fallback.hidden = false; };
-        iframe.onerror = onError;
+        const onError = () => {
+          fallback.hidden = false
+        }
+        iframe.onerror = onError
         window.setTimeout(() => {
-          if (iframe.contentDocument?.body?.childElementCount === 0) fallback.hidden = false;
-        }, 1800);
+          if (iframe.contentDocument?.body?.childElementCount === 0)
+            fallback.hidden = false
+        }, 1800)
       }
 
-      modal.hidden = false;
-      document.body.style.overflow = 'hidden';
-      const firstFocusable = modal.querySelector<HTMLElement>(focusableSelector);
-      firstFocusable?.focus();
-    });
+      modal.hidden = false
+      document.body.style.overflow = 'hidden'
+      const firstFocusable = modal.querySelector<HTMLElement>(focusableSelector)
+      firstFocusable?.focus()
+    })
 
     modal.addEventListener('close', () => {
-      document.body.style.overflow = '';
-    });
+      document.body.style.overflow = ''
+    })
   }
 
-  initResumePreviewModal();
-  document.addEventListener('astro:page-load', initResumePreviewModal);
+  initResumePreviewModal()
+  document.addEventListener('astro:page-load', initResumePreviewModal)
 </script>

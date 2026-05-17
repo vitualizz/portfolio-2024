@@ -13,83 +13,83 @@ const t = useTranslation(lang)
     class="topbar sticky top-0 z-30"
     style="background:color-mix(in oklab, var(--bg) 75%, transparent);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid color-mix(in oklab, var(--line) 80%, transparent)"
   >
-  <div
-    class="topbar-inner mx-auto flex h-[72px] items-center justify-between px-[var(--gutter)]"
-    style="max-width:var(--max)"
-  >
-    <a
-      class="brand font-display text-ink inline-flex items-center gap-[10px] text-[17px] font-bold tracking-[-0.02em]"
-      href={`/${lang}`}
+    <div
+      class="topbar-inner mx-auto flex h-[72px] items-center justify-between px-[var(--gutter)]"
+      style="max-width:var(--max)"
     >
-      <span
-        class="blob bg-accent h-7 w-7"
-        style="border-radius:56% 44% 40% 60% / 60% 50% 50% 40%;box-shadow:0 0 24px color-mix(in oklab, var(--accent) 30%, transparent)"
-      ></span>
-      <span>vitualizz</span>
-    </a>
-
-    <nav class="nav-links flex gap-9 text-[15px] font-medium">
       <a
-        href={withLangPath(lang, `#${SECTION_IDS.top}`)}
-        class="active"
-        data-nav>{t('nav').presentation}</a
+        class="brand font-display text-ink inline-flex items-center gap-[10px] text-[17px] font-bold tracking-[-0.02em]"
+        href={`/${lang}`}
       >
-      <a href={withLangPath(lang, `#${SECTION_IDS.about}`)} data-nav
-        >{t('nav').about_me}</a
-      >
-      <a href={withLangPath(lang, `#${SECTION_IDS.ai}`)} data-nav
-        >{t('nav').ask_ai}</a
-      >
-      <a href={withLangPath(lang, `#${SECTION_IDS.projects}`)} data-nav
-        >{t('nav').projects}</a
-      >
-      <a href={withLangPath(lang, `#${SECTION_IDS.xp}`)} data-nav
-        >{t('nav').work_experience}</a
-      >
-      <a href={withLangPath(lang, `#${SECTION_IDS.blog}`)} data-nav
-        >{t('nav').blog}</a
-      >
-      <a href={withLangPath(lang, `#${SECTION_IDS.contact}`)} data-nav
-        >{t('nav').contact_me}</a
-      >
-    </nav>
+        <span
+          class="blob bg-accent h-7 w-7"
+          style="border-radius:56% 44% 40% 60% / 60% 50% 50% 40%;box-shadow:0 0 24px color-mix(in oklab, var(--accent) 30%, transparent)"
+        ></span>
+        <span>vitualizz</span>
+      </a>
 
-    <div class="nav-right flex items-center gap-[14px]">
-      <ResumeActions
-        lang={lang}
-        variant="navbar"
-        triggerId="resume-actions-navbar"
-      />
-      <details class="lang-menu relative">
-        <summary
-          class="pill border-line text-ink inline-flex cursor-pointer list-none items-center gap-2 rounded-full border px-4 py-[9px] text-[14px] font-medium transition-[border-color,background,transform] duration-200 hover:border-accent hover:-translate-y-px"
-          aria-label={t('nav').switch_language}
-          style="background:color-mix(in oklab, var(--bg-2) 80%, transparent)"
+      <nav class="nav-links flex gap-9 text-[15px] font-medium">
+        <a
+          href={withLangPath(lang, `#${SECTION_IDS.top}`)}
+          class="active"
+          data-nav>{t('nav').presentation}</a
         >
-          {lang.toUpperCase()}
-        </summary>
-        <div
-          class="border-line bg-bg-2 absolute top-[calc(100%+8px)] right-0 z-20 min-w-[130px] rounded-[12px] border p-1"
+        <a href={withLangPath(lang, `#${SECTION_IDS.about}`)} data-nav
+          >{t('nav').about_me}</a
         >
-          {
-            LANG_CODES.map((code) => (
-              <a
-                href={withLangPath(code)}
-                class={`block rounded-[8px] px-3 py-2 text-[13px] ${code === lang ? 'text-accent' : 'text-ink-soft hover:text-ink'}`}
-                aria-label={t('nav').language_option.replace(
-                  '{language}',
-                  code === 'es' ? 'Español' : 'English'
-                )}
-              >
-                {code === 'es' ? 'Español' : 'English'}
-              </a>
-            ))
-          }
-        </div>
-      </details>
-      <ThemeToggle />
+        <a href={withLangPath(lang, `#${SECTION_IDS.ai}`)} data-nav
+          >{t('nav').ask_ai}</a
+        >
+        <a href={withLangPath(lang, `#${SECTION_IDS.projects}`)} data-nav
+          >{t('nav').projects}</a
+        >
+        <a href={withLangPath(lang, `#${SECTION_IDS.xp}`)} data-nav
+          >{t('nav').work_experience}</a
+        >
+        <a href={withLangPath(lang, `#${SECTION_IDS.blog}`)} data-nav
+          >{t('nav').blog}</a
+        >
+        <a href={withLangPath(lang, `#${SECTION_IDS.contact}`)} data-nav
+          >{t('nav').contact_me}</a
+        >
+      </nav>
+
+      <div class="nav-right flex items-center gap-[14px]">
+        <ResumeActions
+          lang={lang}
+          variant="navbar"
+          triggerId="resume-actions-navbar"
+        />
+        <details class="lang-menu relative">
+          <summary
+            class="pill border-line text-ink hover:border-accent inline-flex cursor-pointer list-none items-center gap-2 rounded-full border px-4 py-[9px] text-[14px] font-medium transition-[border-color,background,transform] duration-200 hover:-translate-y-px"
+            aria-label={t('nav').switch_language}
+            style="background:color-mix(in oklab, var(--bg-2) 80%, transparent)"
+          >
+            {lang.toUpperCase()}
+          </summary>
+          <div
+            class="border-line bg-bg-2 absolute top-[calc(100%+8px)] right-0 z-20 min-w-[130px] rounded-[12px] border p-1"
+          >
+            {
+              LANG_CODES.map((code) => (
+                <a
+                  href={withLangPath(code)}
+                  class={`block rounded-[8px] px-3 py-2 text-[13px] ${code === lang ? 'text-accent' : 'text-ink-soft hover:text-ink'}`}
+                  aria-label={t('nav').language_option.replace(
+                    '{language}',
+                    code === 'es' ? 'Español' : 'English'
+                  )}
+                >
+                  {code === 'es' ? 'Español' : 'English'}
+                </a>
+              ))
+            }
+          </div>
+        </details>
+        <ThemeToggle />
+      </div>
     </div>
-  </div>
   </header>
 </portfolio-navbar>
 
@@ -145,7 +145,9 @@ const t = useTranslation(lang)
     private onScroll = () => this.updateActive()
 
     connectedCallback() {
-      this.navLinks = Array.from(this.querySelectorAll<HTMLAnchorElement>('[data-nav]'))
+      this.navLinks = Array.from(
+        this.querySelectorAll<HTMLAnchorElement>('[data-nav]')
+      )
       this.sectionMap = this.navLinks
         .map((a) => ({
           a,
@@ -173,7 +175,9 @@ const t = useTranslation(lang)
         if (item.target && item.target.offsetTop <= y) active = item
       }
 
-      this.navLinks.forEach((a) => a.classList.toggle('active', a === active?.a))
+      this.navLinks.forEach((a) =>
+        a.classList.toggle('active', a === active?.a)
+      )
     }
   }
 

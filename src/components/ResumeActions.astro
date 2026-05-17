@@ -14,7 +14,10 @@ const menuId = `${triggerId}-menu`
 const sourceId = variant
 ---
 
-<div class={`resume-actions resume-actions--${variant} relative`} data-resume-actions-root>
+<div
+  class={`resume-actions resume-actions--${variant} relative`}
+  data-resume-actions-root
+>
   <button
     class={`resume-actions__trigger ${variant === 'hero' ? 'icon-btn w-12 h-12 rounded-[14px] bg-bg-2 border border-line inline-flex items-center justify-center text-ink cursor-pointer' : variant === 'navbar' ? 'pill inline-flex items-center gap-2 px-4 py-[9px] border border-line rounded-full text-[14px] font-medium text-ink' : 'btn-ghost inline-flex items-center gap-[10px] px-[26px] py-[14px] border border-line text-ink rounded-full text-[15px] font-medium hover:border-accent hover:-translate-y-0.5'}`}
     id={triggerId}
@@ -25,23 +28,49 @@ const sourceId = variant
     aria-label={t('resume_actions').menu_aria}
     data-resume-trigger
   >
-    {variant === 'hero' ? (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[22px] h-[22px]"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
-    ) : (
-      <>
-        <span>{t('nav').resume_label}</span>
-        <span aria-hidden="true">▾</span>
-      </>
-    )}
+    {
+      variant === 'hero' ? (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-[22px] w-[22px]"
+        >
+          <>
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14,2 14,8 20,8" />
+            <line x1="8" y1="13" x2="16" y2="13" />
+            <line x1="8" y1="17" x2="13" y2="17" />
+          </>
+        </svg>
+      ) : (
+        <>
+          <span>{t('nav').resume_label}</span>
+          <span aria-hidden="true">▾</span>
+        </>
+      )
+    }
   </button>
 
-  <div class="resume-actions__menu-wrap absolute z-40 top-[calc(100%+8px)] right-0" data-resume-menu-wrap>
-    <ul id={menuId} class="resume-actions__menu list-none m-0 p-[6px] min-w-[160px] rounded-[12px] border border-line bg-bg-2" role="menu" hidden data-resume-menu>
+  <div
+    class="resume-actions__menu-wrap absolute top-[calc(100%+8px)] right-0 z-40"
+    data-resume-menu-wrap
+  >
+    <ul
+      id={menuId}
+      class="resume-actions__menu border-line bg-bg-2 m-0 min-w-[160px] list-none rounded-[12px] border p-[6px]"
+      role="menu"
+      hidden
+      data-resume-menu
+    >
       <li role="none">
         <button
           type="button"
           role="menuitem"
-          class="resume-actions__item w-full border-0 bg-transparent text-left text-ink px-3 py-[10px] rounded-[8px] block font-[inherit] no-underline cursor-pointer"
+          class="resume-actions__item text-ink block w-full cursor-pointer rounded-[8px] border-0 bg-transparent px-3 py-[10px] text-left font-[inherit] no-underline"
           data-resume-preview
           data-lang={lang}
           data-source={sourceId}
@@ -51,7 +80,11 @@ const sourceId = variant
         </button>
       </li>
       <li role="none">
-        <a role="menuitem" class="resume-actions__item w-full border-0 bg-transparent text-left text-ink px-3 py-[10px] rounded-[8px] block font-[inherit] no-underline cursor-pointer" href={CV_PATH_BY_LANG[lang]}>
+        <a
+          role="menuitem"
+          class="resume-actions__item text-ink block w-full cursor-pointer rounded-[8px] border-0 bg-transparent px-3 py-[10px] text-left font-[inherit] no-underline"
+          href={CV_PATH_BY_LANG[lang]}
+        >
           {t('resume_actions').download}
         </a>
       </li>
@@ -60,7 +93,10 @@ const sourceId = variant
 </div>
 
 <style>
-  .resume-actions--hero .resume-actions__menu-wrap { left: 0; right: auto; }
+  .resume-actions--hero .resume-actions__menu-wrap {
+    left: 0;
+    right: auto;
+  }
   .resume-actions__item:hover,
   .resume-actions__item:focus-visible {
     background: color-mix(in oklab, var(--accent) 18%, var(--bg-2));
@@ -70,67 +106,74 @@ const sourceId = variant
 
 <script>
   function initResumeActions() {
-    document.querySelectorAll<HTMLElement>('[data-resume-actions-root]').forEach((root) => {
-      if (root.dataset.ready === 'true') return;
-      root.dataset.ready = 'true';
+    document
+      .querySelectorAll<HTMLElement>('[data-resume-actions-root]')
+      .forEach((root) => {
+        if (root.dataset.ready === 'true') return
+        root.dataset.ready = 'true'
 
-      const trigger = root.querySelector<HTMLButtonElement>('[data-resume-trigger]');
-      const menu = root.querySelector<HTMLElement>('[data-resume-menu]');
-      const previewBtn = root.querySelector<HTMLButtonElement>('[data-resume-preview]');
+        const trigger = root.querySelector<HTMLButtonElement>(
+          '[data-resume-trigger]'
+        )
+        const menu = root.querySelector<HTMLElement>('[data-resume-menu]')
+        const previewBtn = root.querySelector<HTMLButtonElement>(
+          '[data-resume-preview]'
+        )
 
-      if (!trigger || !menu || !previewBtn) return;
+        if (!trigger || !menu || !previewBtn) return
 
-      const closeMenu = () => {
-        menu.hidden = true;
-        trigger.setAttribute('aria-expanded', 'false');
-      };
-
-      const openMenu = () => {
-        menu.hidden = false;
-        trigger.setAttribute('aria-expanded', 'true');
-      };
-
-      trigger.addEventListener('click', () => {
-        if (menu.hidden) openMenu();
-        else closeMenu();
-      });
-
-      trigger.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          openMenu();
-          const firstItem = menu.querySelector<HTMLElement>('[role="menuitem"]');
-          firstItem?.focus();
+        const closeMenu = () => {
+          menu.hidden = true
+          trigger.setAttribute('aria-expanded', 'false')
         }
-        if (event.key === 'Escape') {
-          closeMenu();
+
+        const openMenu = () => {
+          menu.hidden = false
+          trigger.setAttribute('aria-expanded', 'true')
         }
-      });
 
-      menu.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-          event.preventDefault();
-          closeMenu();
-          trigger.focus();
-        }
-      });
+        trigger.addEventListener('click', () => {
+          if (menu.hidden) openMenu()
+          else closeMenu()
+        })
 
-      document.addEventListener('click', (event) => {
-        if (!root.contains(event.target as Node)) closeMenu();
-      });
+        trigger.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault()
+            openMenu()
+            const firstItem =
+              menu.querySelector<HTMLElement>('[role="menuitem"]')
+            firstItem?.focus()
+          }
+          if (event.key === 'Escape') {
+            closeMenu()
+          }
+        })
 
-      previewBtn.addEventListener('click', () => {
-        const detail = {
-          lang: previewBtn.dataset.lang,
-          sourceId: previewBtn.dataset.source,
-          triggerId: previewBtn.dataset.triggerId,
-        };
-        window.dispatchEvent(new CustomEvent('resume:preview', { detail }));
-        closeMenu();
-      });
-    });
+        menu.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            event.preventDefault()
+            closeMenu()
+            trigger.focus()
+          }
+        })
+
+        document.addEventListener('click', (event) => {
+          if (!root.contains(event.target as Node)) closeMenu()
+        })
+
+        previewBtn.addEventListener('click', () => {
+          const detail = {
+            lang: previewBtn.dataset.lang,
+            sourceId: previewBtn.dataset.source,
+            triggerId: previewBtn.dataset.triggerId
+          }
+          window.dispatchEvent(new CustomEvent('resume:preview', { detail }))
+          closeMenu()
+        })
+      })
   }
 
-  initResumeActions();
-  document.addEventListener('astro:page-load', initResumeActions);
+  initResumeActions()
+  document.addEventListener('astro:page-load', initResumeActions)
 </script>

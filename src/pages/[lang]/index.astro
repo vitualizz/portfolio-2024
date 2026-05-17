@@ -22,7 +22,7 @@ export function getStaticPaths() {
 const lang = getLangFromUrl(Astro.url)
 const allPosts = await getCollection('blog')
 const posts = allPosts
-  .filter(p => p.data.lang === lang)
+  .filter((p) => p.data.lang === lang)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 ---
 

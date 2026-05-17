@@ -10,6 +10,7 @@ coverLink: https://rubyonrails.org
 shortDescription: In this article, I'll show you some tips to optimize your queries in Rails. These tips will help you improve your application's performance and write more efficient queries.
 longDescription: In this article, I'll show you some tips to optimize your queries in Rails. These tips will help you improve your application's performance and write more efficient queries.
 ---
+
 # Tips to Optimize Your Rails Queries
 
 In this article, I'll show you some tips to optimize your queries in Rails. These tips will help you improve your application's performance and write more efficient queries.

@@ -10,6 +10,7 @@ coverLink: https://rubyonrails.org
 shortDescription: This article details good practices based on my experience to write clean, maintainable, and efficient Ruby code.
 longDescription: This article details good practices based on my experience to write clean, maintainable, and efficient Ruby code. Although some of these practices are specific to Ruby, many of them also apply to other programming languages.
 ---
+
 # Ruby Good Practices (and Rails)
 
 This article details good practices based on my experience to write clean, maintainable, and efficient Ruby code. Although some of these practices are specific to Ruby, many of them also apply to other programming languages.

@@ -41,7 +41,8 @@ const locale: LanguageLocale = {
     contact_download_cv: 'Descargar CV',
     paused_label: 'pausado',
     footer_location_line: 'Lima · UTC −5 · ES / EN',
-    quote_text: "El código es la parte fácil. <span class='hl'>Enviar producto que aguante</span> — y que el equipo entienda al volver el lunes — es el trabajo.",
+    quote_text:
+      "El código es la parte fácil. <span class='hl'>Enviar producto que aguante</span> — y que el equipo entienda al volver el lunes — es el trabajo.",
     stack_legend_core: 'Core',
     stack_legend_strong: 'Sólido',
     stack_legend_learn: 'Aprendiendo'
@@ -78,7 +79,8 @@ const locale: LanguageLocale = {
     stat_years: 'Años de exp.',
     stat_projects: 'Proyectos',
     stat_stack: 'Full Stack',
-    stack_footer: "→ alguien que prefiere <b>aprender una herramienta a fondo</b> que coleccionar 20 logos en el CV."
+    stack_footer:
+      '→ alguien que prefiere <b>aprender una herramienta a fondo</b> que coleccionar 20 logos en el CV.'
   },
   work_experience: {
     title: 'Experiencia',

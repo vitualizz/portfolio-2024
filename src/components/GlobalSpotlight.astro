@@ -12,13 +12,12 @@
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background:
-      radial-gradient(
-        560px circle at var(--page-glow-x, 50vw) var(--page-glow-y, 42vh),
-        color-mix(in oklab, var(--accent) 13%, transparent),
-        color-mix(in oklab, var(--coral) 5%, transparent) 38%,
-        transparent 72%
-      );
+    background: radial-gradient(
+      560px circle at var(--page-glow-x, 50vw) var(--page-glow-y, 42vh),
+      color-mix(in oklab, var(--accent) 13%, transparent),
+      color-mix(in oklab, var(--coral) 5%, transparent) 38%,
+      transparent 72%
+    );
     opacity: 0;
     transition: opacity 0.45s ease;
     will-change: opacity, background;
@@ -29,13 +28,12 @@
   }
 
   [data-theme='light'] .global-spotlight {
-    background:
-      radial-gradient(
-        520px circle at var(--page-glow-x, 50vw) var(--page-glow-y, 42vh),
-        color-mix(in oklab, var(--accent) 8%, transparent),
-        color-mix(in oklab, var(--coral) 3%, transparent) 42%,
-        transparent 74%
-      );
+    background: radial-gradient(
+      520px circle at var(--page-glow-x, 50vw) var(--page-glow-y, 42vh),
+      color-mix(in oklab, var(--accent) 8%, transparent),
+      color-mix(in oklab, var(--coral) 3%, transparent) 42%,
+      transparent 74%
+    );
   }
 
   [data-theme='light'] .global-spotlight.is-glow-active {
