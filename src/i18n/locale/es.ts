@@ -40,14 +40,22 @@ const locale: LanguageLocale = {
       'Si estás armando equipo y buscás a alguien que tome ownership de punta a punta, ordene arquitectura y sostenga entregas reales, hablemos. Me muevo cómodo entre producto, backend y negocio, y respondo en menos de 24 horas hábiles.',
     contact_download_cv: 'Descargar CV',
     paused_label: 'pausado',
-    footer_location_line: 'Lima · UTC −5 · ES / EN'
+    footer_location_line: 'Lima · UTC −5 · ES / EN',
+    quote_text: "El código es la parte fácil. <span class='hl'>Enviar producto que aguante</span> — y que el equipo entienda al volver el lunes — es el trabajo.",
+    stack_legend_core: 'Core',
+    stack_legend_strong: 'Sólido',
+    stack_legend_learn: 'Aprendiendo'
   },
   presentation: {
     hi: 'Hola, 🚀',
     i_am: "Soy <span class='hl text-nowrap'>Lee Palacios</span>",
     profession: 'Ingeniero de Software y amante de los gatos 🐱',
     description:
-      "<span class='hl'>+7 años</span> construyendo producto en startups de Latam, con foco en backend, arquitectura y decisiones que impactan negocio. Me gusta entrar a problemas complejos, bajar el ruido y convertirlos en entregas concretas. Hoy soy <strong class='text-ink'>founder de Inmology</strong>, donde diseño agentes de IA que automatizan operaciones inmobiliarias de punta a punta.",
+      "<span class='hl'>+7 años</span> entregando producto <strong class='text-ink'>end‑to‑end</strong> en startups LATAM. <strong class='text-ink'>API, base de datos, UI e infra</strong> — la cadena completa, sin pasar la pelota. TypeScript, React, Rails, Python, AWS. Cuando la feature lo pide, también agentes de IA en producción.",
+    description_ps:
+      'PD: mis tres gatos revisan cada PR antes que cualquier humano. Aún no me han aprobado un rebase --force.',
+    typewriter_words:
+      'Senior Fullstack Engineer|TypeScript · React · Rails · Python|De Postgres al pixel|AI Builder · LLM orchestration|Cat dad · 3 gatos',
     tagline:
       'Construyo sistemas que escalan, productos que se envían y equipos que avanzan.',
     cta_primary: 'Ver mis proyectos',
@@ -56,16 +64,21 @@ const locale: LanguageLocale = {
   about_me: {
     section_about_me: 'Acerca de mí',
     section_skills: 'Habilidades',
-    biography:
-      "Soy un <span class='hl-soft'>ingeniero de software</span> con mentalidad de ownership: entro al problema, lo desarmo, ordeno el sistema y lo llevo a producción. Me muevo cómodo entre <span class='hl'>JavaScript</span>, <span class='hl'>Ruby</span> y <span class='hl'>Postgres</span>, especialmente en backend, arquitectura y performance. Disfruto trabajar con equipos exigentes, alinear prioridades y convertir estrategia en entregas que se notan.",
+    biography: [
+      "Empecé a programar a los <span class='hl-soft'>12 años</span> abriendo el código de juegos para entender cómo funcionaban. A los <span class='hl-soft'>15 ya cobraba</span> por escribir software — antes de saber cómo se llamaba el oficio.",
+      "Desde entonces, mi carrera ha sido un recorrido por startups LATAM: de <strong class='text-ink'>developer</strong> a <strong class='text-ink'>Tech Lead</strong> a <strong class='text-ink'>Senior IC</strong>. Construí un sistema de campañas para influencers desde cero, optimicé una plataforma SaaS usada por miles de edificios, y refactorizé stacks que un equipo entero heredó sin documentación. Cada parada me dejó lo mismo: <span class='hl-soft'>producto que se envía</span>.",
+      "Hoy me defino como <strong class='text-ink'>Senior Fullstack Engineer</strong> con <strong class='text-ink'>7+ años</strong> de experiencia: entrego features <strong class='text-ink'>end-to-end</strong> — schema, API, UI, infra — sin pasar la pelota a otro equipo. En el último año sumé <span class='hl'>AI Builder</span> a la mochila: agentes y LLMs cuando la feature lo justifica, no por hype.",
+      "Caja de herramientas rápida: <strong class='text-ink'>TypeScript, React/React Native, Rails, Python, Postgres, AWS</strong>. El detalle vive en mi CV — ahí también está el resto del recorrido."
+    ],
     mini_note:
-      'Vivo en Lima con tres gatos (sí, ellos creen que son mis PMs), bastante mate/café y una obsesión sana por dejar los sistemas mejor de lo que los encontré.',
+      'Lima · ES nativo / EN fluido · tres gatos que aprueban mi código.',
     skills_section_frameworks: 'Frameworks y Bibliotecas',
     skills_section_others: 'Otros',
     skills_section_languages: 'Lenguajes',
     stat_years: 'Años de exp.',
     stat_projects: 'Proyectos',
-    stat_stack: 'Full Stack'
+    stat_stack: 'Full Stack',
+    stack_footer: "→ alguien que prefiere <b>aprender una herramienta a fondo</b> que coleccionar 20 logos en el CV."
   },
   work_experience: {
     title: 'Experiencia',

@@ -36,17 +36,25 @@ const locale: LanguageLocale = {
     contact_title:
       "Let's talk<br/>Tell me about your <em class='not-italic hl'>project</em> ✨",
     contact_subtitle:
-      'If your team needs someone who can take ownership end to end, shape architecture, and keep delivery moving, let’s talk. I work close to product, backend, and business outcomes, and I reply within 24 business hours.',
+      "If your team needs someone who can take ownership end to end, shape architecture, and keep delivery moving, let's talk. I work close to product, backend, and business outcomes, and I reply within 24 business hours.",
     contact_download_cv: 'Download CV',
     paused_label: 'paused',
-    footer_location_line: 'Lima · UTC −5 · ES / EN'
+    footer_location_line: 'Lima · UTC −5 · ES / EN',
+    quote_text: "Code is the easy part. <span class='hl'>Shipping product that holds</span> — and that the team understands coming back on Monday — is the work.",
+    stack_legend_core: 'Core',
+    stack_legend_strong: 'Solid',
+    stack_legend_learn: 'Learning'
   },
   presentation: {
     hi: 'Hi, 🚀',
     i_am: "I'm <span class='hl text-nowrap'>Lee Palacios</span>",
     profession: 'Software Engineer and cat lover 🐱',
     description:
-      "<span class='hl'>+7 years</span> building product in LatAm startups, focused on backend, architecture, and decisions that drive business outcomes. I enjoy jumping into complex problems, reducing noise, and turning them into concrete deliveries. Today I’m the <strong class='text-ink'>founder of Inmology</strong>, where I design AI agents that automate real-estate operations end to end.",
+      "<span class='hl'>+7 years</span> delivering <strong class='text-ink'>end‑to‑end</strong> product in LatAm startups. <strong class='text-ink'>API, database, UI and infra</strong> — the full chain, no ball-dropping. TypeScript, React, Rails, Python, AWS. When the feature calls for it, AI agents in production too.",
+    description_ps:
+      "PS: my three cats review every PR before any human does. They haven't approved a rebase --force yet.",
+    typewriter_words:
+      'Senior Fullstack Engineer|TypeScript · React · Rails · Python|From Postgres to pixel|AI Builder · LLM orchestration|Cat dad · 3 cats',
     tagline:
       'I build systems that scale, products that ship, and teams that move forward.',
     cta_primary: 'See my work',
@@ -55,16 +63,21 @@ const locale: LanguageLocale = {
   about_me: {
     section_about_me: 'About me',
     section_skills: 'Skills',
-    biography:
-      "I’m a <span class='hl-soft'>software engineer</span> with an ownership mindset: I dive into the problem, break it down, bring structure, and help ship it. I’m strongest in <span class='hl'>JavaScript</span>, <span class='hl'>Ruby</span>, and <span class='hl'>Postgres</span>, especially across backend, architecture, and performance. I love working with high-bar teams, aligning priorities, and turning strategy into delivery people can feel.",
+    biography: [
+      "I started coding at <span class='hl-soft'>12 years old</span> by opening game files to understand how they worked. By <span class='hl-soft'>15 I was already getting paid</span> to write software — before I even knew the job had a name.",
+      "Since then, my career has been a journey through LatAm startups: from <strong class='text-ink'>developer</strong> to <strong class='text-ink'>Tech Lead</strong> to <strong class='text-ink'>Senior IC</strong>. I built an influencer campaign platform from scratch, optimized a SaaS used by thousands of buildings, and refactored stacks inherited by a whole team without documentation. Every stop taught me the same thing: <span class='hl-soft'>shipped product</span>.",
+      "Today I define myself as a <strong class='text-ink'>Senior Fullstack Engineer</strong> with <strong class='text-ink'>7+ years</strong> of experience: I deliver features <strong class='text-ink'>end-to-end</strong> — schema, API, UI, infra — without passing the ball to another team. In the last year I added <span class='hl'>AI Builder</span> to my toolkit: agents and LLMs when the feature justifies it, not just for the hype.",
+      "Quick toolbox: <strong class='text-ink'>TypeScript, React/React Native, Rails, Python, Postgres, AWS</strong>. The full detail lives in my CV — along with the rest of the journey."
+    ],
     mini_note:
-      'I live in Lima with three cats (they definitely think they are my PMs), plenty of coffee, and a healthy obsession with leaving systems better than I found them.',
+      'Lima · Native ES / Fluent EN · three cats that approve my code.',
     skills_section_frameworks: 'Frameworks & Libraries',
     skills_section_others: 'Others',
     skills_section_languages: 'Languages',
     stat_years: 'Yrs of exp.',
     stat_projects: 'Projects',
-    stat_stack: 'Full Stack'
+    stat_stack: 'Full Stack',
+    stack_footer: "→ someone who prefers <b>learning one tool deeply</b> over collecting 20 logos on a resume."
   },
   work_experience: {
     title: 'Experience',
@@ -107,7 +120,7 @@ const locale: LanguageLocale = {
   },
   ai: {
     greeting:
-      'Hi! I’m Lee’s AI version. Ask me about <b class="hl">backend</b>, <b class="hl">architecture</b>, <b class="hl">AI agents</b>, <b class="hl">Postgres</b>, or production projects 🐱.',
+      `Hi! I'm Lee's AI version. Ask me about <b class="hl">backend</b>, <b class="hl">architecture</b>, <b class="hl">AI agents</b>, <b class="hl">Postgres</b>, or production projects 🐱.`,
     hint: 'Tip: try a shortcut above ↑ or write your own question below ↓',
     input_placeholder: 'Write your question for Lee...',
     send_aria: 'Send',
@@ -138,7 +151,7 @@ const locale: LanguageLocale = {
   },
   contact_modal: {
     close_aria: 'Close',
-    eyebrow: '// Let’s talk',
+    eyebrow: "// Let's talk",
     title: 'Tell me about your project',
     subtitle:
       'I reply within 24 business hours. For urgent topics, ping me on LinkedIn too.',

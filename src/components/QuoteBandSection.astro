@@ -1,0 +1,65 @@
+---
+import { useTranslation } from 'src/i18n/utils'
+import { safeI18nHtml } from 'src/components/shared/i18nRichText'
+
+interface Props {
+  lang: 'es' | 'en'
+}
+const { lang } = Astro.props
+const t = useTranslation(lang)
+---
+
+<section class="quote-band" aria-label={lang === 'es' ? 'Frase' : 'Quote'}>
+  <div class="wrap">
+    <div class="quote-shell reveal">
+      <span class="q-mark" aria-hidden="true">"</span>
+      <blockquote class="q-text font-display text-ink text-wrap-balance" set:html={safeI18nHtml(t('home').quote_text)} />
+      <div class="q-attr font-mono text-[12px] text-muted-custom uppercase tracking-[0.06em] inline-flex items-center gap-[10px]">
+        <span class="q-line"></span>Lee Palacios
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .quote-band {
+    padding: clamp(60px, 8vw, 100px) 0 0;
+    position: relative;
+  }
+  .quote-shell {
+    max-width: 920px;
+    margin: 0 auto;
+    text-align: center;
+    padding: clamp(28px, 4vw, 48px) clamp(20px, 4vw, 56px);
+    border-top: 1px dashed var(--line);
+    border-bottom: 1px dashed var(--line);
+    position: relative;
+  }
+  .q-mark {
+    position: absolute;
+    top: -28px; left: 50%;
+    transform: translateX(-50%);
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 64px;
+    line-height: 1;
+    color: var(--accent);
+    padding-top: 18px;
+  }
+  .q-text {
+    margin: 12px 0 18px;
+    font-size: clamp(22px, 2.6vw, 32px);
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.018em;
+  }
+  .q-line {
+    width: 28px; height: 1px;
+    background: var(--accent);
+    display: inline-block;
+  }
+</style>
