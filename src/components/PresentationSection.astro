@@ -28,18 +28,15 @@ const t = useTranslation(lang)
               class="hb hb-ai inline-flex items-center gap-2 rounded-full border px-3 py-[6px] font-mono text-[11.5px] tracking-[0.02em] hover:-translate-y-0.5 hover:border-accent"
               style="background:linear-gradient(110deg, color-mix(in oklab, var(--coral) 18%, var(--bg-2)), var(--bg-2));border-color:color-mix(in oklab, var(--coral) 45%, var(--line));color:var(--ink);font-weight:600"
             >
-              <span
-                class="hb-dot h-2 w-2 rounded-full"
-                style="background:var(--coral);box-shadow:0 0 0 4px color-mix(in oklab, var(--coral) 25%, transparent)"
-              ></span>AI Builder
+              <span class="hb-dot h-2 w-2 rounded-full flex-shrink-0"></span>Fullstack Engineer
             </span>
             <span
               class="hb bg-bg-2 border-line text-ink-soft inline-flex items-center gap-2 rounded-full border px-3 py-[6px] font-mono text-[11.5px] tracking-[0.02em] hover:-translate-y-0.5 hover:border-accent"
-              >Backend at heart</span
+              >AI Builder</span
             >
             <span
               class="hb bg-bg-2 border-line inline-flex items-center gap-2 rounded-full border px-3 py-[6px] font-mono text-[11.5px] tracking-[0.02em] hover:-translate-y-0.5 hover:border-accent"
-              style="color:var(--muted)">@ Patrimore</span
+              style="color:var(--muted)">Remote · LATAM</span
             >
           </div>
 
@@ -58,7 +55,7 @@ const t = useTranslation(lang)
             <span
               class="typewriter text-coral font-mono text-[0.92em] font-semibold tracking-[-0.005em]"
               id="typewriter"
-              data-words="Senior Fullstack Engineer|Backend by night, Frontend by day|AI agents · LLM orchestration|Ruby, Python & Postgres lover|Cat dad · 3 gatos"
+              data-words={t('presentation').typewriter_words}
               >Senior Fullstack Engineer</span
             ><span
               class="caret text-accent ml-[-4px] inline-block font-mono font-normal"
@@ -67,10 +64,14 @@ const t = useTranslation(lang)
           </p>
 
           <p
-            class="description mb-9 max-w-[48ch] leading-[1.7] text-[color:var(--muted)]"
+            class="description mb-5 max-w-[48ch] leading-[1.7] text-[color:var(--muted)]"
             style="font-size:clamp(15px,1.2vw,17px)"
           >
             <Fragment set:html={safeI18nHtml(t('presentation').description)} />
+          </p>
+
+          <p class="description-ps max-w-[46ch] leading-[1.55] italic mb-9 pl-[14px] text-[13.5px] text-muted-custom">
+            {t('presentation').description_ps}
           </p>
 
           <div class="hero-actions flex flex-wrap items-center gap-[10px]">
@@ -212,6 +213,10 @@ const t = useTranslation(lang)
     width: 100%;
   }
 
+  .description-ps {
+    border-left: 2px dashed color-mix(in oklab, var(--coral) 50%, var(--line));
+  }
+
   .rocket {
     animation: rocket 2.4s ease-in-out infinite;
   }
@@ -252,10 +257,21 @@ const t = useTranslation(lang)
   }
 
   .blob-tag::before {
-    content: '•';
-    color: var(--mint);
-    margin-right: 6px;
-    animation: pulse 2s ease-in-out infinite;
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--mint);
+    margin-right: 8px;
+    vertical-align: middle;
+    position: relative; top: -1px;
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--mint) 55%, transparent);
+    animation: dotPulse 2.2s ease-out infinite;
+  }
+  @keyframes dotPulse {
+    0%   { box-shadow: 0 0 0 0 color-mix(in oklab, var(--mint) 55%, transparent); }
+    70%  { box-shadow: 0 0 0 7px color-mix(in oklab, var(--mint) 0%, transparent); }
+    100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--mint) 0%, transparent); }
   }
   .blob-tag {
     animation: tagBob 5s ease-in-out infinite;

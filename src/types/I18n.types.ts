@@ -55,12 +55,18 @@ export type LanguageLocale = {
     contact_download_cv: string
     paused_label: string
     footer_location_line: string
+    quote_text: string
+    stack_legend_core: string
+    stack_legend_strong: string
+    stack_legend_learn: string
   },
   presentation: {
     hi: string
     i_am: string
     profession: string
     description: string
+    description_ps: string
+    typewriter_words: string
     tagline: string
     cta_primary: string
     cta_secondary: string
@@ -68,7 +74,7 @@ export type LanguageLocale = {
   about_me: {
     section_about_me: string
     section_skills: string
-    biography: string
+    biography: string[]
     mini_note: string
     skills_section_languages: string
     skills_section_frameworks: string
@@ -76,6 +82,7 @@ export type LanguageLocale = {
     stat_years: string
     stat_projects: string
     stat_stack: string
+    stack_footer: string
   },
   work_experience: WorkExperienceLocale,
   projects: {
