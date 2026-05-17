@@ -43,7 +43,7 @@ const locale: LanguageLocale = {
   },
   presentation: {
     hi: 'Hi, 🚀',
-    i_am: "I'm <span class='hl'>Lee Palacios</span>",
+    i_am: "I'm <span class='hl text-nowrap'>Lee Palacios</span>",
     profession: 'Software Engineer and cat lover 🐱',
     description:
       "<span class='hl'>+7 years</span> building product in LatAm startups, focused on backend, architecture, and decisions that drive business outcomes. I enjoy jumping into complex problems, reducing noise, and turning them into concrete deliveries. Today I’m the <strong>founder of Inmology</strong>, where I design AI agents that automate real-estate operations end to end.",
