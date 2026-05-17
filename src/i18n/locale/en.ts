@@ -115,6 +115,7 @@ const locale: LanguageLocale = {
     crash_fallback:
       'Oops, something failed. Message me directly through the contact form.',
     user_avatar: 'YOU',
+    disclaimer: 'AI can make mistakes or hallucinate. For anything that actually matters, <a href="#contact" class="ai-disclaimer-link">reach out directly →</a>',
     tabs: {
       backend:
         'What has been your most complex backend project and what did you learn from it?',
