@@ -21,7 +21,7 @@ const tBlog = t('blog')
 
 const dateLocale = lang === 'es' ? 'es-PE' : 'en-US'
 const formattedDate = date
-  .toLocaleDateString(dateLocale, { day: 'numeric', month: 'short', year: 'numeric' })
+  .toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' })
   .toUpperCase()
 
 const tagLabel = tags[0]?.toUpperCase() ?? ''
