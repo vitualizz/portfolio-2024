@@ -100,7 +100,9 @@ const locale: LanguageLocale = {
   blog: {
     title: 'Latest Posts',
     read_more: 'Read more',
-    read_article: 'Read article'
+    read_article: 'Read article',
+    back_to_blog: '← Back to blog',
+    min_read: 'MIN READ'
   },
   ai: {
     greeting:

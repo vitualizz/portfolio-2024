@@ -1,6 +1,5 @@
 ---
 import BlogPostLayout from 'src/layouts/BlogPostLayout.astro'
-import { Image } from 'astro:assets'
 import { getCollection, render } from 'astro:content'
 
 const { lang, slug } = Astro.params
@@ -16,12 +15,20 @@ if (!post) {
 }
 
 const { Content } = await render(post)
-const { title, cover, coverLink } = post.data
+const { title, shortDescription, author, date, tags } = post.data
+
+const wordCount = post.body.split(/\s+/).filter(Boolean).length
+const readingTime = Math.max(1, Math.ceil(wordCount / 200))
 ---
 
-<BlogPostLayout title={title}>
-  <a href={coverLink} target="_blank" rel="noopener noreferrer">
-    <Image src={cover} alt={title} width={384} height={216} />
-  </a>
+<BlogPostLayout
+  title={title}
+  shortDescription={shortDescription}
+  author={author}
+  date={date}
+  tags={tags}
+  lang={lang!}
+  readingTime={readingTime}
+>
   <Content />
 </BlogPostLayout>

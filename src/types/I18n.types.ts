@@ -97,6 +97,8 @@ export type LanguageLocale = {
     title: string
     read_more: string
     read_article: string
+    back_to_blog: string
+    min_read: string
   },
   ai: {
     greeting: string
