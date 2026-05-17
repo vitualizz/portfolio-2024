@@ -46,8 +46,9 @@ const locale: LanguageLocale = {
     i_am: "I'm <span class='hl text-nowrap'>Lee Palacios</span>",
     profession: 'Software Engineer and cat lover 🐱',
     description:
-      "<span class='hl'>+7 years</span> building product in LatAm startups, focused on backend, architecture, and decisions that drive business outcomes. I enjoy jumping into complex problems, reducing noise, and turning them into concrete deliveries. Today I’m the <strong>founder of Inmology</strong>, where I design AI agents that automate real-estate operations end to end.",
-    tagline: 'I build systems that scale, products that ship, and teams that move forward.',
+      "<span class='hl'>+7 years</span> building product in LatAm startups, focused on backend, architecture, and decisions that drive business outcomes. I enjoy jumping into complex problems, reducing noise, and turning them into concrete deliveries. Today I’m the <strong class='text-ink'>founder of Inmology</strong>, where I design AI agents that automate real-estate operations end to end.",
+    tagline:
+      'I build systems that scale, products that ship, and teams that move forward.',
     cta_primary: 'See my work',
     cta_secondary: 'Get in touch'
   },
@@ -115,7 +116,8 @@ const locale: LanguageLocale = {
     crash_fallback:
       'Oops, something failed. Message me directly through the contact form.',
     user_avatar: 'YOU',
-    disclaimer: 'AI can make mistakes or hallucinate. For anything that actually matters,',
+    disclaimer:
+      'AI can make mistakes or hallucinate. For anything that actually matters,',
     disclaimer_link: 'reach out directly →',
     tabs: {
       backend:

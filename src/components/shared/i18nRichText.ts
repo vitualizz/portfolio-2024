@@ -3,6 +3,8 @@ const ALLOWED_CLASSES = new Set([
   'hl',
   'hl-soft',
   'hl-title',
+  'text-ink',
+  'text-white',
   'not-italic',
   'text-nowrap'
 ])

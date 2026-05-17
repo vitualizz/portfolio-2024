@@ -47,8 +47,9 @@ const locale: LanguageLocale = {
     i_am: "Soy <span class='hl text-nowrap'>Lee Palacios</span>",
     profession: 'Ingeniero de Software y amante de los gatos 🐱',
     description:
-      "<span class='hl'>+7 años</span> construyendo producto en startups de Latam, con foco en backend, arquitectura y decisiones que impactan negocio. Me gusta entrar a problemas complejos, bajar el ruido y convertirlos en entregas concretas. Hoy soy <strong>founder de Inmology</strong>, donde diseño agentes de IA que automatizan operaciones inmobiliarias de punta a punta.",
-    tagline: 'Construyo sistemas que escalan, productos que se envían y equipos que avanzan.',
+      "<span class='hl'>+7 años</span> construyendo producto en startups de Latam, con foco en backend, arquitectura y decisiones que impactan negocio. Me gusta entrar a problemas complejos, bajar el ruido y convertirlos en entregas concretas. Hoy soy <strong class='text-ink'>founder de Inmology</strong>, donde diseño agentes de IA que automatizan operaciones inmobiliarias de punta a punta.",
+    tagline:
+      'Construyo sistemas que escalan, productos que se envían y equipos que avanzan.',
     cta_primary: 'Ver mis proyectos',
     cta_secondary: 'Contactarme'
   },
@@ -116,7 +117,8 @@ const locale: LanguageLocale = {
     crash_fallback:
       'Ups, algo se cayó. Escríbeme directo por el formulario de contacto.',
     user_avatar: 'TÚ',
-    disclaimer: 'La IA puede cometer errores o inventar cosas. Para lo que realmente importa,',
+    disclaimer:
+      'La IA puede cometer errores o inventar cosas. Para lo que realmente importa,',
     disclaimer_link: 'escribime directo →',
     tabs: {
       backend:
