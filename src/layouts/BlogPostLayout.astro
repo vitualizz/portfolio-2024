@@ -2,20 +2,242 @@
 import BaseLayout from './BaseLayout.astro'
 import Navbar from '@components/Navbar.astro'
 import Footer from 'src/components/Footer.astro'
-import { getLangFromUrl } from 'src/i18n/utils'
+import { useTranslation } from 'src/i18n/utils'
 
 interface Props {
   title: string
+  shortDescription: string
+  author: string
+  date: Date
+  tags: string[]
+  lang: string
+  readingTime: number
 }
 
-const { title } = Astro.props
-const lang = getLangFromUrl(Astro.url)
+const { title, shortDescription, author, date, tags, lang, readingTime } = Astro.props
+
+const t = useTranslation(lang as 'en' | 'es')
+const tBlog = t('blog')
+
+const dateLocale = lang === 'es' ? 'es-PE' : 'en-US'
+const formattedDate = date
+  .toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' })
+  .toUpperCase()
+
+const tagLabel = tags[0]?.toUpperCase() ?? ''
+const authorInitial = author.charAt(0).toUpperCase()
 ---
 
 <BaseLayout title={`Lee Palacios - ${title}`}>
   <Navbar />
-  <div class="prose mx-auto mt-24 w-10/12 dark:prose-invert prose-headings:underline prose-h1:text-xl prose-h1:font-bold prose-p:text-justify prose-a:text-blue-600 prose-img:rounded-xl md:w-11/12 lg:w-full">
-    <slot />
-  </div>
-  <Footer lang={lang} />
+
+  <article class="mx-auto max-w-3xl px-6 pt-24 pb-24">
+
+    <!-- Back link -->
+    <a
+      href={`/${lang}/blog`}
+      class="back-link"
+    >
+      {tBlog.back_to_blog}
+    </a>
+
+    <!-- Header -->
+    <header>
+
+      <!-- Meta row -->
+      <div class="meta-row">
+        {tagLabel && (
+          <span class="tag-pill">{tagLabel}</span>
+        )}
+        {tagLabel && <span class="meta-sep">•</span>}
+        <time class="meta-item">{formattedDate}</time>
+        <span class="meta-sep">•</span>
+        <span class="meta-item">{readingTime} {tBlog.min_read}</span>
+      </div>
+
+      <!-- Display title -->
+      <h1 class="display-title">{title}</h1>
+
+      <!-- Subtitle -->
+      <p class="subtitle">{shortDescription}</p>
+
+      <!-- Author card -->
+      <div class="author-card">
+        <div class="author-avatar">{authorInitial}</div>
+        <div class="author-info">
+          <div class="author-name">{author}</div>
+          <div class="author-role">Senior Fullstack · AI Builder · @ Patrimore</div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <hr class="divider" />
+    </header>
+
+    <!-- Section symbol -->
+    <div class="section-symbol" aria-hidden="true">§</div>
+
+    <!-- Prose body -->
+    <div class="prose prose-invert prose-headings:no-underline max-w-none">
+      <slot />
+    </div>
+
+  </article>
+
+  <Footer lang={lang as 'en' | 'es'} />
 </BaseLayout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    margin-bottom: 2.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tag-pill {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    border: 1px solid color-mix(in oklab, var(--accent) 28%, transparent);
+    background: color-mix(in oklab, var(--accent) 10%, transparent);
+    border-radius: 999px;
+    padding: 0.125rem 0.625rem;
+  }
+
+  .meta-sep {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    opacity: 0.5;
+  }
+
+  .meta-item {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  .display-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 4vw + 1rem, 4.25rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    text-decoration: none;
+    margin-top: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .subtitle {
+    font-size: clamp(1.05rem, 1vw + 0.85rem, 1.25rem);
+    line-height: 1.55;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+
+  .author-card {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    margin-bottom: 2rem;
+  }
+
+  .author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #0B0C10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .author-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .author-role {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: var(--line);
+    margin-bottom: 0;
+  }
+
+  .section-symbol {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 5rem);
+    color: var(--accent);
+    opacity: 0.55;
+    text-align: center;
+    padding: 2rem 0;
+    line-height: 1;
+  }
+
+  article :global(.prose h1),
+  article :global(.prose h2),
+  article :global(.prose h3),
+  article :global(.prose h4),
+  article :global(.prose h5),
+  article :global(.prose h6) {
+    font-family: var(--font-display);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+
+  article :global(.prose a) {
+    color: var(--accent);
+  }
+
+  article :global(.prose code) {
+    color: var(--accent);
+    background: var(--bg-2);
+    border-radius: 0.25rem;
+    padding: 0.125rem 0.375rem;
+  }
+
+  article :global(.prose pre code) {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
+</style>

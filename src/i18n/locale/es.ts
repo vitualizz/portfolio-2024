@@ -101,7 +101,9 @@ const locale: LanguageLocale = {
   blog: {
     title: 'Últimos Posts',
     read_more: 'Leer más',
-    read_article: 'Leer artículo'
+    read_article: 'Leer artículo',
+    back_to_blog: '← Volver al blog',
+    min_read: 'MIN DE LECTURA'
   },
   ai: {
     greeting:
@@ -114,6 +116,8 @@ const locale: LanguageLocale = {
     crash_fallback:
       'Ups, algo se cayó. Escríbeme directo por el formulario de contacto.',
     user_avatar: 'TÚ',
+    disclaimer: 'La IA puede cometer errores o inventar cosas. Para lo que realmente importa,',
+    disclaimer_link: 'escribime directo →',
     tabs: {
       backend:
         '¿Cuál ha sido tu proyecto backend más complejo y qué aprendiste de él?',

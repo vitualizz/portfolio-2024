@@ -55,10 +55,17 @@ const aiT = t('ai')
         </button>
       </form>
     </div>
+
+    <p class="mx-auto mt-3 flex max-w-[900px] items-start gap-[7px] font-mono text-[11px] text-[color:var(--muted)] opacity-75">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="mt-[1px] h-[12px] w-[12px] shrink-0">
+        <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0Zm-6 3.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7.293 5.293a1 1 0 1 1 1.414 1.414L8 7.414V9.5a.5.5 0 0 0 1 0V8l.707-.707A2 2 0 1 0 6 6.5a.5.5 0 0 0 1 0 1 1 0 0 1 .293-.707Z" clip-rule="evenodd"/>
+      </svg>
+      <span>{aiT.disclaimer} <a href="#contact" class="text-accent no-underline transition-opacity duration-150 hover:opacity-75">{aiT.disclaimer_link}</a></span>
+    </p>
   </div>
 </section>
 
-<style>
+<style is:global>
   .ai-shell-bar { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), var(--coral), var(--mint), transparent); opacity: .8; }
   .ai-dot { animation: pulse 2s ease-in-out infinite; }
   .ai-tab { transition: all .2s; }
@@ -69,6 +76,7 @@ const aiT = t('ai')
   .ai-msg.ai-msg-user { grid-template-columns: 1fr 32px; }
   .ai-msg.ai-msg-user .ai-avatar { order: 2; background: color-mix(in oklab, var(--coral) 80%, transparent); color: #fff; }
   .ai-msg-user .ai-bubble { background: color-mix(in oklab, var(--coral) 12%, var(--bg-2)); border-color: color-mix(in oklab, var(--coral) 30%, var(--line)); }
+  .ai-bubble { min-width: 0; overflow-wrap: break-word; word-break: break-word; }
   .ai-bubble p { margin: 0; }
   .ai-bubble p + p { margin-top: 0.7em; }
   .ai-bubble b { color: var(--accent); font-weight: 600; }

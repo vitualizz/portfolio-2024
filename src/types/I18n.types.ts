@@ -97,6 +97,8 @@ export type LanguageLocale = {
     title: string
     read_more: string
     read_article: string
+    back_to_blog: string
+    min_read: string
   },
   ai: {
     greeting: string
@@ -107,6 +109,8 @@ export type LanguageLocale = {
     error_fallback: string
     crash_fallback: string
     user_avatar: string
+    disclaimer: string
+    disclaimer_link: string
     tabs: {
       backend: string
       ai_builder: string
