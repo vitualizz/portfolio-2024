@@ -161,14 +161,6 @@ const t = useTranslation(lang)
     opacity: 0.8;
     transition: opacity 0.25s ease;
   }
-  .contact-card-glow.is-glow-active {
-    background: radial-gradient(
-      420px circle at var(--glow-x, 50%) var(--glow-y, 0%),
-      color-mix(in oklab, var(--accent) 30%, transparent),
-      transparent 68%
-    );
-    opacity: 1;
-  }
   button[id='openContactModal']:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 32px color-mix(in oklab, var(--accent) 40%, transparent);
@@ -190,8 +182,6 @@ const t = useTranslation(lang)
 </style>
 
 <script>
-  import { initPointerGlow } from 'src/scripts/pointerGlow'
-
   class ContactSectionElement extends HTMLElement {
     private modal: HTMLDialogElement | null = null
     private form: HTMLFormElement | null = null
@@ -201,7 +191,6 @@ const t = useTranslation(lang)
     private successTimerId: number | undefined
     private errorTimerId: number | undefined
     private cleanupCallbacks: Array<() => void> = []
-    private destroyGlow: () => void = () => {}
 
     connectedCallback() {
       this.cleanup()
@@ -213,7 +202,6 @@ const t = useTranslation(lang)
       this.submitButtonHtml = this.submitButton?.innerHTML ?? ''
       this.bindModalHandlers()
       this.bindFormHandler()
-      this.bindGlow()
     }
 
     disconnectedCallback() {
@@ -260,12 +248,6 @@ const t = useTranslation(lang)
       this.cleanupCallbacks.push(() =>
         this.form?.removeEventListener('submit', this.onSubmit)
       )
-    }
-
-    private bindGlow() {
-      const card = this.querySelector<HTMLElement>('.contact-card')
-      const glow = this.querySelector<HTMLElement>('.contact-card-glow')
-      if (card && glow) this.destroyGlow = initPointerGlow(card, glow)
     }
 
     private openContactModal = () => {
@@ -348,8 +330,6 @@ const t = useTranslation(lang)
     private cleanup() {
       this.cleanupCallbacks.forEach((cleanup) => cleanup())
       this.cleanupCallbacks = []
-      this.destroyGlow()
-      this.destroyGlow = () => {}
       this.clearTimers()
       this.resetSubmitButton()
       if (this.form) this.form.hidden = false

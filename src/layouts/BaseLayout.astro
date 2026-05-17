@@ -4,6 +4,7 @@ import '@fontsource-variable/dm-sans'
 import bricolageUrl from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url'
 import dmSansUrl from '@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2?url'
 import '../styles/global.css'
+import GlobalSpotlight from 'src/components/GlobalSpotlight.astro'
 import { getLangFromUrl, useTranslation } from 'src/i18n/utils'
 import { ClientRouter } from 'astro:transitions'
 
@@ -52,6 +53,9 @@ const twitterImage = new URL('/img/seo/twitter-image.png', Astro.url)
     <div class="stars"></div>
     <div class="stars2"></div>
     <div class="stars3"></div>
-    <slot />
+    <GlobalSpotlight />
+    <div class="relative z-[1]">
+      <slot />
+    </div>
   </body>
 </html>

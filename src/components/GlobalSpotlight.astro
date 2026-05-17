@@ -1,0 +1,77 @@
+<global-spotlight aria-hidden="true">
+  <div id="globalSpotlight" class="global-spotlight" aria-hidden="true"></div>
+</global-spotlight>
+
+<style>
+  global-spotlight {
+    display: block;
+  }
+
+  .global-spotlight {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        560px circle at var(--page-glow-x, 50vw) var(--page-glow-y, 42vh),
+        color-mix(in oklab, var(--accent) 13%, transparent),
+        color-mix(in oklab, var(--coral) 5%, transparent) 38%,
+        transparent 72%
+      );
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    will-change: opacity, background;
+  }
+
+  .global-spotlight.is-glow-active {
+    opacity: 0.82;
+  }
+
+  [data-theme='light'] .global-spotlight {
+    background:
+      radial-gradient(
+        520px circle at var(--page-glow-x, 50vw) var(--page-glow-y, 42vh),
+        color-mix(in oklab, var(--accent) 8%, transparent),
+        color-mix(in oklab, var(--coral) 3%, transparent) 42%,
+        transparent 74%
+      );
+  }
+
+  [data-theme='light'] .global-spotlight.is-glow-active {
+    opacity: 0.5;
+  }
+
+  @media (prefers-reduced-motion: reduce), (hover: none) {
+    .global-spotlight {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { initViewportPointerGlow } from 'src/scripts/pointerGlow'
+
+  class GlobalSpotlightElement extends HTMLElement {
+    private cleanupSpotlight: () => void = () => {}
+
+    connectedCallback() {
+      this.cleanup()
+      const spotlight = this.querySelector<HTMLElement>('#globalSpotlight')
+      if (spotlight) this.cleanupSpotlight = initViewportPointerGlow(spotlight)
+    }
+
+    disconnectedCallback() {
+      this.cleanup()
+    }
+
+    private cleanup() {
+      this.cleanupSpotlight()
+      this.cleanupSpotlight = () => {}
+    }
+  }
+
+  if (!customElements.get('global-spotlight')) {
+    customElements.define('global-spotlight', GlobalSpotlightElement)
+  }
+</script>
