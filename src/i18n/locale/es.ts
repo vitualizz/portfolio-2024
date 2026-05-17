@@ -66,7 +66,7 @@ const locale: LanguageLocale = {
     section_skills: 'Habilidades',
     biography: [
       "Empecé a programar a los <span class='hl-soft'>12 años</span> abriendo el código de juegos para entender cómo funcionaban. A los <span class='hl-soft'>15 ya cobraba</span> por escribir software — antes de saber cómo se llamaba el oficio.",
-      "Desde entonces, mi carrera ha sido un recorrido por startups LATAM: de <strong class='text-ink'>developer</strong> a <strong class='text-ink'>Tech Lead</strong> a <strong class='text-ink'>Senior IC</strong>. Construí un sistema de campañas para influencers desde cero, optimicé una plataforma SaaS usada por miles de edificios, y refactorizé stacks que un equipo entero heredó sin documentación. Cada parada me dejó lo mismo: <span class='hl-soft'>producto que se envía</span>.",
+      "Desde entonces, mi carrera ha sido un recorrido por startups LATAM: de <strong class='text-ink'>developer</strong> a <strong class='text-ink'>Tech Lead</strong> a <strong class='text-ink'>Senior IC</strong>. Construí un sistema de campañas para influencers desde cero, optimicé una plataforma SaaS usada por miles de edificios, y refactoricé stacks que un equipo entero heredó sin documentación. Cada parada me dejó lo mismo: <span class='hl-soft'>producto que se envía</span>.",
       "Hoy me defino como <strong class='text-ink'>Senior Fullstack Engineer</strong> con <strong class='text-ink'>7+ años</strong> de experiencia: entrego features <strong class='text-ink'>end-to-end</strong> — schema, API, UI, infra — sin pasar la pelota a otro equipo. En el último año sumé <span class='hl'>AI Builder</span> a la mochila: agentes y LLMs cuando la feature lo justifica, no por hype.",
       "Caja de herramientas rápida: <strong class='text-ink'>TypeScript, React/React Native, Rails, Python, Postgres, AWS</strong>. El detalle vive en mi CV — ahí también está el resto del recorrido."
     ],
@@ -177,7 +177,7 @@ const locale: LanguageLocale = {
   seo: {
     title: 'Lee Palacios · Senior Fullstack Engineer | TypeScript, Rails, IA',
     description:
-      'Senior Fullstack Engineer con base en Lima. +7 años entregando software en startups LATAM — TypeScript, React, Rails, Python, AWS. Disponible para roles senior IC o tech lead.',
+      'Senior Fullstack Engineer, Lima · +7 años entregando end-to-end en startups LATAM. TypeScript, Rails, React, Python, AWS. Disponible para roles senior.',
     image: '/img/seo/og-image.png',
     url: 'https://vitualizz.vercel.app/es'
   }

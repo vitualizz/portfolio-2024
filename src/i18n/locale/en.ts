@@ -175,7 +175,7 @@ const locale: LanguageLocale = {
   seo: {
     title: 'Lee Palacios · Senior Fullstack Engineer | TypeScript, Rails, AI',
     description:
-      'Senior Fullstack Engineer based in Lima. 7+ years shipping production software in LatAm startups — TypeScript, React, Rails, Python, AWS. Open to senior IC or tech lead roles.',
+      'Senior Fullstack Engineer, Lima · 7+ yrs shipping end-to-end at LatAm startups. TypeScript, Rails, React, Python, AWS. Open to senior IC or tech lead.',
     image: '/img/seo/og-image.png',
     url: 'https://vitualizz.vercel.app/en'
   }
