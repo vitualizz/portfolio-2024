@@ -1,5 +1,6 @@
 ---
 import { useTranslation } from 'src/i18n/utils'
+import { safeI18nHtml } from 'src/components/shared/i18nRichText'
 
 interface Props { lang: 'es' | 'en' }
 const { lang } = Astro.props
@@ -11,7 +12,7 @@ const aiT = t('ai')
   <div class="wrap">
     <div class="s-head reveal">
       <span class="s-eyebrow">{t('home').ai_eyebrow}</span>
-      <h2 class="s-title" set:html={t('home').ai_title} />
+      <h2 class="s-title" set:html={safeI18nHtml(t('home').ai_title)} />
       <p class="s-sub">
         {t('home').ai_subtitle}
         <span class="ai-built mt-[10px] block font-mono text-[12px] text-[color:var(--muted)]">(construido con <code class="rounded bg-[color:color-mix(in_oklab,var(--accent)_12%,transparent)] px-[6px] py-[2px] text-[11.5px] text-accent">Claude Haiku</code> · via API)</span>
@@ -38,7 +39,7 @@ const aiT = t('ai')
         <div class="ai-msg ai-msg-bot grid grid-cols-[32px_1fr] items-start gap-3">
           <div class="ai-avatar flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent font-display text-[14px] font-bold text-[#0B0C10]">L</div>
           <div class="ai-bubble rounded-[14px] border border-line bg-[color:color-mix(in_oklab,var(--bg)_60%,transparent)] px-[18px] py-[14px] text-[14.5px] leading-[1.6] text-ink">
-            <p set:html={aiT.greeting} />
+            <p set:html={safeI18nHtml(aiT.greeting)} />
             <p class="ai-hint mt-2 font-mono text-[11.5px] text-[color:var(--muted)]">{aiT.hint}</p>
           </div>
         </div>

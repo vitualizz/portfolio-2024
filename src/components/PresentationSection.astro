@@ -1,8 +1,11 @@
 ---
 import { useTranslation } from 'src/i18n/utils'
 import ResumeActions from 'src/components/ResumeActions.astro'
+import { safeI18nHtml } from 'src/components/shared/i18nRichText'
 
-interface Props { lang: 'es' | 'en' }
+interface Props {
+  lang: 'es' | 'en'
+}
 const { lang } = Astro.props
 const t = useTranslation(lang)
 ---
@@ -11,110 +14,326 @@ const t = useTranslation(lang)
   <section class="hero" id="top">
     <div class="wrap">
       <div class="hero-grid">
+        <div>
+          <div
+            class="hero-greet text-ink-soft mb-4 inline-flex items-center gap-[10px] font-sans font-medium"
+            style="font-size:clamp(20px,2vw,26px)"
+          >
+            {t('presentation').hi.replace('🚀', '')}
+            <span class="rocket inline-block text-[1.1em]">🚀</span>
+          </div>
 
-      <!-- Left: text -->
-      <div>
-        <div class="hero-greet font-sans font-medium text-ink-soft mb-4 inline-flex items-center gap-[10px]" style="font-size:clamp(20px,2vw,26px)">{t('presentation').hi.replace('🚀','')} <span class="rocket inline-block text-[1.1em]">🚀</span></div>
+          <div class="hero-badges mb-[18px] flex flex-wrap gap-2">
+            <span
+              class="hb hb-ai inline-flex items-center gap-2 rounded-full border px-3 py-[6px] font-mono text-[11.5px] tracking-[0.02em]"
+              style="background:linear-gradient(110deg, color-mix(in oklab, var(--coral) 18%, var(--bg-2)), var(--bg-2));border-color:color-mix(in oklab, var(--coral) 45%, var(--line));color:var(--ink);font-weight:600"
+            >
+              <span
+                class="hb-dot h-2 w-2 rounded-full"
+                style="background:var(--coral);box-shadow:0 0 0 4px color-mix(in oklab, var(--coral) 25%, transparent)"
+              ></span>AI Builder
+            </span>
+            <span
+              class="hb bg-bg-2 border-line text-ink-soft inline-flex items-center gap-2 rounded-full border px-3 py-[6px] font-mono text-[11.5px] tracking-[0.02em]"
+              >Backend at heart</span
+            >
+            <span
+              class="hb bg-bg-2 border-line inline-flex items-center gap-2 rounded-full border px-3 py-[6px] font-mono text-[11.5px] tracking-[0.02em]"
+              style="color:var(--muted)">@ Patrimore</span
+            >
+          </div>
 
-        <div class="hero-badges flex flex-wrap gap-2 mb-[18px]">
-          <span class="hb hb-ai inline-flex items-center gap-2 font-mono text-[11.5px] px-3 py-[6px] rounded-full border tracking-[0.02em]" style="background:linear-gradient(110deg, color-mix(in oklab, var(--coral) 18%, var(--bg-2)), var(--bg-2));border-color:color-mix(in oklab, var(--coral) 45%, var(--line));color:var(--ink);font-weight:600">
-            <span class="hb-dot w-2 h-2 rounded-full" style="background:var(--coral);box-shadow:0 0 0 4px color-mix(in oklab, var(--coral) 25%, transparent)"></span>AI Builder
-          </span>
-          <span class="hb inline-flex items-center gap-2 font-mono text-[11.5px] px-3 py-[6px] rounded-full bg-bg-2 border border-line text-ink-soft tracking-[0.02em]">Backend at heart</span>
-          <span class="hb inline-flex items-center gap-2 font-mono text-[11.5px] px-3 py-[6px] rounded-full bg-bg-2 border border-line tracking-[0.02em]" style="color:var(--muted)">@ Patrimore</span>
+          <h1
+            class="mb-6 leading-[1.08] font-extrabold tracking-[-0.035em]"
+            style="font-size:clamp(40px,5.6vw,84px)"
+          >
+            <Fragment set:html={safeI18nHtml(t('presentation').i_am)} />
+          </h1>
+
+          <p
+            class="profession text-ink-soft mb-[18px] flex flex-wrap items-baseline gap-2 font-medium"
+            style="font-size:clamp(18px,1.6vw,22px)"
+          >
+            <span class="text-accent font-mono font-bold">›</span>
+            <span
+              class="typewriter text-coral font-mono text-[0.92em] font-semibold tracking-[-0.005em]"
+              id="typewriter"
+              data-words="Senior Fullstack Engineer|Backend by night, Frontend by day|AI agents · LLM orchestration|Ruby, Python & Postgres lover|Cat dad · 3 gatos"
+              >Senior Fullstack Engineer</span
+            ><span
+              class="caret text-accent ml-[-4px] inline-block font-mono font-normal"
+              >│</span
+            >
+          </p>
+
+          <p
+            class="description mb-9 max-w-[48ch] leading-[1.7] text-[color:var(--muted)]"
+            style="font-size:clamp(15px,1.2vw,17px)"
+          >
+            <Fragment set:html={safeI18nHtml(t('presentation').description)} />
+          </p>
+
+          <div class="hero-actions flex flex-wrap items-center gap-[10px]">
+            <a
+              class="icon-btn bg-bg-2 border-line text-ink inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-[14px] border"
+              href="https://github.com/vitualizz"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="h-[22px] w-[22px]"
+                ><path
+                  d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.1c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.76 2.68 1.25 3.34.96.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.18-1.49 3.14-1.18 3.14-1.18.63 1.59.23 2.76.12 3.05.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.05.78 2.12v3.14c0 .31.21.66.79.55A11.51 11.51 0 0 0 23.5 12c0-6.35-5.15-11.5-11.5-11.5z"
+                ></path></svg
+              >
+            </a>
+            <a
+              class="icon-btn linkedin inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-[14px]"
+              href="https://linkedin.com/in/vitualizz"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              style="background:#0A66C2;color:#fff;border:1px solid transparent"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="h-[22px] w-[22px]"
+                ><path
+                  d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"
+                ></path></svg
+              >
+            </a>
+            <button
+              class="icon-btn bg-bg-2 border-line text-ink inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-[14px] border"
+              data-open-modal="contact"
+              aria-label={t('contact_modal').submit}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="h-[22px] w-[22px]"
+                ><rect x="3" y="5" width="18" height="14" rx="2"
+                ></rect><polyline points="3,7 12,13 21,7"></polyline></svg
+              >
+            </button>
+            <ResumeActions
+              lang={lang}
+              variant="hero"
+              triggerId="resume-actions-hero"
+            />
+            <a
+              class="icon-btn primary-cta inline-flex h-12 cursor-pointer items-center justify-center gap-2 rounded-[14px] border px-[18px] font-sans text-[14px] font-semibold tracking-[-0.005em]"
+              href="#ai"
+              style="background:var(--accent);color:#0B0C10;border-color:var(--accent)"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="h-[18px] w-[18px]"
+                ><path
+                  d="M12 2 L13.5 8.5 L20 10 L13.5 11.5 L12 18 L10.5 11.5 L4 10 L10.5 8.5 Z"
+                ></path></svg
+              >
+              <span class="cta-label">{t('nav').ask_ai}</span>
+            </a>
+          </div>
         </div>
 
-        <h1 class="font-extrabold tracking-[-0.035em] leading-[1.08] mb-6" style="font-size:clamp(40px,5.6vw,84px)">
-          <Fragment set:html={t('presentation').i_am} />
-        </h1>
-
-        <p class="profession font-medium flex items-baseline gap-2 flex-wrap mb-[18px] text-ink-soft" style="font-size:clamp(18px,1.6vw,22px)">
-          <span class="text-accent font-mono font-bold">›</span>
-          <span class="typewriter text-coral font-semibold font-mono text-[0.92em] tracking-[-0.005em]" id="typewriter"
-            data-words="Senior Fullstack Engineer|Backend by night, Frontend by day|AI agents · LLM orchestration|Ruby, Python &amp; Postgres lover|Cat dad · 3 gatos">Senior Fullstack Engineer</span><span class="caret inline-block text-accent font-normal font-mono ml-[-4px]">│</span>
-        </p>
-
-        <p class="description text-[color:var(--muted)] max-w-[48ch] leading-[1.7] mb-9" style="font-size:clamp(15px,1.2vw,17px)">
-          <Fragment set:html={t('presentation').description} />
-        </p>
-
-        <div class="hero-actions flex gap-[10px] items-center flex-wrap">
-          <a class="icon-btn w-12 h-12 rounded-[14px] bg-bg-2 border border-line inline-flex items-center justify-center text-ink cursor-pointer" href="https://github.com/vitualizz" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-            <svg viewBox="0 0 24 24" fill="currentColor" class="w-[22px] h-[22px]"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.1c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.76 2.68 1.25 3.34.96.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.18-1.49 3.14-1.18 3.14-1.18.63 1.59.23 2.76.12 3.05.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.05.78 2.12v3.14c0 .31.21.66.79.55A11.51 11.51 0 0 0 23.5 12c0-6.35-5.15-11.5-11.5-11.5z"/></svg>
-          </a>
-          <a class="icon-btn linkedin w-12 h-12 rounded-[14px] inline-flex items-center justify-center cursor-pointer" href="https://linkedin.com/in/vitualizz" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="background:#0A66C2;color:#fff;border:1px solid transparent">
-            <svg viewBox="0 0 24 24" fill="currentColor" class="w-[22px] h-[22px]"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg>
-          </a>
-          <button class="icon-btn w-12 h-12 rounded-[14px] bg-bg-2 border border-line inline-flex items-center justify-center text-ink cursor-pointer" data-open-modal="contact" aria-label={t('contact_modal').submit}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[22px] h-[22px]"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3,7 12,13 21,7"/></svg>
-          </button>
-          <ResumeActions lang={lang} variant="hero" triggerId="resume-actions-hero" />
-          <a class="icon-btn primary-cta inline-flex items-center justify-center rounded-[14px] border cursor-pointer gap-2 font-sans font-semibold text-[14px] tracking-[-0.005em] px-[18px] h-12" href="#ai" style="background:var(--accent);color:#0B0C10;border-color:var(--accent)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px]"><path d="M12 2 L13.5 8.5 L20 10 L13.5 11.5 L12 18 L10.5 11.5 L4 10 L10.5 8.5 Z"/></svg>
-            <span class="cta-label">{t('nav').ask_ai}</span>
-          </a>
+        <!-- Right: character image -->
+        <div
+          class="hero-figure relative"
+          style="aspect-ratio:1/1;max-width:540px;width:100%;margin-left:auto"
+        >
+          <span
+            class="blob-tag"
+            style="position:absolute;top:14%;right:8%;transform:rotate(8deg);background:var(--bg);color:var(--ink);border:1px solid var(--line);padding:6px 16px;border-radius:999px;font-family:var(--font-mono);font-size:12px;z-index:2;box-shadow:0 8px 20px rgba(0,0,0,.4)"
+            >vitualizz online</span
+          >
+          <img
+            class="hero-character relative z-[1] h-full w-full object-contain object-bottom"
+            src="/img/Logo2.webp"
+            alt="Lee Palacios — illustrated character with cats"
+            loading="eager"
+            decoding="async"
+          />
+          <span
+            class="blob-spark s1 absolute z-[2] text-[26px]"
+            style="top:6%;right:2%;color:var(--coral)">✦</span
+          >
+          <span
+            class="blob-spark s2 absolute z-[2]"
+            style="bottom:18%;left:-2%;color:var(--mint);font-size:22px">✧</span
+          >
+          <span
+            class="blob-spark s3 absolute z-[2] text-[26px]"
+            style="top:36%;right:-4%;color:var(--accent)">✦</span
+          >
+          <span
+            class="blob-spark s4 absolute z-[2]"
+            style="bottom:6%;right:18%;color:var(--accent);font-size:18px"
+            >✨</span
+          >
         </div>
-      </div>
-
-      <!-- Right: character image -->
-      <div class="hero-figure relative" style="aspect-ratio:1/1;max-width:540px;width:100%;margin-left:auto">
-        <span class="blob-tag" style="position:absolute;top:14%;right:8%;transform:rotate(8deg);background:var(--bg);color:var(--ink);border:1px solid var(--line);padding:6px 16px;border-radius:999px;font-family:var(--font-mono);font-size:12px;z-index:2;box-shadow:0 8px 20px rgba(0,0,0,.4)">vitualizz online</span>
-        <img class="hero-character relative w-full h-full object-contain object-bottom z-[1]" src="/img/Logo2.webp" alt="Lee Palacios — illustrated character with cats" loading="eager" decoding="async" />
-        <span class="blob-spark s1 absolute text-[26px] z-[2]" style="top:6%;right:2%;color:var(--coral)">✦</span>
-        <span class="blob-spark s2 absolute z-[2]" style="bottom:18%;left:-2%;color:var(--mint);font-size:22px">✧</span>
-        <span class="blob-spark s3 absolute text-[26px] z-[2]" style="top:36%;right:-4%;color:var(--accent)">✦</span>
-        <span class="blob-spark s4 absolute z-[2]" style="bottom:6%;right:18%;color:var(--accent);font-size:18px">✨</span>
-      </div>
-
       </div>
     </div>
   </section>
 </presentation-section>
 
 <style>
-  .hero { min-height: calc(100vh - 72px); display: flex; align-items: center; padding: clamp(40px,6vw,80px) 0 clamp(60px,10vw,120px); position: relative; }
-  .hero > .wrap { position: relative; z-index: 1; width: 100%; }
-  .hero-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(32px,5vw,80px); align-items: center; width: 100%; }
+  .hero {
+    min-height: calc(100vh - 72px);
+    display: flex;
+    align-items: center;
+    padding: clamp(40px, 6vw, 80px) 0 clamp(60px, 10vw, 120px);
+    position: relative;
+  }
+  .hero > .wrap {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: clamp(32px, 5vw, 80px);
+    align-items: center;
+    width: 100%;
+  }
 
-  .rocket { animation: rocket 2.4s ease-in-out infinite; }
-  .hb:hover { transform: translateY(-2px); border-color: var(--accent); }
-  .hb-dot { animation: pulse 1.8s ease-in-out infinite; }
+  .rocket {
+    animation: rocket 2.4s ease-in-out infinite;
+  }
+  .hb:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+  .hb-dot {
+    animation: pulse 1.8s ease-in-out infinite;
+  }
 
-  .caret { animation: blink 1.05s steps(2) infinite; }
+  .caret {
+    animation: blink 1.05s steps(2) infinite;
+  }
 
-  .icon-btn { transition: transform .2s, background .2s, border-color .2s, color .2s; }
-  .icon-btn:hover { background: var(--accent); color: #0B0C10; border-color: var(--accent); transform: translateY(-2px); }
-  .icon-btn.linkedin:hover { background: var(--accent); color: #0B0C10; }
-  .icon-btn.primary-cta:hover { background: var(--coral); color: var(--bg); border-color: var(--coral); }
-  @media (max-width: 540px) { .icon-btn.primary-cta .cta-label { display: none; } .icon-btn.primary-cta { width: 48px; padding: 0; } }
+  .icon-btn {
+    transition:
+      transform 0.2s,
+      background 0.2s,
+      border-color 0.2s,
+      color 0.2s;
+  }
+  .icon-btn:hover {
+    background: var(--accent);
+    color: #0b0c10;
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .icon-btn.linkedin:hover {
+    background: var(--accent);
+    color: #0b0c10;
+  }
+  .icon-btn.primary-cta:hover {
+    background: var(--coral);
+    color: var(--bg);
+    border-color: var(--coral);
+  }
+  @media (max-width: 540px) {
+    .icon-btn.primary-cta .cta-label {
+      display: none;
+    }
+    .icon-btn.primary-cta {
+      width: 48px;
+      padding: 0;
+    }
+  }
 
   .hero-figure::before {
-    content: ""; position: absolute; inset: 8% 4% 4% 4%;
-    background: radial-gradient(circle at 50% 55%, color-mix(in oklab, var(--accent) 22%, transparent) 0%, transparent 65%);
-    filter: blur(20px); z-index: 0; animation: glowPulse 6s ease-in-out infinite;
+    content: '';
+    position: absolute;
+    inset: 8% 4% 4% 4%;
+    background: radial-gradient(
+      circle at 50% 55%,
+      color-mix(in oklab, var(--accent) 22%, transparent) 0%,
+      transparent 65%
+    );
+    filter: blur(20px);
+    z-index: 0;
+    animation: glowPulse 6s ease-in-out infinite;
   }
-  .hero-character { filter: drop-shadow(0 30px 40px rgba(0,0,0,.45)); animation: floatY 8s ease-in-out infinite; }
+  .hero-character {
+    filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.45));
+    animation: floatY 8s ease-in-out infinite;
+  }
 
-  .blob-tag::before { content: "•"; color: var(--mint); margin-right: 6px; animation: pulse 2s ease-in-out infinite; }
-  .blob-tag { animation: tagBob 5s ease-in-out infinite; }
+  .blob-tag::before {
+    content: '•';
+    color: var(--mint);
+    margin-right: 6px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .blob-tag {
+    animation: tagBob 5s ease-in-out infinite;
+  }
 
-  .blob-spark { animation: float 4s ease-in-out infinite; }
-  .blob-spark.s1 { animation-delay: .2s; }
-  .blob-spark.s2 { animation-delay: 1.4s; }
-  .blob-spark.s3 { animation-delay: 2.6s; }
-  .blob-spark.s4 { animation-delay: 3.2s; }
+  .blob-spark {
+    animation: float 4s ease-in-out infinite;
+  }
+  .blob-spark.s1 {
+    animation-delay: 0.2s;
+  }
+  .blob-spark.s2 {
+    animation-delay: 1.4s;
+  }
+  .blob-spark.s3 {
+    animation-delay: 2.6s;
+  }
+  .blob-spark.s4 {
+    animation-delay: 3.2s;
+  }
 
   @media (max-width: 820px) {
     /* Mobile overflow baseline:
        - decorative inline offsets (left/right negativos)
        - overflow: clip poco predecible en algunos Safari */
-    .hero-grid { grid-template-columns: 1fr; gap: 48px; }
-    .hero-figure { max-width: 340px; margin: 0 auto; order: -1; overflow-x: hidden; overflow-y: visible; }
-    .blob-spark.s2 { left: 2% !important; }
-    .blob-spark.s3 { right: 2% !important; }
-    .blob-tag { right: 4% !important; }
-    .hero-character { filter: drop-shadow(0 18px 24px rgba(0,0,0,.35)); }
-    .hero { min-height: auto; padding-top: 32px; }
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+    .hero-figure {
+      max-width: 340px;
+      margin: 0 auto;
+      order: -1;
+      overflow-x: hidden;
+      overflow-y: visible;
+    }
+    .blob-spark.s2 {
+      left: 2% !important;
+    }
+    .blob-spark.s3 {
+      right: 2% !important;
+    }
+    .blob-tag {
+      right: 4% !important;
+    }
+    .hero-character {
+      filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.35));
+    }
+    .hero {
+      min-height: auto;
+      padding-top: 32px;
+    }
   }
 </style>
 
@@ -151,7 +370,9 @@ const t = useTranslation(lang)
     private startTypewriter() {
       if (!this.typewriterEl) return
 
-      const words = (this.typewriterEl.dataset.words || '').split('|').filter(Boolean)
+      const words = (this.typewriterEl.dataset.words || '')
+        .split('|')
+        .filter(Boolean)
       if (!words.length) return
 
       let wordIndex = 0

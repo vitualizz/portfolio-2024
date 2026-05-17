@@ -16,39 +16,48 @@ const locale: LanguageLocale = {
   },
   home: {
     about_eyebrow: '// 01 · About me',
-    about_title: "About <span class='y'>me</span>",
-    about_subtitle: 'The human behind the code — what drives me, what I do, and what is in my toolbox.',
+    about_title: "About <span class='hl-title'>me</span>",
+    about_subtitle:
+      'The human behind the code — what drives me, what I do, and what is in my toolbox.',
     ai_eyebrow: '// 02 · Lab',
-    ai_title: "Ask Lee <span class='y'>↳ via AI</span>",
-    ai_subtitle: 'An AI trained with my CV, stacks and projects. Ask technical questions, about my experience, or whatever you want.',
+    ai_title: "Ask Lee <span class='hl-title'>↳ via AI</span>",
+    ai_subtitle:
+      'An AI trained with my CV, stacks and projects. Ask technical questions, about my experience, or whatever you want.',
     projects_eyebrow: '// 03 · Projects',
-    projects_title: "Selected <span class='y'>work</span>",
-    projects_subtitle: 'Shipped work in production. Click to view demo or code.',
+    projects_title: "Selected <span class='hl-title'>work</span>",
+    projects_subtitle:
+      'Shipped work in production. Click to view demo or code.',
     xp_eyebrow: '// 04 · Experience',
-    xp_title: "My <span class='y'>journey</span>",
+    xp_title: "My <span class='hl-title'>journey</span>",
     xp_subtitle: 'Four professional stops, one constant: shipped product.',
     blog_eyebrow: '// 05 · Notes',
-    blog_title: "What I <span class='y'>write</span>",
+    blog_title: "What I <span class='hl-title'>write</span>",
     blog_subtitle: 'Technical notes about what I am learning.',
-    contact_title: "Let's talk<br/>Tell me about your <em class='not-italic text-accent'>project</em> ✨",
-    contact_subtitle: 'If you have an idea that needs expert hands — clean code, scalable systems and on-time delivery — I would love to hear it. I reply within 24 business hours.',
+    contact_title:
+      "Let's talk<br/>Tell me about your <em class='not-italic hl'>project</em> ✨",
+    contact_subtitle:
+      'If your team needs someone who can take ownership end to end, shape architecture, and keep delivery moving, let’s talk. I work close to product, backend, and business outcomes, and I reply within 24 business hours.',
     contact_download_cv: 'Download CV',
     paused_label: 'paused',
     footer_location_line: 'Lima · UTC −5 · ES / EN'
   },
   presentation: {
     hi: 'Hi, 🚀',
-    i_am: "I'm <span class='font-bold'>Lee Palacios</span>",
+    i_am: "I'm <span class='hl'>Lee Palacios</span>",
     profession: 'Software Engineer and cat lover 🐱',
-    description: "<span class='text-color-1'>+7 years</span> of experience building product in Latin American startups. Today I'm the <strong>founder of Inmology</strong>, designing AI agents that automate real estate operations. Ready to rock your digital world!",
-    tagline: 'I build interfaces that matter and systems that scale.',
+    description:
+      "<span class='hl'>+7 years</span> building product in LatAm startups, focused on backend, architecture, and decisions that drive business outcomes. I enjoy jumping into complex problems, reducing noise, and turning them into concrete deliveries. Today I’m the <strong>founder of Inmology</strong>, where I design AI agents that automate real-estate operations end to end.",
+    tagline: 'I build systems that scale, products that ship, and teams that move forward.',
     cta_primary: 'See my work',
     cta_secondary: 'Get in touch'
   },
   about_me: {
     section_about_me: 'About me',
     section_skills: 'Skills',
-    biography: "I am a <span class='text-color-2'>software engineer</span>, diving into an exciting <span class='text-color-2'>technological</span> universe where every line of code is a stroke of creativity. My heart beats to the rhythm of <span class='text-color-1'>Javascript</span> and <span class='text-color-1'>Ruby</span>, but my curiosity has led me to explore a rainbow of languages. In each project, I seek excellence and <span class='text-color-2'>quality</span>, turning the coding process into an <span class='text-color-2'>exciting</span> and <span class='text-color-2'>rewarding adventure</span>",
+    biography:
+      "I’m a <span class='hl-soft'>software engineer</span> with an ownership mindset: I dive into the problem, break it down, bring structure, and help ship it. I’m strongest in <span class='hl'>JavaScript</span>, <span class='hl'>Ruby</span>, and <span class='hl'>Postgres</span>, especially across backend, architecture, and performance. I love working with high-bar teams, aligning priorities, and turning strategy into delivery people can feel.",
+    mini_note:
+      'I live in Lima with three cats (they definitely think they are my PMs), plenty of coffee, and a healthy obsession with leaving systems better than I found them.',
     skills_section_frameworks: 'Frameworks & Libraries',
     skills_section_others: 'Others',
     skills_section_languages: 'Languages',
@@ -94,19 +103,25 @@ const locale: LanguageLocale = {
     read_article: 'Read article'
   },
   ai: {
-    greeting: 'Hi! I am an AI version of Lee. Ask me about <b>backend</b>, <b>architecture</b>, <b>AI agents</b>, <b>Postgres</b>, my projects, or why I have 3 cats 🐱. Anything you want.',
+    greeting:
+      'Hi! I’m Lee’s AI version. Ask me about <b class="hl">backend</b>, <b class="hl">architecture</b>, <b class="hl">AI agents</b>, <b class="hl">Postgres</b>, or production projects 🐱.',
     hint: 'Tip: try a shortcut above ↑ or write your own question below ↓',
     input_placeholder: 'Write your question for Lee...',
     send_aria: 'Send',
     thinking: 'thinking...',
     error_fallback: 'I could not process your question. Please try again.',
-    crash_fallback: 'Oops, something failed. Message me directly through the contact form.',
+    crash_fallback:
+      'Oops, something failed. Message me directly through the contact form.',
     user_avatar: 'YOU',
     tabs: {
-      backend: 'What has been your most complex backend project and what did you learn from it?',
-      ai_builder: 'Tell me about your experience building with LLMs and AI agents. Which stack do you use?',
-      postgres: 'If I ask you to optimize a slow Postgres query in production, where would you start?',
-      culture: 'What are you looking for in your next team? What kind of culture makes you happy?'
+      backend:
+        'What has been your most complex backend project and what did you learn from it?',
+      ai_builder:
+        'Tell me about your experience building with LLMs and AI agents. Which stack do you use?',
+      postgres:
+        'If I ask you to optimize a slow Postgres query in production, where would you start?',
+      culture:
+        'What are you looking for in your next team? What kind of culture makes you happy?'
     },
     tab_labels: {
       backend: 'backend ↗',
@@ -119,7 +134,8 @@ const locale: LanguageLocale = {
     close_aria: 'Close',
     eyebrow: '// Let’s talk',
     title: 'Tell me about your project',
-    subtitle: 'I reply within 24 business hours. For urgent topics, ping me on LinkedIn too.',
+    subtitle:
+      'I reply within 24 business hours. For urgent topics, ping me on LinkedIn too.',
     name_label: 'Your name',
     name_placeholder: 'e.g. Ana Perez',
     email_label: 'Email',
@@ -141,10 +157,12 @@ const locale: LanguageLocale = {
     preview_modal_fallback: 'Open resume in a new tab'
   },
   seo: {
-    title: "Software Developer | Experience in JavaScript and Ruby | Quality Projects | Contact Me",
-    description: "With over 7 years of programming experience, I'm a technology enthusiast software engineer! Working with JavaScript, Ruby, and more. Contact me for quality projects!",
-    image: "/img/seo/og-image.png",
-    url: "https://vitualizz.vercel.app/en"
+    title:
+      'Tech Lead / Senior Fullstack Engineer | JavaScript, Ruby, AI Agents | Available for high-impact teams',
+    description:
+      'Software engineer with 7+ years shipping product in LatAm startups. Specialized in backend, architecture, and AI agents for teams that need speed without quality tradeoffs.',
+    image: '/img/seo/og-image.png',
+    url: 'https://vitualizz.vercel.app/en'
   }
 }
 

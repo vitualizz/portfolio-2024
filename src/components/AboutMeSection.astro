@@ -1,6 +1,7 @@
 ---
 import { skillGroups } from 'src/data/skills.ts'
 import { useTranslation } from 'src/i18n/utils'
+import { safeI18nHtml } from 'src/components/shared/i18nRichText'
 
 interface Props { lang: 'es' | 'en' }
 const { lang } = Astro.props
@@ -11,18 +12,17 @@ const t = useTranslation(lang)
   <div class="wrap">
     <div class="s-head reveal">
       <span class="s-eyebrow">{t('home').about_eyebrow}</span>
-      <h2 class="s-title" set:html={t('home').about_title} />
+      <h2 class="s-title" set:html={safeI18nHtml(t('home').about_title)} />
       <p class="s-sub">{t('home').about_subtitle}</p>
     </div>
 
     <div class="about-grid">
       <div class="reveal">
         <div class="about-body text-ink-soft text-[clamp(16px,1.25vw,18px)] leading-[1.75]">
-          <p>Soy un <b class="text-coral">ingeniero de software</b> peruano con <b class="text-coral">7+ años</b> entre Tech Lead y Senior Fullstack en startups LATAM. Hoy en <b>Patrimore</b>.</p>
-          <p>Mi pasión es el <b class="text-coral">backend</b>: SQL afinado, arquitecturas que escalan, modelos de datos honestos. El frontend lo manejo cuando hace falta — React, React Native, Tailwind — pero donde encuentro el zen es en una query bien optimizada y una API que no rompe.</p>
-          <p>En el último año he construido seriamente con <span class="text-mint font-semibold">LLMs y agentes</span> — orquestación con N8N, prompts productivos, Python como pegamento. Es la herramienta más interesante que ha aparecido en mi carrera, y todavía estoy raspando la superficie.</p>
+          <!-- set:html is safe here because strings come from internal locale files only -->
+          <p set:html={safeI18nHtml(t('about_me').biography)} />
           <p class="about-mini text-muted-custom text-[14px] mt-[1.6em] pt-[1.1em] flex items-center gap-2 border-t border-dashed border-line">
-            <span class="cat-emoji inline-block origin-bottom">🐱</span> Vivo en Lima con tres gatos que aprueban todo mi código.
+            <span class="cat-emoji inline-block origin-bottom">🐱</span> {t('about_me').mini_note}
           </p>
         </div>
 
