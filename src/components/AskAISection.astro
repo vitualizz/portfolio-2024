@@ -60,7 +60,7 @@ const aiT = t('ai')
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="mt-[1px] h-[12px] w-[12px] shrink-0">
         <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0Zm-6 3.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7.293 5.293a1 1 0 1 1 1.414 1.414L8 7.414V9.5a.5.5 0 0 0 1 0V8l.707-.707A2 2 0 1 0 6 6.5a.5.5 0 0 0 1 0 1 1 0 0 1 .293-.707Z" clip-rule="evenodd"/>
       </svg>
-      <span set:html={safeI18nHtml(aiT.disclaimer)} />
+      <span>{aiT.disclaimer} <a href="#contact" class="text-accent no-underline transition-opacity duration-150 hover:opacity-75">{aiT.disclaimer_link}</a></span>
     </p>
   </div>
 </section>
@@ -89,8 +89,6 @@ const aiT = t('ai')
   .ai-send { transition: transform .2s, background .2s; }
   .ai-send:hover { transform: translateX(2px); background: var(--coral); color: #fff; }
   .ai-send:disabled { background: var(--bg-3); color: var(--muted); cursor: wait; transform: none; }
-  .ai-disclaimer-link { color: var(--accent); text-decoration: none; transition: opacity .15s; }
-  .ai-disclaimer-link:hover { opacity: .75; }
 </style>
 
 <script>

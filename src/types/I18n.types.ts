@@ -110,6 +110,7 @@ export type LanguageLocale = {
     crash_fallback: string
     user_avatar: string
     disclaimer: string
+    disclaimer_link: string
     tabs: {
       backend: string
       ai_builder: string
