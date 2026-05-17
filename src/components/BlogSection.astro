@@ -1,6 +1,7 @@
 ---
 import { useTranslation } from 'src/i18n/utils'
 import { BLOG_DATE_LOCALE } from 'src/i18n/constants'
+import { safeI18nHtml } from 'src/components/shared/i18nRichText'
 
 interface Props {
   posts: any[]
@@ -14,7 +15,7 @@ const t = useTranslation(lang)
   <div class="wrap">
     <div class="s-head reveal">
       <span class="s-eyebrow">{t('home').blog_eyebrow}</span>
-      <h2 class="s-title" set:html={t('home').blog_title} />
+      <h2 class="s-title" set:html={safeI18nHtml(t('home').blog_title)} />
       <p class="s-sub">{t('home').blog_subtitle}</p>
     </div>
 

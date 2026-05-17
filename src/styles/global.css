@@ -133,6 +133,21 @@ h4 {
   font-weight: 700;
 }
 
+.hl {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.hl-soft {
+  color: var(--coral);
+  font-weight: 600;
+}
+
+.hl-title {
+  color: var(--accent);
+  font-weight: 700;
+}
+
 /* ===== COSMOS BACKDROP ===== */
 .cosmos {
   position: fixed; inset: 0; z-index: -2;

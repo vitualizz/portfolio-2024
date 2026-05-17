@@ -69,6 +69,7 @@ export type LanguageLocale = {
     section_about_me: string
     section_skills: string
     biography: string
+    mini_note: string
     skills_section_languages: string
     skills_section_frameworks: string
     skills_section_others: string

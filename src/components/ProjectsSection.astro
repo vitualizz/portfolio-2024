@@ -4,6 +4,7 @@ import Icon from 'src/components/Icon.astro'
 import { getLangFromUrl } from 'src/i18n/utils'
 import { useTranslation } from 'src/i18n/utils'
 import type { IconType } from 'src/types/Icons.types.ts'
+import { safeI18nHtml } from 'src/components/shared/i18nRichText'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslation(lang)
@@ -20,7 +21,7 @@ const VALID_ICONS = new Set<string>([
   <div class="wrap">
     <div class="s-head reveal">
       <span class="s-eyebrow">{t('home').projects_eyebrow}</span>
-      <h2 class="s-title" set:html={t('home').projects_title} />
+      <h2 class="s-title" set:html={safeI18nHtml(t('home').projects_title)} />
       <p class="s-sub">{t('home').projects_subtitle}</p>
     </div>
 

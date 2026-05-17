@@ -2,6 +2,7 @@
 import { getLangFromUrl } from 'src/i18n/utils'
 import { useTranslation } from 'src/i18n/utils'
 import experienceData from 'src/data/experience.json'
+import { safeI18nHtml } from 'src/components/shared/i18nRichText'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslation(lang)
@@ -20,7 +21,7 @@ function formatPeriod(dateStr: string): string {
   <div class="wrap">
     <div class="s-head reveal">
       <span class="s-eyebrow">{t('home').xp_eyebrow}</span>
-      <h2 class="s-title" set:html={t('home').xp_title} />
+      <h2 class="s-title" set:html={safeI18nHtml(t('home').xp_title)} />
       <p class="s-sub">{t('home').xp_subtitle}</p>
     </div>
 
@@ -42,7 +43,7 @@ function formatPeriod(dateStr: string): string {
             </div>
             <h4 class="text-[24px] font-bold tracking-[-0.02em] my-1">{entry.company}{i === experienceData.length - 1 && <span style="color:var(--muted);font-weight:500;font-size:0.7em;"> — {t('home').paused_label}</span>}</h4>
             <div class="text-coral text-[15px] font-medium mb-[10px]">{entry.role}</div>
-            <p class="text-ink-soft text-[15px] leading-[1.65] max-w-[60ch] mb-3" set:html={lang === 'es' ? entry.description_es : entry.description_en} />
+            <p class="text-ink-soft text-[15px] leading-[1.65] max-w-[60ch] mb-3" set:html={safeI18nHtml(lang === 'es' ? entry.description_es : entry.description_en)} />
             <div class="flex flex-wrap gap-[5px] font-mono text-[11px] text-muted-custom">
               {entry.tech.map(t => <span class="border border-line py-[3px] px-2 rounded-full">{t}</span>)}
             </div>

@@ -1,6 +1,7 @@
 ---
 import { useTranslation } from 'src/i18n/utils'
 import ResumeActions from 'src/components/ResumeActions.astro'
+import { safeI18nHtml } from 'src/components/shared/i18nRichText'
 
 interface Props {
   lang: 'es' | 'en'
@@ -19,7 +20,7 @@ const t = useTranslation(lang)
         <div class="contact-card-glow" aria-hidden="true"></div>
         <h2
           class="contact-title relative mb-4 text-[clamp(36px,5.5vw,64px)] leading-[1.02] font-bold tracking-[-0.03em]"
-          set:html={t('home').contact_title}
+          set:html={safeI18nHtml(t('home').contact_title)}
         />
         <p
           class="text-ink-soft relative mx-auto mb-8 max-w-[52ch] text-[17px] leading-[1.6]"
