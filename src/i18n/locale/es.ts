@@ -160,7 +160,7 @@ const locale: LanguageLocale = {
     title:
       'Tech Lead / Senior Fullstack Engineer | JavaScript, Ruby, AI Agents | Disponible para equipos de alto impacto',
     description:
-      'Ingeniero de software con +7 años entregando producto en startups de Latam. Especializado en backend, arquitectura y agentes de IA para equipos que necesitan velocidad con calidad.'
+      'Ingeniero de software con +7 años entregando producto en startups de Latam. Especializado en backend, arquitectura y agentes de IA para equipos que necesitan velocidad con calidad.',
     image: '/img/seo/og-image.png',
     url: 'https://vitualizz.vercel.app/es'
   }
