@@ -63,7 +63,6 @@ export type LanguageLocale = {
   presentation: {
     hi: string
     i_am: string
-    profession: string
     description: string
     description_ps: string
     typewriter_words: string
@@ -76,9 +75,6 @@ export type LanguageLocale = {
     section_skills: string
     biography: string[]
     mini_note: string
-    skills_section_languages: string
-    skills_section_frameworks: string
-    skills_section_others: string
     stat_years: string
     stat_projects: string
     stat_stack: string

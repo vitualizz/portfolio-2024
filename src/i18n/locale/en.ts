@@ -49,7 +49,6 @@ const locale: LanguageLocale = {
   presentation: {
     hi: 'Hi, 🚀',
     i_am: "I'm <span class='hl text-nowrap'>Lee Palacios</span>",
-    profession: 'Software Engineer and cat lover 🐱',
     description:
       "<span class='hl'>+7 years</span> delivering <strong class='text-ink'>end‑to‑end</strong> product in LatAm startups. <strong class='text-ink'>API, database, UI and infra</strong> — the full chain, no ball-dropping. TypeScript, React, Rails, Python, AWS. When the feature calls for it, AI agents in production too.",
     description_ps:
@@ -72,9 +71,6 @@ const locale: LanguageLocale = {
     ],
     mini_note:
       'Lima · Native ES / Fluent EN · three cats that approve my code.',
-    skills_section_frameworks: 'Frameworks & Libraries',
-    skills_section_others: 'Others',
-    skills_section_languages: 'Languages',
     stat_years: 'Yrs of exp.',
     stat_projects: 'Projects',
     stat_stack: 'Full Stack',

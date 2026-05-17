@@ -50,7 +50,6 @@ const locale: LanguageLocale = {
   presentation: {
     hi: 'Hola, 🚀',
     i_am: "Soy <span class='hl text-nowrap'>Lee Palacios</span>",
-    profession: 'Ingeniero de Software y amante de los gatos 🐱',
     description:
       "<span class='hl'>+7 años</span> entregando producto <strong class='text-ink'>end‑to‑end</strong> en startups LATAM. <strong class='text-ink'>API, base de datos, UI e infra</strong> — la cadena completa, sin pasar la pelota. TypeScript, React, Rails, Python, AWS. Cuando la feature lo pide, también agentes de IA en producción.",
     description_ps:
@@ -73,9 +72,6 @@ const locale: LanguageLocale = {
     ],
     mini_note:
       'Lima · ES nativo / EN fluido · tres gatos que aprueban mi código.',
-    skills_section_frameworks: 'Frameworks y Bibliotecas',
-    skills_section_others: 'Otros',
-    skills_section_languages: 'Lenguajes',
     stat_years: 'Años de exp.',
     stat_projects: 'Proyectos',
     stat_stack: 'Full Stack',
