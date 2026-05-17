@@ -20,7 +20,7 @@ const aiT = t('ai')
     </div>
 
     <div class="ai-shell reveal relative mx-auto max-w-[900px] overflow-hidden rounded-[18px] border border-line bg-[linear-gradient(180deg,var(--bg-2)_0%,color-mix(in_oklab,var(--bg-2)_80%,var(--bg))_100%)] shadow-[0_24px_60px_rgba(0,0,0,.35)]">
-      <div class="ai-shell-bar" aria-hidden="true"></div>
+      <div class="absolute inset-x-0 top-0 h-[2px] bg-[linear-gradient(90deg,transparent,var(--accent),var(--coral),var(--mint),transparent)] opacity-[0.8]" aria-hidden="true"></div>
       <div class="ai-header flex flex-wrap items-center justify-between gap-3 border-b border-line bg-[color:color-mix(in_oklab,var(--bg)_60%,transparent)] px-[18px] py-[14px]">
         <div class="ai-status flex items-center gap-[10px] font-mono text-[12px]">
           <span class="ai-dot h-2 w-2 rounded-full bg-mint shadow-[0_0_0_4px_color-mix(in_oklab,var(--mint)_25%,transparent)]"></span>
@@ -28,17 +28,17 @@ const aiT = t('ai')
           <span class="ai-model rounded-full border border-line bg-[color:color-mix(in_oklab,var(--bg)_70%,transparent)] px-2 py-[2px] text-[11px] text-[color:var(--muted)]">claude-haiku-4-5</span>
         </div>
         <div class="flex flex-wrap gap-1">
-          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer" data-suggest={aiT.tabs.backend}>{aiT.tab_labels.backend}</button>
-          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer" data-suggest={aiT.tabs.ai_builder}>{aiT.tab_labels.ai_builder}</button>
-          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer" data-suggest={aiT.tabs.postgres}>{aiT.tab_labels.postgres}</button>
-          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer" data-suggest={aiT.tabs.culture}>{aiT.tab_labels.culture}</button>
+          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer transition-all duration-200" data-suggest={aiT.tabs.backend}>{aiT.tab_labels.backend}</button>
+          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer transition-all duration-200" data-suggest={aiT.tabs.ai_builder}>{aiT.tab_labels.ai_builder}</button>
+          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer transition-all duration-200" data-suggest={aiT.tabs.postgres}>{aiT.tab_labels.postgres}</button>
+          <button class="ai-tab font-mono text-[11px] px-[10px] py-[5px] rounded-[8px] bg-transparent border border-line text-ink-soft cursor-pointer transition-all duration-200" data-suggest={aiT.tabs.culture}>{aiT.tab_labels.culture}</button>
         </div>
       </div>
 
       <div class="ai-conv flex max-h-[420px] flex-col gap-[18px] overflow-y-auto px-[22px] pb-3 pt-6 scroll-smooth" id="aiConv">
         <div class="ai-msg ai-msg-bot grid grid-cols-[32px_1fr] items-start gap-3">
           <div class="ai-avatar flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent font-display text-[14px] font-bold text-[#0B0C10]">L</div>
-          <div class="ai-bubble rounded-[14px] border border-line bg-[color:color-mix(in_oklab,var(--bg)_60%,transparent)] px-[18px] py-[14px] text-[14.5px] leading-[1.6] text-ink">
+          <div class="ai-bubble rounded-[14px] border border-line bg-[color:color-mix(in_oklab,var(--bg)_60%,transparent)] px-[18px] py-[14px] text-[14.5px] leading-[1.6] text-ink min-w-0 break-words">
             <p set:html={safeI18nHtml(aiT.greeting)} />
             <p class="ai-hint mt-2 font-mono text-[11.5px] text-[color:var(--muted)]">{aiT.hint}</p>
           </div>
@@ -47,8 +47,8 @@ const aiT = t('ai')
 
       <form class="ai-form flex items-center border-t border-line bg-[color:color-mix(in_oklab,var(--bg)_80%,transparent)] px-[14px] py-3" id="aiForm" data-ai={JSON.stringify(aiT)}>
         <span class="font-mono text-accent font-bold px-[10px] text-[18px]">›</span>
-        <input id="aiInput" type="text" placeholder={aiT.input_placeholder} autocomplete="off" maxlength="280" class="flex-1 border-none bg-transparent outline-none text-ink font-sans text-[15px] px-1 py-[10px]" />
-        <button class="ai-send flex h-[38px] w-[38px] cursor-pointer items-center justify-center rounded-[10px] border-none bg-accent text-[#0B0C10]" type="submit" aria-label={aiT.send_aria}>
+        <input id="aiInput" type="text" placeholder={aiT.input_placeholder} autocomplete="off" maxlength="280" class="flex-1 border-none bg-transparent outline-none text-ink font-sans text-[15px] px-1 py-[10px] placeholder:text-muted-custom" />
+        <button class="ai-send flex h-[38px] w-[38px] cursor-pointer items-center justify-center rounded-[10px] border-none bg-accent text-[#0B0C10] transition-[transform,background] duration-200 hover:translate-x-[2px] hover:bg-coral hover:text-white disabled:bg-surface-2 disabled:text-muted-custom disabled:cursor-wait disabled:translate-x-0" type="submit" aria-label={aiT.send_aria}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px]">
             <path d="M5 12h14M13 6l6 6-6 6"/>
           </svg>
@@ -66,9 +66,7 @@ const aiT = t('ai')
 </section>
 
 <style is:global>
-  .ai-shell-bar { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), var(--coral), var(--mint), transparent); opacity: .8; }
   .ai-dot { animation: pulse 2s ease-in-out infinite; }
-  .ai-tab { transition: all .2s; }
   .ai-tab:hover { background: color-mix(in oklab, var(--accent) 12%, var(--bg-2)); border-color: color-mix(in oklab, var(--accent) 40%, var(--line)); color: var(--ink); transform: translateY(-1px); }
   .ai-conv::-webkit-scrollbar { width: 6px; }
   .ai-conv::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
@@ -76,7 +74,6 @@ const aiT = t('ai')
   .ai-msg.ai-msg-user { grid-template-columns: 1fr 32px; }
   .ai-msg.ai-msg-user .ai-avatar { order: 2; background: color-mix(in oklab, var(--coral) 80%, transparent); color: #fff; }
   .ai-msg-user .ai-bubble { background: color-mix(in oklab, var(--coral) 12%, var(--bg-2)); border-color: color-mix(in oklab, var(--coral) 30%, var(--line)); }
-  .ai-bubble { min-width: 0; overflow-wrap: break-word; word-break: break-word; }
   .ai-bubble p { margin: 0; }
   .ai-bubble p + p { margin-top: 0.7em; }
   .ai-bubble b { color: var(--accent); font-weight: 600; }
@@ -85,10 +82,6 @@ const aiT = t('ai')
   .ai-thinking .d { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: bounce 1.2s infinite; }
   .ai-thinking .d:nth-child(2) { animation-delay: .15s; }
   .ai-thinking .d:nth-child(3) { animation-delay: .3s; }
-  #aiInput::placeholder { color: var(--muted); }
-  .ai-send { transition: transform .2s, background .2s; }
-  .ai-send:hover { transform: translateX(2px); background: var(--coral); color: #fff; }
-  .ai-send:disabled { background: var(--bg-3); color: var(--muted); cursor: wait; transform: none; }
 </style>
 
 <script>
@@ -121,7 +114,7 @@ const aiT = t('ai')
     function addMsg(role: string, text: string) {
       const wrap = document.createElement('div');
       wrap.className = 'ai-msg grid items-start gap-3 ' + (role === 'user' ? 'ai-msg-user grid-cols-[1fr_32px]' : 'ai-msg-bot grid-cols-[32px_1fr]');
-      wrap.innerHTML = `<div class="ai-avatar flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent font-display text-[14px] font-bold text-[#0B0C10]">${role === 'user' ? (msg.user_avatar || 'YOU') : 'L'}</div><div class="ai-bubble rounded-[14px] border border-line bg-[color:color-mix(in_oklab,var(--bg)_60%,transparent)] px-[18px] py-[14px] text-[14.5px] leading-[1.6] text-ink">${role === 'user' ? `<p>${escHtml(text)}</p>` : renderMd(text)}</div>`;
+      wrap.innerHTML = `<div class="ai-avatar flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent font-display text-[14px] font-bold text-[#0B0C10]">${role === 'user' ? (msg.user_avatar || 'YOU') : 'L'}</div><div class="ai-bubble rounded-[14px] border border-line bg-[color:color-mix(in_oklab,var(--bg)_60%,transparent)] px-[18px] py-[14px] text-[14.5px] leading-[1.6] text-ink min-w-0 break-words">${role === 'user' ? `<p>${escHtml(text)}</p>` : renderMd(text)}</div>`;
       conv.appendChild(wrap);
       conv.scrollTop = conv.scrollHeight;
       return wrap;
@@ -129,7 +122,7 @@ const aiT = t('ai')
     function addThinking() {
       const wrap = document.createElement('div');
       wrap.className = 'ai-msg ai-msg-bot grid grid-cols-[32px_1fr] items-start gap-3';
-      wrap.innerHTML = `<div class="ai-avatar flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent font-display text-[14px] font-bold text-[#0B0C10]">L</div><div class="ai-bubble rounded-[14px] border border-line bg-[color:color-mix(in_oklab,var(--bg)_60%,transparent)] px-[18px] py-[14px] text-[14.5px] leading-[1.6] text-ink"><div class="ai-thinking"><span class="d"></span><span class="d"></span><span class="d"></span><span class="ml-[6px]">${msg.thinking || 'thinking...'}</span></div></div>`;
+      wrap.innerHTML = `<div class="ai-avatar flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent font-display text-[14px] font-bold text-[#0B0C10]">L</div><div class="ai-bubble rounded-[14px] border border-line bg-[color:color-mix(in_oklab,var(--bg)_60%,transparent)] px-[18px] py-[14px] text-[14.5px] leading-[1.6] text-ink min-w-0 break-words"><div class="ai-thinking"><span class="d"></span><span class="d"></span><span class="d"></span><span class="ml-[6px]">${msg.thinking || 'thinking...'}</span></div></div>`;
       conv.appendChild(wrap);
       conv.scrollTop = conv.scrollHeight;
       return wrap;

@@ -14,9 +14,9 @@ const menuId = `${triggerId}-menu`
 const sourceId = variant
 ---
 
-<div class={`resume-actions resume-actions--${variant}`} data-resume-actions-root>
+<div class={`resume-actions resume-actions--${variant} relative`} data-resume-actions-root>
   <button
-    class={`resume-actions__trigger ${variant === 'hero' ? 'icon-btn w-12 h-12 rounded-[14px] bg-bg-2 border border-line inline-flex items-center justify-center text-ink cursor-pointer' : variant === 'navbar' ? 'pill inline-flex items-center gap-2 px-4 py-[9px] border border-line rounded-full text-[14px] font-medium text-ink' : 'btn-ghost inline-flex items-center gap-[10px] px-[26px] py-[14px] border border-line text-ink rounded-full text-[15px] font-medium'}`}
+    class={`resume-actions__trigger ${variant === 'hero' ? 'icon-btn w-12 h-12 rounded-[14px] bg-bg-2 border border-line inline-flex items-center justify-center text-ink cursor-pointer' : variant === 'navbar' ? 'pill inline-flex items-center gap-2 px-4 py-[9px] border border-line rounded-full text-[14px] font-medium text-ink' : 'btn-ghost inline-flex items-center gap-[10px] px-[26px] py-[14px] border border-line text-ink rounded-full text-[15px] font-medium hover:border-accent hover:-translate-y-0.5'}`}
     id={triggerId}
     type="button"
     aria-haspopup="menu"
@@ -35,13 +35,13 @@ const sourceId = variant
     )}
   </button>
 
-  <div class="resume-actions__menu-wrap" data-resume-menu-wrap>
-    <ul id={menuId} class="resume-actions__menu" role="menu" hidden data-resume-menu>
+  <div class="resume-actions__menu-wrap absolute z-40 top-[calc(100%+8px)] right-0" data-resume-menu-wrap>
+    <ul id={menuId} class="resume-actions__menu list-none m-0 p-[6px] min-w-[160px] rounded-[12px] border border-line bg-bg-2" role="menu" hidden data-resume-menu>
       <li role="none">
         <button
           type="button"
           role="menuitem"
-          class="resume-actions__item"
+          class="resume-actions__item w-full border-0 bg-transparent text-left text-ink px-3 py-[10px] rounded-[8px] block font-[inherit] no-underline cursor-pointer"
           data-resume-preview
           data-lang={lang}
           data-source={sourceId}
@@ -51,7 +51,7 @@ const sourceId = variant
         </button>
       </li>
       <li role="none">
-        <a role="menuitem" class="resume-actions__item" href={CV_PATH_BY_LANG[lang]}>
+        <a role="menuitem" class="resume-actions__item w-full border-0 bg-transparent text-left text-ink px-3 py-[10px] rounded-[8px] block font-[inherit] no-underline cursor-pointer" href={CV_PATH_BY_LANG[lang]}>
           {t('resume_actions').download}
         </a>
       </li>
@@ -60,31 +60,7 @@ const sourceId = variant
 </div>
 
 <style>
-  .resume-actions { position: relative; }
-  .resume-actions__menu-wrap { position: absolute; z-index: 40; top: calc(100% + 8px); right: 0; }
   .resume-actions--hero .resume-actions__menu-wrap { left: 0; right: auto; }
-  .resume-actions__menu {
-    list-style: none;
-    margin: 0;
-    padding: 6px;
-    min-width: 160px;
-    border-radius: 12px;
-    border: 1px solid var(--line);
-    background: var(--bg-2);
-  }
-  .resume-actions__item {
-    width: 100%;
-    border: 0;
-    background: transparent;
-    text-align: left;
-    color: var(--ink);
-    padding: 10px 12px;
-    border-radius: 8px;
-    display: block;
-    font: inherit;
-    text-decoration: none;
-    cursor: pointer;
-  }
   .resume-actions__item:hover,
   .resume-actions__item:focus-visible {
     background: color-mix(in oklab, var(--accent) 18%, var(--bg-2));

@@ -62,7 +62,7 @@ const t = useTranslation(lang)
       />
       <details class="lang-menu relative">
         <summary
-          class="pill border-line text-ink inline-flex cursor-pointer list-none items-center gap-2 rounded-full border px-4 py-[9px] text-[14px] font-medium"
+          class="pill border-line text-ink inline-flex cursor-pointer list-none items-center gap-2 rounded-full border px-4 py-[9px] text-[14px] font-medium transition-[border-color,background,transform] duration-200 hover:border-accent hover:-translate-y-px"
           aria-label={t('nav').switch_language}
           style="background:color-mix(in oklab, var(--bg-2) 80%, transparent)"
         >
@@ -119,19 +119,6 @@ const t = useTranslation(lang)
     height: 3px;
     background: var(--accent);
     border-radius: 999px;
-  }
-  .pill {
-    transition:
-      border-color 0.2s,
-      background 0.2s,
-      transform 0.2s;
-  }
-  .pill:hover {
-    border-color: var(--accent);
-    transform: translateY(-1px);
-  }
-  .flag-pe {
-    background: linear-gradient(90deg, #d91023 33%, #fff 33% 66%, #d91023 66%);
   }
   @media (max-width: 1080px) {
     .nav-links {

@@ -25,7 +25,7 @@ const t = useTranslation(lang)
 
           <div class="hero-badges mb-[18px] flex flex-wrap gap-2">
             <span
-              class="hb hb-ai inline-flex items-center gap-2 rounded-full border px-3 py-[6px] font-mono text-[11.5px] tracking-[0.02em]"
+              class="hb hb-ai inline-flex items-center gap-2 rounded-full border px-3 py-[6px] font-mono text-[11.5px] tracking-[0.02em] hover:-translate-y-0.5 hover:border-accent"
               style="background:linear-gradient(110deg, color-mix(in oklab, var(--coral) 18%, var(--bg-2)), var(--bg-2));border-color:color-mix(in oklab, var(--coral) 45%, var(--line));color:var(--ink);font-weight:600"
             >
               <span
@@ -34,11 +34,11 @@ const t = useTranslation(lang)
               ></span>AI Builder
             </span>
             <span
-              class="hb bg-bg-2 border-line text-ink-soft inline-flex items-center gap-2 rounded-full border px-3 py-[6px] font-mono text-[11.5px] tracking-[0.02em]"
+              class="hb bg-bg-2 border-line text-ink-soft inline-flex items-center gap-2 rounded-full border px-3 py-[6px] font-mono text-[11.5px] tracking-[0.02em] hover:-translate-y-0.5 hover:border-accent"
               >Backend at heart</span
             >
             <span
-              class="hb bg-bg-2 border-line inline-flex items-center gap-2 rounded-full border px-3 py-[6px] font-mono text-[11.5px] tracking-[0.02em]"
+              class="hb bg-bg-2 border-line inline-flex items-center gap-2 rounded-full border px-3 py-[6px] font-mono text-[11.5px] tracking-[0.02em] hover:-translate-y-0.5 hover:border-accent"
               style="color:var(--muted)">@ Patrimore</span
             >
           </div>
@@ -75,7 +75,7 @@ const t = useTranslation(lang)
 
           <div class="hero-actions flex flex-wrap items-center gap-[10px]">
             <a
-              class="icon-btn bg-bg-2 border-line text-ink inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-[14px] border"
+              class="icon-btn bg-bg-2 border-line text-ink inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-[14px] border transition-[transform,background,border-color,color] duration-200 hover:bg-accent hover:text-[#0b0c10] hover:border-accent hover:-translate-y-0.5"
               href="https://github.com/vitualizz"
               target="_blank"
               rel="noopener noreferrer"
@@ -91,7 +91,7 @@ const t = useTranslation(lang)
               >
             </a>
             <a
-              class="icon-btn linkedin inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-[14px]"
+              class="icon-btn linkedin inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-[14px] transition-[transform,background,border-color,color] duration-200 hover:bg-accent hover:text-[#0b0c10] hover:border-accent hover:-translate-y-0.5"
               href="https://linkedin.com/in/vitualizz"
               target="_blank"
               rel="noopener noreferrer"
@@ -108,7 +108,7 @@ const t = useTranslation(lang)
               >
             </a>
             <button
-              class="icon-btn bg-bg-2 border-line text-ink inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-[14px] border"
+              class="icon-btn bg-bg-2 border-line text-ink inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-[14px] border transition-[transform,background,border-color,color] duration-200 hover:bg-accent hover:text-[#0b0c10] hover:border-accent hover:-translate-y-0.5"
               data-open-modal="contact"
               aria-label={t('contact_modal').submit}
             >
@@ -130,7 +130,7 @@ const t = useTranslation(lang)
               triggerId="resume-actions-hero"
             />
             <a
-              class="icon-btn primary-cta inline-flex h-12 cursor-pointer items-center justify-center gap-2 rounded-[14px] border px-[18px] font-sans text-[14px] font-semibold tracking-[-0.005em]"
+              class="icon-btn primary-cta inline-flex h-12 cursor-pointer items-center justify-center gap-2 rounded-[14px] border px-[18px] font-sans text-[14px] font-semibold tracking-[-0.005em] transition-[transform,background,border-color,color] duration-200 hover:bg-accent hover:text-[#0b0c10] hover:border-accent hover:-translate-y-0.5 hover:bg-coral hover:text-bg hover:border-coral"
               href="#ai"
               style="background:var(--accent);color:#0B0C10;border-color:var(--accent)"
             >
@@ -215,10 +215,6 @@ const t = useTranslation(lang)
   .rocket {
     animation: rocket 2.4s ease-in-out infinite;
   }
-  .hb:hover {
-    transform: translateY(-2px);
-    border-color: var(--accent);
-  }
   .hb-dot {
     animation: pulse 1.8s ease-in-out infinite;
   }
@@ -227,28 +223,6 @@ const t = useTranslation(lang)
     animation: blink 1.05s steps(2) infinite;
   }
 
-  .icon-btn {
-    transition:
-      transform 0.2s,
-      background 0.2s,
-      border-color 0.2s,
-      color 0.2s;
-  }
-  .icon-btn:hover {
-    background: var(--accent);
-    color: #0b0c10;
-    border-color: var(--accent);
-    transform: translateY(-2px);
-  }
-  .icon-btn.linkedin:hover {
-    background: var(--accent);
-    color: #0b0c10;
-  }
-  .icon-btn.primary-cta:hover {
-    background: var(--coral);
-    color: var(--bg);
-    border-color: var(--coral);
-  }
   @media (max-width: 540px) {
     .icon-btn.primary-cta .cta-label {
       display: none;

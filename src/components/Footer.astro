@@ -6,7 +6,7 @@ const { lang } = Astro.props
 const t = useTranslation(lang)
 ---
 
-<footer class="foot">
+<footer class="foot py-8 border-t border-line text-muted-custom font-mono text-[12px] uppercase tracking-[0.06em]">
   <div class="wrap">
     <div>{t('footer').thanks} · 2026</div>
     <div>{t('home').footer_location_line}</div>
@@ -14,7 +14,5 @@ const t = useTranslation(lang)
 </footer>
 
 <style>
-  footer.foot { padding: 32px 0; border-top: 1px solid var(--line); color: var(--muted); font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
   footer.foot .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
-  .heart { color: var(--pink); }
 </style>

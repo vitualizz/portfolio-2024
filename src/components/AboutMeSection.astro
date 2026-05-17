@@ -48,7 +48,7 @@ const t = useTranslation(lang)
             <h4 class={`text-ink font-display font-semibold mb-[14px] inline-flex items-baseline gap-2${group.primary ? ' text-[20px]' : ' text-[18px]'}`}>{group.label}</h4>
             <div class="skill-chips flex flex-wrap gap-2">
               {group.items.map(item => (
-                <span class={`chip bg-bg-2 border border-line text-ink-soft inline-flex items-center gap-2 px-[14px] py-2 rounded-[12px] text-[14px] font-medium transition-transform transition-colors duration-200${group.chipVariant === 'strong' ? ' chip-strong' : ''}`}>
+                <span class={`chip bg-bg-2 border border-line text-ink-soft inline-flex items-center gap-2 px-[14px] py-2 rounded-[12px] text-[14px] font-medium transition-transform transition-colors duration-200${group.chipVariant === 'strong' ? ' chip-strong' : ' hover:-translate-y-0.5 hover:border-accent hover:text-ink'}`}>
                   <span class={`dot w-2 h-2 rounded-full${group.dotColor === 'coral' ? ' bg-coral' : group.dotColor === 'mint' ? ' bg-mint' : ' bg-accent'}`}></span>
                   {item.label}
                 </span>
@@ -66,7 +66,6 @@ const t = useTranslation(lang)
   .about-body p + p { margin-top: 1.1em; }
 
   .skill-group h4::before { content: "#"; color: var(--accent); font-weight: 700; }
-  .chip:hover { transform: translateY(-2px); border-color: var(--accent); color: var(--ink); }
   .chip.chip-strong { background: linear-gradient(135deg, color-mix(in oklab, var(--accent) 18%, var(--bg-2)), var(--bg-2)); border-color: color-mix(in oklab, var(--accent) 35%, var(--line)); color: var(--ink); font-weight: 600; }
   .chip.chip-strong:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 16px color-mix(in oklab, var(--accent) 18%, transparent); }
 
