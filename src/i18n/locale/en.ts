@@ -34,9 +34,9 @@ const locale: LanguageLocale = {
     blog_title: "What I <span class='hl-title'>write</span>",
     blog_subtitle: 'Technical notes about what I am learning.',
     contact_title:
-      "Let's talk<br/>Tell me about your <em class='not-italic hl'>project</em> ✨",
+      "Hiring senior engineers?<br/>Let's <em class='not-italic hl'>talk</em> ✨",
     contact_subtitle:
-      "If your team needs someone who can take ownership end to end, shape architecture, and keep delivery moving, let's talk. I work close to product, backend, and business outcomes, and I reply within 24 business hours.",
+      "If your team needs someone who can own a feature end-to-end — schema, API, UI, infra — and keep delivery honest, let's talk. Backend-leaning senior IC, comfortable with product and AI when it earns its keep. I reply within 24 business hours.",
     contact_download_cv: 'Download CV',
     paused_label: 'paused',
     footer_location_line: 'Lima · UTC −5 · ES / EN',
@@ -173,10 +173,9 @@ const locale: LanguageLocale = {
     preview_modal_fallback: 'Open resume in a new tab'
   },
   seo: {
-    title:
-      'Tech Lead / Senior Fullstack Engineer | JavaScript, Ruby, AI Agents | Available for high-impact teams',
+    title: 'Lee Palacios · Senior Fullstack Engineer | TypeScript, Rails, AI',
     description:
-      'Software engineer with 7+ years shipping product in LatAm startups. Specialized in backend, architecture, and AI agents for teams that need speed without quality tradeoffs.',
+      'Senior Fullstack Engineer based in Lima. 7+ years shipping production software in LatAm startups — TypeScript, React, Rails, Python, AWS. Open to senior IC or tech lead roles.',
     image: '/img/seo/og-image.png',
     url: 'https://vitualizz.vercel.app/en'
   }
