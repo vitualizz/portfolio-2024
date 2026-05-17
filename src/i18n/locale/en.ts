@@ -36,7 +36,7 @@ const locale: LanguageLocale = {
     contact_title:
       "Let's talk<br/>Tell me about your <em class='not-italic hl'>project</em> ✨",
     contact_subtitle:
-      'If your team needs someone who can lead, unblock, and ship, let’s talk. I focus on real technical impact and reply within 24 business hours.',
+      'If your team needs someone who can take ownership end to end, shape architecture, and keep delivery moving, let’s talk. I work close to product, backend, and business outcomes, and I reply within 24 business hours.',
     contact_download_cv: 'Download CV',
     paused_label: 'paused',
     footer_location_line: 'Lima · UTC −5 · ES / EN'
@@ -46,8 +46,8 @@ const locale: LanguageLocale = {
     i_am: "I'm <span class='hl'>Lee Palacios</span>",
     profession: 'Software Engineer and cat lover 🐱',
     description:
-      "<span class='hl'>+7 years</span> building and leading product in LatAm startups. Today I’m the <strong>founder of Inmology</strong>, where I design AI agents that automate real-estate operations end to end.",
-    tagline: 'I build interfaces that matter and systems that scale.',
+      "<span class='hl'>+7 years</span> building product in LatAm startups, focused on backend, architecture, and decisions that drive business outcomes. I enjoy jumping into complex problems, reducing noise, and turning them into concrete deliveries. Today I’m the <strong>founder of Inmology</strong>, where I design AI agents that automate real-estate operations end to end.",
+    tagline: 'I build systems that scale, products that ship, and teams that move forward.',
     cta_primary: 'See my work',
     cta_secondary: 'Get in touch'
   },
@@ -55,8 +55,9 @@ const locale: LanguageLocale = {
     section_about_me: 'About me',
     section_skills: 'Skills',
     biography:
-      "I’m a <span class='hl-soft'>software engineer</span> who blends architecture, execution, and mentoring. I’m strongest in <span class='hl'>JavaScript</span>, <span class='hl'>Ruby</span>, and <span class='hl'>Postgres</span>, with a strong bias for performance, maintainability, and calm teams that ship.",
-    mini_note: 'I live in Lima with three cats who approve all my code.',
+      "I’m a <span class='hl-soft'>software engineer</span> with an ownership mindset: I dive into the problem, break it down, bring structure, and help ship it. I’m strongest in <span class='hl'>JavaScript</span>, <span class='hl'>Ruby</span>, and <span class='hl'>Postgres</span>, especially across backend, architecture, and performance. I love working with high-bar teams, aligning priorities, and turning strategy into delivery people can feel.",
+    mini_note:
+      'I live in Lima with three cats (they definitely think they are my PMs), plenty of coffee, and a healthy obsession with leaving systems better than I found them.',
     skills_section_frameworks: 'Frameworks & Libraries',
     skills_section_others: 'Others',
     skills_section_languages: 'Languages',

@@ -37,7 +37,7 @@ const locale: LanguageLocale = {
     contact_title:
       "Hablemos<br/>Contame sobre tu <em class='not-italic hl'>proyecto</em> ✨",
     contact_subtitle:
-      'Si estás armando equipo y necesitás alguien que lidere, destrabe y entregue, hablemos. Trabajo con foco en impacto técnico real y respondo en menos de 24 horas hábiles.',
+      'Si estás armando equipo y buscás a alguien que tome ownership de punta a punta, ordene arquitectura y sostenga entregas reales, hablemos. Me muevo cómodo entre producto, backend y negocio, y respondo en menos de 24 horas hábiles.',
     contact_download_cv: 'Descargar CV',
     paused_label: 'pausado',
     footer_location_line: 'Lima · UTC −5 · ES / EN'
@@ -47,8 +47,8 @@ const locale: LanguageLocale = {
     i_am: "Soy <span class='hl'>Lee Palacios</span>",
     profession: 'Ingeniero de Software y amante de los gatos 🐱',
     description:
-      "<span class='hl'>+7 años</span> construyendo y liderando producto en startups de Latam. Hoy soy <strong>founder de Inmology</strong>, donde diseño agentes de IA que automatizan operaciones inmobiliarias de punta a punta.",
-    tagline: 'Construyo interfaces que importan y sistemas que escalan.',
+      "<span class='hl'>+7 años</span> construyendo producto en startups de Latam, con foco en backend, arquitectura y decisiones que impactan negocio. Me gusta entrar a problemas complejos, bajar el ruido y convertirlos en entregas concretas. Hoy soy <strong>founder de Inmology</strong>, donde diseño agentes de IA que automatizan operaciones inmobiliarias de punta a punta.",
+    tagline: 'Construyo sistemas que escalan, productos que se envían y equipos que avanzan.',
     cta_primary: 'Ver mis proyectos',
     cta_secondary: 'Contactarme'
   },
@@ -56,8 +56,9 @@ const locale: LanguageLocale = {
     section_about_me: 'Acerca de mí',
     section_skills: 'Habilidades',
     biography:
-      "Soy un <span class='hl-soft'>ingeniero de software</span> que mezcla arquitectura, ejecución y mentoring. Me muevo cómodo entre <span class='hl'>JavaScript</span>, <span class='hl'>Ruby</span> y <span class='hl'>Postgres</span>, con foco en performance, mantenibilidad y equipos que avanzan sin drama.",
-    mini_note: 'Vivo en Lima con tres gatos que aprueban todo mi código.',
+      "Soy un <span class='hl-soft'>ingeniero de software</span> con mentalidad de ownership: entro al problema, lo desarmo, ordeno el sistema y lo llevo a producción. Me muevo cómodo entre <span class='hl'>JavaScript</span>, <span class='hl'>Ruby</span> y <span class='hl'>Postgres</span>, especialmente en backend, arquitectura y performance. Disfruto trabajar con equipos exigentes, alinear prioridades y convertir estrategia en entregas que se notan.",
+    mini_note:
+      'Vivo en Lima con tres gatos (sí, ellos creen que son mis PMs), bastante mate/café y una obsesión sana por dejar los sistemas mejor de lo que los encontré.',
     skills_section_frameworks: 'Frameworks y Bibliotecas',
     skills_section_others: 'Otros',
     skills_section_languages: 'Lenguajes',
