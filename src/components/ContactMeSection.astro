@@ -2,162 +2,367 @@
 import { useTranslation } from 'src/i18n/utils'
 import ResumeActions from 'src/components/ResumeActions.astro'
 
-interface Props { lang: 'es' | 'en' }
+interface Props {
+  lang: 'es' | 'en'
+}
 const { lang } = Astro.props
 const t = useTranslation(lang)
 ---
 
-<!-- Contact section -->
-<section class="s" id="contact" data-contact-root>
-  <div class="wrap">
-    <div class="contact-card reveal relative overflow-visible text-center rounded-[28px] mx-auto border max-w-[920px] p-[clamp(40px,6vw,80px)] bg-[linear-gradient(160deg,color-mix(in_oklab,var(--accent)_12%,var(--bg-2)),var(--bg-2))] border-[color-mix(in_oklab,var(--accent)_30%,var(--line))]">
-      <div class="contact-card-glow" aria-hidden="true"></div>
-      <h2 class="contact-title font-bold tracking-[-0.03em] leading-[1.02] mb-4 relative text-[clamp(36px,5.5vw,64px)]" set:html={t('home').contact_title} />
-      <p class="text-ink-soft text-[17px] mx-auto mb-8 leading-[1.6] relative max-w-[52ch]">{t('home').contact_subtitle}</p>
-      <div class="flex gap-3 justify-center flex-wrap relative">
-        <button class="inline-flex items-center gap-[10px] px-[26px] py-[14px] bg-accent rounded-full text-[15px] font-semibold border-none cursor-pointer font-[inherit] text-[#0B0C10] transition-[transform,box-shadow] duration-200" id="openContactModal">{t('contact_modal').submit} <span>✉</span></button>
-        <ResumeActions lang={lang} variant="contact" triggerId="resume-actions-contact" />
+<contact-section>
+  <!-- Contact section -->
+  <section class="s" id="contact" data-contact-root>
+    <div class="wrap">
+      <div
+        class="contact-card reveal relative mx-auto max-w-[920px] overflow-hidden rounded-[28px] border border-[color-mix(in_oklab,var(--accent)_30%,var(--line))] bg-[linear-gradient(160deg,color-mix(in_oklab,var(--accent)_12%,var(--bg-2)),var(--bg-2))] p-[clamp(40px,6vw,80px)] text-center"
+      >
+        <div class="contact-card-glow" aria-hidden="true"></div>
+        <h2
+          class="contact-title relative mb-4 text-[clamp(36px,5.5vw,64px)] leading-[1.02] font-bold tracking-[-0.03em]"
+          set:html={t('home').contact_title}
+        />
+        <p
+          class="text-ink-soft relative mx-auto mb-8 max-w-[52ch] text-[17px] leading-[1.6]"
+        >
+          {t('home').contact_subtitle}
+        </p>
+        <div class="relative flex flex-wrap justify-center gap-3">
+          <button
+            class="bg-accent inline-flex cursor-pointer items-center gap-[10px] rounded-full border-none px-[26px] py-[14px] font-[inherit] text-[15px] font-semibold text-[#0B0C10] transition-[transform,box-shadow] duration-200"
+            id="openContactModal"
+            >{t('contact_modal').submit} <span>✉</span></button
+          >
+          <ResumeActions
+            lang={lang}
+            variant="contact"
+            triggerId="resume-actions-contact"
+          />
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Contact modal -->
-<dialog class="modal" id="contactModal" aria-labelledby="contactTitle" data-i18n={JSON.stringify(t('contact_modal'))}>
-  <div class="modal-panel">
-    <button class="modal-close" id="closeContactModal" aria-label={t('contact_modal').close_aria}>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
-    </button>
-    <div class="modal-eyebrow">{t('contact_modal').eyebrow}</div>
-    <h3 id="contactTitle">{t('contact_modal').title}</h3>
-    <p class="modal-sub">{t('contact_modal').subtitle}</p>
+  <!-- Contact modal -->
+  <dialog
+    class="modal"
+    id="contactModal"
+    aria-labelledby="contactTitle"
+    data-i18n={JSON.stringify(t('contact_modal'))}
+  >
+    <div class="modal-panel">
+      <button
+        class="modal-close"
+        id="closeContactModal"
+        aria-label={t('contact_modal').close_aria}
+      >
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><line x1="6" y1="6" x2="18" y2="18"></line><line
+            x1="6"
+            y1="18"
+            x2="18"
+            y2="6"></line></svg
+        >
+      </button>
+      <div class="modal-eyebrow">{t('contact_modal').eyebrow}</div>
+      <h3 id="contactTitle">{t('contact_modal').title}</h3>
+      <p class="modal-sub">{t('contact_modal').subtitle}</p>
 
-    <form class="contact-form" id="contactForm" action="/api/contact" method="POST" novalidate>
-      <div class="field">
-        <label for="cf-name">{t('contact_modal').name_label}</label>
-        <input id="cf-name" type="text" name="name" required placeholder={t('contact_modal').name_placeholder} />
-      </div>
-      <div class="field">
-        <label for="cf-email">{t('contact_modal').email_label}</label>
-        <input id="cf-email" type="email" name="email" required placeholder={t('contact_modal').email_placeholder} />
-      </div>
-      <div class="field">
-        <label for="cf-message">{t('contact_modal').message_label}</label>
-        <textarea id="cf-message" name="description" required placeholder={t('contact_modal').message_placeholder}></textarea>
-      </div>
-      <div class="field">
-        <button type="submit" class="form-submit">
-          {t('contact_modal').submit}
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        </button>
-      </div>
-    </form>
+      <form
+        class="contact-form"
+        id="contactForm"
+        action="/api/contact"
+        method="POST"
+        novalidate
+      >
+        <div class="field">
+          <label for="cf-name">{t('contact_modal').name_label}</label>
+          <input
+            id="cf-name"
+            type="text"
+            name="name"
+            required
+            placeholder={t('contact_modal').name_placeholder}
+          />
+        </div>
+        <div class="field">
+          <label for="cf-email">{t('contact_modal').email_label}</label>
+          <input
+            id="cf-email"
+            type="email"
+            name="email"
+            required
+            placeholder={t('contact_modal').email_placeholder}
+          />
+        </div>
+        <div class="field">
+          <label for="cf-message">{t('contact_modal').message_label}</label>
+          <textarea
+            id="cf-message"
+            name="description"
+            required
+            placeholder={t('contact_modal').message_placeholder}></textarea>
+        </div>
+        <div class="field">
+          <button type="submit" class="form-submit">
+            {t('contact_modal').submit}
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><line x1="22" y1="2" x2="11" y2="13"></line><polygon
+                points="22 2 15 22 11 13 2 9 22 2"></polygon></svg
+            >
+          </button>
+        </div>
+      </form>
 
-    <div class="form-success" id="contactSuccess" hidden>
-      <div class="check">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <div class="form-success" id="contactSuccess" hidden>
+        <div class="check">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><polyline points="20 6 9 17 4 12"></polyline></svg
+          >
+        </div>
+        <h4>{t('contact_modal').success_title}</h4>
+        <p>{t('contact_modal').success_text}</p>
       </div>
-      <h4>{t('contact_modal').success_title}</h4>
-      <p>{t('contact_modal').success_text}</p>
     </div>
-  </div>
-</dialog>
+  </dialog>
+</contact-section>
 
 <style>
-  .contact-card-glow { content: ""; position: absolute; top: -60%; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, color-mix(in oklab, var(--accent) 30%, transparent), transparent 70%); pointer-events: none; filter: blur(20px); }
-  button[id="openContactModal"]:hover { transform: translateY(-2px); box-shadow: 0 12px 32px color-mix(in oklab, var(--accent) 40%, transparent); }
-  .btn-ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .contact-card-glow {
+    position: absolute;
+    inset: -1px;
+    pointer-events: none;
+    background: radial-gradient(
+      420px circle at 50% -10%,
+      color-mix(in oklab, var(--accent) 24%, transparent),
+      transparent 70%
+    );
+    opacity: 0.8;
+    transition: opacity 0.25s ease;
+  }
+  .contact-card-glow.is-glow-active {
+    background: radial-gradient(
+      420px circle at var(--glow-x, 50%) var(--glow-y, 0%),
+      color-mix(in oklab, var(--accent) 30%, transparent),
+      transparent 68%
+    );
+    opacity: 1;
+  }
+  button[id='openContactModal']:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px color-mix(in oklab, var(--accent) 40%, transparent);
+  }
+  .btn-ghost:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
 
   @media (max-width: 820px) {
     [data-contact-root] {
       overflow-x: clip;
     }
 
-    .contact-card {
-      overflow: visible !important;
-    }
-
     .contact-card-glow {
-      width: clamp(340px, 88vw, 520px);
-      height: clamp(340px, 88vw, 520px);
-      top: -42%;
       opacity: 0.7;
-      filter: blur(26px);
     }
   }
 </style>
 
 <script>
-  function initContact() {
-    const root = document.querySelector<HTMLElement>('[data-contact-root]');
-    // One-time guard avoids duplicate listeners after Astro page transitions.
-    if (!root || root.dataset.ready === 'true') return;
-    root.dataset.ready = 'true';
+  import { initPointerGlow } from 'src/scripts/pointerGlow'
 
-    const modal = document.getElementById('contactModal') as HTMLDialogElement | null;
-    const openBtn = root.querySelector('#openContactModal');
-    const closeBtn = document.getElementById('closeContactModal');
-    const form = document.getElementById('contactForm') as HTMLFormElement | null;
-    const success = document.getElementById('contactSuccess');
-    if (!modal) return;
+  class ContactSectionElement extends HTMLElement {
+    private modal: HTMLDialogElement | null = null
+    private form: HTMLFormElement | null = null
+    private success: HTMLElement | null = null
+    private submitButton: HTMLButtonElement | null = null
+    private submitButtonHtml = ''
+    private successTimerId: number | undefined
+    private errorTimerId: number | undefined
+    private cleanupCallbacks: Array<() => void> = []
+    private destroyGlow: () => void = () => {}
 
-    const openContactModal = () => {
-      modal.showModal();
-      document.body.style.overflow = 'hidden';
-    };
-    const closeContactModal = () => {
-      if (modal.open) modal.close();
-      document.body.style.overflow = '';
-    };
-
-    // Also wire up any [data-open-modal="contact"] buttons (from hero)
-    document.querySelectorAll('[data-open-modal="contact"]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        openContactModal();
-      });
-    });
-
-    if (openBtn) {
-      openBtn.addEventListener('click', openContactModal);
-    }
-    if (closeBtn) {
-      closeBtn.addEventListener('click', closeContactModal);
-      modal.addEventListener('click', (e) => {
-        const r = modal.getBoundingClientRect();
-        const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
-        if (!inside) closeContactModal();
-      });
-      modal.addEventListener('close', () => { document.body.style.overflow = ''; });
+    connectedCallback() {
+      this.cleanup()
+      this.modal = this.querySelector<HTMLDialogElement>('#contactModal')
+      this.form = this.querySelector<HTMLFormElement>('#contactForm')
+      this.success = this.querySelector<HTMLElement>('#contactSuccess')
+      this.submitButton =
+        this.form?.querySelector<HTMLButtonElement>('.form-submit') ?? null
+      this.submitButtonHtml = this.submitButton?.innerHTML ?? ''
+      this.bindModalHandlers()
+      this.bindFormHandler()
+      this.bindGlow()
     }
 
-    if (form && success) {
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = form.querySelector('.form-submit') as HTMLButtonElement;
-        btn.disabled = true;
-        const messages = JSON.parse(modal?.dataset.i18n || '{}');
-        btn.textContent = messages.submitting || 'Sending...';
-        const formData = new FormData(form);
-        try {
-          const res = await fetch('/api/contact', { method: 'POST', body: formData });
-          if (res.ok) {
-            form.hidden = true;
-            success.hidden = false;
-            setTimeout(() => {
-              form.reset(); form.hidden = false; success.hidden = true;
-              btn.disabled = false;
-               btn.textContent = messages.submit || 'Send message';
-            }, 6000);
-          } else throw new Error('failed');
-        } catch {
-          btn.disabled = false;
-           btn.textContent = messages.submit_error || 'Error';
-           setTimeout(() => { btn.textContent = messages.submit || 'Send message'; }, 3000);
-        }
-      });
+    disconnectedCallback() {
+      this.cleanup()
+    }
+
+    private bindModalHandlers() {
+      if (!this.modal) return
+      const openButton = this.querySelector<HTMLElement>('#openContactModal')
+      const closeButton = this.querySelector<HTMLElement>('#closeContactModal')
+      const heroButtons = Array.from(
+        document.querySelectorAll<HTMLElement>('[data-open-modal="contact"]')
+      )
+
+      if (openButton) {
+        openButton.addEventListener('click', this.openContactModal)
+        this.cleanupCallbacks.push(() =>
+          openButton.removeEventListener('click', this.openContactModal)
+        )
+      }
+      if (closeButton) {
+        closeButton.addEventListener('click', this.closeContactModal)
+        this.cleanupCallbacks.push(() =>
+          closeButton.removeEventListener('click', this.closeContactModal)
+        )
+      }
+      heroButtons.forEach((button) => {
+        button.addEventListener('click', this.onHeroOpenClick)
+        this.cleanupCallbacks.push(() =>
+          button.removeEventListener('click', this.onHeroOpenClick)
+        )
+      })
+      this.modal.addEventListener('click', this.onModalBackdropClick)
+      this.modal.addEventListener('close', this.resetBodyOverflow)
+      this.cleanupCallbacks.push(() => {
+        this.modal?.removeEventListener('click', this.onModalBackdropClick)
+        this.modal?.removeEventListener('close', this.resetBodyOverflow)
+      })
+    }
+
+    private bindFormHandler() {
+      if (!this.form || !this.success) return
+      this.form.addEventListener('submit', this.onSubmit)
+      this.cleanupCallbacks.push(() =>
+        this.form?.removeEventListener('submit', this.onSubmit)
+      )
+    }
+
+    private bindGlow() {
+      const card = this.querySelector<HTMLElement>('.contact-card')
+      const glow = this.querySelector<HTMLElement>('.contact-card-glow')
+      if (card && glow) this.destroyGlow = initPointerGlow(card, glow)
+    }
+
+    private openContactModal = () => {
+      if (!this.modal?.open) this.modal?.showModal()
+      document.body.style.overflow = 'hidden'
+    }
+
+    private closeContactModal = () => {
+      if (this.modal?.open) this.modal.close()
+      this.resetBodyOverflow()
+    }
+
+    private onHeroOpenClick = (event: Event) => {
+      event.preventDefault()
+      this.openContactModal()
+    }
+
+    private onModalBackdropClick = (event: MouseEvent) => {
+      if (!this.modal) return
+      const r = this.modal.getBoundingClientRect()
+      const inside =
+        event.clientX >= r.left &&
+        event.clientX <= r.right &&
+        event.clientY >= r.top &&
+        event.clientY <= r.bottom
+      if (!inside) this.closeContactModal()
+    }
+
+    private resetBodyOverflow = () => {
+      document.body.style.overflow = ''
+    }
+
+    private onSubmit = async (event: SubmitEvent) => {
+      event.preventDefault()
+      if (!this.form || !this.success || !this.submitButton || !this.modal)
+        return
+      this.clearTimers()
+      const messages = JSON.parse(this.modal.dataset.i18n || '{}')
+      this.submitButton.disabled = true
+      this.submitButton.textContent = messages.submitting || 'Sending...'
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          body: new FormData(this.form)
+        })
+        if (!response.ok) throw new Error('failed')
+        this.form.hidden = true
+        this.success.hidden = false
+        this.successTimerId = window.setTimeout(() => {
+          this.form?.reset()
+          if (this.form) this.form.hidden = false
+          if (this.success) this.success.hidden = true
+          this.resetSubmitButton()
+        }, 6000)
+      } catch {
+        this.submitButton.disabled = false
+        this.submitButton.textContent = messages.submit_error || 'Error'
+        this.errorTimerId = window.setTimeout(
+          () => this.resetSubmitButton(),
+          3000
+        )
+      }
+    }
+
+    private clearTimers() {
+      if (this.successTimerId !== undefined)
+        window.clearTimeout(this.successTimerId)
+      if (this.errorTimerId !== undefined)
+        window.clearTimeout(this.errorTimerId)
+      this.successTimerId = undefined
+      this.errorTimerId = undefined
+    }
+
+    private resetSubmitButton() {
+      if (!this.submitButton) return
+      this.submitButton.disabled = false
+      this.submitButton.innerHTML = this.submitButtonHtml
+    }
+
+    private cleanup() {
+      this.cleanupCallbacks.forEach((cleanup) => cleanup())
+      this.cleanupCallbacks = []
+      this.destroyGlow()
+      this.destroyGlow = () => {}
+      this.clearTimers()
+      this.resetSubmitButton()
+      if (this.form) this.form.hidden = false
+      if (this.success) this.success.hidden = true
+      this.resetBodyOverflow()
+      this.modal = null
+      this.form = null
+      this.success = null
+      this.submitButton = null
+      this.submitButtonHtml = ''
     }
   }
-  initContact();
-  document.addEventListener('astro:page-load', initContact);
+
+  if (!customElements.get('contact-section'))
+    customElements.define('contact-section', ContactSectionElement)
 </script>

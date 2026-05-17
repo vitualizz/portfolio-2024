@@ -15,6 +15,7 @@ const VALID_ICONS = new Set<string>([
 ])
 ---
 
+<projects-section>
 <section class="s" id="projects">
   <div class="wrap">
     <div class="s-head reveal">
@@ -28,11 +29,12 @@ const VALID_ICONS = new Set<string>([
         const href = project.demo ?? project.githubUrl ?? '#'
         const description = lang === 'es' ? project.description_es : project.description_en
         return (
-          <a class="project bg-bg-2 border border-line text-ink rounded-[20px] overflow-hidden flex flex-col transition-[transform,border-color,box-shadow] duration-300 ease-[ease] reveal [transform-style:preserve-3d] [will-change:transform]" href={href} target="_blank" rel="noopener noreferrer">
+          <a class="project bg-bg-2 border border-line text-ink rounded-[20px] overflow-hidden flex flex-col transition-[transform,border-color,box-shadow] duration-300 ease-[ease] reveal relative [transform-style:preserve-3d] [will-change:transform]" href={href} target="_blank" rel="noopener noreferrer">
+            <span class="project-glow" aria-hidden="true"></span>
             <div class="project-img bg-bg-3 relative overflow-hidden aspect-[16/10]">
               <img src={`/img/projects/${project.image}.webp`} alt={project.title} loading="lazy" class="w-full h-full object-cover transition-transform duration-[600ms] ease-[ease]" />
             </div>
-            <div class="project-body flex flex-col flex-1 px-6 pt-6 pb-[26px]">
+            <div class="project-body flex flex-col flex-1 px-6 pt-6 pb-[26px] relative">
               <div class="flex justify-between items-baseline gap-3 mb-2">
                 <h3 class="text-[22px] font-bold tracking-[-0.02em]">{project.title}</h3>
               </div>
@@ -54,28 +56,61 @@ const VALID_ICONS = new Set<string>([
     </div>
   </div>
 </section>
+</projects-section>
 
 <style>
   .project:hover { transform: translateY(-6px); border-color: color-mix(in oklab, var(--accent) 40%, var(--line)); box-shadow: 0 24px 50px rgba(0,0,0,.3); }
+  .project-glow { position: absolute; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(280px circle at 50% 0%, color-mix(in oklab, var(--accent) 12%, transparent), transparent 70%); opacity: .45; transition: opacity .25s ease; }
+  .project-glow.is-glow-active { background: radial-gradient(280px circle at var(--glow-x, 50%) var(--glow-y, 50%), color-mix(in oklab, var(--accent) 22%, transparent), transparent 68%); opacity: 1; }
   .project-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(11,12,16,.55), transparent 40%); }
   .project:hover .project-img img { transform: scale(1.04); }
   .project:hover .project-link .arrow { transform: translate(3px,-3px); }
 </style>
 
 <script>
-  function initProjects() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    if (window.matchMedia('(hover: none)').matches) return;
-    document.querySelectorAll<HTMLElement>('.project').forEach(card => {
-      card.addEventListener('pointermove', (e: PointerEvent) => {
-        const r = card.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width - 0.5;
-        const y = (e.clientY - r.top) / r.height - 0.5;
-        card.style.transform = `translateY(-6px) rotateX(${(-y*4).toFixed(2)}deg) rotateY(${(x*6).toFixed(2)}deg)`;
-      });
-      card.addEventListener('pointerleave', () => { card.style.transform = ''; });
-    });
+  import { initPointerGlow } from 'src/scripts/pointerGlow'
+
+  class ProjectsSectionElement extends HTMLElement {
+    private cleanupCallbacks: Array<() => void> = []
+
+    connectedCallback() {
+      this.cleanup()
+      this.bindCards()
+    }
+
+    disconnectedCallback() { this.cleanup() }
+
+    private bindCards() {
+      const motionDisabled = window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.matchMedia('(hover: none)').matches
+
+      this.querySelectorAll<HTMLElement>('.project').forEach((card) => {
+        const glow = card.querySelector<HTMLElement>('.project-glow')
+        this.cleanupCallbacks.push(glow ? initPointerGlow(card, glow) : () => {})
+        if (motionDisabled) return
+
+        const onPointerMove = (event: PointerEvent) => {
+          const r = card.getBoundingClientRect()
+          const x = (event.clientX - r.left) / r.width - 0.5
+          const y = (event.clientY - r.top) / r.height - 0.5
+          card.style.transform = `translateY(-6px) rotateX(${(-y * 4).toFixed(2)}deg) rotateY(${(x * 6).toFixed(2)}deg)`
+        }
+        const onPointerLeave = () => { card.style.transform = '' }
+
+        card.addEventListener('pointermove', onPointerMove, { passive: true })
+        card.addEventListener('pointerleave', onPointerLeave, { passive: true })
+        this.cleanupCallbacks.push(() => {
+          card.removeEventListener('pointermove', onPointerMove)
+          card.removeEventListener('pointerleave', onPointerLeave)
+          card.style.transform = ''
+        })
+      })
+    }
+
+    private cleanup() {
+      this.cleanupCallbacks.forEach((cleanup) => cleanup())
+      this.cleanupCallbacks = []
+    }
   }
-  initProjects();
-  document.addEventListener('astro:page-load', initProjects);
+
+  if (!customElements.get('projects-section')) customElements.define('projects-section', ProjectsSectionElement)
 </script>

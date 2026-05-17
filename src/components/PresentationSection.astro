@@ -9,7 +9,6 @@ const t = useTranslation(lang)
 
 <presentation-section>
   <section class="hero" id="top">
-    <div class="hero-spotlight" id="heroSpotlight"></div>
     <div class="wrap">
       <div class="hero-grid">
 
@@ -73,11 +72,6 @@ const t = useTranslation(lang)
 </presentation-section>
 
 <style>
-  .hero-spotlight {
-    position: absolute; inset: 0; pointer-events: none; z-index: 0;
-    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklab, var(--accent) 14%, transparent), transparent 60%);
-    opacity: 0; transition: opacity .4s ease;
-  }
   .hero { min-height: calc(100vh - 72px); display: flex; align-items: center; padding: clamp(40px,6vw,80px) 0 clamp(60px,10vw,120px); position: relative; }
   .hero > .wrap { position: relative; z-index: 1; width: 100%; }
   .hero-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(32px,5vw,80px); align-items: center; width: 100%; }
@@ -127,53 +121,19 @@ const t = useTranslation(lang)
 <script>
   class PresentationSectionElement extends HTMLElement {
     private typewriterEl: HTMLElement | null = null
-    private heroEl: HTMLElement | null = null
-    private spotlightEl: HTMLElement | null = null
     private typeTimeoutId: number | undefined
     private buttonCleanup: Array<() => void> = []
 
-    private onHeroPointerMove = (e: PointerEvent) => {
-      if (!this.heroEl || !this.spotlightEl) return
-      const r = this.heroEl.getBoundingClientRect()
-      this.spotlightEl.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`)
-      this.spotlightEl.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`)
-      this.spotlightEl.style.opacity = '1'
-    }
-
-    private onHeroPointerLeave = () => {
-      if (this.spotlightEl) this.spotlightEl.style.opacity = '0'
-    }
-
     connectedCallback() {
+      this.cleanup()
       this.typewriterEl = this.querySelector<HTMLElement>('#typewriter')
-      this.heroEl = this.querySelector<HTMLElement>('.hero')
-      this.spotlightEl = this.querySelector<HTMLElement>('#heroSpotlight')
 
       this.startTypewriter()
-      this.bindSpotlight()
       this.bindMagneticButtons()
     }
 
     disconnectedCallback() {
-      this.clearTypewriterTimer()
-
-      if (this.heroEl) {
-        this.heroEl.removeEventListener('pointermove', this.onHeroPointerMove)
-        this.heroEl.removeEventListener('pointerleave', this.onHeroPointerLeave)
-      }
-
-      if (this.spotlightEl) {
-        this.spotlightEl.style.opacity = ''
-        this.spotlightEl.style.removeProperty('--mx')
-        this.spotlightEl.style.removeProperty('--my')
-      }
-
-      this.buttonCleanup.forEach((cleanup) => cleanup())
-      this.buttonCleanup = []
-
-      this.typewriterEl = null
-      this.heroEl = null
-      this.spotlightEl = null
+      this.cleanup()
     }
 
     private scheduleTypewriter(nextTick: () => void, delay: number) {
@@ -228,19 +188,6 @@ const t = useTranslation(lang)
       this.scheduleTypewriter(tick, 900)
     }
 
-    private bindSpotlight() {
-      if (
-        !this.heroEl ||
-        !this.spotlightEl ||
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      ) {
-        return
-      }
-
-      this.heroEl.addEventListener('pointermove', this.onHeroPointerMove)
-      this.heroEl.addEventListener('pointerleave', this.onHeroPointerLeave)
-    }
-
     private bindMagneticButtons() {
       if (
         window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
@@ -270,6 +217,13 @@ const t = useTranslation(lang)
           btn.style.transform = ''
         })
       })
+    }
+
+    private cleanup() {
+      this.clearTypewriterTimer()
+      this.buttonCleanup.forEach((cleanup) => cleanup())
+      this.buttonCleanup = []
+      this.typewriterEl = null
     }
   }
 

@@ -233,7 +233,6 @@ h4 {
 
 @media (prefers-reduced-motion: reduce) {
   .reveal, .chip-prep { opacity: 1; transform: none; transition: none; }
-  .hero-spotlight { display: none; }
 }
 
 /* ===== SECTION SHELL ===== */
