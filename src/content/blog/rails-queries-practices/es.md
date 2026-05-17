@@ -7,7 +7,7 @@ tags: ['rails', 'best-practices', 'queries']
 lang: es
 cover: ./cover.webp
 coverLink: https://rubyonrails.org
-shortDescription: En este artículo, te mostraré algunos consejos para optimizar tus consultas en Rails. Estos consejos te ayudarán a mejorar el rendimiento de tu aplicación y a escribir consultas más eficientes.
+shortDescription: "Cómo diagnostico y corrijo queries lentas en Rails en producción. EXPLAIN, índices — y el punto exacto donde ActiveRecord deja de ayudarte y empieza a esconder el costo."
 longDescription: En este artículo, te mostraré algunos consejos para optimizar tus consultas en Rails. Estos consejos te ayudarán a mejorar el rendimiento de tu aplicación y a escribir consultas más eficientes.
 ---
 

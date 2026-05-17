@@ -7,7 +7,7 @@ tags: ['ruby', 'rails', 'best-practices']
 lang: en
 cover: ./cover.webp
 coverLink: https://rubyonrails.org
-shortDescription: This article details good practices based on my experience to write clean, maintainable, and efficient Ruby code.
+shortDescription: "Notes from years of Ruby in production: the patterns that survive contact with the team, the ones that quietly rot, and a couple I now refuse to write."
 longDescription: This article details good practices based on my experience to write clean, maintainable, and efficient Ruby code. Although some of these practices are specific to Ruby, many of them also apply to other programming languages.
 ---
 

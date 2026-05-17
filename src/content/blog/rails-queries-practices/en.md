@@ -7,7 +7,7 @@ tags: ['rails', 'best-practices', 'queries']
 lang: en
 cover: ./cover.webp
 coverLink: https://rubyonrails.org
-shortDescription: In this article, I'll show you some tips to optimize your queries in Rails. These tips will help you improve your application's performance and write more efficient queries.
+shortDescription: "How I diagnose and fix slow Rails queries in production. EXPLAIN-driven, index-aware — and where ActiveRecord stops helping and starts hiding the cost."
 longDescription: In this article, I'll show you some tips to optimize your queries in Rails. These tips will help you improve your application's performance and write more efficient queries.
 ---
 

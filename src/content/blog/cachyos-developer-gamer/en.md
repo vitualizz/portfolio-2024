@@ -1,7 +1,7 @@
 ---
 title: The Ideal Linux Distribution for Programming and Gaming
 seoTitle: 'CachyOS: The Ideal Linux Distribution for Programming and Gaming'
-shortDescription: CachyOS is a Linux distribution based on Arch Linux, promising to maximize your system's performance and customization.
+shortDescription: "Why CachyOS — an Arch derivative — has been my daily driver for both code and gaming. The honest tradeoffs, not the cheerleading."
 longDescription: CachyOS is a Linux distribution based on Arch Linux, promising to maximize your system's performance and customization. With its focus on resource optimization, it's an excellent choice for both programmers and gamers looking to get the most out of their equipment.
 cover: ./cover.webp
 coverLink: https://cachyos.org
