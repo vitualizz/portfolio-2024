@@ -16,71 +16,105 @@ const t = useTranslation(lang)
       <span class="text-muted-custom mx-1">·</span>
       <span class="text-ink-soft">explorer</span>
     </div>
-    <div class="stack-legend hidden sm:inline-flex gap-[14px] font-mono text-[10.5px] text-muted-custom uppercase tracking-[0.05em]">
+    <div
+      class="stack-legend text-muted-custom hidden gap-[14px] font-mono text-[10.5px] tracking-[0.05em] uppercase sm:inline-flex"
+    >
       <span class="inline-flex items-center gap-[6px]">
-        <span class="leg-dot leg-core w-2 h-2 rounded-full inline-block"></span>{t('home').stack_legend_core}
+        <span class="leg-dot leg-core inline-block h-2 w-2 rounded-full"
+        ></span>{t('home').stack_legend_core}
       </span>
       <span class="inline-flex items-center gap-[6px]">
-        <span class="leg-dot leg-strong w-2 h-2 rounded-full inline-block bg-mint"></span>{t('home').stack_legend_strong}
+        <span
+          class="leg-dot leg-strong bg-mint inline-block h-2 w-2 rounded-full"
+        ></span>{t('home').stack_legend_strong}
       </span>
       <span class="inline-flex items-center gap-[6px]">
-        <span class="leg-dot leg-learn w-2 h-2 rounded-full inline-block bg-coral"></span>{t('home').stack_legend_learn}
+        <span
+          class="leg-dot leg-learn bg-coral inline-block h-2 w-2 rounded-full"
+        ></span>{t('home').stack_legend_learn}
       </span>
     </div>
   </div>
 
   <div class="stack-tabs" role="tablist">
-    {stackExplorerPanels.map((panel, i) => (
-      <button
-        class={`stack-tab${i === 0 ? ' is-active' : ''}`}
-        data-stack={panel.key}
-        role="tab"
-        aria-selected={i === 0 ? 'true' : 'false'}
-      >
-        <span class="st-num hidden sm:inline font-mono text-[10.5px]">{panel.tabNum}</span>
-        <span class="st-name">{panel.tabName}</span>
-      </button>
-    ))}
+    {
+      stackExplorerPanels.map((panel, i) => (
+        <button
+          class={`stack-tab${i === 0 ? ' is-active' : ''}`}
+          data-stack={panel.key}
+          role="tab"
+          aria-selected={i === 0 ? 'true' : 'false'}
+        >
+          <span class="st-num hidden font-mono text-[10.5px] sm:inline">
+            {panel.tabNum}
+          </span>
+          <span class="st-name">{panel.tabName}</span>
+        </button>
+      ))
+    }
   </div>
 
-  <div class="stack-panels px-[18px] pt-5 pb-2 min-h-[240px]">
-    {stackExplorerPanels.map((panel, i) => (
-      <div class={`stack-panel${i === 0 ? ' is-active' : ''}`} data-panel={panel.key}>
-        <p class="stack-line mb-4 text-[14.5px] text-ink-soft leading-[1.55]">
-          {panel.description[lang]}
-        </p>
-        <div class="stack-chips flex flex-wrap gap-[7px]">
-          {panel.chips.map(chip => (
-            <span class={`schip ${chip.variant}`}>{chip.label}</span>
-          ))}
+  <div class="stack-panels min-h-[240px] px-[18px] pt-5 pb-2">
+    {
+      stackExplorerPanels.map((panel, i) => (
+        <div
+          class={`stack-panel${i === 0 ? ' is-active' : ''}`}
+          data-panel={panel.key}
+        >
+          <p class="stack-line text-ink-soft mb-4 text-[14.5px] leading-[1.55]">
+            {panel.description[lang]}
+          </p>
+          <div class="stack-chips flex flex-wrap gap-[7px]">
+            {panel.chips.map((chip) => (
+              <span class={`schip ${chip.variant}`}>{chip.label}</span>
+            ))}
+          </div>
         </div>
-      </div>
-    ))}
+      ))
+    }
   </div>
 
   <div class="stack-foot">
     <span class="sf-mono text-accent">$ whoami</span>
-    <span class="sf-line font-sans text-ink-soft text-[13.5px] leading-[1.5]" set:html={t('about_me').stack_footer} />
+    <span
+      class="sf-line text-ink-soft font-sans text-[13.5px] leading-[1.5]"
+      set:html={t('about_me').stack_footer}
+    />
   </div>
 </stack-explorer>
 
 <style>
   .stack-explorer {
-    background: linear-gradient(180deg, var(--bg-2), color-mix(in oklab, var(--bg-2) 70%, var(--bg)));
+    background: linear-gradient(
+      180deg,
+      var(--bg-2),
+      color-mix(in oklab, var(--bg-2) 70%, var(--bg))
+    );
     border: 1px solid var(--line);
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0,0,0,.25);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
     position: relative;
   }
   .stack-explorer::before {
-    content: "";
-    position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--coral), var(--mint));
-    opacity: .9;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      var(--accent),
+      var(--coral),
+      var(--mint)
+    );
+    opacity: 0.9;
   }
   .stack-head {
-    display: flex; justify-content: space-between; align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 14px 18px;
     border-bottom: 1px solid var(--line);
     background: color-mix(in oklab, var(--bg) 50%, transparent);
@@ -99,7 +133,9 @@ const t = useTranslation(lang)
     background: color-mix(in oklab, var(--bg) 30%, transparent);
     scrollbar-width: none;
   }
-  .stack-tabs::-webkit-scrollbar { display: none; }
+  .stack-tabs::-webkit-scrollbar {
+    display: none;
+  }
 
   .stack-tab {
     flex: 1 0 auto;
@@ -112,35 +148,62 @@ const t = useTranslation(lang)
     font-size: 13px;
     font-weight: 500;
     letter-spacing: -0.005em;
-    display: inline-flex; align-items: baseline; gap: 8px;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
     border-right: 1px solid var(--line);
     position: relative;
-    transition: color .2s, background .2s;
+    transition:
+      color 0.2s,
+      background 0.2s;
     white-space: nowrap;
   }
-  .stack-tab:last-child { border-right: none; }
-  .stack-tab:hover { color: var(--ink); background: color-mix(in oklab, var(--accent) 6%, transparent); }
+  .stack-tab:last-child {
+    border-right: none;
+  }
+  .stack-tab:hover {
+    color: var(--ink);
+    background: color-mix(in oklab, var(--accent) 6%, transparent);
+  }
   .stack-tab.is-active {
     color: var(--ink);
     background: color-mix(in oklab, var(--accent) 10%, var(--bg-2));
   }
-  .stack-tab.is-active .st-num { color: var(--accent); }
+  .stack-tab.is-active .st-num {
+    color: var(--accent);
+  }
   .stack-tab.is-active::after {
-    content: "";
-    position: absolute; left: 0; right: 0; bottom: -1px;
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
     height: 2px;
     background: var(--accent);
   }
 
-  .stack-panel { display: none; animation: panelIn .4s cubic-bezier(.2,.7,.3,1) both; }
-  .stack-panel.is-active { display: block; }
+  .stack-panel {
+    display: none;
+    animation: panelIn 0.4s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  }
+  .stack-panel.is-active {
+    display: block;
+  }
   @keyframes panelIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: none; }
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   .schip {
-    display: inline-flex; align-items: center; gap: 7px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
     padding: 8px 13px;
     background: color-mix(in oklab, var(--bg) 60%, transparent);
     border: 1px solid var(--line);
@@ -148,49 +211,97 @@ const t = useTranslation(lang)
     font-size: 13.5px;
     font-weight: 500;
     color: var(--ink-soft);
-    transition: transform .2s, border-color .2s, color .2s, box-shadow .2s;
+    transition:
+      transform 0.2s,
+      border-color 0.2s,
+      color 0.2s,
+      box-shadow 0.2s;
     cursor: default;
-    animation: chipPop .35s cubic-bezier(.2,.7,.3,1) both;
+    animation: chipPop 0.35s cubic-bezier(0.2, 0.7, 0.3, 1) both;
   }
   .schip::before {
-    content: "";
-    width: 7px; height: 7px; border-radius: 50%;
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
     flex-shrink: 0;
   }
   .schip.s-core::before {
     background: var(--accent);
     box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 25%, transparent);
   }
-  .schip.s-strong::before { background: var(--mint); }
-  .schip.s-learn::before { background: var(--coral); }
+  .schip.s-strong::before {
+    background: var(--mint);
+  }
+  .schip.s-learn::before {
+    background: var(--coral);
+  }
   .schip.s-core {
     color: var(--ink);
     border-color: color-mix(in oklab, var(--accent) 35%, var(--line));
-    background: linear-gradient(135deg, color-mix(in oklab, var(--accent) 14%, var(--bg-2)), var(--bg-2));
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--accent) 14%, var(--bg-2)),
+      var(--bg-2)
+    );
     font-weight: 600;
   }
-  .schip:hover { transform: translateY(-2px); border-color: var(--accent); color: var(--ink); }
-  .schip.s-core:hover { box-shadow: 0 8px 16px color-mix(in oklab, var(--accent) 22%, transparent); }
+  .schip:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+  .schip.s-core:hover {
+    box-shadow: 0 8px 16px color-mix(in oklab, var(--accent) 22%, transparent);
+  }
 
   @keyframes chipPop {
-    from { opacity: 0; transform: translateY(4px) scale(.96); }
-    to { opacity: 1; transform: none; }
+    from {
+      opacity: 0;
+      transform: translateY(4px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
-  .stack-panel.is-active .schip:nth-child(1)  { animation-delay: .02s; }
-  .stack-panel.is-active .schip:nth-child(2)  { animation-delay: .05s; }
-  .stack-panel.is-active .schip:nth-child(3)  { animation-delay: .08s; }
-  .stack-panel.is-active .schip:nth-child(4)  { animation-delay: .11s; }
-  .stack-panel.is-active .schip:nth-child(5)  { animation-delay: .14s; }
-  .stack-panel.is-active .schip:nth-child(6)  { animation-delay: .17s; }
-  .stack-panel.is-active .schip:nth-child(7)  { animation-delay: .20s; }
-  .stack-panel.is-active .schip:nth-child(8)  { animation-delay: .23s; }
-  .stack-panel.is-active .schip:nth-child(9)  { animation-delay: .26s; }
-  .stack-panel.is-active .schip:nth-child(10) { animation-delay: .29s; }
+  .stack-panel.is-active .schip:nth-child(1) {
+    animation-delay: 0.02s;
+  }
+  .stack-panel.is-active .schip:nth-child(2) {
+    animation-delay: 0.05s;
+  }
+  .stack-panel.is-active .schip:nth-child(3) {
+    animation-delay: 0.08s;
+  }
+  .stack-panel.is-active .schip:nth-child(4) {
+    animation-delay: 0.11s;
+  }
+  .stack-panel.is-active .schip:nth-child(5) {
+    animation-delay: 0.14s;
+  }
+  .stack-panel.is-active .schip:nth-child(6) {
+    animation-delay: 0.17s;
+  }
+  .stack-panel.is-active .schip:nth-child(7) {
+    animation-delay: 0.2s;
+  }
+  .stack-panel.is-active .schip:nth-child(8) {
+    animation-delay: 0.23s;
+  }
+  .stack-panel.is-active .schip:nth-child(9) {
+    animation-delay: 0.26s;
+  }
+  .stack-panel.is-active .schip:nth-child(10) {
+    animation-delay: 0.29s;
+  }
 
   .stack-foot {
     border-top: 1px dashed var(--line);
     padding: 14px 18px;
-    display: flex; align-items: baseline; gap: 10px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
     font-family: var(--font-mono);
     font-size: 12px;
     color: var(--muted);
@@ -199,25 +310,32 @@ const t = useTranslation(lang)
   }
 
   @media (max-width: 540px) {
-    .stack-tab { padding: 12px; font-size: 12.5px; }
+    .stack-tab {
+      padding: 12px;
+      font-size: 12.5px;
+    }
   }
 </style>
 
 <script>
   class StackExplorerElement extends HTMLElement {
     connectedCallback() {
-      this.querySelectorAll<HTMLButtonElement>('.stack-tab').forEach(tab => {
+      this.querySelectorAll<HTMLButtonElement>('.stack-tab').forEach((tab) => {
         tab.addEventListener('click', () => {
           const key = tab.dataset.stack
           if (!key) return
-          this.querySelectorAll('.stack-tab').forEach(t => {
+          this.querySelectorAll('.stack-tab').forEach((t) => {
             t.classList.remove('is-active')
             t.setAttribute('aria-selected', 'false')
           })
-          this.querySelectorAll('.stack-panel').forEach(p => p.classList.remove('is-active'))
+          this.querySelectorAll('.stack-panel').forEach((p) =>
+            p.classList.remove('is-active')
+          )
           tab.classList.add('is-active')
           tab.setAttribute('aria-selected', 'true')
-          this.querySelector<HTMLElement>(`[data-panel="${key}"]`)?.classList.add('is-active')
+          this.querySelector<HTMLElement>(
+            `[data-panel="${key}"]`
+          )?.classList.add('is-active')
         })
       })
     }

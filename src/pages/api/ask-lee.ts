@@ -35,7 +35,10 @@ const normalizeMessages = (value: unknown): ChatMessage[] => {
       if (!item || typeof item !== 'object') return false
 
       const candidate = item as Partial<ChatMessage>
-      return typeof candidate.role === 'string' && typeof candidate.content === 'string'
+      return (
+        typeof candidate.role === 'string' &&
+        typeof candidate.content === 'string'
+      )
     })
     .map((item) => ({ role: item.role, content: item.content }))
 }
@@ -43,13 +46,21 @@ const normalizeMessages = (value: unknown): ChatMessage[] => {
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json()
-    const messages = normalizeMessages((body as { messages?: unknown }).messages)
+    const messages = normalizeMessages(
+      (body as { messages?: unknown }).messages
+    )
     const apiKey = import.meta.env.ANTHROPIC_API_KEY
     if (!apiKey) {
-      return new Response(JSON.stringify({ answer: 'API key not configured. Por favor escríbeme directamente por el formulario de contacto.' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
+      return new Response(
+        JSON.stringify({
+          answer:
+            'API key not configured. Por favor escríbeme directamente por el formulario de contacto.'
+        }),
+        {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      )
     }
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -72,9 +83,14 @@ export const POST: APIRoute = async ({ request }) => {
       headers: { 'Content-Type': 'application/json' }
     })
   } catch (err) {
-    return new Response(JSON.stringify({ answer: 'Error procesando tu pregunta. Intenta de nuevo.' }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    })
+    return new Response(
+      JSON.stringify({
+        answer: 'Error procesando tu pregunta. Intenta de nuevo.'
+      }),
+      {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    )
   }
 }

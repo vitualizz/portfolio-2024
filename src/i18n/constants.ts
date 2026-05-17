@@ -5,7 +5,7 @@ export const DEFAULT_LANG: LanguagesCodes = 'es'
 
 export const LANG_ROUTE: Record<LanguagesCodes, `/${LanguagesCodes}`> = {
   es: '/es',
-  en: '/en',
+  en: '/en'
 }
 
 export const SECTION_IDS = {
@@ -15,17 +15,17 @@ export const SECTION_IDS = {
   projects: 'projects',
   xp: 'xp',
   blog: 'blog',
-  contact: 'contact',
+  contact: 'contact'
 } as const
 
 export const CV_PATH_BY_LANG: Record<LanguagesCodes, string> = {
   es: '/cv/es.pdf',
-  en: '/cv/en.pdf',
+  en: '/cv/en.pdf'
 }
 
 export const BLOG_DATE_LOCALE: Record<LanguagesCodes, string> = {
   es: 'es-PE',
-  en: 'en-US',
+  en: 'en-US'
 }
 
 export function withLangPath(lang: LanguagesCodes, hashOrPath = ''): string {

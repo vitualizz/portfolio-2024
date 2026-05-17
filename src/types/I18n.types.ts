@@ -33,7 +33,7 @@ export type LanguageLocale = {
     switch_language: string
     language_name: string
     language_option: string
-  },
+  }
   home: {
     about_eyebrow: string
     about_title: string
@@ -59,7 +59,7 @@ export type LanguageLocale = {
     stack_legend_core: string
     stack_legend_strong: string
     stack_legend_learn: string
-  },
+  }
   presentation: {
     hi: string
     i_am: string
@@ -70,7 +70,7 @@ export type LanguageLocale = {
     tagline: string
     cta_primary: string
     cta_secondary: string
-  },
+  }
   about_me: {
     section_about_me: string
     section_skills: string
@@ -83,30 +83,30 @@ export type LanguageLocale = {
     stat_projects: string
     stat_stack: string
     stack_footer: string
-  },
-  work_experience: WorkExperienceLocale,
+  }
+  work_experience: WorkExperienceLocale
   projects: {
     section_projects: string
     live_preview: string
     github_label: string
     view_image: string
-  },
+  }
   contact_me: {
     tell_me: string
     send_message_me: string
     resume_label: string
     form: ContactForm
-  },
+  }
   footer: {
     thanks: string
-  },
+  }
   blog: {
     title: string
     read_more: string
     read_article: string
     back_to_blog: string
     min_read: string
-  },
+  }
   ai: {
     greeting: string
     hint: string
@@ -161,5 +161,5 @@ export type LanguageLocale = {
     description: string
     image: string
     url: string
-  },
+  }
 }

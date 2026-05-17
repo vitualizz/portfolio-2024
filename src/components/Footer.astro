@@ -1,12 +1,16 @@
 ---
 import { useTranslation } from 'src/i18n/utils'
 
-interface Props { lang: 'es' | 'en' }
+interface Props {
+  lang: 'es' | 'en'
+}
 const { lang } = Astro.props
 const t = useTranslation(lang)
 ---
 
-<footer class="foot py-8 border-t border-line text-muted-custom font-mono text-[12px] uppercase tracking-[0.06em]">
+<footer
+  class="foot border-line text-muted-custom border-t py-8 font-mono text-[12px] tracking-[0.06em] uppercase"
+>
   <div class="wrap">
     <div>{t('footer').thanks} · 2026</div>
     <div>{t('home').footer_location_line}</div>
@@ -14,5 +18,11 @@ const t = useTranslation(lang)
 </footer>
 
 <style>
-  footer.foot .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  footer.foot .wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
 </style>

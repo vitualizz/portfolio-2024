@@ -2,9 +2,10 @@
 import { useTranslation } from 'src/i18n/utils'
 import { BLOG_DATE_LOCALE } from 'src/i18n/constants'
 import { safeI18nHtml } from 'src/components/shared/i18nRichText'
+import type { CollectionEntry } from 'astro:content'
 
 interface Props {
-  posts: any[]
+  posts: CollectionEntry<'blog'>[]
   lang: 'es' | 'en'
 }
 const { posts, lang } = Astro.props
@@ -20,31 +21,66 @@ const t = useTranslation(lang)
     </div>
 
     <div class="blog-grid grid grid-cols-3 gap-5 max-[920px]:grid-cols-1">
-      {posts.map(post => {
-        const slug = post.slug.split('/')[0]
-        const date = post.data.date.toLocaleDateString(BLOG_DATE_LOCALE[lang], { day: 'numeric', month: 'short', year: 'numeric' })
-        return (
-          <a class="blog-card bg-bg-2 border border-line text-ink text-left rounded-[18px] px-[26px] pt-[26px] pb-[22px] cursor-pointer flex flex-col relative overflow-hidden reveal transition-[transform,border-color,box-shadow] duration-[350ms] ease-[cubic-bezier(.2,.7,.3,1)]" href={`/${lang}/blog/${slug}`}>
-            <div class="flex gap-3 items-center font-mono text-[11px] text-muted-custom uppercase tracking-[0.04em] mb-4">
-              <span class="blog-tag text-accent py-[2px] px-2 rounded-full border border-[color-mix(in_oklab,var(--accent)_35%,var(--line))] bg-[color-mix(in_oklab,var(--accent)_8%,transparent)]">{post.data.tags[0]}</span>
-              <span class="text-muted-custom">{date}</span>
-            </div>
-            <h3 class="text-[22px] font-bold tracking-[-0.02em] mb-[10px] leading-[1.15]">{post.data.title}</h3>
-            <p class="text-muted-custom text-[14.5px] leading-[1.6] mb-[18px] flex-1">{post.data.shortDescription}</p>
-            <div class="blog-foot text-accent flex justify-between items-center font-mono text-[12px]">
-              <span>{t('blog').read_article}</span>
-              <span class="arrow transition-transform duration-[250ms]">↗</span>
-            </div>
-          </a>
-        )
-      })}
+      {
+        posts.map((post) => {
+          const slug = post.slug.split('/')[0]
+          const date = post.data.date.toLocaleDateString(
+            BLOG_DATE_LOCALE[lang],
+            { day: 'numeric', month: 'short', year: 'numeric' }
+          )
+          return (
+            <a
+              class="blog-card bg-bg-2 border-line text-ink reveal relative flex cursor-pointer flex-col overflow-hidden rounded-[18px] border px-[26px] pt-[26px] pb-[22px] text-left transition-[transform,border-color,box-shadow] duration-[350ms] ease-[cubic-bezier(.2,.7,.3,1)]"
+              href={`/${lang}/blog/${slug}`}
+            >
+              <div class="text-muted-custom mb-4 flex items-center gap-3 font-mono text-[11px] tracking-[0.04em] uppercase">
+                <span class="blog-tag text-accent rounded-full border border-[color-mix(in_oklab,var(--accent)_35%,var(--line))] bg-[color-mix(in_oklab,var(--accent)_8%,transparent)] px-2 py-[2px]">
+                  {post.data.tags[0]}
+                </span>
+                <span class="text-muted-custom">{date}</span>
+              </div>
+              <h3 class="mb-[10px] text-[22px] leading-[1.15] font-bold tracking-[-0.02em]">
+                {post.data.title}
+              </h3>
+              <p class="text-muted-custom mb-[18px] flex-1 text-[14.5px] leading-[1.6]">
+                {post.data.shortDescription}
+              </p>
+              <div class="blog-foot text-accent flex items-center justify-between font-mono text-[12px]">
+                <span>{t('blog').read_article}</span>
+                <span class="arrow transition-transform duration-[250ms]">
+                  ↗
+                </span>
+              </div>
+            </a>
+          )
+        })
+      }
     </div>
   </div>
 </section>
 
 <style>
-  .blog-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .4s ease; }
-  .blog-card:hover::before { transform: scaleX(1); }
-  .blog-card:hover { transform: translateY(-6px); border-color: color-mix(in oklab, var(--accent) 40%, var(--line)); box-shadow: 0 24px 40px rgba(0,0,0,.3); }
-  .blog-card:hover .blog-foot .arrow { transform: translate(4px,-4px); }
+  .blog-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .blog-card:hover::before {
+    transform: scaleX(1);
+  }
+  .blog-card:hover {
+    transform: translateY(-6px);
+    border-color: color-mix(in oklab, var(--accent) 40%, var(--line));
+    box-shadow: 0 24px 40px rgba(0, 0, 0, 0.3);
+  }
+  .blog-card:hover .blog-foot .arrow {
+    transform: translate(4px, -4px);
+  }
 </style>

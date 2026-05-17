@@ -13,7 +13,14 @@
     "period": { "start": "2022-06", "end": "2024-08" },
     "description_en": "Owned features across a condominium management platform serving thousands of buildings. Ruby on Rails + React + Postgres; led query optimization and cross-team refactors.",
     "description_es": "Lideré features en una plataforma de administración de condominios usada por miles de edificios. Ruby on Rails + React + Postgres; optimización de queries y refactors entre equipos.",
-    "tech": ["Ruby on Rails", "React", "TypeScript", "Redux", "TailwindCSS", "Postgres"]
+    "tech": [
+      "Ruby on Rails",
+      "React",
+      "TypeScript",
+      "Redux",
+      "TailwindCSS",
+      "Postgres"
+    ]
   },
   {
     "company": "Influgo",
@@ -21,7 +28,14 @@
     "period": { "start": "2020-01", "end": "2022-05" },
     "description_en": "Led the build of a campaign and proposal management system for influencers. Architected the Rails API and React/React Native clients; set conventions still in use today.",
     "description_es": "Lideré la construcción de un sistema de gestión de campañas y propuestas para influencers. Diseñé la API en Rails y los clientes React/React Native; establecí convenciones aún vigentes.",
-    "tech": ["Ruby on Rails", "React", "React Native", "TypeScript", "AWS Lambda", "Postgres"]
+    "tech": [
+      "Ruby on Rails",
+      "React",
+      "React Native",
+      "TypeScript",
+      "AWS Lambda",
+      "Postgres"
+    ]
   },
   {
     "company": "Inmology",

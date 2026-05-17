@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.astro/
+.vercel/
+coverage/
+
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+.env
+.env.*
+*.log
+
+public/cv/

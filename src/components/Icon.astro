@@ -27,7 +27,7 @@ export interface Props {
 }
 const { name } = Astro.props as Props
 
-const map: Record<IconType, any> = {
+const map: Record<IconType, typeof Ruby> = {
   javascript: Javascript,
   ruby: Ruby,
   typescript: Typescript,

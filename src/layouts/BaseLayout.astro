@@ -25,10 +25,10 @@ const twitterImage = new URL('/img/seo/twitter-image.png', Astro.url)
 <html lang={lang} data-theme="dark">
   <head>
     <script is:inline>
-      (function() {
-        const stored = localStorage.getItem('portfolio-theme');
-        if (stored) document.documentElement.setAttribute('data-theme', stored);
-      })();
+      ;(function () {
+        const stored = localStorage.getItem('portfolio-theme')
+        if (stored) document.documentElement.setAttribute('data-theme', stored)
+      })()
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -43,8 +43,20 @@ const twitterImage = new URL('/img/seo/twitter-image.png', Astro.url)
     <meta name="twitter:description" content={tSeo.description} />
     <meta name="twitter:image" content={twitterImage} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preload" href={bricolageUrl} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={dmSansUrl} as="font" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      href={bricolageUrl}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href={dmSansUrl}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <title>{title ?? tSeo.title}</title>
     <ClientRouter />
   </head>

@@ -16,39 +16,39 @@ const posts = allPosts.sort(
 ---
 
 <HomeLayout>
-  <main class="px-6 lg:px-16 py-24 max-w-6xl mx-auto">
-    <div class="mb-16 anim-fade-up">
-      <h1 class="font-display text-5xl lg:text-6xl font-bold mb-4">Blog</h1>
-      <div class="w-16 h-1 bg-accent rounded-full"></div>
+  <main class="mx-auto max-w-6xl px-6 py-24 lg:px-16">
+    <div class="anim-fade-up mb-16">
+      <h1 class="font-display mb-4 text-5xl font-bold lg:text-6xl">Blog</h1>
+      <div class="bg-accent h-1 w-16 rounded-full"></div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {
         posts.map((post, i) => (
           <a
             href={`/${lang}/blog/${post.slug.split('/')[0]}`}
-            class="group block anim-fade-up"
+            class="group anim-fade-up block"
             style={`animation-delay: ${i * 0.1}s`}
           >
-            <article class="h-full rounded-xl border border-border bg-surface p-6 flex flex-col gap-4 hover:border-accent/50 transition-colors duration-300">
-              <time class="text-sm text-text-muted font-medium">
+            <article class="border-border bg-surface hover:border-accent/50 flex h-full flex-col gap-4 rounded-xl border p-6 transition-colors duration-300">
+              <time class="text-text-muted text-sm font-medium">
                 {new Date(post.data.date).toLocaleDateString(
                   lang === 'en' ? 'en-US' : 'es-ES',
                   { year: 'numeric', month: 'long', day: 'numeric' }
                 )}
               </time>
 
-              <h2 class="font-display text-xl lg:text-2xl font-semibold group-hover:text-accent transition-colors leading-tight">
+              <h2 class="font-display group-hover:text-accent text-xl leading-tight font-semibold transition-colors lg:text-2xl">
                 {post.data.title}
               </h2>
 
               {post.data.shortDescription && (
-                <p class="text-text-muted text-sm leading-relaxed flex-1">
+                <p class="text-text-muted flex-1 text-sm leading-relaxed">
                   {post.data.shortDescription}
                 </p>
               )}
 
-              <div class="flex items-center gap-1 text-accent text-sm font-medium mt-auto">
+              <div class="text-accent mt-auto flex items-center gap-1 text-sm font-medium">
                 <span>{tBlog.read_more}</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

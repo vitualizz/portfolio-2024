@@ -40,7 +40,8 @@ const locale: LanguageLocale = {
     contact_download_cv: 'Download CV',
     paused_label: 'paused',
     footer_location_line: 'Lima · UTC −5 · ES / EN',
-    quote_text: "Code is the easy part. <span class='hl'>Shipping product that holds</span> — and that the team understands coming back on Monday — is the work.",
+    quote_text:
+      "Code is the easy part. <span class='hl'>Shipping product that holds</span> — and that the team understands coming back on Monday — is the work.",
     stack_legend_core: 'Core',
     stack_legend_strong: 'Solid',
     stack_legend_learn: 'Learning'
@@ -77,7 +78,8 @@ const locale: LanguageLocale = {
     stat_years: 'Yrs of exp.',
     stat_projects: 'Projects',
     stat_stack: 'Full Stack',
-    stack_footer: "→ someone who prefers <b>learning one tool deeply</b> over collecting 20 logos on a resume."
+    stack_footer:
+      '→ someone who prefers <b>learning one tool deeply</b> over collecting 20 logos on a resume.'
   },
   work_experience: {
     title: 'Experience',
@@ -119,8 +121,7 @@ const locale: LanguageLocale = {
     min_read: 'MIN READ'
   },
   ai: {
-    greeting:
-      `Hi! I'm Lee's AI version. Ask me about <b class="hl">backend</b>, <b class="hl">architecture</b>, <b class="hl">AI agents</b>, <b class="hl">Postgres</b>, or production projects 🐱.`,
+    greeting: `Hi! I'm Lee's AI version. Ask me about <b class="hl">backend</b>, <b class="hl">architecture</b>, <b class="hl">AI agents</b>, <b class="hl">Postgres</b>, or production projects 🐱.`,
     hint: 'Tip: try a shortcut above ↑ or write your own question below ↓',
     input_placeholder: 'Write your question for Lee...',
     send_aria: 'Send',

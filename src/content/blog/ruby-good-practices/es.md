@@ -10,6 +10,7 @@ coverLink: https://rubyonrails.org
 shortDescription: Este artículo detalla buenas prácticas en base a la experiencia que tengo para escribir código Ruby limpio, mantenible y eficiente.
 longDescription: Este artículo detalla buenas prácticas en base a la experiencia que tengo para escribir código Ruby limpio, mantenible y eficiente. Aunque algunas de estas prácticas son específicas de Ruby, muchas de ellas también se aplican a otros lenguajes de programación.
 ---
+
 # Buenas Prácticas en Ruby (y Rails)
 
 Este artículo detalla buenas prácticas en base a la experiencia que tengo para escribir código Ruby limpio, mantenible y eficiente. Aunque algunas de estas prácticas son específicas de Ruby, muchas de ellas también se aplican a otros lenguajes de programación.

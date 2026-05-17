@@ -10,6 +10,7 @@ coverLink: https://rubyonrails.org
 shortDescription: En este artículo, te mostraré algunos consejos para optimizar tus consultas en Rails. Estos consejos te ayudarán a mejorar el rendimiento de tu aplicación y a escribir consultas más eficientes.
 longDescription: En este artículo, te mostraré algunos consejos para optimizar tus consultas en Rails. Estos consejos te ayudarán a mejorar el rendimiento de tu aplicación y a escribir consultas más eficientes.
 ---
+
 # Consejos para optimizar tus consultas en Rails
 
 En este artículo, te mostraré algunos consejos para optimizar tus consultas en Rails. Estos consejos te ayudarán a mejorar el rendimiento de tu aplicación y a escribir consultas más eficientes.

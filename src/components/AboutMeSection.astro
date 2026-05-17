@@ -3,7 +3,9 @@ import { useTranslation } from 'src/i18n/utils'
 import { safeI18nHtml } from 'src/components/shared/i18nRichText'
 import StackExplorer from 'src/components/StackExplorer.astro'
 
-interface Props { lang: 'es' | 'en' }
+interface Props {
+  lang: 'es' | 'en'
+}
 const { lang } = Astro.props
 const t = useTranslation(lang)
 const bioParagraphs = t('about_me').biography
@@ -19,27 +21,60 @@ const bioParagraphs = t('about_me').biography
 
     <div class="about-grid">
       <div class="reveal">
-        <div class="about-body text-ink-soft text-[clamp(16px,1.25vw,18px)] leading-[1.75]">
-          {bioParagraphs.map(p => (
-            <p set:html={safeI18nHtml(p)} />
-          ))}
-          <p class="about-mini text-muted-custom text-[14px] mt-[1.6em] pt-[1.1em] flex items-center gap-2 border-t border-dashed border-line">
-            <span class="cat-emoji inline-block origin-bottom">🐱</span> {t('about_me').mini_note}
+        <div
+          class="about-body text-ink-soft text-[clamp(16px,1.25vw,18px)] leading-[1.75]"
+        >
+          {bioParagraphs.map((p) => <p set:html={safeI18nHtml(p)} />)}
+          <p
+            class="about-mini text-muted-custom border-line mt-[1.6em] flex items-center gap-2 border-t border-dashed pt-[1.1em] text-[14px]"
+          >
+            <span class="cat-emoji inline-block origin-bottom">🐱</span>
+            {t('about_me').mini_note}
           </p>
         </div>
 
-        <div class="stats border border-line grid grid-cols-3 mt-9 rounded-[18px] overflow-hidden bg-[color-mix(in_oklab,var(--bg-2)_80%,transparent)]">
-          <div class="stat border-r border-line px-[18px] py-[22px] text-center">
-            <div class="num text-accent font-display text-[32px] font-bold tracking-[-0.02em] leading-none">7+</div>
-            <div class="lbl text-muted-custom mt-[6px] text-[12px] uppercase tracking-[0.05em] font-mono">{t('about_me').stat_years}</div>
+        <div
+          class="stats border-line mt-9 grid grid-cols-3 overflow-hidden rounded-[18px] border bg-[color-mix(in_oklab,var(--bg-2)_80%,transparent)]"
+        >
+          <div
+            class="stat border-line border-r px-[18px] py-[22px] text-center"
+          >
+            <div
+              class="num text-accent font-display text-[32px] leading-none font-bold tracking-[-0.02em]"
+            >
+              7+
+            </div>
+            <div
+              class="lbl text-muted-custom mt-[6px] font-mono text-[12px] tracking-[0.05em] uppercase"
+            >
+              {t('about_me').stat_years}
+            </div>
           </div>
-          <div class="stat border-r border-line px-[18px] py-[22px] text-center">
-            <div class="num text-accent font-display text-[32px] font-bold tracking-[-0.02em] leading-none">20+</div>
-            <div class="lbl text-muted-custom mt-[6px] text-[12px] uppercase tracking-[0.05em] font-mono">{t('about_me').stat_projects}</div>
+          <div
+            class="stat border-line border-r px-[18px] py-[22px] text-center"
+          >
+            <div
+              class="num text-accent font-display text-[32px] leading-none font-bold tracking-[-0.02em]"
+            >
+              20+
+            </div>
+            <div
+              class="lbl text-muted-custom mt-[6px] font-mono text-[12px] tracking-[0.05em] uppercase"
+            >
+              {t('about_me').stat_projects}
+            </div>
           </div>
           <div class="stat px-[18px] py-[22px] text-center">
-            <div class="num text-accent font-display text-[32px] font-bold tracking-[-0.02em] leading-none">3</div>
-            <div class="lbl text-muted-custom mt-[6px] text-[12px] uppercase tracking-[0.05em] font-mono">{t('about_me').stat_stack}</div>
+            <div
+              class="num text-accent font-display text-[32px] leading-none font-bold tracking-[-0.02em]"
+            >
+              3
+            </div>
+            <div
+              class="lbl text-muted-custom mt-[6px] font-mono text-[12px] tracking-[0.05em] uppercase"
+            >
+              {t('about_me').stat_stack}
+            </div>
           </div>
         </div>
       </div>
@@ -52,41 +87,57 @@ const bioParagraphs = t('about_me').biography
 </section>
 
 <style>
-  .about-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(40px,6vw,96px); align-items: start; }
-  .about-body p + p { margin-top: 1.1em; }
-  .cat-emoji { animation: catBob 3s ease-in-out infinite; }
-  @media (max-width: 820px) { .about-grid { grid-template-columns: 1fr; } }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+  }
+  .about-body p + p {
+    margin-top: 1.1em;
+  }
+  .cat-emoji {
+    animation: catBob 3s ease-in-out infinite;
+  }
+  @media (max-width: 820px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 
 <script>
   function initAbout() {
     // Animated counters
-    const stats = document.querySelectorAll<HTMLElement>('.stat .num');
-    const counterObs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (!e.isIntersecting || (e.target as HTMLElement).dataset.done) return;
-        const el = e.target as HTMLElement;
-        const raw = (el.textContent || '').trim();
-        const m = raw.match(/^(\d+)(.*)$/);
-        if (!m) return;
-        const target = parseInt(m[1], 10);
-        const suffix = m[2] || '';
-        el.dataset.done = '1';
-        const dur = 1400;
-        const start = performance.now();
-        function step(now: number) {
-          const t = Math.min(1, (now - start) / dur);
-          const eased = 1 - Math.pow(1 - t, 3);
-          el.textContent = Math.round(target * eased) + suffix;
-          if (t < 1) requestAnimationFrame(step);
-          else el.textContent = target + suffix;
-        }
-        requestAnimationFrame(step);
-      });
-    }, { threshold: 0.4 });
-    stats.forEach(s => counterObs.observe(s));
-
+    const stats = document.querySelectorAll<HTMLElement>('.stat .num')
+    const counterObs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting || (e.target as HTMLElement).dataset.done)
+            return
+          const el = e.target as HTMLElement
+          const raw = (el.textContent || '').trim()
+          const m = raw.match(/^(\d+)(.*)$/)
+          if (!m) return
+          const target = parseInt(m[1], 10)
+          const suffix = m[2] || ''
+          el.dataset.done = '1'
+          const dur = 1400
+          const start = performance.now()
+          function step(now: number) {
+            const t = Math.min(1, (now - start) / dur)
+            const eased = 1 - Math.pow(1 - t, 3)
+            el.textContent = Math.round(target * eased) + suffix
+            if (t < 1) requestAnimationFrame(step)
+            else el.textContent = target + suffix
+          }
+          requestAnimationFrame(step)
+        })
+      },
+      { threshold: 0.4 }
+    )
+    stats.forEach((s) => counterObs.observe(s))
   }
-  initAbout();
-  document.addEventListener('astro:page-load', initAbout);
+  initAbout()
+  document.addEventListener('astro:page-load', initAbout)
 </script>

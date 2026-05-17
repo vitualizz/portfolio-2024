@@ -14,14 +14,19 @@ interface Props {
   readingTime: number
 }
 
-const { title, shortDescription, author, date, tags, lang, readingTime } = Astro.props
+const { title, shortDescription, author, date, tags, lang, readingTime } =
+  Astro.props
 
 const t = useTranslation(lang as 'en' | 'es')
 const tBlog = t('blog')
 
 const dateLocale = lang === 'es' ? 'es-PE' : 'en-US'
 const formattedDate = date
-  .toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' })
+  .toLocaleDateString(dateLocale, {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  })
   .toUpperCase()
 
 const tagLabel = tags[0]?.toUpperCase() ?? ''
@@ -32,23 +37,16 @@ const authorInitial = author.charAt(0).toUpperCase()
   <Navbar />
 
   <article class="mx-auto max-w-3xl px-6 pt-24 pb-24">
-
     <!-- Back link -->
-    <a
-      href={`/${lang}/blog`}
-      class="back-link"
-    >
+    <a href={`/${lang}/blog`} class="back-link">
       {tBlog.back_to_blog}
     </a>
 
     <!-- Header -->
     <header>
-
       <!-- Meta row -->
       <div class="meta-row">
-        {tagLabel && (
-          <span class="tag-pill">{tagLabel}</span>
-        )}
+        {tagLabel && <span class="tag-pill">{tagLabel}</span>}
         {tagLabel && <span class="meta-sep">•</span>}
         <time class="meta-item">{formattedDate}</time>
         <span class="meta-sep">•</span>
@@ -66,7 +64,9 @@ const authorInitial = author.charAt(0).toUpperCase()
         <div class="author-avatar">{authorInitial}</div>
         <div class="author-info">
           <div class="author-name">{author}</div>
-          <div class="author-role">Senior Fullstack · AI Builder · @ Patrimore</div>
+          <div class="author-role">
+            Senior Fullstack · AI Builder · @ Patrimore
+          </div>
         </div>
       </div>
 
@@ -81,7 +81,6 @@ const authorInitial = author.charAt(0).toUpperCase()
     <div class="prose prose-invert prose-headings:no-underline max-w-none">
       <slot />
     </div>
-
   </article>
 
   <Footer lang={lang as 'en' | 'es'} />
@@ -167,7 +166,7 @@ const authorInitial = author.charAt(0).toUpperCase()
     height: 40px;
     border-radius: 50%;
     background: var(--accent);
-    color: #0B0C10;
+    color: #0b0c10;
     display: flex;
     align-items: center;
     justify-content: center;
