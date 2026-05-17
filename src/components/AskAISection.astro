@@ -58,13 +58,12 @@ const aiT = t('ai')
   </div>
 </section>
 
-<style>
+<style is:global>
   .ai-dot { animation: pulse 2s ease-in-out infinite; }
   .ai-tab:hover { background: color-mix(in oklab, var(--accent) 12%, var(--bg-2)); border-color: color-mix(in oklab, var(--accent) 40%, var(--line)); color: var(--ink); transform: translateY(-1px); }
   .ai-conv::-webkit-scrollbar { width: 6px; }
   .ai-conv::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
   .ai-msg { animation: msgIn .45s cubic-bezier(.2,.7,.3,1) both; }
-  .ai-msg.ai-msg-user { grid-template-columns: 1fr 32px; }
   .ai-msg.ai-msg-user .ai-avatar { order: 2; background: color-mix(in oklab, var(--coral) 80%, transparent); color: #fff; }
   .ai-msg-user .ai-bubble { background: color-mix(in oklab, var(--coral) 12%, var(--bg-2)); border-color: color-mix(in oklab, var(--coral) 30%, var(--line)); }
   .ai-bubble p { margin: 0; }
