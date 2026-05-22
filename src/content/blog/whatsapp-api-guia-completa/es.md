@@ -179,7 +179,7 @@ Los precios varían por país y cambian con frecuencia. No hay números concreto
 
 **Capa 3: El markup del BSP.** Algunos BSPs agregan su propio cargo por mensaje encima de lo que ya cobra Meta. Otros no. Siempre preguntá. Un markup de décimas de centavo por conversación parece insignificante, pero multiplicado por decenas de miles de conversaciones al mes se convierte en una diferencia concreta en tu factura mensual.
 
-**Capa 4: La dinámica de la ventana de conversación.** Cómo manejás el tiempo de respuesta afecta directamente cuánto pagás por cada conversación. Si respondés dentro de las 24 horas, operás en la categoría Service (la más barata). Si la ventana se cierra y querés retomar el contacto, necesitás un Template Message — que se cobra como Marketing, Utility o Authentication según el contenido. Esta restricción tiene su propia sección abajo, pero importa entenderla como una variable de costo separada, no solo como una regla técnica.
+**Capa 4: La dinámica de la ventana de conversación.** Cómo manejás el tiempo de respuesta afecta directamente cuánto pagás por cada conversación. Si respondés dentro de las 24 horas, operás en la categoría Service (la más barata). Si la ventana se cierra y querés retomar el contacto, necesitás un Template Message — que se cobra como Marketing, Utility o Authentication según el contenido. Ejemplo concreto: si un cliente te escribió el lunes y no cerraste el loop hasta el miércoles, la próxima vez que vos inicies el contacto ya no es Service — es Marketing o Utility, con el costo correspondiente. Esta restricción tiene su propia sección abajo, pero importa entenderla como una variable de costo separada, no solo como una regla técnica.
 
 _Nota: si usás Zapier, Make u otras herramientas de integración para conectar WhatsApp con tu CRM o con otros sistemas, esas herramientas tienen sus propios precios. No son costos de WhatsApp, pero sí son parte del stack real y vale tenerlos en cuenta._
 
@@ -246,6 +246,21 @@ Estas son las preguntas que van al hueso. No las hagas al final de una demo cuan
 **7. ¿Qué pasa con mis templates aprobados y mi historial de conversaciones si cancelo?**
 
 ¿Por qué importa? Los templates aprobados son trabajo acumulado: cada uno pasó por un proceso de revisión de Meta que puede tomar 24 a 48 horas. El historial de conversaciones es data de tus clientes. Pedí la política de exportación por escrito antes de firmar.
+
+## Plataformas de referencia (al momento de escribir este artículo)
+
+Esta sección no es un ranking ni una recomendación absoluta. Es un punto de partida para que tengas nombres concretos cuando empieces a comparar opciones. Los precios, modelos y features cambian — verificá directamente con cada plataforma antes de decidir.
+
+| Plataforma | Tipo | Mejor para | Modelo de WABA | Rango de precio | Nota |
+|---|---|---|---|---|---|
+| **Respond.io** | BSP oficial + Embedded Signup | Equipos medianos y grandes de CX/ventas B2C, omnicanal | Usuario dueño del WABA | USD 79–279/mes + tarifas Meta | Sin markup de mensajes. Partner oficial de Meta con acceso anticipado a features. Soporta WhatsApp, TikTok, Instagram, email y VoIP. |
+| **MessageSync.ai** | SaaS Wrapper (sin estatus BSP confirmado) | PYMEs que necesitan SMS + WhatsApp + email en un solo lugar | Desconocido — verificar antes | USD 19–29/mes | API aún en "Coming Soon" al momento de este artículo. Sin documentación de propiedad de WABA. Opción económica pero con incertidumbre técnica. |
+| **Twilio** | BSP oficial | Equipos técnicos que quieren construir soluciones propias sobre la API | Variable según configuración | Variable — modelo pay-as-you-go | Muy developer-first. Sin inbox incluido — vos construís todo encima. Presencia global. Verificá detalles antes de decidir. |
+| **Bird** (ex-MessageBird) | BSP oficial | Empresas medianas con necesidades omnicanal | Variable | Variable | Fuerte en Europa y LATAM. Verificá modelos actuales de WABA y pricing antes de decidir. |
+| **360dialog** | BSP oficial | Plataformas y agencias que quieren acceso directo a la Cloud API | Variable | Variable | Especializado en WhatsApp. Popular como backend para otras plataformas. Verificá condiciones actuales. |
+| **Vonage** (parte de Ericsson) | BSP enterprise | Empresas grandes con necesidades de telecomunicaciones integradas | Variable | Variable | Foco enterprise y telco. Verificá features y pricing actuales antes de decidir. |
+
+Si ninguna de estas calza exactamente con tu caso, las siete preguntas de la sección anterior son el filtro más útil que tenés para evaluar cualquier otra opción que encuentres.
 
 ## Conclusión
 
