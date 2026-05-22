@@ -33,6 +33,25 @@ Al final de esta guía vas a poder:
 
 No hay código, no hay ejemplos de API, no hay cURL. Solo conceptos y decisiones.
 
+## Glosario: los términos clave de un vistazo
+
+Si ya conocés estos términos, saltá directo a la sección siguiente.
+
+| Término | Qué significa |
+|---|---|
+| **BSP** (Business Solution Provider) | Empresa certificada por Meta para dar acceso a la WhatsApp Business API y gestionar cuentas. |
+| **Tech Provider** | Partner de Meta donde vos sos dueño de tu WABA — ellos acceden con permisos, no como propietarios. |
+| **WABA** (WhatsApp Business Account) | La cuenta de Meta que contiene tu número de WhatsApp Business, tus templates aprobados y tus límites. |
+| **Cloud API** | La versión moderna de la API de WhatsApp, alojada por Meta. No necesitás servidores propios. |
+| **On-Premise API** | La versión legacy de la API, alojada en servidores propios. Está siendo discontinuada por Meta. |
+| **Embedded Signup** | Flujo de registro integrado dentro de una plataforma: conectás tu WhatsApp sin salir a Meta Business Suite. |
+| **Template Message / HSM** | Mensaje pre-aprobado por Meta que usás para iniciar conversaciones fuera de la ventana de 24 horas. |
+| **Ventana de conversación de 24h** | Periodo tras el último mensaje de tu cliente donde podés responderle libremente, sin templates. |
+| **Meta Business Verification** | Proceso de verificación legal de tu empresa con Meta para desbloquear más capacidad de mensajes. |
+| **SaaS Wrapper** | Plataforma que construye su producto sobre un BSP sin ser partner oficial de Meta. |
+| **Categorías de conversación** | Los cuatro tipos de costo en Meta: Marketing, Utility, Authentication y Service. |
+| **Markup de mensajes** | Cargo adicional que algunos BSPs suman sobre las tarifas de Meta por cada conversación. |
+
 ## Antes de todo: WhatsApp Business App vs WhatsApp API
 
 Antes de hablar de ecosistemas y plataformas, hay una distinción fundamental que todo lo demás asume: la **WhatsApp Business App** y la **WhatsApp Business Platform** (la API) son dos productos completamente diferentes.
@@ -80,7 +99,7 @@ El principio clave: **la API es infraestructura, no un producto**. Nadie te vend
 
 ## ¿Qué es un BSP y por qué importa quién es el tuyo?
 
-Un **BSP (Business Solution Provider)** es una empresa que Meta aprobó formalmente para revender acceso a la WhatsApp Business API. No cualquiera puede ser BSP: tiene que pasar un proceso de certificación, cumplir con los requisitos técnicos y de soporte de Meta, y mantener esa relación activa.
+Un **BSP** es una empresa que Meta aprobó formalmente para dar acceso a la API. No cualquiera puede serlo: hay un proceso de certificación con requisitos técnicos y de soporte que mantener activo.
 
 Lo que un BSP te da, en términos concretos:
 
@@ -102,11 +121,11 @@ Un BSP es como un importador oficial de autos: te trae el producto del fabricant
 
 ## ¿Qué es un Tech Provider?
 
-Un **Tech Provider** es un tipo de partner de Meta más nuevo que un BSP, y la diferencia estructural es significativa: con un Tech Provider, **el WABA queda bajo tu propio Meta Business Portfolio**, no bajo el del proveedor.
+Con un **Tech Provider**, **el WABA queda bajo tu propio Meta Business Portfolio** desde el primer día — no bajo el del proveedor. Esa es la diferencia estructural que importa.
 
 El proveedor accede a tu cuenta a través de un "system user" con permisos acotados. Puede hacer las mismas cosas que hacés vos en nombre tuyo, pero no es el dueño. Si mañana decidís dejar esa plataforma, llevás el WABA con vos. Tu número, tus templates aprobados, tu historial de verificación: todo sigue siendo tuyo.
 
-La mayoría de los Tech Providers implementan **Embedded Signup**, que es el mecanismo de Meta para que el onboarding ocurra completamente dentro de la plataforma del proveedor, sin que tengas que entrar a Meta Business Suite por separado. El flujo tiene cuatro pasos:
+La mayoría de los Tech Providers implementan **Embedded Signup** (ver glosario): el onboarding ocurre completamente dentro de la plataforma, sin salir a Meta Business Suite. El flujo tiene cuatro pasos:
 
 1. Iniciás sesión con tu cuenta de Facebook dentro de la plataforma del proveedor
 2. Autorizás los permisos que el proveedor necesita para operar sobre tu cuenta
@@ -123,7 +142,7 @@ Un Tech Provider es como un administrador de propiedades: gestiona tu departamen
 
 ## WABA: el concepto más importante que nadie explica bien
 
-Llegamos al centro de todo. Una **WABA (WhatsApp Business Account)** es la cuenta de Meta que contiene tu número de teléfono de WhatsApp Business, tu nombre de empresa visible en las conversaciones, tu estado de verificación, tu biblioteca de templates aprobados y tus cuotas de mensajes.
+Llegamos al centro de todo. Tu **WABA** es el contenedor que tiene tu número, tu nombre visible, tu estado de verificación y tu biblioteca de templates aprobados.
 
 El WABA es el contenedor. Sin una WABA activa, no existís en la plataforma de WhatsApp Business. Con una, tu número es portátil — si vos la controlás.
 
