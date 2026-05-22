@@ -113,7 +113,7 @@ Hasta acá todo bien. El problema aparece en un detalle que casi ninguna platafo
 
 Otro punto que rara vez aparece en las comparativas: el **markup de mensajes**. Meta cobra sus propias tarifas de conversación. Algunos BSPs pasan esas tarifas directamente al usuario sin ningún cargo adicional y lo declaran explícitamente en su pricing. Otros agregan un costo por mensaje encima de lo que ya cobra Meta. A baja escala no se nota. A 100.000 conversaciones por mes, esa diferencia puede ser varios miles de dólares.
 
-Existe también la opción de acceder directamente a la Cloud API sin pasar por un BSP. Meta lo permite: cualquier negocio verificado puede obtener credenciales y conectarse directamente. Pero hay un trade-off enorme: **no tenés dashboard, no tenés inbox, no tenés automatización, no tenés soporte, no tenés gestión de templates**. Solo endpoints HTTP. Si tu equipo puede construir toda esa infraestructura encima, es una opción. Para el 95% de los casos, no lo es.
+Existe también la opción de acceder directamente a la Cloud API sin pasar por un BSP. Meta lo permite: cualquier negocio verificado puede obtener credenciales y conectarse directamente. Pero hay un trade-off enorme: **no tenés dashboard, no tenés inbox, no tenés automatización, no tenés soporte, no tenés gestión de templates**. Solo acceso técnico a la API, sin ninguna interfaz encima. Si tu equipo puede construir toda esa infraestructura encima, es una opción. Para el 95% de los casos, no lo es.
 
 Al final de este artículo encontrás una sección con plataformas de referencia y para quién es cada una.
 
