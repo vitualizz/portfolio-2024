@@ -1,0 +1,287 @@
+---
+interface Props {
+  tag?: string
+  postTitle?: string
+  postSubtitle?: string
+  suggestions?: string[]
+}
+
+const {
+  suggestions = [
+    'Resúmeme el post en 3 líneas',
+    '¿Cuál es el punto más importante?',
+    '¿Cómo aplicar esto en producción?',
+  ],
+} = Astro.props
+---
+
+<aside class="sticky top-[92px] flex flex-col gap-[18px] self-start min-[1080px]:block hidden">
+  <div id="ask-ai-card" class="ask-ai-card bg-gradient-to-b from-bg-2 to-bg-2/80 border border-line rounded-[18px] overflow-hidden relative shadow-[0_18px_40px_rgba(0,0,0,0.28)]">
+    <div class="flex items-center gap-2.5 px-4 pt-3.5 pb-2">
+      <span class="aai-dot w-2 h-2 rounded-full bg-mint shrink-0" aria-hidden="true"></span>
+      <h3 class="font-display font-bold text-[14.5px] tracking-[-0.015em] text-ink flex-1 leading-tight m-0">
+        ¿Dudas? Pregúntale a Lee-AI
+      </h3>
+      <span class="font-mono text-[10.5px] text-muted-custom px-[7px] py-0.5 rounded-full border border-line bg-bg/60 tracking-[0.03em]">
+        haiku
+      </span>
+    </div>
+
+    <p class="px-4 pb-3 text-[12.5px] text-muted-custom leading-[1.5] m-0">
+      Un asistente que <b class="text-ink-soft">leyó este post</b> y responde como si fuera yo.
+      Hacé preguntas técnicas o pedí un resumen.
+    </p>
+
+    <div class="flex flex-wrap gap-1.5 px-4 pb-3">
+      {
+        suggestions.map((q) => (
+          <button
+            data-q={q}
+            class="font-mono text-[11px] px-2.5 py-1.5 rounded-lg bg-transparent border border-line text-ink-soft cursor-pointer leading-tight hover:bg-accent/10 hover:border-accent/40 hover:text-ink hover:-translate-y-px transition-all"
+          >
+            {q}
+          </button>
+        ))
+      }
+    </div>
+
+    <div
+      id="aai-conv"
+      class="px-3.5 pb-1 max-h-[340px] overflow-y-auto flex flex-col gap-3 scroll-smooth empty:hidden aai-conv-scroll"
+    ></div>
+
+    <form id="aai-form" class="flex items-center px-3 py-2.5 border-t border-line bg-bg/70">
+      <span class="font-mono text-accent font-bold px-2 text-[15px]">›</span>
+      <input
+        type="text"
+        placeholder="Pregunta sobre el post..."
+        autocomplete="off"
+        maxlength="240"
+        class="flex-1 border-none bg-transparent outline-none text-ink font-sans text-[13.5px] px-0.5 py-1.5 min-w-0 placeholder:text-muted-custom"
+      />
+      <button
+        class="aai-send w-[30px] h-[30px] bg-accent text-[#0b0c10] border-none rounded-lg cursor-pointer flex items-center justify-center shrink-0 hover:-translate-y-px transition-transform disabled:bg-bg-3 disabled:text-muted-custom disabled:cursor-wait disabled:translate-y-0"
+        type="submit"
+        aria-label="Enviar"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="14"
+          height="14"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M5 12h14M13 6l6 6-6 6"></path>
+        </svg>
+      </button>
+    </form>
+  </div>
+
+  <p class="font-mono text-[10.5px] text-muted-custom text-center tracking-[0.05em] m-0 px-1 uppercase">
+    Powered by <code class="bg-accent/10 text-accent px-1.5 py-0.5 rounded normal-case tracking-normal">claude-haiku-4-5</code>
+  </p>
+</aside>
+
+<style>
+  /* Top accent bar — ::before cannot be Tailwind */
+  .ask-ai-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--coral), transparent);
+    opacity: 0.85;
+  }
+
+  /* Pulsing dot animation */
+  .aai-dot {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--mint) 55%, transparent);
+    animation: aai-pulse 2.2s ease-out infinite;
+  }
+
+  @keyframes aai-pulse {
+    0%   { box-shadow: 0 0 0 0   color-mix(in oklab, var(--mint) 55%, transparent); }
+    70%  { box-shadow: 0 0 0 7px color-mix(in oklab, var(--mint)  0%, transparent); }
+    100% { box-shadow: 0 0 0 0   color-mix(in oklab, var(--mint)  0%, transparent); }
+  }
+
+  /* Custom scrollbar */
+  .aai-conv-scroll::-webkit-scrollbar       { width: 5px; }
+  .aai-conv-scroll::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+
+  /* Dynamically-created message elements — must be :global since JS injects them */
+  :global(.aai-msg) {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    gap: 8px;
+    align-items: start;
+    animation: aai-in 0.4s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  }
+  :global(.aai-msg.aai-msg-user) { grid-template-columns: 1fr 26px; }
+  :global(.aai-msg.aai-msg-user .aai-avatar) { order: 2; }
+
+  :global(.aai-avatar) {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 11px;
+    background: var(--accent); color: #0b0c10;
+    flex-shrink: 0;
+  }
+  :global(.aai-msg-user .aai-avatar) {
+    background: color-mix(in oklab, var(--coral) 80%, transparent);
+    color: #fff;
+  }
+
+  :global(.aai-bubble) {
+    padding: 10px 12px;
+    background: color-mix(in oklab, var(--bg) 60%, transparent);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-size: 13px; line-height: 1.55; color: var(--ink);
+  }
+  :global(.aai-msg-user .aai-bubble) {
+    background: color-mix(in oklab, var(--coral) 10%, var(--bg-2));
+    border-color: color-mix(in oklab, var(--coral) 25%, var(--line));
+  }
+  :global(.aai-bubble p)      { margin: 0; }
+  :global(.aai-bubble p + p)  { margin-top: 0.6em; }
+  :global(.aai-bubble b)      { color: var(--accent); font-weight: 600; }
+  :global(.aai-bubble code) {
+    font-family: var(--font-mono); font-size: 0.88em;
+    background: color-mix(in oklab, var(--accent) 12%, transparent);
+    color: var(--accent); padding: 1px 5px; border-radius: 4px;
+  }
+
+  :global(.aai-thinking) { display: inline-flex; align-items: center; gap: 4px; }
+  :global(.aai-thinking span) {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--accent);
+    animation: aai-bounce 1.2s infinite;
+  }
+  :global(.aai-thinking span:nth-child(2)) { animation-delay: 0.15s; }
+  :global(.aai-thinking span:nth-child(3)) { animation-delay: 0.30s; }
+
+  @keyframes aai-bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+    40%            { transform: translateY(-3px); opacity: 1; }
+  }
+
+  @keyframes aai-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: none; }
+  }
+</style>
+
+<script>
+  const card = document.getElementById('ask-ai-card')
+  if (card) {
+    const conv = document.getElementById('aai-conv')
+    const form = document.getElementById('aai-form')
+    const input = form?.querySelector('input') as HTMLInputElement | null
+    const sendBtn = form?.querySelector('.aai-send') as HTMLButtonElement | null
+    const suggestBtns = card.querySelectorAll('[data-q]')
+
+    const article = document.querySelector('.blog-article')
+    const title = article?.querySelector('.display-title')?.textContent?.trim() ?? ''
+    const subtitle = article?.querySelector('.subtitle')?.textContent?.trim() ?? ''
+    const tag = article?.querySelector('.tag-pill')?.textContent?.trim() ?? ''
+
+    let bodyText = ''
+    const proseEl = article?.querySelector('.prose')
+    if (proseEl) {
+      const clone = proseEl.cloneNode(true) as HTMLElement
+      clone.querySelectorAll('pre').forEach((p) => {
+        ;(p as HTMLElement).textContent = '\n[código]\n' + p.textContent + '\n'
+      })
+      bodyText = clone.innerText.replace(/\n{3,}/g, '\n\n').trim().slice(0, 6000)
+    }
+
+    const history: Array<{ role: string; content: string }> = []
+
+    function esc(s: string) {
+      return String(s).replace(
+        /[&<>"']/g,
+        (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c,
+      )
+    }
+
+    function renderMd(s: string) {
+      return esc(s)
+        .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .split(/\n\n+/)
+        .map((p) => `<p>${p.replace(/\n/g, '<br/>')}</p>`)
+        .join('')
+    }
+
+    function addMsg(role: string, text: string) {
+      if (!conv) return
+      const el = document.createElement('div')
+      el.className = 'aai-msg aai-msg-' + role
+      const av = role === 'user' ? 'TÚ' : 'L'
+      el.innerHTML = `<div class="aai-avatar">${av}</div><div class="aai-bubble">${role === 'user' ? `<p>${esc(text)}</p>` : renderMd(text)}</div>`
+      conv.appendChild(el)
+      conv.scrollTop = conv.scrollHeight
+      return el
+    }
+
+    function addThinking() {
+      if (!conv) return null
+      const el = document.createElement('div')
+      el.className = 'aai-msg aai-msg-assistant'
+      el.innerHTML = `<div class="aai-avatar">L</div><div class="aai-bubble"><div class="aai-thinking"><span></span><span></span><span></span></div></div>`
+      conv.appendChild(el)
+      conv.scrollTop = conv.scrollHeight
+      return el
+    }
+
+    async function ask(q: string) {
+      q = q.trim()
+      if (!q) return
+      if (input) input.value = ''
+      addMsg('user', q)
+      history.push({ role: 'user', content: q })
+      if (sendBtn) sendBtn.disabled = true
+      const thinking = addThinking()
+      try {
+        const res = await fetch('/api/ask-blog', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: history.slice(-6),
+            context: { title, subtitle, tag, body: bodyText },
+          }),
+        })
+        const data = await res.json()
+        thinking?.remove()
+        const answer = data.answer ?? 'No pude generar una respuesta.'
+        addMsg('assistant', answer)
+        history.push({ role: 'assistant', content: answer })
+      } catch {
+        if (thinking)
+          thinking.querySelector('.aai-bubble')!.innerHTML = `<p>Algo se cayó. Intentá de nuevo.</p>`
+      } finally {
+        if (sendBtn) sendBtn.disabled = false
+        if (input) input.focus()
+      }
+    }
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault()
+      if (input) ask(input.value)
+    })
+
+    suggestBtns.forEach((b) =>
+      b.addEventListener('click', () =>
+        ask((b as HTMLElement).dataset.q ?? b.textContent ?? ''),
+      ),
+    )
+  }
+</script>

@@ -5,6 +5,7 @@ const ALLOWED_CLASSES = new Set([
   'hl-title',
   'text-ink',
   'text-white',
+  'text-mint',
   'not-italic',
   'text-nowrap'
 ])
