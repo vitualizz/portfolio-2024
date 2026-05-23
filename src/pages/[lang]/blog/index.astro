@@ -183,7 +183,7 @@ function getReadingTime(body: string): number {
             BLOG_DATE_LOCALE[lang as 'en' | 'es'],
             { day: 'numeric', month: 'short', year: 'numeric' }
           )
-          const readingTime = getReadingTime(post.body)
+          const readingTime = getReadingTime(post.body ?? '')
 
           return (
             <a

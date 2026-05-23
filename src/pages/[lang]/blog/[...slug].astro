@@ -17,7 +17,7 @@ if (!post) {
 const { Content } = await render(post)
 const { title, shortDescription, author, date, tags, cover } = post.data
 
-const wordCount = post.body.split(/\s+/).filter(Boolean).length
+const wordCount = (post.body ?? '').split(/\s+/).filter(Boolean).length
 const readingTime = Math.max(1, Math.ceil(wordCount / 200))
 
 const langPosts = pages
@@ -43,7 +43,7 @@ const morePosts = langPosts
     title: p.data.title,
     tags: p.data.tags,
     date: p.data.date,
-    readingTime: Math.max(1, Math.ceil(p.body.split(/\s+/).filter(Boolean).length / 200)),
+    readingTime: Math.max(1, Math.ceil((p.body ?? '').split(/\s+/).filter(Boolean).length / 200)),
   }))
 ---
 
