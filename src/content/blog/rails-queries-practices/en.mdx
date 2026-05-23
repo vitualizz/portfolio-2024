@@ -1,118 +1,576 @@
 ---
-title: Tips to Optimize Your Rails Queries
-seoTitle: Tips to Optimize Your Rails Queries
+title: Rails Queries That Actually Scale
+seoTitle: Advanced ActiveRecord Queries in Rails — N+1, Eager Loading, Indexes and More
 date: 2024-11-20
 author: Lee Palacios
-tags: ['rails', 'best-practices', 'queries']
+tags: ['rails', 'active-record', 'performance', 'ruby']
 lang: en
 cover: ./cover.webp
 coverLink: https://rubyonrails.org
-shortDescription: In this article, I'll show you some tips to optimize your queries in Rails. These tips will help you improve your application's performance and write more efficient queries.
-longDescription: In this article, I'll show you some tips to optimize your queries in Rails. These tips will help you improve your application's performance and write more efficient queries.
+shortDescription: From N+1 to batch processing, this guide walks through the ActiveRecord techniques that separate an app that "works" from one that actually scales.
+longDescription: Master includes, eager_load, counter_cache, compound indexes, and detection tools like Bullet and strict_loading. Every technique comes with real Ruby examples, the SQL it generates, and when to reach for it.
 ---
 
-# Tips to Optimize Your Rails Queries
+import Callout from '../../../components/blog/Callout.astro'
 
-In this article, I'll show you some tips to optimize your queries in Rails. These tips will help you improve your application's performance and write more efficient queries.
+When a Rails app starts getting real traffic, performance problems almost always show up in the queries. Not because Rails is slow, but because ActiveRecord makes it way too easy to write code that generates 10x more SQL than necessary — without you even noticing.
 
-## 1. Avoid N+1 Queries
+If you're just getting started with Rails, this is exactly the right time to learn this. Everyone makes these mistakes — and knowing them early will save you a lot of pain down the road.
 
-The N+1 query problem is one of the most common issues in Rails. It occurs when you make a query to get a list of records and then make an additional query to get the records associated with each of the original records. This can lead to a large number of additional queries and slow down your application.
+This guide uses a blog domain (`Author → Post → Comment / Tag`) as a common thread. Every example uses the same schema, so the contrast between the "bad" and "good" versions is always apples-to-apples.
+
+## The Blog Domain
+
+Before getting into the techniques, let's define the models once. This setup appears in every example that follows.
 
 ```ruby
-# Bad
-users = User.all
-
-users.each do |user|
-  puts user.posts.count
+class Author < ApplicationRecord
+  has_many :posts, dependent: :destroy
 end
 
-# Good
-users = User.includes(:posts)
+class Post < ApplicationRecord
+  belongs_to :author, counter_cache: true   # updates author.posts_count
+  has_many :comments, dependent: :destroy
+  has_many :post_tags, dependent: :destroy
+  has_many :tags, through: :post_tags
 
-users.each do |user|
-  puts user.posts.count
+  scope :published, -> { where(published: true) }
+end
+
+class Comment < ApplicationRecord
+  belongs_to :post, counter_cache: true     # updates post.comments_count
+end
+
+class Tag < ApplicationRecord
+  has_many :post_tags, dependent: :destroy
+  has_many :posts, through: :post_tags
+end
+
+class PostTag < ApplicationRecord
+  belongs_to :post
+  belongs_to :tag
 end
 ```
 
-## 2. Use Scopes to Make Queries More Readable and Reusable
+Relevant schema:
 
-Scopes are a way to encapsulate query logic in your model and make it more readable and reusable. You can use scopes to define common queries and then reuse them in different parts of your application.
+- `authors`: `id, name, email, posts_count, created_at`
+- `posts`: `id, author_id, title, body, published, published_at, comments_count, created_at`
+- `comments`: `id, post_id, body, created_at`
+- `tags`: `id, name`
+- `post_tags`: `id, post_id, tag_id`
+
+---
+
+## 1. The N+1 Problem and How to Fix It
+
+The N+1 is the most common performance mistake in Rails. It happens when you iterate over a collection and access an association inside the loop — Rails fires one extra query per element.
+
+**Think of it this way:** you have a list of 100 posts and you want to display each author's name. Without eager loading, Rails goes to the database 100 times — once per author — instead of fetching them all in one shot. With 100 posts that's 101 queries; with 1,000 posts it's 1,001. The app works, but it gets slow in a way that isn't obvious from reading the code.
 
 ```ruby
-# Bad
-users = User.where(active: true).where('created_at > ?', 1.week.ago)
+# Slow — N+1
+posts = Post.all
 
-# Good
-class User < ApplicationRecord
-  scope :active, -> { where(active: true) }
-  scope :recent, -> { where('created_at > ?', 1.week.ago) }
+posts.each do |post|
+  puts post.author.name   # extra query for every post
 end
-
-users = User.active.recent
 ```
 
-## 3. Load Only the Data You Need
-
-When making queries in Rails, make sure to load only the data you need. Avoid loading unnecessary data that can slow down your application.
-
-```ruby
-# Bad
-users = User.all
-
-# Good
-users = User.select(:id, :name)
+```sql
+-- Generated SQL: one query per post (N+1)
+SELECT * FROM posts;
+SELECT * FROM authors WHERE authors.id = 1;
+SELECT * FROM authors WHERE authors.id = 2;
+-- ... one for every post
 ```
 
-## 4. Index Your Columns
-
-Indexing your database columns can significantly improve query performance. It allows the database to quickly find the data you're looking for, especially when querying large datasets.
+<Callout type="warning" title="N+1 anti-pattern">
+  If the loop touches any unloaded association (`post.author`, `post.comments`, etc.), Rails will fire one SELECT per iteration. With 200 posts that's 201 queries.
+</Callout>
 
 ```ruby
-class AddIndexToUsersEmail < ActiveRecord::Migration[6.0]
+# Fast — includes preloads the association
+posts = Post.includes(:author)
+
+posts.each do |post|
+  puts post.author.name   # no extra query, already in memory
+end
+```
+
+```sql
+-- Generated SQL: two queries, no matter how many posts there are
+SELECT * FROM posts;
+SELECT * FROM authors WHERE authors.id IN (1, 2, 3, ...);
+```
+
+---
+
+## 2. `includes` vs `preload` vs `eager_load`
+
+Rails offers three methods for eager loading. Choosing the right one depends on whether you need to filter by the association or just load it.
+
+| Method | SQL Strategy | Auto-switches to JOIN | When to use explicitly |
+|---|---|---|---|
+| `includes` | Separate queries (default) | Yes, when there's a `.where` on the association | General case; let Rails decide the strategy |
+| `preload` | Always separate queries | No | When you need to force separate queries even if there's a `where` |
+| `eager_load` | Always LEFT OUTER JOIN | No | When you need to filter AND load in a single query |
+
+```ruby
+# includes — Rails picks the strategy
+Post.includes(:author)
+
+# preload — always two queries
+Post.preload(:comments)
+
+# eager_load — always a JOIN
+Post.eager_load(:author)
+```
+
+```sql
+-- includes (no where on the association) → separate queries
+SELECT * FROM posts;
+SELECT * FROM authors WHERE authors.id IN (1, 2, 3);
+
+-- eager_load (or includes + where on the association) → LEFT OUTER JOIN
+SELECT posts.*, authors.*
+FROM posts
+LEFT OUTER JOIN authors ON authors.id = posts.author_id;
+```
+
+<Callout type="warning" title="The includes auto-switch">
+  When you add a `.where` that references the association's table, `includes` silently switches from two-queries to JOIN. If you don't know this, it can produce unexpected results when associated records have duplicate rows in the JOIN.
+</Callout>
+
+```ruby
+# This includes will use JOIN because the where touches the authors table
+Post.includes(:author).where(authors: { name: 'Lee' })
+```
+
+<Callout type="tip" title="General rule">
+  Use `includes` by default. If you need to filter by the association and want to be explicit, use `eager_load`. You only reach for `preload` when you need to block the JOIN (rare cases).
+</Callout>
+
+### When do you actually need `preload`?
+
+The `includes` auto-switch is **silent** — it doesn't raise any error. The bug shows up when you chain a `.where` that references the association's table:
+
+```ruby
+# You want published posts along with their comments
+# Looks innocent... but the where touches the comments table
+Post.published.includes(:comments).where("comments.created_at > ?", 1.month.ago)
+```
+
+```sql
+-- includes detects "comments.created_at" in the where → switches to LEFT OUTER JOIN
+SELECT posts.*, comments.*
+FROM posts
+LEFT OUTER JOIN comments ON comments.post_id = posts.id
+WHERE posts.published = true
+  AND comments.created_at > '2024-10-20';
+
+-- ⚠️ A post with no recent comments has comments.created_at = NULL
+-- NULL > '2024-10-20' is FALSE in SQL → that post disappears from the result
+-- You expected all published posts; you're actually only seeing posts with recent comments
+```
+
+This is the kind of bug that takes hours to track down: the code doesn't blow up, it just returns **fewer records than expected**.
+
+`preload` cuts the problem at the root because it always uses two separate queries — nothing to detect, no auto-switch:
+
+```ruby
+# Strategy: filter with joins, load with preload
+Post.published
+    .joins(:comments).where("comments.created_at > ?", 1.month.ago)  # filters
+    .preload(:comments)  # loads — always two separate queries, no magic
+```
+
+```sql
+-- Query 1: filters the posts (explicit JOIN for the where)
+SELECT DISTINCT posts.*
+FROM posts
+INNER JOIN comments ON comments.post_id = posts.id
+WHERE posts.published = true
+  AND comments.created_at > '2024-10-20';
+
+-- Query 2: loads the comments for those posts (separate, predictable)
+SELECT * FROM comments WHERE post_id IN (1, 3, 7, ...);
+```
+
+<Callout type="tip" title="The most explicit combo: joins + preload">
+  When you need to filter by association data AND load it: use `joins` for the filter (explicit JOIN) and `preload` for the load (guaranteed two queries). More verbose than `eager_load`, but the intent is 100% clear for the next dev who reads the code.
+</Callout>
+
+---
+
+## 3. `joins` vs `includes` — filtering vs loading
+
+These two methods get confused often, but they do different things.
+
+```ruby
+# joins — filters posts that have the 'ruby' tag, but does NOT load the tags
+Post.joins(:tags).where(tags: { name: 'ruby' })
+
+# includes — loads posts and their tags so you can use them in the view
+Post.includes(:tags)
+```
+
+```sql
+-- joins only filters (INNER JOIN, no extra data loaded)
+SELECT posts.*
+FROM posts
+INNER JOIN post_tags ON post_tags.post_id = posts.id
+INNER JOIN tags ON tags.id = post_tags.tag_id
+WHERE tags.name = 'ruby';
+
+-- includes loads the association for later use
+SELECT * FROM posts;
+SELECT * FROM tags
+  INNER JOIN post_tags ON post_tags.tag_id = tags.id
+  WHERE post_tags.post_id IN (1, 2, 3, ...);
+```
+
+<Callout type="tip" title="Clear rule">
+  `joins` = filter by association. `includes` = load association for rendering. If you access `post.tags` in the view after doing `joins`, you'll generate N+1 anyway.
+</Callout>
+
+---
+
+## 4. `pluck` vs `select` vs `.map`
+
+When you only need one or two columns, there's no reason to instantiate full ActiveRecord objects.
+
+```ruby
+# .map — instantiates full AR objects, then extracts the column
+Post.all.map(&:title)
+
+# select — scoped SQL query, but still instantiates AR objects
+Post.select(:title).map(&:title)
+
+# pluck — returns an array of values directly, without instantiating AR
+Post.pluck(:title)
+```
+
+```sql
+-- .map (Post.all) → loads ALL columns
+SELECT * FROM posts;
+
+-- select(:title) → only loads title, but still instantiates AR objects
+SELECT title FROM posts;
+
+-- pluck(:title) → only title, without instantiating any objects
+SELECT title FROM posts;
+-- (same SQL, but the result is an Array, not an AR collection)
+```
+
+<Callout type="tip" title="pluck is the most efficient option for extracting values">
+  `pluck` is the fastest: it runs one query and returns primitive values without going through the ActiveRecord object layer. Use it when you just need raw data for a dropdown, a calculation, or passing values to another service.
+</Callout>
+
+When NOT to use `pluck`:
+
+- When you need to call instance methods on the model (`post.formatted_title`, `post.slug`, etc.)
+- When callbacks or virtual attributes are part of the flow
+- When you're going to modify the records (you need the AR object for `.save`)
+
+---
+
+## 5. `exists?` vs `any?` vs `count > 0`
+
+To check whether at least one record exists, all three "work" — but with very different costs.
+
+```ruby
+author = Author.find(1)
+
+# exists? — SELECT 1 LIMIT 1, the most efficient
+author.posts.exists?
+
+# any? — equivalent to exists? in modern Rails, but semantically different
+author.posts.any?
+
+# count > 0 — does COUNT(*), unnecessarily expensive for a boolean check
+author.posts.count > 0
+```
+
+```sql
+-- exists?
+SELECT 1 FROM posts WHERE author_id = 1 LIMIT 1;
+
+-- any? (Rails 4+)
+SELECT 1 FROM posts WHERE author_id = 1 LIMIT 1;
+
+-- count > 0 — fetches the full count even though we only need a yes/no
+SELECT COUNT(*) FROM posts WHERE author_id = 1;
+```
+
+<Callout type="warning" title="count > 0 is an anti-pattern for boolean checks">
+  `count > 0` asks the database to count every matching record just so you can throw that number away with `> 0`. `exists?` stops at the first record it finds.
+</Callout>
+
+Prefer `exists?` for boolean checks. `any?` is a valid alternative with the same performance on Rails 4+. Save `count` for when you actually need the number.
+
+---
+
+## 6. `counter_cache`
+
+When you display an association count (`post.comments.count`) in a list, you're generating one COUNT per record.
+
+```ruby
+# Without counter_cache — N+1 COUNT queries
+posts = Post.all
+posts.each do |post|
+  puts post.comments.count   # SELECT COUNT(*) FROM comments WHERE post_id = ?
+end
+```
+
+The solution is to delegate that count to the database and keep it updated automatically.
+
+**Step 1 — Add the column:**
+
+```ruby
+class AddCommentsCountToPosts < ActiveRecord::Migration[7.1]
   def change
-    add_index :users, :email
+    add_column :posts, :comments_count, :integer, default: 0, null: false
+
+    # Populate existing values
+    Post.find_each do |post|
+      Post.reset_counters(post.id, :comments)
+    end
   end
 end
 ```
 
-## 5. Perform Calculations in the Database When Possible
-
-When performing calculations on data, try to do them in the database rather than in your application code. This can significantly improve performance, especially when working with large datasets.
+**Step 2 — Declare the counter_cache:**
 
 ```ruby
-# Bad
-total = 0
-Order.all.each do |order|
-  total += order.amount
-end
-
-# Good
-total = Order.sum(:amount)
-```
-
-## 6. Use `find_each` to Process Large Datasets
-
-When processing large datasets in Rails, use the `find_each` method instead of `each`. `find_each` processes records in batches and avoids loading all records into memory at once.
-
-```ruby
-# Bad
-User.all.each do |user|
-  # Process user
-end
-
-# Good
-User.find_each do |user|
-  # Process user
+class Comment < ApplicationRecord
+  belongs_to :post, counter_cache: true
+  # Rails keeps post.comments_count in sync on Comment create/destroy
 end
 ```
 
-## Conclusion
+**Result:**
 
-By following these tips, you can optimize your queries in Rails and improve your application's performance. These best practices will help you write more efficient queries and avoid common pitfalls that can slow down your application.
+```ruby
+post = Post.find(1)
+post.comments_count   # reads the cached integer, no query
+```
 
-I hope you found this article helpful. If you have any questions or suggestions, feel free to leave a comment below. Happy coding! 🚀
+```sql
+-- No extra query for comments_count
+-- The column is updated on INSERT/DELETE of comments
+UPDATE posts SET comments_count = comments_count + 1 WHERE id = 1;
+```
+
+<Callout type="tip" title="When the tradeoff is worth it">
+  `counter_cache` adds an extra UPDATE on every write. It's worth it when you display the count in listings (N posts, each with its count). Less worth it if the count is rarely shown or the model is written very frequently (many INSERT/DELETE on that association).
+</Callout>
 
 ---
 
-**Tags**: `#rails`, `#best-practices`, `#queries`
+## 7. `find_each`, `find_in_batches`, and `in_batches`
+
+For processing large datasets, loading everything with `Post.all` is a memory problem. Rails offers three batch processing methods.
+
+<Callout type="warning" title="Never Post.all.each on large datasets">
+  `Post.all.each` loads all records into memory at once. With 100,000 posts that can be several GB of RAM, and the app crashes.
+</Callout>
+
+```ruby
+# find_each — yields individual records, batch_size default = 1000
+Post.find_each(batch_size: 500) do |post|
+  post.reindex_search
+end
+
+# find_in_batches — yields arrays of records
+Post.find_in_batches(batch_size: 500) do |batch|
+  SearchIndexer.bulk_update(batch)
+end
+
+# in_batches — yields AR relations (you can chain scopes on each batch)
+Post.in_batches(of: 500) do |relation|
+  relation.update_all(processed: true)
+end
+```
+
+```sql
+-- find_each generates queries with LIMIT + ORDER BY id
+SELECT * FROM posts WHERE id > 0 ORDER BY id LIMIT 500;
+SELECT * FROM posts WHERE id > 500 ORDER BY id LIMIT 500;
+-- ...
+```
+
+Key differences:
+
+- `find_each` → yields records one by one. Ideal for per-instance operations.
+- `find_in_batches` → yields arrays. Ideal for APIs that accept bulk input (Elasticsearch, batch mailers).
+- `in_batches` → yields AR relations. Ideal for `update_all` / `delete_all` over each batch without instantiating objects.
+
+---
+
+## 8. Database Calculations
+
+Pushing aggregations down to SQL is always more efficient than fetching records and reducing them in Ruby.
+
+```ruby
+# Bad — loads all posts into memory to sum/count in Ruby
+total = Post.all.map(&:comments_count).sum
+avg   = Post.all.map(&:comments_count).sum.to_f / Post.count
+
+# Good — the database does the work
+total = Post.sum(:comments_count)
+avg   = Post.average(:comments_count)
+count = Post.published.count
+by_author = Post.group(:author_id).count
+min_comments = Post.minimum(:comments_count)
+max_comments = Post.maximum(:comments_count)
+```
+
+```sql
+-- sum
+SELECT SUM(comments_count) FROM posts;
+
+-- average
+SELECT AVG(comments_count) FROM posts;
+
+-- group + count
+SELECT author_id, COUNT(*) FROM posts GROUP BY author_id;
+```
+
+<Callout type="tip" title="group + count is very useful for analytics">
+  `Post.group(:author_id).count` returns a hash `{ 1 => 12, 2 => 7, ... }` straight from SQL. You can combine it with `.having` to filter groups: `Post.group(:author_id).having('count(*) > 5').count`.
+</Callout>
+
+---
+
+## 9. `explain` and `explain(:analyze)`
+
+Before adding an index, check whether the query will actually use it. `explain` shows the execution plan without running the query; `explain(:analyze)` runs it and shows real timing.
+
+```ruby
+# Estimated execution plan
+Post.where(author_id: 1, published: true).explain
+
+# Rails 7.1+ — with PostgreSQL options
+Post.where(author_id: 1, published: true).explain(:analyze, :verbose, :buffers)
+```
+
+```sql
+-- Sample EXPLAIN ANALYZE output (PostgreSQL)
+QUERY PLAN
+----------------------------------------------------------
+ Seq Scan on posts  (cost=0.00..24.50 rows=3 width=236)
+                    (actual time=0.018..0.021 rows=3 loops=1)
+   Filter: ((author_id = 1) AND (published = true))
+   Rows Removed by Filter: 47
+ Planning Time: 0.1 ms
+ Execution Time: 0.04 ms
+```
+
+What to look for:
+
+- `Seq Scan` = full table scan — bad on large tables, may indicate a missing index.
+- `Index Scan` or `Index Only Scan` = using the index — good.
+- `Rows Removed by Filter` very high = many records discarded after reading, the index isn't on the right column.
+
+<Callout type="tip" title="Run explain before adding any index">
+  Don't add indexes blindly. First run `explain(:analyze)` in the Rails console with real data. An index the query planner ignores is pure write overhead.
+</Callout>
+
+---
+
+## 10. Compound Indexes
+
+A compound index covers queries that filter by multiple columns together, more efficiently than two separate single-column indexes.
+
+```ruby
+# Filter published posts from a specific author — a common query
+Post.where(author_id: 1, published: true).order(:published_at)
+```
+
+A compound index on `(author_id, published, published_at)` serves that query directly. Two separate indexes on `author_id` and `published` don't combine efficiently.
+
+```ruby
+class AddCompoundIndexToPosts < ActiveRecord::Migration[7.1]
+  def change
+    add_index :posts, [:author_id, :published_at],
+              name: 'idx_posts_author_published_at'
+  end
+end
+```
+
+```sql
+-- With the compound index
+Index Scan using idx_posts_author_published_at on posts
+  Index Cond: ((author_id = 1) AND (published_at IS NOT NULL))
+```
+
+<Callout type="warning" title="The leftmost prefix rule">
+  An index on `(author_id, published_at)` works for queries that filter by `author_id` or by `(author_id, published_at)`. But it does NOT work for queries that only filter by `published_at`. Column order matters.
+</Callout>
+
+---
+
+## 11. Detection Tools — Bullet and `strict_loading`
+
+Static analysis only goes so far. These two tools warn you in real time when your code generates problematic queries.
+
+### Bullet gem
+
+Bullet detects N+1 during HTTP requests in development.
+
+```ruby
+# Gemfile
+gem 'bullet', group: :development
+```
+
+```ruby
+# config/initializers/bullet.rb
+if defined?(Bullet)
+  Bullet.enable        = true
+  Bullet.alert         = true   # browser popup
+  Bullet.rails_logger  = true   # logs to development.log
+  Bullet.add_footer    = true   # footer on every request
+end
+```
+
+### strict_loading
+
+`strict_loading` raises an exception the moment you try to access an unloaded association. It's more aggressive than Bullet: it fails at call time, not at request time.
+
+```ruby
+# At the query level — only for this scope
+Post.strict_loading.includes(:author).each do |post|
+  post.author.name   # ok, it's loaded
+  post.comments      # StrictLoadingViolationError — was not included
+end
+
+# Globally in development
+# config/environments/development.rb
+config.active_record.strict_loading_by_default = true
+```
+
+<Callout type="tip" title="Use both tools in development">
+  Bullet catches N+1 during the normal request/response cycle. `strict_loading` catches them even in tests and scripts. Together they let almost nothing slip through undetected before it reaches production.
+</Callout>
+
+---
+
+## Cheat Sheet
+
+| Technique | When to use it |
+|---|---|
+| `includes(:assoc)` | Whenever you access an association inside a loop |
+| `eager_load` | When you need to filter AND load in the same query |
+| `preload` | When you want to force two-queries even if there's a `where` |
+| `joins` | Filter by association without loading its data |
+| `pluck(:col)` | Extract columns without instantiating AR objects |
+| `exists?` | Boolean existence check (avoid `count > 0`) |
+| `counter_cache` | Counts shown in listings — eliminates N+1 COUNT |
+| `find_each` | Process records one by one on large datasets |
+| `find_in_batches` | Bulk operations (indexers, mailers) |
+| `in_batches` | `update_all` / `delete_all` per batch |
+| `.sum / .average / .group` | Aggregations — always in SQL, never in Ruby |
+| `explain(:analyze)` | Before adding any index |
+| Compound index | Queries that filter by multiple columns together |
+| Bullet + strict_loading | Always on in development |

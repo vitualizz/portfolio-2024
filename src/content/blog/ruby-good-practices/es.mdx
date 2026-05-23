@@ -7,33 +7,74 @@ tags: ['ruby', 'rails', 'best-practices']
 lang: es
 cover: ./cover.webp
 coverLink: https://rubyonrails.org
-shortDescription: Este artículo detalla buenas prácticas en base a la experiencia que tengo para escribir código Ruby limpio, mantenible y eficiente.
-longDescription: Este artículo detalla buenas prácticas en base a la experiencia que tengo para escribir código Ruby limpio, mantenible y eficiente. Aunque algunas de estas prácticas son específicas de Ruby, muchas de ellas también se aplican a otros lenguajes de programación.
+shortDescription: Naming, guard clauses, scopes, safe navigation, N+1 y RSpec — las prácticas que todo dev junior de Ruby debería tener en el bolsillo.
+longDescription: Idioms de Ruby y Rails con un dominio común (Product, Order, LineItem) en cada ejemplo. Para juniors que quieren escribir código más mantenible.
 ---
 
-# Buenas Prácticas en Ruby (y Rails)
+import Callout from '../../../components/blog/Callout.astro'
 
-Este artículo detalla buenas prácticas en base a la experiencia que tengo para escribir código Ruby limpio, mantenible y eficiente. Aunque algunas de estas prácticas son específicas de Ruby, muchas de ellas también se aplican a otros lenguajes de programación.
+Este artículo recorre las prácticas que más me cambiaron la forma de escribir Ruby. Algunas son de Ruby puro, otras de Rails — pero todas las vas a poder aplicar desde tu próximo PR.
 
-## 1. **Usa nombres descriptivos**
+## El dominio que vamos a usar
 
-Los nombres de variables y métodos deben ser descriptivos y reflejar su propósito. Esto facilita la lectura y comprensión del código, tanto para ti como para otros desarrolladores.
+Para que los ejemplos tengan sentido entre sí, vamos a usar siempre el mismo dominio: un sistema de órdenes con tres modelos (`Product`, `Order` y `LineItem`).
 
 ```ruby
-# Mal
-def calc(a)
-  a + 10
+class Product < ApplicationRecord
+  # columns: id, name, price, discount_rate, stock
+  has_many :line_items
+  validates :name, presence: true
+  validates :price, numericality: { greater_than: 0 }
 end
 
-# Bien
-def calc_with_bonus(number)
-  number + 10
+class Order < ApplicationRecord
+  # columns: id, user_id, status, total, created_at
+  belongs_to :user
+  has_many :line_items, dependent: :destroy
+
+  scope :pending,   -> { where(status: 'pending') }
+  scope :completed, -> { where(status: 'completed') }
+end
+
+class LineItem < ApplicationRecord
+  # columns: id, order_id, product_id, quantity, unit_price
+  belongs_to :order
+  belongs_to :product
 end
 ```
 
+Tablas de referencia:
+- `products`: `id, name, price, discount_rate, stock`
+- `orders`: `id, user_id, status, total, created_at`
+- `line_items`: `id, order_id, product_id, quantity, unit_price`
+
+---
+
+## 1. **Usa nombres descriptivos**
+
+Los nombres de variables y métodos deben reflejar exactamente qué hacen. Un nombre críptico le ahorra dos segundos al que escribe y le cuesta diez minutos a cada lector.
+
+```ruby
+# Mal
+def total(u, d)
+  u.orders.sum(&:total) * (1 - d)
+end
+```
+
+```ruby
+# Bien
+def total_with_discount(user, discount_rate)
+  user.orders.sum(&:total) * (1 - discount_rate)
+end
+```
+
+<Callout type="tip">
+  **El código se lee más veces de las que se escribe.** Un nombre descriptivo te ahorra el comentario — el código se auto-documenta.
+</Callout>
+
 ## 2. **Usa Guard Clauses**
 
-Las guard clauses son declaraciones condicionales que devuelven temprano si no se cumple una condición. Esto evita la anidación excesiva de bloques `if` y mejora la legibilidad del código.
+Las guard clauses son retornos tempranos que eliminan la anidación. En lugar de envolver toda la lógica en un `if`, salís antes si no se cumplen las condiciones.
 
 ```ruby
 # Mal
@@ -58,82 +99,89 @@ def create_order(user, order_params)
 end
 ```
 
+<Callout type="info">
+  **.present? es de Rails, no de Ruby puro.** `.present?` (y `.blank?`) vienen de ActiveSupport. En Ruby puro usá `nil?` o `!value.nil?`. Aclararlo evita confusión cuando saltás entre proyectos Ruby y Rails. Para el operador `&.` que evita el `NoMethodError` directamente, te cuento en la Sección 5.
+</Callout>
+
 ## 3. **Evita los métodos largos**
 
-Los métodos largos son difíciles de entender y mantener. En la posibilidad sigue el principio de responsabilidad única y divide los métodos largos en métodos más pequeños y específicos.
+Un método largo es difícil de leer, de testear y de cambiar sin romper algo. El principio de responsabilidad única aplica también a los métodos: cada uno hace una sola cosa.
 
 ```ruby
 # Malo
-def process_order(user, order_params)
-  total = order_params[:items].sum { |item| item[:price] }
-  order = Order.create(user: user, total: total, status: 'pending')
+def process_order(order)
+  order.total = order.line_items.sum { |li| li.unit_price * li.quantity }
 
-  if user.loyalty_points > 100
-    order.apply_discount(10)
+  order.line_items.each do |li|
+    product = li.product
+    product.stock -= li.quantity
+    product.save!
   end
 
-  order.send_confirmation_email
+  order.status = 'confirmed'
+  order.save!
+  OrderMailer.confirmation(order).deliver_later
 end
 
 # Bueno
-def process_order(user, order_params)
-  total = calculate_total(order_params[:items])
-  order = create_order(user, total)
-
-  apply_discount_if_eligible(user, order)
-  send_order_confirmation(order)
+def process_order(order)
+  order.total = calculate_total(order)
+  decrement_stock(order)
+  confirm_and_notify(order)
 end
 
 private
 
-def calculate_total(items)
-  items.sum { |item| item[:price] }
+def calculate_total(order)
+  order.line_items.sum { |li| li.unit_price * li.quantity }
 end
 
-def create_order(user, total)
-  Order.create(user: user, total: total, status: 'pending')
+def decrement_stock(order)
+  order.line_items.each do |li|
+    li.product.update!(stock: li.product.stock - li.quantity)
+  end
 end
 
-def apply_discount_if_eligible(user, order)
-  order.apply_discount(10) if user.loyalty_points > 100
-end
-
-def send_order_confirmation(order)
-  order.send_confirmation_email
+def confirm_and_notify(order)
+  order.update!(status: 'confirmed')
+  OrderMailer.confirmation(order).deliver_later
 end
 ```
 
-## Ya metiendonos en Rails
-
 ## 4. **Usa scopes para consultas comunes**
+
+Hasta acá hablamos de Ruby puro. Ahora entramos a Rails.
 
 Los scopes son métodos que devuelven una relación ActiveRecord, lo que permite encadenarlos con otros métodos de consulta. Úsalos para consultas comunes y para mantener el código DRY.
 
 ```ruby
-class User < ApplicationRecord
-  scope :active, -> { where(active: true) }
-  scope :admins, -> { where(role: 'admin') }
+class Order < ApplicationRecord
+  scope :recent,    -> { where('created_at > ?', 1.month.ago) }
+  scope :confirmed, -> { where(status: 'confirmed') }
+  scope :pending,   -> { where(status: 'pending') }
 end
 ```
 
-A esto no te olvides tambien usar Object Queries para consultas más complejas y mantener el código más limpio.
+A esto no te olvides también usar Query Objects para consultas más complejas y mantener el código más limpio.
 Tip: Normalmente yo lo uso creando un nuevo directorio en `app/queries` y creando un archivo por cada consulta.
 
 ```ruby
-# app/queries/users_query.rb
-class UsersQuery
-  def self.active_admins
-    User.active.admins
+# app/queries/orders_query.rb
+class OrdersQuery
+  def self.recent_confirmed
+    Order.recent.confirmed
   end
 
   # Queries complejas
-  def self.with_orders
+  def self.top_buyers_last_month
     query = <<~SQL
-      SELECT users.*
+      SELECT users.*, SUM(orders.total) AS total_spent
       FROM users
       JOIN orders ON orders.user_id = users.id
-      WHERE orders.active = true
-      ...
+      WHERE orders.created_at > NOW() - INTERVAL '1 month'
+      GROUP BY users.id
+      ORDER BY total_spent DESC
+      LIMIT 10
     SQL
 
     User.find_by_sql(query)
@@ -141,22 +189,140 @@ class UsersQuery
 end
 ```
 
+<Callout type="warning">
+  **Bang methods (!) explotan, los normales no.** `order.save` devuelve `false` si falla la validación — silencioso. `order.save!` lanza `ActiveRecord::RecordInvalid` — explícito. En scopes y queries no aplica directamente, pero cuando combinás scopes con writes tenés que decidir: ¿querés saber del error explícitamente (bang) o manejarlo con el return value?
+</Callout>
+
+## 5. **Usa el operador de navegación segura (&.)**
+
+Cuando una cadena de métodos toca algo que puede ser `nil`, Ruby explota con `NoMethodError`. El safe navigation operator (`&.`) corta la cadena devolviendo `nil` en lugar de tirar una excepción.
+
+```ruby
+# Mal — si user.address es nil, explota
+city = user.address.city
+# => NoMethodError: undefined method `city' for nil:NilClass
+```
+
+```ruby
+# Bien — la cadena se corta devolviendo nil
+city = user&.address&.city
+```
+
+<Callout type="danger">
+  **No abuses de &.** `&.` es para casos donde `nil` es un valor válido del dominio. Si lo usás para callar `NoMethodError` en todos lados, estás escondiendo bugs reales — el día que aparezca un `nil` inesperado, no vas a tener stack trace que te diga dónde.
+</Callout>
+
 ## 6. **Siempre enfocate en el rendimiento**
 
-- **Evita N+1 queries**: Usa `includes` o `joins` para cargar asociaciones en una sola consulta.
-- **Usa caché**: Usa caché para almacenar datos que no cambian con frecuencia y mejorar el rendimiento.
-- **Evita callbacks costosos**: Los callbacks pueden ser costosos y difíciles de depurar. Es preferible usar jobs o servicios para tareas complejas.
+El 90% de los problemas de performance en Rails son N+1. Empezamos por ahí.
+
+<Callout type="warning">
+  **Anti-patrón N+1.** Una query por cada elemento del loop. Con 100 órdenes y un `each` que toca `order.line_items` o `order.user`, son 101 queries.
+</Callout>
+
+```ruby
+# Mal — N+1
+orders = Order.all
+
+orders.each do |order|
+  order.line_items.each do |li|
+    puts li.product.name   # una query por line_item, por order
+  end
+end
+```
+
+```ruby
+# Bien — eager loading con includes
+orders = Order.includes(line_items: :product)
+
+orders.each do |order|
+  order.line_items.each do |li|
+    puts li.product.name   # sin queries extra, ya está en memoria
+  end
+end
+```
+
+<Callout type="tip">
+  **Cuando hay loop, hay includes.** Regla mental: si tu loop accede a una asociación, usá `includes` o vas a pagar el peaje.
+</Callout>
+
+Otras prácticas de performance que conviene tener en el radar:
+
+- **Caché**: para datos que no cambian con frecuencia (`Rails.cache.fetch`).
+- **Callbacks costosos**: preferí jobs o servicios para tareas complejas — los callbacks son difíciles de depurar.
+- **Aggregations en SQL**: `Order.sum(:total)`, no `Order.all.map(&:total).sum`.
 
 ## 7. **Testing como forma de vida**
 
-Escribe pruebas para tu código. Las pruebas automatizadas garantizan que tu código funcione como se espera y facilitan la refactorización. Utiliza RSpec, Minitest o cualquier otra herramienta de prueba que prefieras.
+Las pruebas no son lujo: te dejan refactorizar sin miedo. En Rails la convención es RSpec, pero Minitest está perfecto — es lo que usa el core de Rails.
+
+```ruby
+# spec/models/order_spec.rb
+require 'rails_helper'
+
+RSpec.describe Order do
+  describe '#total' do
+    it 'suma los subtotales de cada line_item' do
+      order = Order.new
+      order.line_items.build(unit_price: 100, quantity: 2)
+      order.line_items.build(unit_price: 50,  quantity: 1)
+
+      expected = (100 * 2) + (50 * 1)
+
+      expect(order.line_items.sum { |li| li.unit_price * li.quantity })
+        .to eq(expected)
+    end
+  end
+end
+```
+
+<Callout type="tip">
+  **Un buen test es un test que te explica el código.** El bloque `describe`/`it` debería leerse como una frase: "Order#total suma los subtotales de cada line_item". Si no se lee así, el nombre del test está mal — no el código.
+</Callout>
+
+## 8. **Idioms modernos de Ruby**
+
+Dos idioms cortos pero muy Ruby que vale la pena tener internalizados.
+
+### `||=` para memoización
+
+Si una operación es cara (un cálculo, una query), memoizarla con `||=` la corre una sola vez por instancia.
+
+```ruby
+class Order < ApplicationRecord
+  def total_with_taxes
+    @total_with_taxes ||= calculate_total_with_taxes
+  end
+
+  private
+
+  def calculate_total_with_taxes
+    line_items.sum { |li| li.unit_price * li.quantity } * 1.21
+  end
+end
+```
+
+`||=` asigna solo si la variable es `nil` o `false`. La primera llamada calcula y guarda; las siguientes devuelven el valor cacheado.
+
+### `# frozen_string_literal: true`
+
+Magic comment al inicio del archivo. Hace que todos los string literals del archivo sean inmutables.
+
+```ruby
+# frozen_string_literal: true
+
+class Order < ApplicationRecord
+  STATUS_CONFIRMED = 'confirmed'
+  STATUS_PENDING   = 'pending'
+end
+```
+
+<Callout type="info">
+  **Por qué importa frozen_string_literal.** Cada vez que escribís `'confirmed'`, Ruby aloca un nuevo string. Con el magic comment, los strings se comparten y nadie los puede mutar accidentalmente. Es default en Ruby 3+ en muchos proyectos, pero el comment sigue siendo explícito y portable.
+</Callout>
 
 ## Conclusión
 
-Estas son solo algunas de las buenas prácticas que puedes seguir al escribir código Ruby y Rails. Recuerda que la programación es un arte y una ciencia, y siempre hay espacio para mejorar y aprender. Sigue practicando y disfrutando de la programación en Ruby!
+Ninguna de estas prácticas es magia — son hábitos. La primera vez que aplicás `&.` o `||=` te va a salir raro, la décima te va a salir solo.
 
-### ¿Cuáles son tus buenas prácticas favoritas en Ruby y Rails? 🚀🛤️
-
----
-
-**Tags**: `#Ruby`, `#Rails`, `#Programación`, `#BuenasPrácticas`
+Si recién arrancás con Ruby, agarrá una o dos de estas y aplicalas en tu próximo PR. No trates de hacerlas todas a la vez: el código limpio es un músculo, no una checklist.
