@@ -138,6 +138,14 @@ const locale: LanguageLocale = {
     mascot_text: 'fin de la lista — vuelve pronto, los gatos también escriben',
     empty_title: 'Ningún post coincide',
     empty_text: 'Prueba con otro tag o limpia la búsqueda. Los gatos también se confunden a veces.',
+    croq_label: '¿Te gustó este post?',
+    croq_title: 'Apóyame con unas croquetas para mis gatos',
+    croq_body: 'Si lo que escribí te ahorró un dolor de cabeza, déjale unas croquetas a mis tres gatos. Ellos revisan cada PR antes que cualquier humano.',
+    croq_cta: 'Invitar croquetas',
+    post_nav_prev: '← Anterior',
+    post_nav_next: 'Siguiente →',
+    more_posts_eyebrow: '// Más notas',
+    more_posts_title: 'Otras cosas que escribí',
   },
   ai: {
     greeting:

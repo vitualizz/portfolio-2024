@@ -19,6 +19,32 @@ const { title, shortDescription, author, date, tags, cover } = post.data
 
 const wordCount = post.body.split(/\s+/).filter(Boolean).length
 const readingTime = Math.max(1, Math.ceil(wordCount / 200))
+
+const langPosts = pages
+  .filter((p) => p.slug.endsWith(`/${lang}`))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+
+const currentIndex = langPosts.findIndex((p) => p.slug === post.slug)
+
+const toNavPost = (p: (typeof langPosts)[number]) => ({
+  slug: p.slug.split('/')[0],
+  title: p.data.title,
+  tags: p.data.tags,
+})
+
+const prevPost = currentIndex < langPosts.length - 1 ? toNavPost(langPosts[currentIndex + 1]) : null
+const nextPost = currentIndex > 0 ? toNavPost(langPosts[currentIndex - 1]) : null
+
+const morePosts = langPosts
+  .filter((_, i) => i !== currentIndex)
+  .slice(0, 3)
+  .map((p) => ({
+    slug: p.slug.split('/')[0],
+    title: p.data.title,
+    tags: p.data.tags,
+    date: p.data.date,
+    readingTime: Math.max(1, Math.ceil(p.body.split(/\s+/).filter(Boolean).length / 200)),
+  }))
 ---
 
 <BlogPostLayout
@@ -30,6 +56,9 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200))
   lang={lang!}
   readingTime={readingTime}
   cover={cover}
+  prevPost={prevPost}
+  nextPost={nextPost}
+  morePosts={morePosts}
 >
   <Content />
 </BlogPostLayout>
