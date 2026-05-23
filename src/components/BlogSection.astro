@@ -1,6 +1,6 @@
 ---
 import { useTranslation } from 'src/i18n/utils'
-import { BLOG_DATE_LOCALE } from 'src/i18n/constants'
+import { BLOG_DATE_LOCALE, withLangPath } from 'src/i18n/constants'
 import { safeI18nHtml } from 'src/components/shared/i18nRichText'
 import type { CollectionEntry } from 'astro:content'
 
@@ -55,6 +55,16 @@ const t = useTranslation(lang)
           )
         })
       }
+    </div>
+
+    <div class="mt-10 flex justify-center reveal">
+      <a
+        href={withLangPath(lang, '/blog')}
+        class="inline-flex items-center gap-2.5 px-6 py-3 border border-line rounded-full text-[14px] font-medium text-ink-soft bg-[color-mix(in_oklab,var(--bg-2)_80%,transparent)] transition-[border-color,color,transform] duration-200 hover:border-accent hover:text-accent hover:-translate-y-0.5"
+      >
+        {t('blog').see_all}
+        <span class="text-[16px]">↗</span>
+      </a>
     </div>
   </div>
 </section>

@@ -69,5 +69,23 @@ const twitterImage = new URL('/img/seo/twitter-image.png', Astro.url)
     <div class="relative z-[1]">
       <slot />
     </div>
+    <script>
+      function spawnCats() {
+        if (document.querySelector('.walking-cat')) return
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+        function spawn(cls: string, inner: string, delay?: string) {
+          const el = document.createElement('div')
+          el.className = cls
+          el.setAttribute('aria-hidden', 'true')
+          el.innerHTML = inner
+          document.body.appendChild(el)
+          if (delay) el.style.animationDelay = delay
+        }
+        spawn('walking-cat', '<span class="cat-emoji">🐈</span>')
+        spawn('peeking-cat', '🐱', '-6s')
+      }
+      spawnCats()
+      document.addEventListener('astro:after-swap', spawnCats)
+    </script>
   </body>
 </html>

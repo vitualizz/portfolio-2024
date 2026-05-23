@@ -28,26 +28,15 @@ const t = useTranslation(lang)
         <span>vitualizz</span>
       </a>
 
-      <nav class="nav-links flex gap-9 text-[15px] font-medium">
-        <a
-          href={withLangPath(lang, `#${SECTION_IDS.top}`)}
-          class="active"
-          data-nav>{t('nav').presentation}</a
-        >
+      <nav class="nav-links flex gap-8 text-[14.5px] font-medium">
         <a href={withLangPath(lang, `#${SECTION_IDS.about}`)} data-nav
           >{t('nav').about_me}</a
-        >
-        <a href={withLangPath(lang, `#${SECTION_IDS.ai}`)} data-nav
-          >{t('nav').ask_ai}</a
         >
         <a href={withLangPath(lang, `#${SECTION_IDS.projects}`)} data-nav
           >{t('nav').projects}</a
         >
-        <a href={withLangPath(lang, `#${SECTION_IDS.xp}`)} data-nav
-          >{t('nav').work_experience}</a
-        >
-        <a href={withLangPath(lang, `#${SECTION_IDS.blog}`)} data-nav
-          >{t('nav').blog}</a
+        <a href={withLangPath(lang, '/blog')} data-nav-blog
+          >{t('nav').blog}<span class="nav-cat" aria-hidden="true">🐾</span></a
         >
         <a href={withLangPath(lang, `#${SECTION_IDS.contact}`)} data-nav
           >{t('nav').contact_me}</a
@@ -148,6 +137,17 @@ const t = useTranslation(lang)
       this.navLinks = Array.from(
         this.querySelectorAll<HTMLAnchorElement>('[data-nav]')
       )
+
+      // On blog pages, mark the blog link active and skip scroll-based tracking
+      if (window.location.pathname.includes('/blog')) {
+        const blogLink = this.querySelectorAll<HTMLAnchorElement>('[data-nav-blog]')[0]
+        if (blogLink) {
+          this.navLinks.forEach((a) => a.classList.remove('active'))
+          blogLink.classList.add('active')
+        }
+        return
+      }
+
       this.sectionMap = this.navLinks
         .map((a) => ({
           a,

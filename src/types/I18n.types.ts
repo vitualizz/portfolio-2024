@@ -106,6 +106,24 @@ export type LanguageLocale = {
     read_article: string
     back_to_blog: string
     min_read: string
+    see_all: string
+    index_eyebrow: string
+    index_title: string
+    index_subtitle: string
+    index_stat_posts: string
+    index_stat_topics: string
+    index_stat_cats: string
+    filter_label: string
+    filter_all: string
+    filter_search_placeholder: string
+    featured_label: string
+    closer_title: string
+    closer_text: string
+    closer_github: string
+    closer_contact: string
+    mascot_text: string
+    empty_title: string
+    empty_text: string
   }
   ai: {
     greeting: string

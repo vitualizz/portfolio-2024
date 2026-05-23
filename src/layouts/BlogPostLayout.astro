@@ -128,7 +128,7 @@ const suggestions =
             {shortDescription}
           </p>
 
-          <div class="flex items-center gap-3.5 mb-8">
+          <div class="flex items-center gap-3.5 py-5 border-t border-b border-line mb-0">
             <div
               class="w-11 h-11 rounded-full bg-gradient-to-br from-accent to-coral/60 text-[#0b0c10] flex items-center justify-center font-display font-extrabold text-xl shrink-0"
             >
@@ -141,16 +141,11 @@ const suggestions =
               </div>
             </div>
           </div>
-
-          <hr class="border-0 h-px bg-line mb-0" />
         </header>
 
-        <!-- Section mark -->
-        <div
-          class="font-display text-[clamp(3rem,6vw,5rem)] text-accent opacity-55 text-center py-8 leading-none"
-          aria-hidden="true"
-        >
-          §
+        <!-- Section divider -->
+        <div class="text-center my-10" aria-hidden="true">
+          <span class="div-mark font-display text-[22px] text-accent opacity-80 tracking-[0.3em] px-3 relative">§</span>
         </div>
 
         <!-- Prose body -->
@@ -228,6 +223,25 @@ const suggestions =
 </script>
 
 <style>
+  /* Section divider with lines */
+  .div-mark::before,
+  .div-mark::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--line));
+  }
+  .div-mark::before {
+    right: 100%;
+    transform: translateY(-50%) scaleX(-1);
+  }
+  .div-mark::after {
+    left: 100%;
+    transform: translateY(-50%);
+  }
+
   /* Cover pseudo-element overlay — cannot be Tailwind */
   .article-cover::after {
     content: '';
