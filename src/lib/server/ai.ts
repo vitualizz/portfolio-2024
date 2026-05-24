@@ -8,7 +8,7 @@ const openai = createOpenAI({
 export type ChatMessage = { role: string; content: string }
 
 export const OPENAI_MODEL = 'gpt-5-mini'
-export const MAX_OUTPUT_TOKENS = 4000
+export const MAX_OUTPUT_TOKENS = 1000
 
 type AskOptions = {
   system: string

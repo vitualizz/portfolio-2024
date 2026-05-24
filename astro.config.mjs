@@ -24,7 +24,7 @@ export default defineConfig({
   }), playformCompress(), mdx()],
   output: 'server',
   adapter: vercelServerless({
-    maxDuration: 10
+    maxDuration: 15
   }),
   i18n: {
     defaultLocale: 'es',
