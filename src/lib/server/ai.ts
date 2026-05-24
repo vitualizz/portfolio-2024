@@ -1,10 +1,14 @@
-import { openai } from '@ai-sdk/openai'
+import { createOpenAI } from '@ai-sdk/openai'
 import { generateText, type ModelMessage } from 'ai'
+
+const openai = createOpenAI({
+  apiKey: import.meta.env.OPENAI_API_KEY
+})
 
 export type ChatMessage = { role: string; content: string }
 
 export const OPENAI_MODEL = 'gpt-5-mini'
-export const MAX_OUTPUT_TOKENS = 400
+export const MAX_OUTPUT_TOKENS = 4000
 
 type AskOptions = {
   system: string
@@ -58,7 +62,7 @@ export const generateAskAnswer = async ({
     })
 
     return text.trim() || fallbackAnswer
-  } catch {
+  } catch (error) {
     return fallbackAnswer
   }
 }
