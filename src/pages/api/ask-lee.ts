@@ -1,6 +1,11 @@
 import type { APIRoute } from 'astro'
+import {
+  generateAskAnswer,
+  jsonAnswer,
+  normalizeMessages
+} from '../../lib/server/ai'
 
-const LEE_SYSTEM_PROMPT = `You are "Lee-AI", a portfolio assistant that speaks AS IF you were Lee Palacios. Be warm, concise, and direct. Match the asker's language (Spanish or English) automatically.
+const LEE_SYSTEM_PROMPT = `You are "Lee-AI", a portfolio assistant that speaks AS IF you were Lee Palacios. Be warm, concise, and direct.
 
 FACTS ABOUT LEE PALACIOS:
 - Software Engineer based in Lima, Peru. 7+ years of experience.
@@ -15,33 +20,15 @@ FACTS ABOUT LEE PALACIOS:
 - Languages: Spanish (native), English (fluent).
 
 STYLE RULES:
+- Answer in the language of the latest user question when it is detectable.
+- If the latest user question language is ambiguous, answer in Spanish.
 - 1-3 short paragraphs MAX.
 - Be honest and concrete. Drop real examples (e.g. "una vez optimicé una query de 8s a 30ms").
 - End with one short follow-up question when natural.
 - Never break character.`
 
-type ChatMessage = { role: string; content: string }
-
-const toAnthropicMessage = (message: ChatMessage) => ({
-  role: message.role === 'assistant' ? 'assistant' : 'user',
-  content: message.content
-})
-
-const normalizeMessages = (value: unknown): ChatMessage[] => {
-  if (!Array.isArray(value)) return []
-
-  return value
-    .filter((item): item is ChatMessage => {
-      if (!item || typeof item !== 'object') return false
-
-      const candidate = item as Partial<ChatMessage>
-      return (
-        typeof candidate.role === 'string' &&
-        typeof candidate.content === 'string'
-      )
-    })
-    .map((item) => ({ role: item.role, content: item.content }))
-}
+const FALLBACK_ANSWER =
+  'No pude generar una respuesta ahora. Por favor escríbeme directamente por el formulario de contacto.'
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -49,48 +36,14 @@ export const POST: APIRoute = async ({ request }) => {
     const messages = normalizeMessages(
       (body as { messages?: unknown }).messages
     )
-    const apiKey = import.meta.env.ANTHROPIC_API_KEY
-    if (!apiKey) {
-      return new Response(
-        JSON.stringify({
-          answer:
-            'API key not configured. Por favor escríbeme directamente por el formulario de contacto.'
-        }),
-        {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
-        }
-      )
-    }
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5',
-        max_tokens: 400,
-        system: LEE_SYSTEM_PROMPT,
-        messages: messages.map(toAnthropicMessage)
-      })
+    const answer = await generateAskAnswer({
+      system: LEE_SYSTEM_PROMPT,
+      messages,
+      fallbackAnswer: FALLBACK_ANSWER
     })
-    const data = await response.json()
-    const answer = data.content?.[0]?.text || 'No pude generar una respuesta.'
-    return new Response(JSON.stringify({ answer }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    })
-  } catch (err) {
-    return new Response(
-      JSON.stringify({
-        answer: 'Error procesando tu pregunta. Intenta de nuevo.'
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      }
-    )
+
+    return jsonAnswer(answer)
+  } catch {
+    return jsonAnswer('Error procesando tu pregunta. Intenta de nuevo.')
   }
 }

@@ -56,10 +56,10 @@ src/
 
 ### Environment variables
 
-| Variable            | Required | Description                                                                |
-| :------------------ | :------- | :------------------------------------------------------------------------- |
-| `RESEND_API_KEY`    | Yes      | API key for the contact form. Get one at [resend.com](https://resend.com). |
-| `ANTHROPIC_API_KEY` | Yes      | API key used by `/api/ask-lee` to generate AskAISection responses.         |
+| Variable         | Required | Description                                                                                 |
+| :--------------- | :------- | :------------------------------------------------------------------------------------------ |
+| `RESEND_API_KEY` | Yes      | API key for the contact form. Get one at [resend.com](https://resend.com).                  |
+| `OPENAI_API_KEY` | Yes      | API key used by `/api/ask-lee` and `/api/ask-blog` to generate Ask AI responses via OpenAI. |
 
 Copy `.env.example` to `.env` and fill in the values.
 
@@ -109,7 +109,7 @@ The site is deployed to Vercel using the `@astrojs/vercel` serverless adapter (`
 
 Set the following environment variable in the Vercel dashboard under **Settings → Environment Variables**:
 
-| Variable            | Description                                  |
-| :------------------ | :------------------------------------------- |
-| `RESEND_API_KEY`    | Required for the contact form to send emails |
-| `ANTHROPIC_API_KEY` | Required for AskAISection AI responses       |
+| Variable         | Description                                                  |
+| :--------------- | :----------------------------------------------------------- |
+| `RESEND_API_KEY` | Required for the contact form to send emails                 |
+| `OPENAI_API_KEY` | Required for `/api/ask-lee` and `/api/ask-blog` AI responses |

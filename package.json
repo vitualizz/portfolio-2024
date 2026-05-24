@@ -16,6 +16,7 @@
     "check": "pnpm typecheck && pnpm lint && pnpm format:check"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^3.0.65",
     "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^5.0.6",
     "@astrojs/sitemap": "^3.7.2",
@@ -24,6 +25,7 @@
     "@fontsource-variable/bricolage-grotesque": "^5.2.10",
     "@fontsource-variable/dm-sans": "^5.2.8",
     "@playform/compress": "^0.0.3",
+    "ai": "^6.0.191",
     "astro": "^5.12.3",
     "astro-heroicons": "^2.1.1",
     "resend": "^4.7.0",

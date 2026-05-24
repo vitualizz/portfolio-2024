@@ -1,27 +1,17 @@
 import type { APIRoute } from 'astro'
+import {
+  generateAskAnswer,
+  jsonAnswer,
+  normalizeMessages
+} from '../../lib/server/ai'
 
-type ChatMessage = { role: string; content: string }
 type PostContext = {
   title?: string
   subtitle?: string
   tag?: string
   body?: string
-}
-
-const toAnthropicMessage = (m: ChatMessage) => ({
-  role: m.role === 'assistant' ? 'assistant' : 'user',
-  content: m.content,
-})
-
-const normalizeMessages = (value: unknown): ChatMessage[] => {
-  if (!Array.isArray(value)) return []
-  return value
-    .filter((item): item is ChatMessage => {
-      if (!item || typeof item !== 'object') return false
-      const c = item as Partial<ChatMessage>
-      return typeof c.role === 'string' && typeof c.content === 'string'
-    })
-    .map((item) => ({ role: item.role, content: item.content }))
+  lang?: string
+  language?: string
 }
 
 const buildSystemPrompt = (ctx: PostContext) =>
@@ -30,6 +20,7 @@ const buildSystemPrompt = (ctx: PostContext) =>
 POST · ${ctx.tag ?? ''}
 TÍTULO: ${ctx.title ?? ''}
 SUBTÍTULO: ${ctx.subtitle ?? ''}
+IDIOMA DEL POST/SITIO: ${ctx.lang ?? ctx.language ?? 'español'}
 
 CONTENIDO DEL POST:
 """
@@ -37,58 +28,32 @@ ${(ctx.body ?? '').slice(0, 6000)}
 """
 
 REGLAS:
-- Respondé en el idioma del usuario (por defecto español).
+- Respondé en el idioma de la última pregunta del usuario cuando sea detectable.
+- Si el idioma de la última pregunta es ambiguo, usá el idioma del post/sitio indicado arriba; si tampoco está disponible, respondé en español.
 - Mantenete anclado al contenido del post. Si preguntan algo no cubierto, decilo brevemente y sugerí el formulario de contacto.
 - 1-3 párrafos cortos. Directo, conversacional, sin relleno.
 - Hablá como Lee en primera persona ("yo", "en mi experiencia") cuando suene natural.
 - Cuando ayude, citá una frase específica del post o resumí un paso.
 - Nunca rompas el personaje.`
 
+const FALLBACK_ANSWER =
+  'No pude generar una respuesta ahora. Escribime directamente por el formulario de contacto.'
+
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json()
-    const messages = normalizeMessages((body as { messages?: unknown }).messages)
-    const ctx: PostContext = (body as { context?: PostContext }).context ?? {}
-    const apiKey = import.meta.env.ANTHROPIC_API_KEY
-
-    if (!apiKey) {
-      return new Response(
-        JSON.stringify({
-          answer:
-            'API key no configurada. Escribime directamente por el formulario de contacto.',
-        }),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
-      )
-    }
-
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5',
-        max_tokens: 400,
-        system: buildSystemPrompt(ctx),
-        messages: messages.map(toAnthropicMessage),
-      }),
-    })
-
-    const data = await response.json()
-    const answer = data.content?.[0]?.text ?? 'No pude generar una respuesta.'
-
-    return new Response(JSON.stringify({ answer }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    })
-  } catch {
-    return new Response(
-      JSON.stringify({
-        answer: 'Error procesando tu pregunta. Intentá de nuevo.',
-      }),
-      { status: 200, headers: { 'Content-Type': 'application/json' } },
+    const messages = normalizeMessages(
+      (body as { messages?: unknown }).messages
     )
+    const ctx: PostContext = (body as { context?: PostContext }).context ?? {}
+    const answer = await generateAskAnswer({
+      system: buildSystemPrompt(ctx),
+      messages,
+      fallbackAnswer: FALLBACK_ANSWER
+    })
+
+    return jsonAnswer(answer)
+  } catch {
+    return jsonAnswer('Error procesando tu pregunta. Intentá de nuevo.')
   }
 }
