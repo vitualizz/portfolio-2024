@@ -1,8 +1,8 @@
 ---
-title: The Ideal Linux Distribution for Programming and Gaming
-seoTitle: 'CachyOS: The Ideal Linux Distribution for Programming and Gaming'
-shortDescription: CachyOS is a Linux distribution based on Arch Linux, promising to maximize your system's performance and customization.
-longDescription: CachyOS is a Linux distribution based on Arch Linux, promising to maximize your system's performance and customization. With its focus on resource optimization, it's an excellent choice for both programmers and gamers looking to get the most out of their equipment.
+title: CachyOS for Developers and Gamers
+seoTitle: CachyOS for Developers and Gamers — kernel, optimized repos and real setup
+shortDescription: If you're already on Linux and want an Arch-based distro that ships performance-tuned out of the box for coding and gaming, here's what CachyOS actually gives you.
+longDescription: BORE/EEVDF/SCX schedulers, x86-64-v3/v4 repos with PGO+LTO, cachyos-settings, paru, proton-cachyos and game-performance. Everything that matters, with real commands.
 cover: ./cover.webp
 coverLink: https://cachyos.org
 date: 2024-09-19
@@ -11,44 +11,216 @@ tags: ['developer', 'gamer', 'os']
 lang: en
 ---
 
-# CachyOS: The Ideal Linux Distribution for Programming and Gaming
+import Callout from '../../../components/blog/Callout.astro'
 
-CachyOS is a Linux distribution based on **Arch Linux**, promising to maximize your system's performance and customization. With its focus on **resource optimization**, it's an excellent choice for both programmers and gamers looking to get the most out of their equipment. But how does it compare to other options like **WSL (Windows Subsystem for Linux)**? And if you're a gamer, how well do games run on this distribution?
+If you're already on Linux and evaluating whether it's worth switching from plain Arch, Manjaro, or even leaving WSL behind, this is written for you. CachyOS is not "Arch with a nice installer" — it's Arch with performance engineering applied from the factory: patched kernels, repos recompiled for your microarchitecture, and a set of tweaks that most users end up configuring manually after weeks of use.
 
-## Advantages for Programmers
+The target reader is a developer or gamer who already knows what an AUR helper is, doesn't need an explanation of what a terminal is, and wants Arch power without spending the weekend configuring ananicy, zram, and schedulers. CachyOS makes those decisions for you — and makes them well.
 
-If you're a developer, **CachyOS** offers you a series of key tools and benefits:
+This guide covers what actually matters: kernels and schedulers, optimized repos, automatic system tweaks, and the real setup for development and gaming, with commands you can copy and run. Since CachyOS is a rolling release, everything here reflects the state as of 2025. If something changed, the source of truth is [cachyos.org/download](https://cachyos.org/download).
 
-- **Native Performance**: Unlike WSL, CachyOS works with all the power of a native Linux system. This means you're not dealing with an emulation or virtualization layer, resulting in **better performance** when compiling, running Docker containers, or performing heavy tasks.
-- **Extreme Customization**: Being based on **Arch Linux**, you can customize absolutely everything, from the desktop environment to the development tools. If you like having full control over your environment, CachyOS is perfect for you.
-- **Optimized Environment**: It includes the **Alacritty** terminal, which uses the GPU to improve rendering speed, and **Cachy-Browser**, a customized version of LibreWolf that prioritizes privacy and security.
+## 1. Kernel and schedulers
 
-These features make CachyOS an attractive option for any programmer looking to maximize the efficiency of their work environment.
+CachyOS doesn't use the mainline kernel. It ships its own `linux-cachyos` with BORE, EEVDF, and sched_ext (SCX) patches — a subsystem that lets you swap the CPU scheduler at runtime. That's what makes the biggest difference in frame pacing and desktop responsiveness under load.
 
-## Gaming on Linux: How Does It Perform?
+**BORE** (Burst-Oriented Response Enhancer) is a scheduler designed for interactive workloads. It rewards processes with short bursts — typing, scrolling, frame rendering — over batch jobs that hog the CPU for long stretches. The difference isn't just FPS; it's smoothness: more consistent frame delivery and less hitching under mixed load.
 
-For gamers who prefer Linux, **CachyOS** also offers some interesting benefits, although with some caveats:
+**EEVDF** (Earliest Eligible Virtual Deadline First) replaces the old CFS in modern kernels. It has better latency bounds than CFS, especially with many cores involved, and handles heterogeneous workloads better: something compiling in the background while you're rendering in the editor shouldn't destroy your frametime — and with EEVDF, it doesn't.
 
-- **Gaming Optimization**: While Linux is still not on par with Windows in terms of gaming performance, CachyOS maximizes your system's resources to offer a solid gaming experience. You'll be able to enjoy games that have good compatibility with Linux thanks to tools like **Proton** and **Steam Play**.
-- **Smooth Experience**: Being optimized for better memory and CPU usage, CachyOS offers a smooth experience for those games compatible with Linux. This is especially useful for gamers looking for a fast system without the distractions that Windows sometimes brings.
+**sched_ext (SCX)** is the structural differentiator. It's a framework that lets you load schedulers written in eBPF without recompiling the kernel — variants like `scx_lavd`, `scx_rusty`, and `scx_bpfland` are available and can be swapped at runtime. You can run a gaming-optimized scheduler while playing and switch to a throughput-focused one while compiling, without a reboot.
 
-### ⚠️ **Warning for Gamers**
+```bash
+# Show current kernel
+uname -r
 
-However, it's important to mention that **no game will run as well as on Windows**. Linux still has limitations in terms of compatibility and performance in certain AAA titles. If your main focus is games, and you need to squeeze every last drop of FPS, Windows is still the best in this regard.
+# List available SCX schedulers
+ls /usr/lib/scx/
 
-## Comparison with WSL
+# Check which scheduler is active
+cat /sys/kernel/sched_ext/state
 
-While **WSL** is an excellent option for developers using Windows, CachyOS offers some key advantages:
+# Install and open the kernel manager
+sudo pacman -S cachyos-kernel-manager
+cachyos-kernel-manager
+```
 
-- **Full Performance**: As we already mentioned, CachyOS offers you **native Linux performance**, without the limitations of a virtualization layer like WSL.
-- **More Customization**: Although WSL is handy for accessing Linux within Windows, CachyOS allows you to customize absolutely everything, something that the more technical users will appreciate.
+<Callout type="tip" title="Try variants without fear">
+`cachyos-kernel-manager` lets you install multiple kernels in parallel: `linux-cachyos`, `linux-cachyos-bore`, `linux-cachyos-rt`, `linux-cachyos-lts`. If one variant gives you trouble, reboot and pick another from GRUB. No need to uninstall anything.
+</Callout>
 
-## Conclusion
+## 2. Optimized repos with PGO and LTO
 
-**CachyOS** is an excellent choice for those looking for a **fast and optimized operating system** for both **programming** and **gaming**. It offers clear advantages over options like **WSL**, and while it doesn't match Windows in gaming performance, it's a viable option if you're willing to sacrifice a few FPS in exchange for greater freedom and control over your system.
+This is one of the real differentiators: CachyOS maintains its own repos with packages recompiled for modern microarchitectures using PGO and LTO. If your CPU is from the last 8–10 years, you're running materially faster binaries than plain Arch.
 
-### Are you ready to give it a try? 💻🎮
+**x86-64-v3** covers CPUs with AVX2 — Intel Haswell+ (2013) and AMD Zen+ (2018) onward. That covers virtually all modern hardware. **x86-64-v4** raises the bar with AVX-512 — Intel Rocket Lake+ (2021) and AMD Zen 4+ (2022). It's the newest tier and the biggest gain, but also the most hardware-restricted.
 
----
+**PGO** (Profile-Guided Optimization) is a technique where the compiler builds the binary, runs it with real workloads, then recompiles using that data to tune branch prediction, inlining, and memory layout. The typical gain is 5–15% depending on the package, but the key point is it's not a made-up number — it comes from real execution data.
 
-**Tags**: `#CachyOS`, `#Linux`, `#Programming`, `#Gaming`, `#ArchLinux`
+**LTO** (Link-Time Optimization) operates at link time: it looks at all objects together and can eliminate dead code and inline across separate files — something per-compilation-unit optimizations can't achieve. The result is smaller binaries with better cache locality.
+
+```bash
+# Check which microarchitecture level your CPU supports
+/lib/ld-linux-x86-64.so.2 --help | grep supported
+
+# Inspect active repos in pacman.conf
+cat /etc/pacman.conf | grep -E '^\[|Include'
+
+# Update mirrors based on your microarchitecture
+sudo cachyos-rate-mirrors
+```
+
+<Callout type="warning" title="Hardware gate for v4 repos">
+The x86-64-v4 repo requires AVX-512. If you're on Zen3, Zen2, or Intel pre-Rocket Lake, you'll land on v3 — which is still faster than mainline Arch, but not v4. Verify with the command above before assuming you have the most optimized repo active.
+</Callout>
+
+<Callout type="info" title="PGO + LTO in one line">
+PGO tunes the compiler with real execution data. LTO eliminates dead code and enables cross-file inlining at link time. More expensive to compile, faster to run — and you don't pay that cost because the binaries already come compiled in the repo.
+</Callout>
+
+## 3. cachyos-settings: the tweaks most people do manually
+
+The `cachyos-settings` package applies a set of system-level adjustments that you'd traditionally have to research and configure yourself. It's not magic — it's engineering of defaults: deciding which tweaks are worth applying from day one. Everything is auditable and reversible.
+
+**ananicy-cpp** is a C++ daemon (rewrite of the original Python ananicy) that assigns CPU and IO priorities at runtime based on per-process rules. Gaming and multimedia processes are automatically prioritized over cron jobs and background indexers. The difference shows up when you're in a gaming session or rendering and something heavy runs in the background: ananicy-cpp throttles what doesn't matter right now.
+
+**zram** configures compressed swap in RAM using `zstd`, with a typical 3:1 ratio. The advantage over disk swap — even NVMe — is dramatic in latency: compressing and decompressing in the CPU is much faster than a round-trip to storage. On systems with 16GB or less, zram practically eliminates the stalls that traditional swap would cause.
+
+The **I/O scheduler** is tuned per device via udev rules: `mq-deadline` for NVMe (low latency, no aggressive reordering that SSDs don't need), `bfq` for HDD and USB (better fairness between processes). This applies automatically at boot without you touching anything.
+
+```bash
+# Verify that ananicy-cpp is running
+systemctl status ananicy-cpp
+
+# Current zram status
+zramctl
+
+# Active I/O scheduler on your NVMe
+cat /sys/block/nvme0n1/queue/scheduler
+
+# See what files cachyos-settings installs
+pacman -Ql cachyos-settings | grep -E '\.conf$|\.rules$'
+```
+
+<Callout type="info" title="Everything is opt-out, nothing is hidden">
+`cachyos-settings` is a normal package. If you want to disable something, use `systemctl disable` or edit the files in `/etc`. `pacman -Ql cachyos-settings` lists everything it installs. Nothing is hidden or locked in.
+</Callout>
+
+## 4. Developer setup
+
+Once the system is tuned, day-to-day development on CachyOS is basically Arch with better defaults. The difference is that many things you'd normally configure manually are already reasonable, and the AUR is full access with no extra friction.
+
+`paru` ships as the default AUR helper — it's written in Rust, uses the same flags as `yay`, and has a practical security advantage: before installing a new AUR package it shows you the PKGBUILD and the diff. This isn't an arbitrary CachyOS decision; it's the technical reason paru beat yay for serious use.
+
+The terminals `kitty` and `alacritty` are in the official repos, both GPU-accelerated. For shell, `fish` is the CachyOS default; if you prefer zsh, `pacman -S zsh starship` and `chsh -s /usr/bin/zsh` is all you need. For a multiplexer, `zellij` (Rust, modern UI) and classic `tmux` are both in repos — use whichever you already know.
+
+For containers, Docker and Podman run natively: no WSL2 virtualization layer, the daemon uses kernel namespaces directly. Cold-start times and build times on heavy projects are noticeably faster.
+
+```bash
+# Search and install dev tools from AUR
+paru -S neovim-nightly-bin
+paru -S visual-studio-code-bin lazygit bottom zellij ripgrep fd bat eza
+
+# Native Docker
+sudo pacman -S docker docker-compose
+sudo systemctl enable --now docker
+sudo usermod -aG docker $USER
+
+# Switch to zsh + starship if you don't want fish
+sudo pacman -S zsh starship
+chsh -s /usr/bin/zsh
+echo 'eval "$(starship init zsh)"' >> ~/.zshrc
+```
+
+<Callout type="tip" title="paru over yay">
+paru is the CachyOS default for a reason: faster, written in Rust, and by default shows you the PKGBUILD and diff before installing new AUR packages. Get in the habit of reading that diff — it's your last line of defense against a compromised PKGBUILD.
+</Callout>
+
+## 5. Gaming setup
+
+This is where CachyOS shines. Not because it does anything magic with DirectX, but because it coherently integrates all the pieces of the Linux gaming stack: Proton, MangoHud, Gamescope, and a custom Proton fork with patches upstream hasn't merged yet.
+
+**Steam** installs with `paru -S steam`. Once installed, enable Proton in Settings → Compatibility → Enable Steam Play for all titles. This only activates Proton for games that don't have a native Linux build.
+
+**proton-cachyos** is the Proton-GE fork maintained by CachyOS with additional patches: FSR4 support, fsync/futex2 optimizations, and bleeding-edge fixes Valve upstream hasn't integrated yet. It appears as an option in Steam's Compatibility dropdown for each game.
+
+**MangoHud** gives you a configurable overlay with FPS, frametime, temps, GPU and CPU usage — essential for diagnosing performance issues. Activate it with `MANGOHUD=1 %command%` as a Steam launch option.
+
+**Gamescope** is Valve's compositor designed for gaming. Useful for games that don't handle native resolution well, multi-monitor setups, or that need FSR upscaling. The launch option `gamescope -W 2560 -H 1440 -r 165 -f -- %command%` forces resolution and refresh rate inside the compositor.
+
+**game-performance** is CachyOS's own wrapper: it sets the CPU governor to `performance`, applies an SCX profile optimized for gaming latency, and returns to defaults when the game exits. It's more complete than `gamemoderun` because it ties into the SCX stack covered in the kernel section.
+
+```bash
+# Full gaming stack
+paru -S steam proton-cachyos mangohud gamescope gamemode
+
+# Verify proton-cachyos is available to Steam
+ls ~/.steam/steam/compatibilitytools.d/
+
+# Quick MangoHud test outside Steam
+mangohud glxgears
+
+# Combined launch option for a game
+gamescope -W 2560 -H 1440 -r 165 -f -- mangohud game-performance %command%
+```
+
+<Callout type="tip" title="Check ProtonDB before buying">
+  [protondb.com](https://protondb.com) is the resource you'll use most. Platinum and Gold run without any configuration; Silver usually needs a minor tweak; Bronze and Borked have serious issues. Checking takes 30 seconds and saves you from buying a game that won't run.
+</Callout>
+
+<Callout type="warning" title="Kernel-level anti-cheat has no workaround">
+  Some games (Valorant, competitive Fortnite, titles with kernel-level EAC or BattlEye) don't run on Linux in any distro. It's a security model limitation — not a Proton issue, not a CachyOS issue. If your main game is one of these, wait for the publisher to explicitly enable support.
+</Callout>
+
+<Callout type="tip" title="game-performance instead of gamemoderun">
+On CachyOS, use `game-performance` instead of `gamemoderun`. It sets the CPU governor to performance, applies the SCX gaming profile, and automatically reverts when the game exits. Launch option: `game-performance %command%`. If you have ananicy-cpp active (you do by default), game-performance is the wrapper that coordinates with it — gamemoderun isn't.
+</Callout>
+
+## 6. Limitations and gotchas
+
+CachyOS isn't perfect, and being honest here saves you headaches. There are three concrete things worth knowing before committing to this distro as your daily driver.
+
+**Rolling release means `pacman -Syu` can break things.** It doesn't happen often, but it happens. A mesa or wayland update can break compositing, a new kernel can introduce a regression with your specific GPU, an AUR package can fall behind a new dependency version. The mitigation isn't hoping for the best — it's setting up automatic snapshots with btrfs and snapper or timeshift, and reading CachyOS news before a major update. If you don't set up snapshots, eventually you'll need to reinstall.
+
+**The x86-64-v4 hardware gate** we covered in the repos section: if you're on Zen3, Zen2, or Intel pre-Rocket Lake, you don't have AVX-512 and you'll use v3. Still faster than mainline Arch, but if you came here expecting v4 and have older hardware, adjust your expectations.
+
+**Kernel-level anti-cheat is the real blocker for gaming.** Easy Anti-Cheat and BattlEye only work in Proton if the publisher explicitly enabled support — and many haven't. Valorant, competitive Fortnite, some EA titles: they don't run on Linux, in any distro, with any compatibility trick. If your main game is one of these, Linux isn't for you yet.
+
+```bash
+# Set up snapshots with btrfs + snapper (assuming / on btrfs)
+sudo pacman -S snapper snap-pac
+sudo snapper -c root create-config /
+
+# Or timeshift if you prefer rsync
+sudo pacman -S timeshift
+
+# Check CachyOS news before a major update
+curl -s https://cachyos.org/blog/feed.xml | head -50
+```
+
+<Callout type="warning" title="Snapshots are not optional on rolling release">
+If CachyOS is going to be your daily driver, set up snapshots on day one. The day an update breaks your boot — and eventually it will — the difference between a 5-minute rollback and reinstalling everything is having snapshots active. It's not "when I have time." It's before you need them.
+</Callout>
+
+<Callout type="warning" title="Kernel-level anti-cheat">
+Valorant, Fortnite (competitive mode), and titles with kernel-level EAC or BattlEye don't run on Linux. This is independent of the distro — it's a Linux security model limitation. Before migrating, check every game on [protondb.com](https://protondb.com).
+</Callout>
+
+## Cheat sheet
+
+Summary of the commands and tools you'll use most:
+
+| Tool / command | What it does |
+|---|---|
+| `cachyos-kernel-manager` | GUI to install and switch kernel variants (BORE, RT, LTS) |
+| `cachyos-rate-mirrors` | Automatic mirror selection based on your microarchitecture |
+| `paru -S <pkg>` | Install from AUR — faster than yay, shows PKGBUILD diff |
+| `ananicy-cpp` | Daemon that auto-assigns CPU/IO priorities per process |
+| `zramctl` | Status of compressed RAM swap (active by default) |
+| `proton-cachyos` | Proton fork with FSR4 patches + fsync optimized for CachyOS |
+| `mangohud %command%` | FPS, frametimes, temps and GPU/CPU usage overlay in Steam |
+| `gamescope -W X -H Y -f --` | Valve's compositor for resolution and upscaling in gaming |
+| `game-performance %command%` | Performance governor + SCX gaming profile (CachyOS-specific) |
+| [protondb.com](https://protondb.com) | Linux game compatibility check before buying |
+| `timeshift` / `snapper` | System snapshots — mandatory on rolling release |
+
+If what you read sounds interesting, the healthiest approach is to try it in a VM or a secondary partition before migrating your daily driver. A week of real use will tell you far more than any benchmark — and if you decide it's not for you, you've lost nothing. You can find the installer at [cachyos.org/download](https://cachyos.org/download).
