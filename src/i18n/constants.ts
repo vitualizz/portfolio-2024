@@ -19,8 +19,10 @@ export const SECTION_IDS = {
 } as const
 
 export const CV_PATH_BY_LANG: Record<LanguagesCodes, string> = {
-  es: '/cv/es.pdf',
-  en: '/cv/en.pdf'
+  // es: '/cv/es.pdf',
+  // en: '/cv/en.pdf',
+  es: '/cv/cv_text.pdf',
+  en: '/cv/cv_text.pdf'
 }
 
 export const BLOG_DATE_LOCALE: Record<LanguagesCodes, string> = {

@@ -1,0 +1,184 @@
+% !TeX program = xelatex
+% \documentclass[10pt,a4paper]{article}
+\documentclass[10pt]{article}
+\usepackage[papersize={210mm,780mm}, margin=1in]{geometry}
+% \usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{fontspec}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{wrapfig}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\setmainfont{Fira Sans}
+\definecolor{main}{HTML}{2E3A59}
+\definecolor{accent}{HTML}{4A90E2}
+\definecolor{graytext}{HTML}{555555}
+
+\titleformat{\section}{\color{main}\bfseries\Large}{}{0em}{}[\vspace{-0.5em}\color{accent}\rule{\linewidth}{0.5pt}\vspace{0.5em}]
+\titleformat{\subsection}{\bfseries\large\color{main}}{}{0em}{}
+
+\linespread{1.05}
+
+\setlist[itemize]{
+  left=1.5em,
+  label=\textbullet,
+  itemsep=0.5em,
+  topsep=0.4em,
+  parsep=0.3em,
+  labelsep=0.7em,
+}
+
+% ====================
+\begin{document}
+
+% ====================
+% Encabezado con imagen
+% ====================
+\begin{minipage}{0.72\textwidth}
+  {\Huge \bfseries\color{main} Lee Palacios}\\[0.3em]
+  \large\textcolor{graytext}{TypeScript | React | Node.js | PostgreSQL}\\[0.5em]
+  \href{mailto:vitualizz@gmail.com}{vitualizz@gmail.com} \quad| \quad +51 932 344 598 \quad| \quad Lima, Perú\\
+  \href{https://www.linkedin.com/in/vitualizz}{linkedin.com/in/vitualizz} \quad| \quad \href{https://vitualizz.vercel.app/}{vitualizz.vercel.app}
+\end{minipage}
+\hfill
+\begin{minipage}{0.23\textwidth}
+  \begin{center}
+    \begin{tikzpicture}
+      \clip (0,0) circle (1.6cm);
+      \node at (0,-0.2) {\includegraphics[width=3.6cm, height=3.6cm, keepaspectratio=false]{foto.png}};
+    \end{tikzpicture}
+  \end{center}
+\end{minipage}
+
+\vspace{1em}
+
+% ====================
+\section{Perfil}
+\noindent
+\large\textbf{Senior Fullstack Engineer} con +7 años construyendo plataformas SaaS escalables con TypeScript, React, Node.js y PostgreSQL. Fan del clean code, los procesos ágiles y la automatización. Enfocado en calidad, ownership técnico y mentoría de equipos.\\
+\textit{(Y sí, también soy fan de los gatitos.)}
+
+% ====================
+
+\vspace{1.5em}
+\section{Experiencia Laboral}
+
+\vspace{0.5em}
+\subsection*{Patrimore \hfill \textnormal{\textit{Octubre 2025 -- Mayo 2026}}}
+\textit{Senior Fullstack Engineer}
+\begin{itemize}
+  \item Lideré la actualización del core de la plataforma, migrando las versiones de Ruby y Rails, y reemplacé Capistrano por Kamal, optimizando los despliegues en contenedores y simplificando drásticamente la infraestructura.
+  \item Diseñé desde cero un motor de categorización financiera que procesa miles de pagos en tiempo real, integrando un backend en FastAPI con modelos de IA y reglas personalizadas para automatizar una tarea antes hecha a mano.
+  \item Construí un gestor centralizado de boletas y suscripciones que unifica los datos de Zoho y Bsale en un solo lugar, eliminando la necesidad de revisar múltiples plataformas y previniendo errores críticos de facturación.
+  \item Creé herramientas internas de automatización para el equipo, destacando un script personalizado que genera las presentaciones PPT de métricas para los dailies, reduciendo el trabajo manual en las sincronizaciones diarias.
+\end{itemize}
+
+\vspace{2em}
+\subsection*{Inmology \hfill \textnormal{\textit{Mayo 2025 -- Diciembre 2025}}}
+\textit{Co-Founder \& Tech Lead}
+\begin{itemize}
+  \item Definí el stack y la arquitectura base de la startup en etapa early, eligiendo herramientas que balancearon velocidad de iteración con un camino claro hacia escalabilidad.
+  \item Arquitecturé desde cero un sistema de agentes orientado a captación inmobiliaria, integrando servicios externos y modelando los flujos de conversación end-to-end.
+  \item Desplegué la infraestructura cloud inicial con foco en observabilidad y despliegue de microservicios, dejando el sistema preparado para escalar horizontalmente.
+  \item Lideré un equipo de 2 desarrolladores, coordinando roadmap técnico, revisión de código y prácticas de calidad para sostener el ritmo de entrega.
+\end{itemize}
+
+\vspace{2em}
+\subsection*{ComunidadFeliz.com \hfill \textnormal{\textit{Mayo 2024 -- Abril 2025}}}
+\textit{Developer Full Stack Senior L1}
+\begin{itemize}
+  \item Optimicé consultas SQL críticas sobre la plataforma, reduciendo en un 60\% los tiempos de respuesta de los endpoints de mayor tráfico.
+  \item Lideré el desarrollo de un sistema de chat en Next.js para consultas de residentes, reduciendo en un 30\% la carga del equipo de soporte.
+  \item Definí y documenté convenciones para callbacks en frontend, reduciendo bugs recurrentes y acelerando la carga de componentes críticos del producto.
+\end{itemize}
+
+\vspace{2em}
+\subsection*{GoJom (Y Combinator W22) \hfill \textnormal{\textit{Febrero 2022 -- Marzo 2024}}}
+\textit{Backend Developer \& DevOps Engineer}
+\begin{itemize}
+  \item Refactoricé y desacoplé el tasador inmobiliario hacia AWS Lambda con Serverless Framework, reduciendo costos en \$1,000 mensuales y habilitando escalabilidad por demanda.
+  \item Gestioné infraestructura en AWS y Azure, endureciendo el control de permisos y desacoplando servicios para reducir el blast radius de cambios.
+  \item Desarrollé microservicios en Node.js con Redis y BullMQ, sosteniendo el escalamiento de 100 a 10,000+ usuarios activos.
+  \item Mentoreé a 2 desarrolladores junior y lideré decisiones técnicas clave durante la etapa de aceleración en Y Combinator, elevando la productividad del equipo en un 20\%.
+\end{itemize}
+
+\vspace{2em}
+
+\subsection*{Sperant (EterniaSoft) \hfill \textnormal{\textit{Enero 2018 -- Enero 2022}}}
+\textit{Full Stack Developer (CRM y App Móvil)}
+\begin{itemize}
+  \item Diseñé e implementé un sistema robusto de webhooks y conectores externos con Sendpulse, estandarizando la integración con terceros del CRM.
+  \item Lideré el rediseño del frontend en Vue.js bajo Atomic Design y Tailwind CSS, entregando una UI consistente y mantenible que aceleró el desarrollo de nuevas vistas.
+  \item Construí el backend serverless en AWS Lambda para la app móvil en React Native, sosteniendo los flujos críticos de CRM en producción.
+  \item Desarrollé un SDK personalizado en TypeScript para acceso eficiente a la base de datos desde el API, reduciendo la duplicación entre clientes.
+\end{itemize}
+
+% ====================
+
+\vspace{1.5em}
+\section{Habilidades Técnicas}
+\noindent
+\vspace{0.3em}
+\textbf{Lenguajes:} TypeScript, JavaScript, Python, Ruby, SQL, HTML, CSS \\
+\vspace{0.3em}
+\textbf{Backend:} Node.js, Express, Rails \quad \textbf{Frontend:} React, Next.js, Vue.js \\
+\vspace{0.3em}
+\textbf{Bases de Datos:} PostgreSQL, MySQL, Redis \\
+\vspace{0.3em}
+\textbf{Cloud / DevOps:} AWS, Docker, CI/CD, Serverless \\
+\vspace{0.3em}
+\textbf{Herramientas:} Git, GitHub, Agile, TDD, Clean Code \\
+\vspace{0.3em}
+\textbf{APIs:} REST, GraphQL, WebSockets
+
+% ====================
+
+\vspace{1.5em}
+\section{Formación Académica}
+\textbf{Formación Autodidacta en Desarrollo de Software}
+\begin{itemize}
+  \item Proyectos reales con miles de usuarios
+  \item Mentoría de expertos y trabajo en startups
+  \item Especialización en SaaS, Rails y metodologías ágiles
+\end{itemize}
+
+% ====================
+
+\vspace{1.5em}
+\section{Certificaciones y Cursos}
+\begin{itemize}
+  \item AWS Cloud Practitioner – Amazon
+  \item Certificación en Data Science – Coderhouse
+  \item Cursos en Clean Code y Arquitectura de Software
+\end{itemize}
+
+% ====================
+
+\vspace{1.5em}
+\section{Idiomas}
+\begin{itemize}
+  \item Español: Nativo
+  \item Inglés: Intermedio (B1) – Comunicación técnica efectiva
+\end{itemize}
+
+% ====================
+
+\vspace{1.5em}
+\section{Presencia Digital}
+\begin{itemize}
+  \item \href{https://vitualizz.vercel.app/}{Portafolio: https://vitualizz.vercel.app}
+  \item \href{https://www.linkedin.com/in/vitualizz}{LinkedIn: https://linkedin.com/in/vitualizz}
+  \item \href{https://github.com/vitualizz}{GitHub: https://github.com/vitualizz}
+\end{itemize}
+
+\end{document}

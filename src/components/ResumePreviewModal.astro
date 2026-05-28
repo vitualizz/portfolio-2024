@@ -68,7 +68,8 @@ const t = useTranslation(lang)
 </style>
 
 <script>
-  const CV_PATH_BY_LANG = { es: '/cv/es.pdf', en: '/cv/en.pdf' } as const
+  // const CV_PATH_BY_LANG = { es: '/cv/es.pdf', en: '/cv/en.pdf' } as const
+  const CV_PATH_BY_LANG = { es: '/cv/cv_text.pdf', en: '/cv/cv_text.pdf' } as const
 
   function initResumePreviewModal() {
     const modal = document.querySelector<HTMLElement>('[data-resume-modal]')

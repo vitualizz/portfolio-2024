@@ -2,17 +2,17 @@
   {
     "company": "Patrimore",
     "role": "Senior Fullstack Engineer",
-    "period": { "start": "2025-01", "end": null },
-    "description_es": "Construyendo y refinando features de plataforma con foco en backend: arquitectura, queries optimizadas, y modelos de datos que aguantan. Stack moderno full-stack con React en el front.",
-    "description_en": "Building and refining platform features with a strong backend focus: architecture, optimized queries, and data models that hold up. Modern full-stack with React on the front.",
-    "tech": ["Backend-heavy", "Postgres", "TypeScript", "React"]
+    "period": { "start": "2025-10", "end": "2026-05" },
+    "description_es": "Modernicé la infraestructura central y diseñé un motor de IA que automatiza la clasificación de miles de pagos en tiempo real. Centralicé la facturación integrando múltiples plataformas, eliminando por completo los errores críticos de cobro.",
+    "description_en": "Modernized the core infrastructure and designed an AI engine that automates the classification of thousands of real-time payments. Centralized billing by integrating multiple platforms, completely eliminating critical invoicing errors.",
+    "tech": ["Ruby on Rails", "FastAPI", "Kamal", "AI / LLM", "React", "TypeScript"]
   },
   {
     "company": "ComunidadFeliz",
     "role": "Senior Fullstack Engineer",
     "period": { "start": "2022-06", "end": "2024-08" },
-    "description_en": "Owned features across a condominium management platform serving thousands of buildings. Ruby on Rails + React + Postgres; led query optimization and cross-team refactors.",
-    "description_es": "Lideré features en una plataforma de administración de condominios usada por miles de edificios. Ruby on Rails + React + Postgres; optimización de queries y refactors entre equipos.",
+    "description_es": "Optimicé el rendimiento de la base de datos reduciendo un 60% los tiempos de carga para miles de edificios. Diseñé un sistema de comunicación interna que disminuyó en un 30% la carga de trabajo del equipo de soporte.",
+    "description_en": "Optimized database performance, cutting load times by 60% for thousands of buildings[cite: 1]. Designed an internal communication system that reduced the customer support workload by 30%[cite: 1].",
     "tech": [
       "Ruby on Rails",
       "React",
@@ -26,8 +26,8 @@
     "company": "Influgo",
     "role": "Tech Lead",
     "period": { "start": "2020-01", "end": "2022-05" },
-    "description_en": "Led the build of a campaign and proposal management system for influencers. Architected the Rails API and React/React Native clients; set conventions still in use today.",
-    "description_es": "Lideré la construcción de un sistema de gestión de campañas y propuestas para influencers. Diseñé la API en Rails y los clientes React/React Native; establecí convenciones aún vigentes.",
+    "description_es": "Lideré el desarrollo desde cero del sistema de campañas para influencers, escalando la arquitectura de 100 a más de 10,000 usuarios activos[cite: 1] y definiendo los estándares de ingeniería de la empresa.",
+    "description_en": "Led the greenfield development of the influencer campaign system, scaling the architecture from 100 to over 10,000 active users[cite: 1] and establishing the company's core engineering standards.",
     "tech": [
       "Ruby on Rails",
       "React",
@@ -41,8 +41,8 @@
     "company": "Inmology",
     "role": "Founder & AI Engineer",
     "period": { "start": "2024-09", "end": "2025-01" },
-    "description_en": "Building AI agents for real-estate automation. End-to-end product: prompt design, agent orchestration with N8N, data infrastructure on Postgres + AWS Lambda.",
-    "description_es": "Construyendo agentes de IA para automatizar tareas inmobiliarias. Producto end-to-end: diseño de prompts, orquestación de agentes con N8N, infraestructura en Postgres + AWS Lambda.",
+    "description_es": "Diseñé y construí productos basados en agentes de IA para automatizar flujos operativos en el sector inmobiliario, manejando todo el ciclo de vida del producto: desde la arquitectura hasta la infraestructura cloud.",
+    "description_en": "Designed and built AI agent-driven products to automate operational workflows in the real estate sector, managing the entire product lifecycle from core architecture to cloud infrastructure.",
     "tech": ["GPT", "N8N", "Python", "JavaScript", "Postgres", "AWS Lambda"]
   }
 ]

@@ -1,202 +1,118 @@
 [
   {
+    "title": "Patrimore",
+    "description_es": "Modernicé la infraestructura core migrando a Kamal y Rails LTS. Diseñé un motor de IA para categorizar miles de pagos en tiempo real y centralicé integraciones de Zoho/Bsale, eliminando errores críticos de facturación.",
+    "description_en": "Modernized core infrastructure by migrating to Kamal and Rails LTS. Designed an AI engine to categorize thousands of real-time payments and unified Zoho/Bsale integrations, eliminating billing errors.",
+    "image": "patrimore",
+    "stack": [
+      { "icon": "rails", "tooltip": "Ruby on Rails" },
+      { "icon": "fastapi", "tooltip": "FastAPI (Python)" },
+      { "icon": "kamal", "tooltip": "Kamal" },
+      { "icon": "gpt", "tooltip": "AI / LLM" },
+      { "icon": "react", "tooltip": "React" },
+      { "icon": "typescript", "tooltip": "TypeScript" }
+    ],
+    "demo": "https://patrimore.com/"
+  },
+  {
     "title": "Inmology",
-    "description_es": "Founder de Inmology, una pequeña empresa que se dedica a la creación de agentes IA para automatizar tareas en la industria inmobiliaria. Entendiendo los modelos de aprendizade de IA con la herramienta de N8N.",
-    "description_en": "Founder of Inmology, a small company dedicated to creating AI agents for automating tasks in the in-home industry. Understanding AI models with N8N tool.",
-    "image": "inmology",
+    "description_es": "Founder e Ingeniero de IA. Diseñé y orquesté agentes de IA autónomos con N8N para automatizar flujos operativos complejos e infraestructura serverless en la industria inmobiliaria.",
+    "description_en": "Founder & AI Engineer. Designed and orchestrated autonomous AI agents using N8N to automate complex operational workflows and serverless infrastructure for the real estate industry.",
+    "image": "inmology2",
     "githubUrl": "https://github.com/vitualizz/inmology",
     "stack": [
-      {
-        "icon": "gpt",
-        "tooltip": "GPT / Others AI"
-      },
-      {
-        "icon": "python",
-        "tooltip": "Python"
-      },
-      {
-        "icon": "javascript",
-        "tooltip": "Javascript"
-      },
-      {
-        "icon": "postgres",
-        "tooltip": "Postgres"
-      },
-      {
-        "icon": "lambda",
-        "tooltip": "AWS Lambda"
-      }
+      { "icon": "gpt", "tooltip": "GPT / Others AI" },
+      { "icon": "n8n", "tooltip": "N8N Orchestration" },
+      { "icon": "python", "tooltip": "Python" },
+      { "icon": "javascript", "tooltip": "Javascript" },
+      { "icon": "postgres", "tooltip": "Postgres" },
+      { "icon": "lambda", "tooltip": "AWS Lambda" }
     ],
     "demo": "https://inmology.vercel.app/"
   },
   {
     "title": "ComunidadFeliz",
-    "description_es": "Desarrollador FullStack, implementando mejoras en la plataforma de administración de condominios. Utilizando Ruby on Rails y React. Además de optimizar las consultas de la base de datos.",
-    "description_en": "FullStack Developer, implementing improvements in the condominium management platform. Using Ruby on Rails and React. Also, optimizing database queries.",
+    "description_es": "Optimicé el rendimiento de la base de datos reduciendo un 60% los tiempos de respuesta para miles de edificios. Co-diseñé un sistema de chat interno que disminuyó un 30% la carga del equipo de soporte.",
+    "description_en": "Optimized core database performance, cutting response times by 60% for thousands of buildings[cite: 1]. Co-designed an internal chat system that reduced customer support workload by 30%[cite: 1].",
     "image": "comunidadfeliz",
     "stack": [
-      {
-        "icon": "rails",
-        "tooltip": "Ruby on Rails"
-      },
-      {
-        "icon": "react",
-        "tooltip": "React"
-      },
-      {
-        "icon": "tailwind",
-        "tooltip": "TailwindCSS"
-      },
-      {
-        "icon": "typescript",
-        "tooltip": "Typescript"
-      },
-      {
-        "icon": "redux",
-        "tooltip": "Redux"
-      },
-      {
-        "icon": "postgres",
-        "tooltip": "Postgres"
-      }
+      { "icon": "rails", "tooltip": "Ruby on Rails" },
+      { "icon": "react", "tooltip": "React" },
+      { "icon": "tailwind", "tooltip": "TailwindCSS" },
+      { "icon": "typescript", "tooltip": "Typescript" },
+      { "icon": "redux", "tooltip": "Redux" },
+      { "icon": "postgres", "tooltip": "Postgres" }
     ],
     "demo": "https://comunidadfeliz.cl/"
   },
   {
     "title": "Influgo",
-    "description_en": "Senior Ruby on Rails Developer. Led the development of the project, a campaign/proposal management system for influencers. Implementing the back layer with rails and the front layer with React.",
-    "description_es": "Desarrollador Senior de Ruby on Rails. Lideré el desarrollo del proyecto, un sistema de gestión de campañas/propuestas para influencers. Implementando la capa de back con rails y la capa de front con React.",
+    "description_es": "Lideré la arquitectura completa del sistema de gestión de campañas para influencers. Diseñé la API en Rails y las apps web/mobile, escalando la infraestructura de 100 a más de 10K+ usuarios activos[cite: 1].",
+    "description_en": "Led the end-to-end architecture of the influencer campaign platform. Built the Rails API and web/mobile clients, scaling infrastructure from 100 to over 10K+ active users[cite: 1].",
     "image": "influgo",
     "stack": [
-      {
-        "icon": "rails",
-        "tooltip": "Ruby on Rails"
-      },
-      {
-        "icon": "react",
-        "tooltip": "React / React Native"
-      },
-      {
-        "icon": "tailwind",
-        "tooltip": "TailwindCSS"
-      },
-      {
-        "icon": "typescript",
-        "tooltip": "Typescript"
-      },
-      {
-        "icon": "lambda",
-        "tooltip": "AWS Lambda"
-      },
-      {
-        "icon": "postgres",
-        "tooltip": "Postgres"
-      }
+      { "icon": "rails", "tooltip": "Ruby on Rails" },
+      { "icon": "react", "tooltip": "React / React Native" },
+      { "icon": "tailwind", "tooltip": "TailwindCSS" },
+      { "icon": "typescript", "tooltip": "Typescript" },
+      { "icon": "lambda", "tooltip": "AWS Lambda" },
+      { "icon": "postgres", "tooltip": "Postgres" }
     ],
     "demo": "https://influgo.co/"
   },
   {
     "title": "Gojom",
-    "description_en": "I worked as a Backend, refining code for a property appraiser. Leveraging Typescript, AWS Lambda, and Serverless Framework. Additionally, as a DevOps, I optimized cloud infrastructure across AWS.",
-    "description_es": "Trabajé como Backend, optimizando código para un tasador de inmuebles. Utilizando TS, AWS Lambda y Serverless. Además, como DevOps, optimicé la infraestructura de AWS.",
+    "description_es": "Diseñé la arquitectura backend serverless para un tasador masivo de inmuebles automatizado[cite: 1]. Optimicé la infraestructura e implementé servicios que redujeron costos cloud en $1,000 USD/mes[cite: 1].",
+    "description_en": "Engineered the serverless backend architecture for an automated property appraiser[cite: 1]. Optimized DevOps pipelines and AWS infrastructure, reducing cloud costs by $1,000 USD/month[cite: 1].",
     "image": "gojom",
     "stack": [
-      {
-        "icon": "rails",
-        "tooltip": "Ruby on Rails"
-      },
-      {
-        "icon": "tailwind",
-        "tooltip": "TailwindCSS"
-      },
-      {
-        "icon": "elasticsearch",
-        "tooltip": "ElasticSearch"
-      },
-      {
-        "icon": "postgres",
-        "tooltip": "Postgres"
-      }
+      { "icon": "rails", "tooltip": "Ruby on Rails" },
+      { "icon": "lambda", "tooltip": "AWS Lambda" },
+      { "icon": "serverless", "tooltip": "Serverless Framework" },
+      { "icon": "tailwind", "tooltip": "TailwindCSS" },
+      { "icon": "elasticsearch", "tooltip": "ElasticSearch" },
+      { "icon": "postgres", "tooltip": "Postgres" }
     ],
     "demo": "https://www.linkedin.com/company/gojom"
   },
   {
     "title": "Sperant",
-    "description_en": "As a FullStack Developer, I created a robust webhook system. Enhanced frontend with Vue.js, Atomic Design, and Tailwind CSS for efficient UI development, improving user experience.",
-    "description_es": "FullStack, creé un sistema de webhooks. Mejoré el frontend con Vue.js, Atomic Design y Tailwind CSS para un desarrollo de interfaz de usuario eficiente, mejorando la experiencia del usuario.",
+    "description_es": "Diseñé e implementé un sistema robusto de webhooks de alta disponibilidad. Modernicé la UI web aplicando Atomic Design y Tailwind CSS, acelerando la velocidad de desarrollo del equipo frontend.",
+    "description_en": "Designed and implemented a robust, high-availability webhook system. Modernized the web UI utilizing Atomic Design and Tailwind CSS, accelerating frontend engineering velocity.",
     "image": "sperant",
     "stack": [
-      {
-        "icon": "rails",
-        "tooltip": "Ruby on Rails"
-      },
-      {
-        "icon": "vue",
-        "tooltip": "VueJS"
-      },
-      {
-        "icon": "dynamodb",
-        "tooltip": "DynamoDB"
-      },
-      {
-        "icon": "postgres",
-        "tooltip": "Postgres"
-      }
+      { "icon": "rails", "tooltip": "Ruby on Rails" },
+      { "icon": "vue", "tooltip": "VueJS" },
+      { "icon": "dynamodb", "tooltip": "DynamoDB" },
+      { "icon": "postgres", "tooltip": "Postgres" }
     ],
     "demo": "https://sperant.com/"
   },
   {
     "title": "App Sperant",
-    "description_en": "Contributed to Sperant's mobile app backend in AWS Lambda, frontend in React Native with Tailwind. Developed a custom SDK for  database handling, all in Typescript for clean, scalable code.",
-    "description_es": "Contribuí al backend de la app de Sperant en AWS Lambda, y al frontend en React Native con Tailwind. Desarrollé un SDK para el manejo de la base de datos, todo en Typescript para un código limpio y escalable.",
+    "description_es": "Desarrollé el backend serverless en AWS Lambda y la app móvil en React Native. Construí un SDK interno personalizado en TypeScript para estandarizar y agilizar el manejo de datos a gran escala.",
+    "description_en": "Developed the serverless backend on AWS Lambda and the mobile app using React Native. Built a custom internal TypeScript SDK to standardize and streamline large-scale data handling.",
     "image": "sperant_mobile",
     "stack": [
-      {
-        "icon": "react",
-        "tooltip": "React Native"
-      },
-      {
-        "icon": "tailwind",
-        "tooltip": "TailwindCSS"
-      },
-      {
-        "icon": "lambda",
-        "tooltip": "AWS Lambda"
-      },
-      {
-        "icon": "redux",
-        "tooltip": "Redux"
-      }
+      { "icon": "react", "tooltip": "React Native" },
+      { "icon": "tailwind", "tooltip": "TailwindCSS" },
+      { "icon": "lambda", "tooltip": "AWS Lambda" },
+      { "icon": "redux", "tooltip": "Redux" }
     ],
     "demo": "https://play.google.com/store/apps/details?id=com.sperant.postventa"
   },
   {
     "title": "AssistChat",
-    "description_en": "Developed a personal project promoting the benefits of GPT chatbot implementation. Focus in crafting precise prompts for optimal model comprehension.",
-    "description_es": "Desarrollé un proyecto personal que promueve los beneficios de implementar un chatbot GPT. Me enfoqué en crear indicaciones precisas para una comprensión óptima del modelo.",
+    "description_es": "Proyecto personal de automatización conversacional. Desarrollé la integración de APIs de GPT mediante ingeniería de prompts avanzada para optimizar el análisis contextual de modelos de lenguaje.",
+    "description_en": "Personal conversational automation project. Engineered advanced GPT prompt integration and context handling to optimize large language model comprehension and response accuracy.",
     "image": "assistchat",
     "githubUrl": "https://github.com/vitualizz/assistchat",
     "stack": [
-      {
-        "icon": "rails",
-        "tooltip": "Ruby on Rails"
-      },
-      {
-        "icon": "react",
-        "tooltip": "React Native"
-      },
-      {
-        "icon": "tailwind",
-        "tooltip": "TailwindCSS"
-      },
-      {
-        "icon": "typescript",
-        "tooltip": "Typescript"
-      },
-      {
-        "icon": "gpt",
-        "tooltip": "OpenAI Gpt"
-      }
+      { "icon": "rails", "tooltip": "Ruby on Rails" },
+      { "icon": "react", "tooltip": "React Native" },
+      { "icon": "tailwind", "tooltip": "TailwindCSS" },
+      { "icon": "typescript", "tooltip": "Typescript" },
+      { "icon": "gpt", "tooltip": "OpenAI Gpt" }
     ],
     "demo": "https://assistchat.onrender.com/"
   }
