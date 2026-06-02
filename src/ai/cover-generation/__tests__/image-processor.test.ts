@@ -19,7 +19,7 @@ vi.mock('node:path', async (importOriginal) => {
   return {
     default: {
       ...original,
-      resolve: (_cwd: string, ..._parts: string[]) => '/fake',
+      resolve: () => '/fake',
       join: (...parts: string[]) => parts.join('/')
     }
   }

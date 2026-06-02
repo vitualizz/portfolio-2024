@@ -64,7 +64,7 @@ vi.mock('node:path', async (importOriginal) => {
   return {
     default: {
       ...original,
-      resolve: (_cwd: string, ..._parts: string[]) => '/fake/blog',
+      resolve: () => '/fake/blog',
       join: (...parts: string[]) => parts.join('/')
     }
   }
@@ -107,7 +107,7 @@ describe('analyzeContent', () => {
   it('exits non-zero on missing en.mdx', () => {
     const exitSpy = vi
       .spyOn(process, 'exit')
-      .mockImplementation((_code?: string | number | null | undefined) => {
+      .mockImplementation(() => {
         throw new Error('process.exit')
       })
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
@@ -125,7 +125,7 @@ describe('analyzeContent', () => {
   it('exits non-zero for unknown slug', () => {
     const exitSpy = vi
       .spyOn(process, 'exit')
-      .mockImplementation((_code?: string | number | null | undefined) => {
+      .mockImplementation(() => {
         throw new Error('process.exit')
       })
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
