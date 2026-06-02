@@ -103,7 +103,10 @@ export const generateDomainAnswer = async (
   const { text } = await generateText({
     model: openai(OPENAI_MODEL),
     system,
-    messages: [...history.map(toModelMessage), { role: 'user', content: question }],
+    messages: [
+      ...history.map(toModelMessage),
+      { role: 'user', content: question }
+    ],
     maxOutputTokens: 300
   })
   return text

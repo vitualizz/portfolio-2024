@@ -32,8 +32,19 @@ interface Props {
   morePosts?: MorePost[]
 }
 
-const { title, shortDescription, author, date, tags, lang, readingTime, cover, prevPost, nextPost, morePosts = [] } =
-  Astro.props
+const {
+  title,
+  shortDescription,
+  author,
+  date,
+  tags,
+  lang,
+  readingTime,
+  cover,
+  prevPost,
+  nextPost,
+  morePosts = []
+} = Astro.props
 
 const t = useTranslation(lang as 'en' | 'es')
 const tBlog = t('blog')
@@ -43,7 +54,7 @@ const formattedDate = date
   .toLocaleDateString(dateLocale, {
     day: 'numeric',
     month: 'long',
-    year: 'numeric',
+    year: 'numeric'
   })
   .toUpperCase()
 
@@ -59,12 +70,12 @@ const suggestions =
     ? [
         'Resúmeme el post en 3 líneas',
         '¿Cuál es el punto más importante?',
-        '¿Cómo aplicar esto en producción?',
+        '¿Cómo aplicar esto en producción?'
       ]
     : [
         'Summarize in 3 lines',
         "What's the most important point?",
-        'How to apply this in production?',
+        'How to apply this in production?'
       ]
 ---
 
@@ -73,20 +84,21 @@ const suggestions =
   <div
     id="read-progress"
     aria-hidden="true"
-    class="fixed top-0 left-0 h-[3px] w-0 bg-gradient-to-r from-accent to-coral z-[100] transition-[width] duration-100 pointer-events-none"
-  ></div>
+    class="from-accent to-coral pointer-events-none fixed top-0 left-0 z-[100] h-[3px] w-0 bg-gradient-to-r transition-[width] duration-100"
+  >
+  </div>
 
   <Navbar />
 
-  <div class="max-w-[var(--max)] mx-auto px-[var(--gutter)]">
+  <div class="mx-auto max-w-[var(--max)] px-[var(--gutter)]">
     <div
-      class="grid grid-cols-1 min-[1080px]:grid-cols-[minmax(0,720px)_320px] gap-x-[clamp(32px,4vw,64px)] justify-center items-start py-[clamp(36px,6vw,80px)] pb-[clamp(32px,5vw,64px)]"
+      class="grid grid-cols-1 items-start justify-center gap-x-[clamp(32px,4vw,64px)] py-[clamp(36px,6vw,80px)] pb-[clamp(32px,5vw,64px)] min-[1080px]:grid-cols-[minmax(0,720px)_320px]"
     >
-      <article class="max-w-[720px] min-w-0 blog-article">
+      <article class="blog-article max-w-[720px] min-w-0">
         <!-- Back link -->
         <a
           href={`/${lang}/blog`}
-          class="inline-block mb-8 font-mono text-[11px] uppercase tracking-[0.08em] text-muted-custom hover:text-accent transition-colors"
+          class="text-muted-custom hover:text-accent mb-8 inline-block font-mono text-[11px] tracking-[0.08em] uppercase transition-colors"
         >
           ← {tBlog.back_to_blog}
         </a>
@@ -94,7 +106,7 @@ const suggestions =
         <!-- Cover image -->
         {
           cover && (
-            <figure class="article-cover mb-7 rounded-[18px] overflow-hidden border border-line bg-bg-2 aspect-[1200/630] shadow-[0_24px_60px_rgba(0,0,0,0.35)] relative">
+            <figure class="article-cover border-line bg-bg-2 relative mb-7 aspect-[1200/630] overflow-hidden rounded-[18px] border shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
               <Image
                 src={cover}
                 alt={title}
@@ -102,7 +114,7 @@ const suggestions =
                 height={630}
                 loading="eager"
                 decoding="async"
-                class="w-full h-full object-cover block"
+                class="block h-full w-full object-cover"
               />
             </figure>
           )
@@ -110,47 +122,61 @@ const suggestions =
 
         <!-- Header -->
         <header>
-          <div class="flex items-center gap-2.5 mb-6 flex-wrap">
+          <div class="mb-6 flex flex-wrap items-center gap-2.5">
             {
               tagLabel && (
-                <span class="tag-pill font-mono text-[11px] tracking-[0.08em] text-accent border border-accent/30 bg-accent/10 rounded-full px-2.5 py-1 font-semibold uppercase">
+                <span class="tag-pill text-accent border-accent/30 bg-accent/10 rounded-full border px-2.5 py-1 font-mono text-[11px] font-semibold tracking-[0.08em] uppercase">
                   {tagLabel}
                 </span>
               )
             }
-            {tagLabel && <span class="font-mono text-[11px] text-muted-custom opacity-50">•</span>}
-            <time class="font-mono text-[11px] tracking-[0.06em] text-muted-custom uppercase"
+            {
+              tagLabel && (
+                <span class="text-muted-custom font-mono text-[11px] opacity-50">
+                  •
+                </span>
+              )
+            }
+            <time
+              class="text-muted-custom font-mono text-[11px] tracking-[0.06em] uppercase"
               >{formattedDate}</time
             >
-            <span class="font-mono text-[11px] text-muted-custom opacity-50">•</span>
-            <span class="font-mono text-[11px] tracking-[0.06em] text-muted-custom uppercase"
+            <span class="text-muted-custom font-mono text-[11px] opacity-50"
+              >•</span
+            >
+            <span
+              class="text-muted-custom font-mono text-[11px] tracking-[0.06em] uppercase"
               >{readingTime} {tBlog.min_read}</span
             >
           </div>
 
           <h1
-            class="display-title font-display text-[clamp(2.5rem,calc(4vw+1rem),4.25rem)] font-extrabold leading-[1.05] tracking-tight text-ink mt-2 mb-5"
+            class="display-title font-display text-ink mt-2 mb-5 text-[clamp(2.5rem,calc(4vw+1rem),4.25rem)] leading-[1.05] font-extrabold tracking-tight"
             style="text-wrap: balance"
           >
             {title}
           </h1>
 
           <p
-            class="subtitle text-[clamp(1.05rem,calc(1vw+0.85rem),1.25rem)] leading-[1.55] text-ink-soft mb-8 max-w-[56ch]"
+            class="subtitle text-ink-soft mb-8 max-w-[56ch] text-[clamp(1.05rem,calc(1vw+0.85rem),1.25rem)] leading-[1.55]"
             style="text-wrap: pretty"
           >
             {shortDescription}
           </p>
 
-          <div class="flex items-center gap-3.5 py-5 border-t border-b border-line mb-0">
+          <div
+            class="border-line mb-0 flex items-center gap-3.5 border-t border-b py-5"
+          >
             <div
-              class="w-11 h-11 rounded-full bg-gradient-to-br from-accent to-coral/60 text-[#0b0c10] flex items-center justify-center font-display font-extrabold text-xl shrink-0"
+              class="from-accent to-coral/60 font-display flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-xl font-extrabold text-[#0b0c10]"
             >
               {authorInitial}
             </div>
             <div class="flex flex-col gap-0.5">
-              <div class="text-[0.9rem] font-semibold text-ink">{author}</div>
-              <div class="font-mono text-[0.7rem] tracking-[0.04em] text-muted-custom">
+              <div class="text-ink text-[0.9rem] font-semibold">{author}</div>
+              <div
+                class="text-muted-custom font-mono text-[0.7rem] tracking-[0.04em]"
+              >
                 Senior Fullstack · AI Builder · Lima 🇵🇪
               </div>
             </div>
@@ -158,8 +184,11 @@ const suggestions =
         </header>
 
         <!-- Section divider -->
-        <div class="text-center my-10" aria-hidden="true">
-          <span class="div-mark font-display text-[22px] text-accent opacity-80 tracking-[0.3em] px-3 relative">§</span>
+        <div class="my-10 text-center" aria-hidden="true">
+          <span
+            class="div-mark font-display text-accent relative px-3 text-[22px] tracking-[0.3em] opacity-80"
+            >§</span
+          >
         </div>
 
         <!-- Prose body -->
@@ -171,7 +200,9 @@ const suggestions =
         <aside class="follow-card" aria-label={tBlog.follow_label}>
           <div class="follow-card__avatar" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-              <path d="M2 21h18v-2H2v2zm16-9.5V8a6 6 0 0 0-12 0v3.5L4 14v6h16v-6l-2-2.5zM10 8a2 2 0 0 1 4 0v3.5h-4V8z" />
+              <path
+                d="M2 21h18v-2H2v2zm16-9.5V8a6 6 0 0 0-12 0v3.5L4 14v6h16v-6l-2-2.5zM10 8a2 2 0 0 1 4 0v3.5h-4V8z"
+              ></path>
             </svg>
           </div>
           <div class="follow-card__text">
@@ -187,7 +218,12 @@ const suggestions =
               rel="noopener noreferrer"
               aria-label="GitHub"
             >
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"
+              <svg
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="currentColor"
+                aria-hidden="true"
                 ><path
                   d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.1c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.76 2.68 1.25 3.34.96.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.18-1.49 3.14-1.18 3.14-1.18.63 1.59.23 2.76.12 3.05.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.05.78 2.12v3.14c0 .31.21.66.79.55A11.51 11.51 0 0 0 23.5 12c0-6.35-5.15-11.5-11.5-11.5z"
                 ></path></svg
@@ -201,7 +237,12 @@ const suggestions =
               rel="noopener noreferrer"
               aria-label="LinkedIn"
             >
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"
+              <svg
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="currentColor"
+                aria-hidden="true"
                 ><path
                   d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"
                 ></path></svg
@@ -212,19 +253,26 @@ const suggestions =
         </aside>
 
         <!-- Share footer -->
-        <footer class="mt-10 pt-8 border-t border-line">
-          <div class="flex justify-between items-center flex-wrap gap-4">
-            <span class="font-mono text-[12px] text-muted-custom uppercase tracking-[0.06em]">
+        <footer class="border-line mt-10 border-t pt-8">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <span
+              class="text-muted-custom font-mono text-[12px] tracking-[0.06em] uppercase"
+            >
               {lang === 'es' ? '¿Te sirvió?' : 'Was this helpful?'}
             </span>
-            <div class="flex gap-2 flex-wrap">
+            <div class="flex flex-wrap gap-2">
               <a
                 href={twitterUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 px-4 py-2.5 border border-line rounded-full text-[13px] font-mono text-ink-soft bg-bg-2/80 hover:border-accent hover:text-accent hover:-translate-y-0.5 transition-all"
+                class="border-line text-ink-soft bg-bg-2/80 hover:border-accent hover:text-accent inline-flex items-center gap-2 rounded-full border px-4 py-2.5 font-mono text-[13px] transition-all hover:-translate-y-0.5"
               >
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="14"
+                  height="14"
+                  fill="currentColor"
+                >
                   <path
                     d="M22.46 6c-.77.35-1.6.58-2.46.69a4.28 4.28 0 0 0 1.88-2.37 8.59 8.59 0 0 1-2.72 1.04 4.28 4.28 0 0 0-7.4 3.9 12.13 12.13 0 0 1-8.8-4.46 4.28 4.28 0 0 0 1.32 5.71 4.27 4.27 0 0 1-1.94-.54v.05a4.28 4.28 0 0 0 3.43 4.2 4.3 4.3 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.97 8.59 8.59 0 0 1-5.32 1.83A8.7 8.7 0 0 1 0 18.94a12.1 12.1 0 0 0 6.56 1.92c7.88 0 12.19-6.52 12.19-12.18 0-.19 0-.37-.01-.55A8.7 8.7 0 0 0 22.46 6z"
                   ></path>
@@ -233,7 +281,7 @@ const suggestions =
               </a>
               <a
                 href={`/${lang}#contact`}
-                class="inline-flex items-center gap-2 px-4 py-2.5 border border-line rounded-full text-[13px] font-mono text-ink-soft bg-bg-2/80 hover:border-accent hover:text-accent hover:-translate-y-0.5 transition-all"
+                class="border-line text-ink-soft bg-bg-2/80 hover:border-accent hover:text-accent inline-flex items-center gap-2 rounded-full border px-4 py-2.5 font-mono text-[13px] transition-all hover:-translate-y-0.5"
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -264,27 +312,43 @@ const suggestions =
     <!-- Post navigation -->
     {
       (prevPost || nextPost) && (
-        <nav class="post-nav grid grid-cols-1 min-[640px]:grid-cols-2 gap-[14px] max-w-[720px] mx-auto pb-16">
+        <nav class="post-nav mx-auto grid max-w-[720px] grid-cols-1 gap-[14px] pb-16 min-[640px]:grid-cols-2">
           {prevPost ? (
             <a
               href={`/${lang}/blog/${prevPost.slug}`}
-              class="pn-card border border-line bg-bg-2 rounded-[16px] p-[18px_20px] flex flex-col gap-1.5 transition-[border-color,transform,background] duration-[250ms] hover:-translate-y-[3px] hover:border-accent/40 hover:bg-accent/5"
+              class="pn-card border-line bg-bg-2 hover:border-accent/40 hover:bg-accent/5 flex flex-col gap-1.5 rounded-[16px] border p-[18px_20px] transition-[border-color,transform,background] duration-[250ms] hover:-translate-y-[3px]"
             >
-              <span class="font-mono text-[11px] text-accent uppercase tracking-[0.06em]">{tBlog.post_nav_prev}</span>
-              <span class="font-display text-[16px] font-semibold text-ink tracking-[-0.015em] leading-[1.3]">{prevPost.title}</span>
-              <span class="font-mono text-[10.5px] text-muted-custom uppercase tracking-[0.05em]">{prevPost.tags[0]}</span>
+              <span class="text-accent font-mono text-[11px] tracking-[0.06em] uppercase">
+                {tBlog.post_nav_prev}
+              </span>
+              <span class="font-display text-ink text-[16px] leading-[1.3] font-semibold tracking-[-0.015em]">
+                {prevPost.title}
+              </span>
+              <span class="text-muted-custom font-mono text-[10.5px] tracking-[0.05em] uppercase">
+                {prevPost.tags[0]}
+              </span>
             </a>
-          ) : <div />}
+          ) : (
+            <div />
+          )}
           {nextPost ? (
             <a
               href={`/${lang}/blog/${nextPost.slug}`}
-              class="pn-card border border-line bg-bg-2 rounded-[16px] p-[18px_20px] flex flex-col gap-1.5 text-right transition-[border-color,transform,background] duration-[250ms] hover:-translate-y-[3px] hover:border-accent/40 hover:bg-accent/5 max-[639px]:text-left"
+              class="pn-card border-line bg-bg-2 hover:border-accent/40 hover:bg-accent/5 flex flex-col gap-1.5 rounded-[16px] border p-[18px_20px] text-right transition-[border-color,transform,background] duration-[250ms] hover:-translate-y-[3px] max-[639px]:text-left"
             >
-              <span class="font-mono text-[11px] text-accent uppercase tracking-[0.06em]">{tBlog.post_nav_next}</span>
-              <span class="font-display text-[16px] font-semibold text-ink tracking-[-0.015em] leading-[1.3]">{nextPost.title}</span>
-              <span class="font-mono text-[10.5px] text-muted-custom uppercase tracking-[0.05em]">{nextPost.tags[0]}</span>
+              <span class="text-accent font-mono text-[11px] tracking-[0.06em] uppercase">
+                {tBlog.post_nav_next}
+              </span>
+              <span class="font-display text-ink text-[16px] leading-[1.3] font-semibold tracking-[-0.015em]">
+                {nextPost.title}
+              </span>
+              <span class="text-muted-custom font-mono text-[10.5px] tracking-[0.05em] uppercase">
+                {nextPost.tags[0]}
+              </span>
             </a>
-          ) : <div />}
+          ) : (
+            <div />
+          )}
         </nav>
       )
     }
@@ -293,25 +357,40 @@ const suggestions =
   <!-- More posts -->
   {
     morePosts.length > 0 && (
-      <section class="more-posts border-t border-line">
-        <div class="max-w-[var(--max)] mx-auto px-[var(--gutter)] pt-14 pb-20">
-          <div class="flex items-baseline gap-4 mb-7 flex-wrap">
-            <span class="font-mono text-[12px] text-accent uppercase tracking-[0.08em]">{tBlog.more_posts_eyebrow}</span>
-            <h3 class="font-display text-[clamp(24px,3vw,32px)] font-bold tracking-[-0.025em] m-0">{tBlog.more_posts_title}</h3>
+      <section class="more-posts border-line border-t">
+        <div class="mx-auto max-w-[var(--max)] px-[var(--gutter)] pt-14 pb-20">
+          <div class="mb-7 flex flex-wrap items-baseline gap-4">
+            <span class="text-accent font-mono text-[12px] tracking-[0.08em] uppercase">
+              {tBlog.more_posts_eyebrow}
+            </span>
+            <h3 class="font-display m-0 text-[clamp(24px,3vw,32px)] font-bold tracking-[-0.025em]">
+              {tBlog.more_posts_title}
+            </h3>
           </div>
-          <div class="grid grid-cols-1 min-[820px]:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 gap-4 min-[820px]:grid-cols-3">
             {morePosts.map((p) => {
-              const d = p.date.toLocaleDateString(lang === 'es' ? 'es-PE' : 'en-US', {
-                day: 'numeric', month: 'short', year: 'numeric'
-              })
+              const d = p.date.toLocaleDateString(
+                lang === 'es' ? 'es-PE' : 'en-US',
+                {
+                  day: 'numeric',
+                  month: 'short',
+                  year: 'numeric'
+                }
+              )
               return (
                 <a
                   href={`/${lang}/blog/${p.slug}`}
-                  class="mp-card flex flex-col gap-2 p-[22px] bg-bg-2 border border-line rounded-[16px] transition-[transform,border-color] duration-300 hover:-translate-y-[4px] hover:border-accent/40"
+                  class="mp-card bg-bg-2 border-line hover:border-accent/40 flex flex-col gap-2 rounded-[16px] border p-[22px] transition-[transform,border-color] duration-300 hover:-translate-y-[4px]"
                 >
-                  <span class="font-mono text-[11px] text-accent uppercase tracking-[0.06em] border border-accent/30 bg-accent/8 rounded-full px-2 py-0.5 self-start">{p.tags[0]}</span>
-                  <h4 class="font-display text-[17px] font-semibold tracking-[-0.015em] leading-[1.25] my-1">{p.title}</h4>
-                  <span class="font-mono text-[11px] text-muted-custom uppercase tracking-[0.05em] mt-auto">{d} · {p.readingTime} {tBlog.min_read}</span>
+                  <span class="text-accent border-accent/30 bg-accent/8 self-start rounded-full border px-2 py-0.5 font-mono text-[11px] tracking-[0.06em] uppercase">
+                    {p.tags[0]}
+                  </span>
+                  <h4 class="font-display my-1 text-[17px] leading-[1.25] font-semibold tracking-[-0.015em]">
+                    {p.title}
+                  </h4>
+                  <span class="text-muted-custom mt-auto font-mono text-[11px] tracking-[0.05em] uppercase">
+                    {d} · {p.readingTime} {tBlog.min_read}
+                  </span>
                 </a>
               )
             })}
@@ -419,9 +498,17 @@ const suggestions =
   .follow-card::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), var(--coral), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--accent),
+      var(--coral),
+      transparent
+    );
   }
   .follow-card__avatar {
     grid-column: 1;
@@ -436,7 +523,9 @@ const suggestions =
     color: var(--accent);
     border: 1px solid color-mix(in oklab, var(--accent) 35%, var(--line));
   }
-  .follow-card__text { grid-column: 2; }
+  .follow-card__text {
+    grid-column: 2;
+  }
   .follow-card__eyebrow {
     display: block;
     font-family: var(--font-mono);
@@ -482,7 +571,11 @@ const suggestions =
     font-size: 14.5px;
     letter-spacing: -0.005em;
     text-decoration: none;
-    transition: transform 0.2s, box-shadow 0.2s, background 0.2s, border-color 0.2s;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s,
+      background 0.2s,
+      border-color 0.2s;
     flex: 1 1 220px;
     min-width: 0;
   }
@@ -498,14 +591,14 @@ const suggestions =
     box-shadow: 0 8px 22px color-mix(in oklab, var(--accent) 25%, transparent);
   }
   .follow-card__cta--linkedin {
-    background: #0A66C2;
+    background: #0a66c2;
     color: #fff;
     border: 1px solid transparent;
   }
   .follow-card__cta--linkedin:hover {
     background: #0d7dd6;
     transform: translateY(-2px);
-    box-shadow: 0 8px 22px color-mix(in oklab, #0A66C2 45%, transparent);
+    box-shadow: 0 8px 22px color-mix(in oklab, #0a66c2 45%, transparent);
   }
   .follow-card__cta:focus-visible {
     outline: 2px solid var(--accent);

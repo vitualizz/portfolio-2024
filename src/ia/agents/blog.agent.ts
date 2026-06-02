@@ -25,7 +25,11 @@ export const blogAgent: IDomainAgent = {
   domain: 'blog',
   sourceLabel: 'blog posts',
 
-  answer: async (question: string, history: ChatMessage[], lang: Lang): Promise<DomainAnswer> => {
+  answer: async (
+    question: string,
+    history: ChatMessage[],
+    lang: Lang
+  ): Promise<DomainAnswer> => {
     try {
       const entries = await getCollection(
         'blog',
@@ -55,7 +59,12 @@ export const blogAgent: IDomainAgent = {
         .sort((a: BlogMeta, b: BlogMeta) => b.date.getTime() - a.date.getTime())
 
       if (posts.length === 0) {
-        return { domain: 'blog', sourceLabel: 'blog posts', content: '', hasContent: false }
+        return {
+          domain: 'blog',
+          sourceLabel: 'blog posts',
+          content: '',
+          hasContent: false
+        }
       }
 
       const formatted = formatBlog(posts)
@@ -68,7 +77,12 @@ export const blogAgent: IDomainAgent = {
         hasContent: content.length > 0
       }
     } catch {
-      return { domain: 'blog', sourceLabel: 'blog posts', content: '', hasContent: false }
+      return {
+        domain: 'blog',
+        sourceLabel: 'blog posts',
+        content: '',
+        hasContent: false
+      }
     }
   }
 }

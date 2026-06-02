@@ -9,7 +9,10 @@ const lang = getLangFromUrl(Astro.url)
 const t = useTranslation(lang)
 const tBlog = t('blog')
 
-const allPosts = await getCollection('blog', (filter) => filter.data.lang === lang)
+const allPosts = await getCollection(
+  'blog',
+  (filter) => filter.data.lang === lang
+)
 const posts = allPosts.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 )
@@ -34,14 +37,15 @@ function getReadingTime(body: string): number {
 ---
 
 <HomeLayout lang={lang as 'en' | 'es'}>
-  <main class="mx-auto max-w-[var(--max)] px-[var(--gutter)] py-[clamp(40px,6vw,80px)]">
-
+  <main
+    class="mx-auto max-w-[var(--max)] px-[var(--gutter)] py-[clamp(40px,6vw,80px)]"
+  >
     <!-- ===== HERO ===== -->
     <section class="blog-hero">
       <div>
         <!-- Eyebrow -->
         <div
-          class="inline-flex items-center gap-2.5 font-mono text-[12px] text-accent uppercase tracking-[0.08em] px-3.5 py-1.5 bg-[color-mix(in_oklab,var(--accent)_10%,transparent)] border border-[color-mix(in_oklab,var(--accent)_30%,transparent)] rounded-full mb-[22px]"
+          class="text-accent mb-[22px] inline-flex items-center gap-2.5 rounded-full border border-[color-mix(in_oklab,var(--accent)_30%,transparent)] bg-[color-mix(in_oklab,var(--accent)_10%,transparent)] px-3.5 py-1.5 font-mono text-[12px] tracking-[0.08em] uppercase"
         >
           <span class="bh-live" aria-hidden="true"></span>
           {tBlog.index_eyebrow}
@@ -49,9 +53,9 @@ function getReadingTime(body: string): number {
 
         <!-- Title -->
         <h1
-          class="font-display text-[clamp(42px,7vw,84px)] font-extrabold tracking-[-0.035em] leading-none mb-[18px] text-balance"
+          class="font-display mb-[18px] text-[clamp(42px,7vw,84px)] leading-none font-extrabold tracking-[-0.035em] text-balance"
         >
-          <span set:html={tBlog.index_title}></span><span
+          <span set:html={tBlog.index_title} /><span
             class="bh-cat-emoji"
             aria-hidden="true">🐱</span
           >
@@ -59,42 +63,42 @@ function getReadingTime(body: string): number {
 
         <!-- Subtitle -->
         <p
-          class="text-[clamp(16px,1.4vw,18px)] text-ink-soft leading-[1.65] mb-6 max-w-[56ch]"
+          class="text-ink-soft mb-6 max-w-[56ch] text-[clamp(16px,1.4vw,18px)] leading-[1.65]"
         >
           {tBlog.index_subtitle}
         </p>
 
         <!-- Stats -->
         <div
-          class="inline-flex border border-line rounded-[14px] overflow-hidden bg-[color-mix(in_oklab,var(--bg-2)_80%,transparent)]"
+          class="border-line inline-flex overflow-hidden rounded-[14px] border bg-[color-mix(in_oklab,var(--bg-2)_80%,transparent)]"
         >
-          <div class="px-[22px] py-3.5 border-r border-line text-center">
+          <div class="border-line border-r px-[22px] py-3.5 text-center">
             <span
-              class="block font-display text-[26px] font-bold text-accent leading-none"
+              class="font-display text-accent block text-[26px] leading-none font-bold"
               >{posts.length}</span
             >
             <span
-              class="block font-mono text-[10.5px] text-muted-custom uppercase tracking-[0.05em] mt-[5px]"
+              class="text-muted-custom mt-[5px] block font-mono text-[10.5px] tracking-[0.05em] uppercase"
               >{tBlog.index_stat_posts}</span
             >
           </div>
-          <div class="px-[22px] py-3.5 border-r border-line text-center">
+          <div class="border-line border-r px-[22px] py-3.5 text-center">
             <span
-              class="block font-display text-[26px] font-bold text-accent leading-none"
+              class="font-display text-accent block text-[26px] leading-none font-bold"
               >{uniquePrimaryTags.length}</span
             >
             <span
-              class="block font-mono text-[10.5px] text-muted-custom uppercase tracking-[0.05em] mt-[5px]"
+              class="text-muted-custom mt-[5px] block font-mono text-[10.5px] tracking-[0.05em] uppercase"
               >{tBlog.index_stat_topics}</span
             >
           </div>
           <div class="px-[22px] py-3.5 text-center">
             <span
-              class="block font-display text-[26px] font-bold text-accent leading-none"
+              class="font-display text-accent block text-[26px] leading-none font-bold"
               >3</span
             >
             <span
-              class="block font-mono text-[10.5px] text-muted-custom uppercase tracking-[0.05em] mt-[5px]"
+              class="text-muted-custom mt-[5px] block font-mono text-[10.5px] tracking-[0.05em] uppercase"
               >{tBlog.index_stat_cats}</span
             >
           </div>
@@ -107,10 +111,10 @@ function getReadingTime(body: string): number {
         <span class="bh-paw bh-paw-1">🐾</span>
         <span class="bh-paw bh-paw-2">🐾</span>
         <div class="bh-scrap bh-scrap-1"><b>SELECT</b> * FROM gatos</div>
-        <div class="bh-scrap bh-scrap-2"
-          ><b>// TODO:</b>
-          {lang === 'es' ? 'dar croquetas' : 'feed cats'}</div
-        >
+        <div class="bh-scrap bh-scrap-2">
+          <b>// TODO:</b>
+          {lang === 'es' ? 'dar croquetas' : 'feed cats'}
+        </div>
         <div class="bh-scrap bh-scrap-3">EXPLAIN <b>ANALYZE</b></div>
         <div class="bh-scrap bh-scrap-4">git commit -m "<b>meow</b>"</div>
       </div>
@@ -119,10 +123,10 @@ function getReadingTime(body: string): number {
     <!-- ===== FILTER BAR ===== -->
     <div
       id="blogFilter"
-      class="sticky top-[84px] z-20 flex flex-wrap items-center gap-2.5 px-[22px] py-[18px] bg-[color-mix(in_oklab,var(--bg-2)_80%,transparent)] backdrop-blur-xl border border-line rounded-2xl mb-7"
+      class="border-line sticky top-[84px] z-20 mb-7 flex flex-wrap items-center gap-2.5 rounded-2xl border bg-[color-mix(in_oklab,var(--bg-2)_80%,transparent)] px-[22px] py-[18px] backdrop-blur-xl"
     >
       <span
-        class="font-mono text-[11px] text-muted-custom uppercase tracking-[0.06em] mr-1"
+        class="text-muted-custom mr-1 font-mono text-[11px] tracking-[0.06em] uppercase"
         >{tBlog.filter_label}</span
       >
 
@@ -143,7 +147,7 @@ function getReadingTime(body: string): number {
       }
 
       <label
-        class="bf-search-label flex-1 min-w-[180px] ml-auto flex items-center gap-2 px-3.5 py-2 border border-line rounded-full bg-bg transition-colors duration-200"
+        class="bf-search-label border-line bg-bg ml-auto flex min-w-[180px] flex-1 items-center gap-2 rounded-full border px-3.5 py-2 transition-colors duration-200"
         aria-label={lang === 'es' ? 'Buscar' : 'Search'}
       >
         <svg
@@ -153,7 +157,7 @@ function getReadingTime(body: string): number {
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="w-3.5 h-3.5 text-muted-custom shrink-0"
+          class="text-muted-custom h-3.5 w-3.5 shrink-0"
           ><circle cx="11" cy="11" r="7"></circle><line
             x1="21"
             y1="21"
@@ -164,7 +168,7 @@ function getReadingTime(body: string): number {
           id="bfSearch"
           type="search"
           placeholder={tBlog.filter_search_placeholder}
-          class="flex-1 bg-transparent text-ink font-sans text-[13.5px] outline-none min-w-0 placeholder:text-muted-custom border-none"
+          class="text-ink placeholder:text-muted-custom min-w-0 flex-1 border-none bg-transparent font-sans text-[13.5px] outline-none"
         />
       </label>
     </div>
@@ -172,7 +176,7 @@ function getReadingTime(body: string): number {
     <!-- ===== POSTS GRID ===== -->
     <div
       id="postsGrid"
-      class="grid grid-cols-1 min-[640px]:grid-cols-2 min-[1080px]:grid-cols-3 gap-5"
+      class="grid grid-cols-1 gap-5 min-[640px]:grid-cols-2 min-[1080px]:grid-cols-3"
     >
       {
         posts.map((post, i) => {
@@ -190,13 +194,12 @@ function getReadingTime(body: string): number {
               href={`/${lang}/blog/${slug}`}
               class:list={[
                 'bp-card',
-                isFeatured && 'bp-featured min-[640px]:col-span-2',
+                isFeatured && 'bp-featured min-[640px]:col-span-2'
               ]}
               data-tags={post.data.tags.join(',')}
               data-title={post.data.title.toLowerCase()}
               data-excerpt={(post.data.shortDescription || '').toLowerCase()}
             >
-              <!-- Cover -->
               <div class:list={['bp-cover', isFeatured && 'bp-cover-featured']}>
                 {isFeatured && (
                   <span class="bp-pin">⌘ {tBlog.featured_label}</span>
@@ -208,40 +211,41 @@ function getReadingTime(body: string): number {
                     width={isFeatured ? 1200 : 800}
                     height={isFeatured ? 630 : 450}
                     loading={i === 0 ? 'eager' : 'lazy'}
-                    class="bp-cover-img w-full h-full object-cover"
+                    class="bp-cover-img h-full w-full object-cover"
                   />
                 )}
               </div>
 
-              <!-- Body -->
-              <div class="flex flex-col flex-1 px-6 pt-[22px] pb-6">
-                <div class="flex flex-wrap items-center gap-2.5 font-mono text-[11px] text-muted-custom uppercase tracking-[0.05em] mb-3.5">
+              <div class="flex flex-1 flex-col px-6 pt-[22px] pb-6">
+                <div class="text-muted-custom mb-3.5 flex flex-wrap items-center gap-2.5 font-mono text-[11px] tracking-[0.05em] uppercase">
                   {tag && (
-                    <span class="text-accent border border-[color-mix(in_oklab,var(--accent)_35%,var(--line))] bg-[color-mix(in_oklab,var(--accent)_8%,transparent)] px-2.5 py-[3px] rounded-full font-semibold">
+                    <span class="text-accent rounded-full border border-[color-mix(in_oklab,var(--accent)_35%,var(--line))] bg-[color-mix(in_oklab,var(--accent)_8%,transparent)] px-2.5 py-[3px] font-semibold">
                       {formatTag(tag)}
                     </span>
                   )}
                   <span>{dateFormatted}</span>
                   <span class="bp-dot" />
-                  <span>{readingTime} {tBlog.min_read}</span>
+                  <span>
+                    {readingTime} {tBlog.min_read}
+                  </span>
                 </div>
 
                 <h3
                   class:list={[
-                    'font-display font-bold tracking-[-0.02em] leading-[1.18] mb-2.5 text-balance',
+                    'font-display mb-2.5 leading-[1.18] font-bold tracking-[-0.02em] text-balance',
                     isFeatured
                       ? 'text-[clamp(26px,3vw,34px)]'
-                      : 'text-[clamp(20px,2vw,24px)]',
+                      : 'text-[clamp(20px,2vw,24px)]'
                   ]}
                 >
                   {post.data.title}
                 </h3>
 
-                <p class="text-ink-soft text-[14.5px] leading-[1.6] flex-1 mb-[18px]">
+                <p class="text-ink-soft mb-[18px] flex-1 text-[14.5px] leading-[1.6]">
                   {post.data.shortDescription}
                 </p>
 
-                <div class="flex justify-between items-center font-mono text-[12px] text-accent mt-auto">
+                <div class="text-accent mt-auto flex items-center justify-between font-mono text-[12px]">
                   <span>{tBlog.read_article}</span>
                   <span class="bp-arrow transition-transform duration-[250ms]">
                     ↗
@@ -256,11 +260,11 @@ function getReadingTime(body: string): number {
       <!-- Empty state -->
       <div
         id="emptyState"
-        class="hidden col-span-full py-[60px] px-6 text-center border border-dashed border-line rounded-[18px] bg-[color-mix(in_oklab,var(--bg-2)_60%,transparent)]"
+        class="border-line col-span-full hidden rounded-[18px] border border-dashed bg-[color-mix(in_oklab,var(--bg-2)_60%,transparent)] px-6 py-[60px] text-center"
       >
-        <div class="e-cat text-[56px] leading-none mb-3.5 inline-block">🙀</div>
+        <div class="e-cat mb-3.5 inline-block text-[56px] leading-none">🙀</div>
         <h4
-          class="font-display text-[22px] font-bold mb-1.5 tracking-[-0.02em]"
+          class="font-display mb-1.5 text-[22px] font-bold tracking-[-0.02em]"
         >
           {tBlog.empty_title}
         </h4>
@@ -270,29 +274,29 @@ function getReadingTime(body: string): number {
 
     <!-- ===== CLOSING SECTION ===== -->
     <section
-      class="mt-[clamp(56px,8vw,88px)] p-[clamp(36px,5vw,60px)] border border-[color-mix(in_oklab,var(--accent)_30%,var(--line))] rounded-[24px] blog-closer text-center relative overflow-hidden"
+      class="blog-closer relative mt-[clamp(56px,8vw,88px)] overflow-hidden rounded-[24px] border border-[color-mix(in_oklab,var(--accent)_30%,var(--line))] p-[clamp(36px,5vw,60px)] text-center"
     >
       <h2
-        class="font-display text-[clamp(28px,4vw,40px)] font-bold tracking-[-0.03em] leading-[1.05] mb-3.5 relative text-balance"
+        class="font-display relative mb-3.5 text-[clamp(28px,4vw,40px)] leading-[1.05] font-bold tracking-[-0.03em] text-balance"
         set:html={tBlog.closer_title}
       />
       <p
-        class="text-ink-soft text-[16px] leading-[1.65] max-w-[56ch] mx-auto mb-7 relative"
+        class="text-ink-soft relative mx-auto mb-7 max-w-[56ch] text-[16px] leading-[1.65]"
       >
         {tBlog.closer_text}
       </p>
-      <div class="inline-flex gap-3 flex-wrap justify-center relative">
+      <div class="relative inline-flex flex-wrap justify-center gap-3">
         <a
           href="https://github.com/vitualizz"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2.5 px-[22px] py-[13px] bg-accent text-[#0B0C10] rounded-full text-[14.5px] font-semibold transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_color-mix(in_oklab,var(--accent)_40%,transparent)]"
+          class="bg-accent inline-flex items-center gap-2.5 rounded-full px-[22px] py-[13px] text-[14.5px] font-semibold text-[#0B0C10] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_color-mix(in_oklab,var(--accent)_40%,transparent)]"
         >
           {tBlog.closer_github}
         </a>
         <a
           href={withLangPath(lang as 'en' | 'es', '#contact')}
-          class="inline-flex items-center gap-2.5 px-[22px] py-[13px] border border-line text-ink rounded-full text-[14.5px] font-medium bg-[color-mix(in_oklab,var(--bg)_50%,transparent)] transition-[border-color,transform] duration-200 hover:border-accent hover:-translate-y-0.5"
+          class="border-line text-ink hover:border-accent inline-flex items-center gap-2.5 rounded-full border bg-[color-mix(in_oklab,var(--bg)_50%,transparent)] px-[22px] py-[13px] text-[14.5px] font-medium transition-[border-color,transform] duration-200 hover:-translate-y-0.5"
         >
           {tBlog.closer_contact}
         </a>
@@ -301,17 +305,14 @@ function getReadingTime(body: string): number {
 
     <!-- ===== MASCOT ROW ===== -->
     <div
-      class="mt-10 mb-8 flex items-center justify-center gap-4 text-muted-custom font-mono text-[12px] uppercase tracking-[0.05em]"
+      class="text-muted-custom mt-10 mb-8 flex items-center justify-center gap-4 font-mono text-[12px] tracking-[0.05em] uppercase"
     >
       <span class="sleeping-cat">
         <span class="body">😺</span>
-        <span class="zzz"
-          ><span>Z</span><span>z</span><span>z</span></span
-        >
+        <span class="zzz"><span>Z</span><span>z</span><span>z</span></span>
       </span>
       <span>{tBlog.mascot_text}</span>
     </div>
-
   </main>
 </HomeLayout>
 
@@ -714,7 +715,9 @@ function getReadingTime(body: string): number {
   const grid = document.getElementById('postsGrid')
   const emptyState = document.getElementById('emptyState')
   const chips = document.querySelectorAll<HTMLButtonElement>('.bf-chip')
-  const searchInput = document.getElementById('bfSearch') as HTMLInputElement | null
+  const searchInput = document.getElementById(
+    'bfSearch'
+  ) as HTMLInputElement | null
 
   let currentFilter = 'all'
   let currentSearch = ''
@@ -730,8 +733,7 @@ function getReadingTime(body: string): number {
       const title = card.dataset.title ?? ''
       const excerpt = card.dataset.excerpt ?? ''
 
-      const matchTag =
-        currentFilter === 'all' || tags.includes(currentFilter)
+      const matchTag = currentFilter === 'all' || tags.includes(currentFilter)
       const matchSearch =
         !q ||
         title.includes(q) ||

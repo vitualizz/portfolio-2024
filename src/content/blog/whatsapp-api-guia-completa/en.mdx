@@ -37,20 +37,20 @@ No code, no API examples, no cURL. Just concepts and decisions.
 
 If you already know these terms, skip straight to the next section.
 
-| Term | What it means |
-|---|---|
-| **BSP** (Business Solution Provider) | A company certified by Meta to provide access to the WhatsApp Business API and manage accounts. |
-| **Tech Provider** | A Meta partner where you own your WABA — they access it with permissions, not as owners. |
-| **WABA** (WhatsApp Business Account) | The Meta account that holds your WhatsApp Business number, your approved templates, and your message limits. |
-| **Cloud API** | The modern version of the WhatsApp API, hosted by Meta. No servers of your own required. |
-| **On-Premise API** | The legacy version of the API, hosted on your own servers. Being phased out by Meta. |
-| **Embedded Signup** | An integrated registration flow inside a platform: you connect your WhatsApp without leaving to Meta Business Suite. |
-| **Template Message / HSM** | A Meta-pre-approved message used to start conversations outside the 24-hour window. |
-| **24h conversation window** | The period after your customer's last message during which you can reply freely, without templates. |
-| **Meta Business Verification** | The process of legally verifying your business with Meta to unlock higher message capacity. |
-| **SaaS Wrapper** | A platform that builds its product on top of a BSP without being an official Meta partner. |
-| **Conversation categories** | Meta's four cost types: Marketing, Utility, Authentication, and Service. |
-| **Message markup** | An additional charge some BSPs add on top of Meta's per-conversation fees. |
+| Term                                 | What it means                                                                                                        |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| **BSP** (Business Solution Provider) | A company certified by Meta to provide access to the WhatsApp Business API and manage accounts.                      |
+| **Tech Provider**                    | A Meta partner where you own your WABA — they access it with permissions, not as owners.                             |
+| **WABA** (WhatsApp Business Account) | The Meta account that holds your WhatsApp Business number, your approved templates, and your message limits.         |
+| **Cloud API**                        | The modern version of the WhatsApp API, hosted by Meta. No servers of your own required.                             |
+| **On-Premise API**                   | The legacy version of the API, hosted on your own servers. Being phased out by Meta.                                 |
+| **Embedded Signup**                  | An integrated registration flow inside a platform: you connect your WhatsApp without leaving to Meta Business Suite. |
+| **Template Message / HSM**           | A Meta-pre-approved message used to start conversations outside the 24-hour window.                                  |
+| **24h conversation window**          | The period after your customer's last message during which you can reply freely, without templates.                  |
+| **Meta Business Verification**       | The process of legally verifying your business with Meta to unlock higher message capacity.                          |
+| **SaaS Wrapper**                     | A platform that builds its product on top of a BSP without being an official Meta partner.                           |
+| **Conversation categories**          | Meta's four cost types: Marketing, Utility, Authentication, and Service.                                             |
+| **Message markup**                   | An additional charge some BSPs add on top of Meta's per-conversation fees.                                           |
 
 ## First things first: WhatsApp Business App vs WhatsApp API
 
@@ -60,13 +60,13 @@ The App is the free application you install on your phone. It is designed for a 
 
 The API is infrastructure. It is a connection layer that any software can use to send and receive messages automatically — without a human at the keyboard. Multi-user, multi-device, connectable to any tool. But it has one important characteristic: **the API has no dashboard, no inbox, no interface**. It is like a company's telephone system: you need the phones, the headsets, and the operators on top for it to be usable.
 
-| | WhatsApp Business App | WhatsApp Business Platform (API) |
-|---|---|---|
-| Who can use it | Anyone with a phone | Businesses with a verified Meta account |
-| Message limit | No technical limit, manual | 250/day without verification; scales with verification |
-| Interface | The mobile app | None — you need a platform on top |
-| Cost | Free | Platform fee + Meta conversation fees |
-| What it is for | Manual conversations, single operator | Automation, teams, integration with systems |
+|                | WhatsApp Business App                 | WhatsApp Business Platform (API)                       |
+| -------------- | ------------------------------------- | ------------------------------------------------------ |
+| Who can use it | Anyone with a phone                   | Businesses with a verified Meta account                |
+| Message limit  | No technical limit, manual            | 250/day without verification; scales with verification |
+| Interface      | The mobile app                        | None — you need a platform on top                      |
+| Cost           | Free                                  | Platform fee + Meta conversation fees                  |
+| What it is for | Manual conversations, single operator | Automation, teams, integration with systems            |
 
 The practical heuristic: if you are handling fewer than 50 conversations a day and one person manages them all, the App is fine. When you start needing multiple agents, automation, or integration with your CRM or platform, the API is the way to go.
 
@@ -168,12 +168,12 @@ WhatsApp Business pricing has four layers. If you only see one of them, you will
 
 **Layer 2: Meta's conversation costs.** Meta charges per conversation, separate from your platform subscription. The charge is per conversation type, not per individual message. There are four categories:
 
-| Category | When it is used | Example |
-|---|---|---|
-| Marketing | Messages you initiate for commercial purposes | Discount promotion, newsletter, launch announcement |
-| Utility | Transactional messages related to a previous interaction | Order confirmation, appointment reminder, invoice available |
-| Authentication | Identity verification codes | Login OTP, 2FA code |
-| Service | Replies within the 24-hour conversation window | Customer support responding to a user inquiry |
+| Category       | When it is used                                          | Example                                                     |
+| -------------- | -------------------------------------------------------- | ----------------------------------------------------------- |
+| Marketing      | Messages you initiate for commercial purposes            | Discount promotion, newsletter, launch announcement         |
+| Utility        | Transactional messages related to a previous interaction | Order confirmation, appointment reminder, invoice available |
+| Authentication | Identity verification codes                              | Login OTP, 2FA code                                         |
+| Service        | Replies within the 24-hour conversation window           | Customer support responding to a user inquiry               |
 
 Prices vary by country and change frequently. There are no concrete numbers in this article because they would be outdated before you finish reading it. Check the updated pricing directly in Meta's documentation: [developers.facebook.com/docs/whatsapp/pricing](https://developers.facebook.com/docs/whatsapp/pricing).
 
@@ -205,13 +205,13 @@ It is like an enterprise phone service: you pay the subscription (the platform),
 
 There is no better path in the abstract. There is a better path for your specific profile, the volume you handle, and the level of control you need. Look at this table and find yourself.
 
-| Profile | Recommended path | Why | Main risk |
-|---|---|---|---|
-| SMB / small business that wants to respond to messages | SaaS Wrapper or simple BSP with good UX | Accessible price, setup in hours, no need for complex API or automation | Opaque WABA — ask who owns it before loading your contact base |
-| Startup / SaaS builder integrating WhatsApp into their product | Direct BSP or direct Cloud API | You need webhooks, a stable API, and full control from your own code from day one | Direct Cloud API has no inbox or support — you build everything on top |
-| Automation agency managing multiple clients | BSP with Tech Provider features + Embedded Signup | Client onboarding in minutes, separate WABAs per client, multi-workspace | Per-seat costs scale fast as your team grows |
-| Enterprise CX or sales team | Full BSP with AI Agents + API + integrations | You need routing, analytics, SSO, CRM integrations, support at scale | Lock-in from proprietary workflow and agent configurations |
-| Developer / technical founder who wants maximum control | Direct Meta Cloud API | You own the entire stack, no intermediaries, no markup | You also have to build the inbox, templates, scaling, monitoring, and support |
+| Profile                                                        | Recommended path                                  | Why                                                                               | Main risk                                                                     |
+| -------------------------------------------------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| SMB / small business that wants to respond to messages         | SaaS Wrapper or simple BSP with good UX           | Accessible price, setup in hours, no need for complex API or automation           | Opaque WABA — ask who owns it before loading your contact base                |
+| Startup / SaaS builder integrating WhatsApp into their product | Direct BSP or direct Cloud API                    | You need webhooks, a stable API, and full control from your own code from day one | Direct Cloud API has no inbox or support — you build everything on top        |
+| Automation agency managing multiple clients                    | BSP with Tech Provider features + Embedded Signup | Client onboarding in minutes, separate WABAs per client, multi-workspace          | Per-seat costs scale fast as your team grows                                  |
+| Enterprise CX or sales team                                    | Full BSP with AI Agents + API + integrations      | You need routing, analytics, SSO, CRM integrations, support at scale              | Lock-in from proprietary workflow and agent configurations                    |
+| Developer / technical founder who wants maximum control        | Direct Meta Cloud API                             | You own the entire stack, no intermediaries, no markup                            | You also have to build the inbox, templates, scaling, monitoring, and support |
 
 The general pattern: the more sophisticated your use case, the more it is worth having the WABA under your control — even if that means paying for a higher tier or building more things yourself. Autonomy has a price, but so does lock-in.
 
@@ -251,14 +251,14 @@ Why does it matter? Approved templates are accumulated work: each one went throu
 
 This section is not a ranking or an absolute recommendation. It is a starting point so you have concrete names when you begin comparing options. Prices, models, and features change — verify directly with each platform before deciding.
 
-| Platform | Type | Best for | WABA model | Price range | Note |
-|---|---|---|---|---|---|
-| **Respond.io** | Official BSP + Embedded Signup | Mid-to-large B2C CX/sales teams, omnichannel | User owns the WABA | USD 79–279/mo + Meta fees | No message markup. Official Meta partner with early feature access. Supports WhatsApp, TikTok, Instagram, email, and VoIP. |
-| **MessageSync.ai** | SaaS Wrapper (no confirmed BSP status) | SMBs needing SMS + WhatsApp + email in one place | Unknown — verify before signing | USD 19–29/mo | API still "Coming Soon" as of this article. No WABA ownership documentation. Budget-friendly but with technical uncertainty. |
-| **Twilio** | Official BSP | Technical teams that want to build custom solutions on the API | Variable depending on configuration | Variable — pay-as-you-go model | Very developer-first. No inbox included — you build everything on top. Global reach. Verify details before deciding. |
-| **Bird** (ex-MessageBird) | Official BSP | Mid-market companies with omnichannel needs | Variable | Variable | Strong in Europe and LATAM. Verify current WABA and pricing models before deciding. |
-| **360dialog** | Official BSP | Platforms and agencies wanting direct Cloud API access | Variable | Variable | WhatsApp-focused. Popular as a backend for other platforms. Verify current terms. |
-| **Vonage** (part of Ericsson) | Enterprise BSP | Large companies with integrated telecommunications needs | Variable | Variable | Enterprise and telco focus. Verify current features and pricing before deciding. |
+| Platform                      | Type                                   | Best for                                                       | WABA model                          | Price range                    | Note                                                                                                                         |
+| ----------------------------- | -------------------------------------- | -------------------------------------------------------------- | ----------------------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| **Respond.io**                | Official BSP + Embedded Signup         | Mid-to-large B2C CX/sales teams, omnichannel                   | User owns the WABA                  | USD 79–279/mo + Meta fees      | No message markup. Official Meta partner with early feature access. Supports WhatsApp, TikTok, Instagram, email, and VoIP.   |
+| **MessageSync.ai**            | SaaS Wrapper (no confirmed BSP status) | SMBs needing SMS + WhatsApp + email in one place               | Unknown — verify before signing     | USD 19–29/mo                   | API still "Coming Soon" as of this article. No WABA ownership documentation. Budget-friendly but with technical uncertainty. |
+| **Twilio**                    | Official BSP                           | Technical teams that want to build custom solutions on the API | Variable depending on configuration | Variable — pay-as-you-go model | Very developer-first. No inbox included — you build everything on top. Global reach. Verify details before deciding.         |
+| **Bird** (ex-MessageBird)     | Official BSP                           | Mid-market companies with omnichannel needs                    | Variable                            | Variable                       | Strong in Europe and LATAM. Verify current WABA and pricing models before deciding.                                          |
+| **360dialog**                 | Official BSP                           | Platforms and agencies wanting direct Cloud API access         | Variable                            | Variable                       | WhatsApp-focused. Popular as a backend for other platforms. Verify current terms.                                            |
+| **Vonage** (part of Ericsson) | Enterprise BSP                         | Large companies with integrated telecommunications needs       | Variable                            | Variable                       | Enterprise and telco focus. Verify current features and pricing before deciding.                                             |
 
 If none of these fits your case exactly, the seven questions in the previous section are the most useful filter you have for evaluating any other option you find.
 

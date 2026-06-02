@@ -1,7 +1,10 @@
 import type { ExperienceEntry } from '../tools/types'
 import type { Lang } from '../types'
 
-export const formatExperience = (entries: ExperienceEntry[], lang: Lang): string =>
+export const formatExperience = (
+  entries: ExperienceEntry[],
+  lang: Lang
+): string =>
   entries
     .map((e) => {
       const desc = lang === 'es' ? e.description_es : e.description_en

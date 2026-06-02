@@ -2,10 +2,18 @@ import type { ToolKey } from '../tools/types'
 import type { RouterDecision, RouterMode } from '../types'
 import { generateRouterDecision } from '../../lib/server/ai'
 
-const ALL_RETRIEVE_KEYS: ToolKey[] = ['experience', 'projects', 'skills', 'blog']
+const ALL_RETRIEVE_KEYS: ToolKey[] = [
+  'experience',
+  'projects',
+  'skills',
+  'blog'
+]
 const VALID_KEYS = new Set<ToolKey>(ALL_RETRIEVE_KEYS)
 
-const SAFE_FALLBACK: RouterDecision = { mode: 'retrieve', toolKeys: ALL_RETRIEVE_KEYS }
+const SAFE_FALLBACK: RouterDecision = {
+  mode: 'retrieve',
+  toolKeys: ALL_RETRIEVE_KEYS
+}
 
 const ROUTER_PROMPT = `You are an intent router for a portfolio assistant about Lee Palacios.
 Decide whether the user message needs data retrieval and which tools to use.
@@ -28,7 +36,11 @@ Respond with ONE line of strict JSON, no markdown, no explanation:
 
 const parseDecision = (raw: string): RouterDecision => {
   try {
-    const json = raw.trim().replace(/^```(?:json)?/i, '').replace(/```$/, '').trim()
+    const json = raw
+      .trim()
+      .replace(/^```(?:json)?/i, '')
+      .replace(/```$/, '')
+      .trim()
     const parsed = JSON.parse(json) as unknown
     if (!parsed || typeof parsed !== 'object') return SAFE_FALLBACK
     const obj = parsed as Record<string, unknown>
@@ -39,7 +51,10 @@ const parseDecision = (raw: string): RouterDecision => {
       (k): k is ToolKey => typeof k === 'string' && VALID_KEYS.has(k as ToolKey)
     )
     if (mode === 'retrieve' && toolKeys.length === 0) return SAFE_FALLBACK
-    return { mode: mode as RouterMode, toolKeys: mode === 'direct' ? [] : toolKeys }
+    return {
+      mode: mode as RouterMode,
+      toolKeys: mode === 'direct' ? [] : toolKeys
+    }
   } catch {
     return SAFE_FALLBACK
   }

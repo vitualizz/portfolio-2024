@@ -140,7 +140,8 @@ const t = useTranslation(lang)
 
       // On blog pages, mark the blog link active and skip scroll-based tracking
       if (window.location.pathname.includes('/blog')) {
-        const blogLink = this.querySelectorAll<HTMLAnchorElement>('[data-nav-blog]')[0]
+        const blogLink =
+          this.querySelectorAll<HTMLAnchorElement>('[data-nav-blog]')[0]
         if (blogLink) {
           this.navLinks.forEach((a) => a.classList.remove('active'))
           blogLink.classList.add('active')

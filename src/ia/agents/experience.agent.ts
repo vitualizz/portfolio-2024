@@ -25,7 +25,11 @@ export const experienceAgent: IDomainAgent = {
   domain: 'experience',
   sourceLabel: 'experience.json',
 
-  answer: async (question: string, history: ChatMessage[], lang: Lang): Promise<DomainAnswer> => {
+  answer: async (
+    question: string,
+    history: ChatMessage[],
+    lang: Lang
+  ): Promise<DomainAnswer> => {
     try {
       const data = loadExperience()
       const formatted = formatExperience(data, lang)
@@ -38,7 +42,12 @@ export const experienceAgent: IDomainAgent = {
         hasContent: content.length > 0
       }
     } catch {
-      return { domain: 'experience', sourceLabel: 'experience.json', content: '', hasContent: false }
+      return {
+        domain: 'experience',
+        sourceLabel: 'experience.json',
+        content: '',
+        hasContent: false
+      }
     }
   }
 }

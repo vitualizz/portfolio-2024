@@ -28,7 +28,9 @@ beforeEach(() => {
 
 describe('experienceAgent', () => {
   it('returns DomainAnswer with content on success', async () => {
-    mockGenerate.mockResolvedValue('Lee worked at Sperant as a Backend Engineer.')
+    mockGenerate.mockResolvedValue(
+      'Lee worked at Sperant as a Backend Engineer.'
+    )
     const result = await experienceAgent.answer('where did Lee work?', [], 'en')
     expect(result.hasContent).toBe(true)
     expect(result.content).toContain('Sperant')

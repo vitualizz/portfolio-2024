@@ -24,7 +24,9 @@ beforeEach(() => {
 
 describe('skillsAgent', () => {
   it('returns DomainAnswer with content on success', async () => {
-    mockGenerate.mockResolvedValue('Lee is proficient in Ruby on Rails and PostgreSQL.')
+    mockGenerate.mockResolvedValue(
+      'Lee is proficient in Ruby on Rails and PostgreSQL.'
+    )
     const result = await skillsAgent.answer('what is Lee tech stack?', [], 'en')
     expect(result.hasContent).toBe(true)
     expect(result.content).toContain('Ruby on Rails')

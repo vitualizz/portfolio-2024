@@ -45,7 +45,10 @@ cachyos-kernel-manager
 ```
 
 <Callout type="tip" title="Try variants without fear">
-`cachyos-kernel-manager` lets you install multiple kernels in parallel: `linux-cachyos`, `linux-cachyos-bore`, `linux-cachyos-rt`, `linux-cachyos-lts`. If one variant gives you trouble, reboot and pick another from GRUB. No need to uninstall anything.
+  `cachyos-kernel-manager` lets you install multiple kernels in parallel:
+  `linux-cachyos`, `linux-cachyos-bore`, `linux-cachyos-rt`,
+  `linux-cachyos-lts`. If one variant gives you trouble, reboot and pick another
+  from GRUB. No need to uninstall anything.
 </Callout>
 
 ## 2. Optimized repos with PGO and LTO
@@ -70,11 +73,17 @@ sudo cachyos-rate-mirrors
 ```
 
 <Callout type="warning" title="Hardware gate for v4 repos">
-The x86-64-v4 repo requires AVX-512. If you're on Zen3, Zen2, or Intel pre-Rocket Lake, you'll land on v3 — which is still faster than mainline Arch, but not v4. Verify with the command above before assuming you have the most optimized repo active.
+  The x86-64-v4 repo requires AVX-512. If you're on Zen3, Zen2, or Intel
+  pre-Rocket Lake, you'll land on v3 — which is still faster than mainline Arch,
+  but not v4. Verify with the command above before assuming you have the most
+  optimized repo active.
 </Callout>
 
 <Callout type="info" title="PGO + LTO in one line">
-PGO tunes the compiler with real execution data. LTO eliminates dead code and enables cross-file inlining at link time. More expensive to compile, faster to run — and you don't pay that cost because the binaries already come compiled in the repo.
+  PGO tunes the compiler with real execution data. LTO eliminates dead code and
+  enables cross-file inlining at link time. More expensive to compile, faster to
+  run — and you don't pay that cost because the binaries already come compiled
+  in the repo.
 </Callout>
 
 ## 3. cachyos-settings: the tweaks most people do manually
@@ -102,7 +111,9 @@ pacman -Ql cachyos-settings | grep -E '\.conf$|\.rules$'
 ```
 
 <Callout type="info" title="Everything is opt-out, nothing is hidden">
-`cachyos-settings` is a normal package. If you want to disable something, use `systemctl disable` or edit the files in `/etc`. `pacman -Ql cachyos-settings` lists everything it installs. Nothing is hidden or locked in.
+  `cachyos-settings` is a normal package. If you want to disable something, use
+  `systemctl disable` or edit the files in `/etc`. `pacman -Ql cachyos-settings`
+  lists everything it installs. Nothing is hidden or locked in.
 </Callout>
 
 ## 4. Developer setup
@@ -132,7 +143,10 @@ echo 'eval "$(starship init zsh)"' >> ~/.zshrc
 ```
 
 <Callout type="tip" title="paru over yay">
-paru is the CachyOS default for a reason: faster, written in Rust, and by default shows you the PKGBUILD and diff before installing new AUR packages. Get in the habit of reading that diff — it's your last line of defense against a compromised PKGBUILD.
+  paru is the CachyOS default for a reason: faster, written in Rust, and by
+  default shows you the PKGBUILD and diff before installing new AUR packages.
+  Get in the habit of reading that diff — it's your last line of defense against
+  a compromised PKGBUILD.
 </Callout>
 
 ## 5. Gaming setup
@@ -164,15 +178,25 @@ gamescope -W 2560 -H 1440 -r 165 -f -- mangohud game-performance %command%
 ```
 
 <Callout type="tip" title="Check ProtonDB before buying">
-  [protondb.com](https://protondb.com) is the resource you'll use most. Platinum and Gold run without any configuration; Silver usually needs a minor tweak; Bronze and Borked have serious issues. Checking takes 30 seconds and saves you from buying a game that won't run.
+  [protondb.com](https://protondb.com) is the resource you'll use most. Platinum
+  and Gold run without any configuration; Silver usually needs a minor tweak;
+  Bronze and Borked have serious issues. Checking takes 30 seconds and saves you
+  from buying a game that won't run.
 </Callout>
 
 <Callout type="warning" title="Kernel-level anti-cheat has no workaround">
-  Some games (Valorant, competitive Fortnite, titles with kernel-level EAC or BattlEye) don't run on Linux in any distro. It's a security model limitation — not a Proton issue, not a CachyOS issue. If your main game is one of these, wait for the publisher to explicitly enable support.
+  Some games (Valorant, competitive Fortnite, titles with kernel-level EAC or
+  BattlEye) don't run on Linux in any distro. It's a security model limitation —
+  not a Proton issue, not a CachyOS issue. If your main game is one of these,
+  wait for the publisher to explicitly enable support.
 </Callout>
 
 <Callout type="tip" title="game-performance instead of gamemoderun">
-On CachyOS, use `game-performance` instead of `gamemoderun`. It sets the CPU governor to performance, applies the SCX gaming profile, and automatically reverts when the game exits. Launch option: `game-performance %command%`. If you have ananicy-cpp active (you do by default), game-performance is the wrapper that coordinates with it — gamemoderun isn't.
+  On CachyOS, use `game-performance` instead of `gamemoderun`. It sets the CPU
+  governor to performance, applies the SCX gaming profile, and automatically
+  reverts when the game exits. Launch option: `game-performance %command%`. If
+  you have ananicy-cpp active (you do by default), game-performance is the
+  wrapper that coordinates with it — gamemoderun isn't.
 </Callout>
 
 ## 6. Limitations and gotchas
@@ -198,29 +222,35 @@ curl -s https://cachyos.org/blog/feed.xml | head -50
 ```
 
 <Callout type="warning" title="Snapshots are not optional on rolling release">
-If CachyOS is going to be your daily driver, set up snapshots on day one. The day an update breaks your boot — and eventually it will — the difference between a 5-minute rollback and reinstalling everything is having snapshots active. It's not "when I have time." It's before you need them.
+  If CachyOS is going to be your daily driver, set up snapshots on day one. The
+  day an update breaks your boot — and eventually it will — the difference
+  between a 5-minute rollback and reinstalling everything is having snapshots
+  active. It's not "when I have time." It's before you need them.
 </Callout>
 
 <Callout type="warning" title="Kernel-level anti-cheat">
-Valorant, Fortnite (competitive mode), and titles with kernel-level EAC or BattlEye don't run on Linux. This is independent of the distro — it's a Linux security model limitation. Before migrating, check every game on [protondb.com](https://protondb.com).
+  Valorant, Fortnite (competitive mode), and titles with kernel-level EAC or
+  BattlEye don't run on Linux. This is independent of the distro — it's a Linux
+  security model limitation. Before migrating, check every game on
+  [protondb.com](https://protondb.com).
 </Callout>
 
 ## Cheat sheet
 
 Summary of the commands and tools you'll use most:
 
-| Tool / command | What it does |
-|---|---|
-| `cachyos-kernel-manager` | GUI to install and switch kernel variants (BORE, RT, LTS) |
-| `cachyos-rate-mirrors` | Automatic mirror selection based on your microarchitecture |
-| `paru -S <pkg>` | Install from AUR — faster than yay, shows PKGBUILD diff |
-| `ananicy-cpp` | Daemon that auto-assigns CPU/IO priorities per process |
-| `zramctl` | Status of compressed RAM swap (active by default) |
-| `proton-cachyos` | Proton fork with FSR4 patches + fsync optimized for CachyOS |
-| `mangohud %command%` | FPS, frametimes, temps and GPU/CPU usage overlay in Steam |
-| `gamescope -W X -H Y -f --` | Valve's compositor for resolution and upscaling in gaming |
-| `game-performance %command%` | Performance governor + SCX gaming profile (CachyOS-specific) |
-| [protondb.com](https://protondb.com) | Linux game compatibility check before buying |
-| `timeshift` / `snapper` | System snapshots — mandatory on rolling release |
+| Tool / command                       | What it does                                                 |
+| ------------------------------------ | ------------------------------------------------------------ |
+| `cachyos-kernel-manager`             | GUI to install and switch kernel variants (BORE, RT, LTS)    |
+| `cachyos-rate-mirrors`               | Automatic mirror selection based on your microarchitecture   |
+| `paru -S <pkg>`                      | Install from AUR — faster than yay, shows PKGBUILD diff      |
+| `ananicy-cpp`                        | Daemon that auto-assigns CPU/IO priorities per process       |
+| `zramctl`                            | Status of compressed RAM swap (active by default)            |
+| `proton-cachyos`                     | Proton fork with FSR4 patches + fsync optimized for CachyOS  |
+| `mangohud %command%`                 | FPS, frametimes, temps and GPU/CPU usage overlay in Steam    |
+| `gamescope -W X -H Y -f --`          | Valve's compositor for resolution and upscaling in gaming    |
+| `game-performance %command%`         | Performance governor + SCX gaming profile (CachyOS-specific) |
+| [protondb.com](https://protondb.com) | Linux game compatibility check before buying                 |
+| `timeshift` / `snapper`              | System snapshots — mandatory on rolling release              |
 
 If what you read sounds interesting, the healthiest approach is to try it in a VM or a secondary partition before migrating your daily driver. A week of real use will tell you far more than any benchmark — and if you decide it's not for you, you've lost nothing. You can find the installer at [cachyos.org/download](https://cachyos.org/download).

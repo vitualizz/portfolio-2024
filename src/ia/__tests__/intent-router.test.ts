@@ -15,15 +15,21 @@ describe('intentRouter', () => {
   })
 
   it('(1) single tool — retrieve projects', async () => {
-    mockGenerateRouterDecision.mockResolvedValue('{"mode":"retrieve","toolKeys":["projects"]}')
+    mockGenerateRouterDecision.mockResolvedValue(
+      '{"mode":"retrieve","toolKeys":["projects"]}'
+    )
     const decision = await intentRouter.route('What projects has Lee built?')
     expect(decision.mode).toBe('retrieve')
     expect(decision.toolKeys).toEqual(['projects'])
   })
 
   it('(2) multi-tool — retrieve skills and projects', async () => {
-    mockGenerateRouterDecision.mockResolvedValue('{"mode":"retrieve","toolKeys":["skills","projects"]}')
-    const decision = await intentRouter.route("Tell me about Lee's skills and projects")
+    mockGenerateRouterDecision.mockResolvedValue(
+      '{"mode":"retrieve","toolKeys":["skills","projects"]}'
+    )
+    const decision = await intentRouter.route(
+      "Tell me about Lee's skills and projects"
+    )
     expect(decision.mode).toBe('retrieve')
     expect(decision.toolKeys).toContain('skills')
     expect(decision.toolKeys).toContain('projects')
@@ -31,7 +37,9 @@ describe('intentRouter', () => {
   })
 
   it('(3) direct mode — greeting returns mode:direct with empty toolKeys', async () => {
-    mockGenerateRouterDecision.mockResolvedValue('{"mode":"direct","toolKeys":[]}')
+    mockGenerateRouterDecision.mockResolvedValue(
+      '{"mode":"direct","toolKeys":[]}'
+    )
     const decision = await intentRouter.route('Hola!')
     expect(decision.mode).toBe('direct')
     expect(decision.toolKeys).toHaveLength(0)
@@ -48,21 +56,27 @@ describe('intentRouter', () => {
   })
 
   it('(5) invalid mode value → SAFE_FALLBACK', async () => {
-    mockGenerateRouterDecision.mockResolvedValue('{"mode":"weird","toolKeys":["projects"]}')
+    mockGenerateRouterDecision.mockResolvedValue(
+      '{"mode":"weird","toolKeys":["projects"]}'
+    )
     const decision = await intentRouter.route('some question')
     expect(decision.mode).toBe('retrieve')
     expect(decision.toolKeys).toHaveLength(4)
   })
 
   it('(6) retrieve with empty toolKeys → SAFE_FALLBACK', async () => {
-    mockGenerateRouterDecision.mockResolvedValue('{"mode":"retrieve","toolKeys":[]}')
+    mockGenerateRouterDecision.mockResolvedValue(
+      '{"mode":"retrieve","toolKeys":[]}'
+    )
     const decision = await intentRouter.route('some question')
     expect(decision.mode).toBe('retrieve')
     expect(decision.toolKeys).toHaveLength(4)
   })
 
   it('(7) fenced JSON is stripped and parsed correctly', async () => {
-    mockGenerateRouterDecision.mockResolvedValue('```json\n{"mode":"retrieve","toolKeys":["blog"]}\n```')
+    mockGenerateRouterDecision.mockResolvedValue(
+      '```json\n{"mode":"retrieve","toolKeys":["blog"]}\n```'
+    )
     const decision = await intentRouter.route('any articles?')
     expect(decision.mode).toBe('retrieve')
     expect(decision.toolKeys).toEqual(['blog'])
@@ -83,7 +97,9 @@ describe('intentRouter', () => {
   })
 
   it('(10) github key is filtered out from toolKeys', async () => {
-    mockGenerateRouterDecision.mockResolvedValue('{"mode":"retrieve","toolKeys":["projects","github"]}')
+    mockGenerateRouterDecision.mockResolvedValue(
+      '{"mode":"retrieve","toolKeys":["projects","github"]}'
+    )
     const decision = await intentRouter.route('projects and github repos')
     expect(decision.mode).toBe('retrieve')
     expect(decision.toolKeys).toContain('projects')

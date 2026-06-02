@@ -49,7 +49,10 @@ IF someone asks what you can do:
 - Be specific: career history, built projects, tech stack, written articles
 - Suggest they pick a shortcut tab or ask directly`
 
-const buildSynthesisSystem = (answers: DomainAnswer[], lang: string): string => {
+const buildSynthesisSystem = (
+  answers: DomainAnswer[],
+  lang: string
+): string => {
   const reports = answers
     .filter((a) => a.hasContent)
     .map((a) => `=== ${a.domain.toUpperCase()} ===\n${a.content}`)
@@ -82,10 +85,14 @@ type OrchestratorMeta = {
 
 export const askLeeOrchestrator = async (
   req: AgentRequest
-): Promise<{ result: ReturnType<typeof streamAskAnswer>; meta: OrchestratorMeta }> => {
+): Promise<{
+  result: ReturnType<typeof streamAskAnswer>
+  meta: OrchestratorMeta
+}> => {
   const lang = req.lang ?? 'es'
   const history = req.messages.slice(-6)
-  const latestMessage = history.filter((m) => m.role === 'user').at(-1)?.content ?? ''
+  const latestMessage =
+    history.filter((m) => m.role === 'user').at(-1)?.content ?? ''
 
   const decision = await intentRouter.route(latestMessage)
 
@@ -100,7 +107,9 @@ export const askLeeOrchestrator = async (
   }
 
   // Retrieve mode — run selected domain agents in parallel
-  const agents = decision.toolKeys.map((key) => AGENT_REGISTRY[key]).filter(Boolean)
+  const agents = decision.toolKeys
+    .map((key) => AGENT_REGISTRY[key])
+    .filter(Boolean)
 
   const answers: DomainAnswer[] = await Promise.all(
     agents.map((agent) => agent.answer(latestMessage, history, lang))

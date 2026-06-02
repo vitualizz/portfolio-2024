@@ -82,7 +82,9 @@ describe('askLeeOrchestrator', () => {
       content: 'Lee worked at Sperant.',
       hasContent: true
     })
-    const req = { messages: [{ role: 'user' as const, content: 'where did Lee work?' }] }
+    const req = {
+      messages: [{ role: 'user' as const, content: 'where did Lee work?' }]
+    }
     const res = await askLeeOrchestrator(req)
     expect(mockExpAgent).toHaveBeenCalledOnce()
     expect(res.meta.sources).toContain('experience.json')

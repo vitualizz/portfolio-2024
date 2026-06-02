@@ -48,7 +48,7 @@ Antes de hablar de decisiones arquitecturales, vale la pena alinear definiciones
 
 Un **chat** es lo más básico: enviás mensajes, el LLM responde. Stateless entre llamadas, sin memoria más allá del historial que vos le mandás, sin capacidad de hacer nada externo.
 
-Un **agente** es un chat con herramientas. El LLM puede decidir llamar funciones — buscar en una base de datos, ejecutar código, consultar una API — y procesar el resultado antes de responder. La diferencia clave: el modelo razona sobre *qué hacer*, no solo *qué decir*.
+Un **agente** es un chat con herramientas. El LLM puede decidir llamar funciones — buscar en una base de datos, ejecutar código, consultar una API — y procesar el resultado antes de responder. La diferencia clave: el modelo razona sobre _qué hacer_, no solo _qué decir_.
 
 Un **sistema multi-agente** es un orquestador que coordina múltiples agentes especializados. Cada uno tiene su propio prompt, su propio contexto y su propia responsabilidad. El orquestador decide a quién llamar y cómo sintetizar los resultados.
 
@@ -77,7 +77,7 @@ Mi portfolio no tiene ninguno de esos problemas. Experiencia laboral: un JSON ti
 Agregar embeddings, un vector store, latencia de búsqueda semántica y costo de indexado para recuperar lo que ya tengo perfectamente ordenado en JSONs tipados sería añadir complejidad sin resolver ningún problema real. Peor: haría el sistema más difícil de debuggear y más caro de operar.
 
 > "Start with simple prompts, optimize them, and add complexity only when simpler solutions fall short."
-> — Anthropic, *Building Effective Agents*, 2024
+> — Anthropic, _Building Effective Agents_, 2024
 
 La regla práctica que me quedó: **no traigas RAG hasta que la data no entre en el prompt**. Si entra, usá loaders deterministas. Si no entra, ahí sí evaluá embeddings.
 
@@ -91,10 +91,18 @@ El primer intento de estructura fue un **IntentRouter** basado en keywords. La i
 
 ```typescript
 const KEYWORD_MAP: Record<string, ToolKey[]> = {
-  experience: ['experience', 'work', 'role', 'empresa', 'carrera', 'trabajé', 'job'],
+  experience: [
+    'experience',
+    'work',
+    'role',
+    'empresa',
+    'carrera',
+    'trabajé',
+    'job'
+  ],
   projects: ['project', 'built', 'proyecto', 'hice', 'construí', 'portfolio'],
   skills: ['skill', 'tech', 'stack', 'framework', 'lenguaje', 'tecnología'],
-  blog: ['post', 'article', 'wrote', 'escribí', 'blog', 'artículo'],
+  blog: ['post', 'article', 'wrote', 'escribí', 'blog', 'artículo']
 }
 ```
 
@@ -104,7 +112,8 @@ Al principio se sentía bien. Determinista, barato, cero latencia de routing. Po
 
 El problema apareció en cuanto empecé a probar con mensajes reales.
 
-<Mermaid code={`flowchart LR
+<Mermaid
+  code={`flowchart LR
   subgraph V1["❌ v1 — keyword router"]
     direction TB
     M1[Mensaje del usuario] --> KW["Router de keywords\n60+ strings hardcodeados\nES + EN solamente"]
@@ -113,7 +122,8 @@ El problema apareció en cuanto empecé a probar con mensajes reales.
     PR1 --> LLM1["LLM\n↳ contexto ruidoso"]
     LLM1 --> OUT1[Respuesta]
   end
-  note1["Problema: 'Où a travaillé Lee?'\nno matchea ningún keyword.\nContexto vacío → el LLM inventa."]`} />
+  note1["Problema: 'Où a travaillé Lee?'\nno matchea ningún keyword.\nContexto vacío → el LLM inventa."]`}
+/>
 
 "Where did Lee work?" activaba la tool de experience. Bien. "Contame de Lee" no activaba nada claro — fallback a todas las tools, contexto gigante, respuesta genérica. "Où a travaillé Lee?" (en francés) → cero matches → contexto vacío → el modelo inventaba.
 
@@ -155,8 +165,8 @@ El router devuelve un objeto tipado con dos campos:
 
 ```typescript
 type RouterDecision = {
-  mode: 'direct' | 'retrieve'  // ¿necesita datos o no?
-  toolKeys: ToolKey[]          // qué agentes invocar
+  mode: 'direct' | 'retrieve' // ¿necesita datos o no?
+  toolKeys: ToolKey[] // qué agentes invocar
 }
 
 // Ejemplos de respuesta del router:
@@ -191,7 +201,11 @@ El contrato que define cada agente de dominio es simple:
 export interface IDomainAgent {
   readonly domain: string
   readonly sourceLabel: string
-  answer(question: string, history: ChatMessage[], lang: Lang): Promise<DomainAnswer>
+  answer(
+    question: string,
+    history: ChatMessage[],
+    lang: Lang
+  ): Promise<DomainAnswer>
 }
 
 export type DomainAnswer = {
@@ -211,13 +225,23 @@ export const experienceAgent: IDomainAgent = {
 
   answer: async (question, history, lang): Promise<DomainAnswer> => {
     try {
-      const data = loadExperience()           // loader puro, sin LLM
-      const formatted = formatExperience(data, lang)  // formatter puro, sin LLM
-      const system = buildPrompt(formatted, lang)     // prompt del especialista
-      const content = await generateDomainAnswer(system, question, history)  // LLM call
-      return { domain: 'experience', sourceLabel: 'experience.json', content, hasContent: content.length > 0 }
+      const data = loadExperience() // loader puro, sin LLM
+      const formatted = formatExperience(data, lang) // formatter puro, sin LLM
+      const system = buildPrompt(formatted, lang) // prompt del especialista
+      const content = await generateDomainAnswer(system, question, history) // LLM call
+      return {
+        domain: 'experience',
+        sourceLabel: 'experience.json',
+        content,
+        hasContent: content.length > 0
+      }
     } catch {
-      return { domain: 'experience', sourceLabel: 'experience.json', content: '', hasContent: false }
+      return {
+        domain: 'experience',
+        sourceLabel: 'experience.json',
+        content: '',
+        hasContent: false
+      }
     }
   }
 }
@@ -226,7 +250,10 @@ export const experienceAgent: IDomainAgent = {
 Tres capas distintas: `loadExperience()` es un loader puro que lee el JSON tipado. `formatExperience()` es un formatter puro que convierte los datos a texto natural:
 
 ```typescript
-export const formatExperience = (entries: ExperienceEntry[], lang: Lang): string =>
+export const formatExperience = (
+  entries: ExperienceEntry[],
+  lang: Lang
+): string =>
   entries
     .map((e) => {
       const desc = lang === 'es' ? e.description_es : e.description_en
@@ -258,7 +285,9 @@ if (decision.mode === 'direct') {
 }
 
 // Camino 2: modo retrieve — agentes seleccionados en paralelo
-const agents = decision.toolKeys.map((key) => AGENT_REGISTRY[key]).filter(Boolean)
+const agents = decision.toolKeys
+  .map((key) => AGENT_REGISTRY[key])
+  .filter(Boolean)
 const answers: DomainAnswer[] = await Promise.all(
   agents.map((agent) => agent.answer(latestMessage, history, lang))
 )
@@ -266,10 +295,14 @@ const answers: DomainAnswer[] = await Promise.all(
 const activeAnswers = answers.filter((a) => a.hasContent)
 
 // Sin contenido → fallback honesto, confianza baja
-if (activeAnswers.length === 0) { /* ... */ }
+if (activeAnswers.length === 0) {
+  /* ... */
+}
 
 // Un agente con contenido → stream directo con persona completa
-if (activeAnswers.length === 1) { /* ... */ }
+if (activeAnswers.length === 1) {
+  /* ... */
+}
 
 // Múltiples agentes → síntesis: una sola voz sobre los reportes especializados
 const synthesisSystem = buildSynthesisSystem(activeAnswers, lang)
@@ -298,27 +331,27 @@ Además, el historial de conversación se pasa a cada agente — el contexto de 
   U([Usuario]) --> API[POST /api/ask-lee]
   API --> ORQ[[Orquestador]]
 
-  ORQ --> R{{"Router LLM\n— clasifica intención —\ncualquier idioma"}}
+ORQ --> R{{"Router LLM\n— clasifica intención —\ncualquier idioma"}}
 
-  R -->|"mode: direct\nHola / off-topic"| DIR["LLM\npersona + propósito\nsin contexto de datos"]
-  R -->|"mode: retrieve\ncarrera / proyectos / stack"| PA
+R -->|"mode: direct\nHola / off-topic"| DIR["LLM\npersona + propósito\nsin contexto de datos"]
+R -->|"mode: retrieve\ncarrera / proyectos / stack"| PA
 
-  subgraph PA["Promise.all — agentes en paralelo"]
-    EA["ExperienceAgent\nLLM especializado\ncontexto: solo carrera"]
-    PRA["ProjectsAgent\nLLM especializado\ncontexto: solo proyectos"]
-    SA["SkillsAgent\nLLM especializado\ncontexto: solo stack"]
-    BA["BlogAgent\nLLM especializado\ncontexto: solo posts"]
-  end
+subgraph PA["Promise.all — agentes en paralelo"]
+EA["ExperienceAgent\nLLM especializado\ncontexto: solo carrera"]
+PRA["ProjectsAgent\nLLM especializado\ncontexto: solo proyectos"]
+SA["SkillsAgent\nLLM especializado\ncontexto: solo stack"]
+BA["BlogAgent\nLLM especializado\ncontexto: solo posts"]
+end
 
-  PA --> SYN{{"Orquestador\n1 agente → stream directo\nN agentes → síntesis LLM"}}
-  DIR --> SSE
-  SYN --> SSE[/"SSE stream\nchunk + done + sources"/]
-  SSE --> UI([AskAiSidebar])
+PA --> SYN{{"Orquestador\n1 agente → stream directo\nN agentes → síntesis LLM"}}
+DIR --> SSE
+SYN --> SSE[/"SSE stream\nchunk + done + sources"/]
+SSE --> UI([AskAiSidebar])
 
-  style ORQ fill:#1f2937,stroke:#f59e0b
-  style R fill:#1f2937,stroke:#6b7280
-  style SYN fill:#1f2937,stroke:#f59e0b
-  style SSE fill:#1f2937,stroke:#10b981`} />
+style ORQ fill:#1f2937,stroke:#f59e0b
+style R fill:#1f2937,stroke:#6b7280
+style SYN fill:#1f2937,stroke:#f59e0b
+style SSE fill:#1f2937,stroke:#10b981`} />
 
 Todo se entrega por SSE. La API emite eventos `chunk` con tokens en tiempo real y un evento `done` con metadatos: `sources`, `confidence`, `toolsUsed`. La sidebar renderiza los chunks mientras llegan — el usuario ve la respuesta construirse, no espera a que termine.
 
@@ -337,4 +370,3 @@ Todo se entrega por SSE. La API emite eventos `chunk` con tokens en tiempo real 
 ---
 
 Ask Lee está vivo en este sitio. Podés abrirlo y hacerle preguntas sobre mi carrera, mis proyectos o mi stack. Y si algo falla — mis gatos están revisando el PR antes que cualquier humano.
-

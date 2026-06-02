@@ -10,23 +10,23 @@ const variants = {
   info: {
     aside: 'border-accent bg-accent/5',
     icon: 'text-accent',
-    role: 'note',
+    role: 'note'
   },
   tip: {
     aside: 'border-mint bg-mint/5',
     icon: 'text-mint',
-    role: 'note',
+    role: 'note'
   },
   warning: {
     aside: 'border-coral bg-coral/8',
     icon: 'text-coral',
-    role: 'note',
+    role: 'note'
   },
   danger: {
     aside: 'border-red-500 bg-red-500/8',
     icon: 'text-red-400',
-    role: 'alert',
-  },
+    role: 'alert'
+  }
 }
 
 const v = variants[type]
@@ -39,41 +39,126 @@ const v = variants[type]
 >
   <!-- Icon -->
   <div class={`shrink-0 mt-0.5 ${v.icon}`} aria-hidden="true">
-    {type === 'info' && (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5"/>
-        <path d="M10 9v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        <circle cx="10" cy="6.5" r="0.75" fill="currentColor"/>
-      </svg>
-    )}
-    {type === 'tip' && (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 2C7.24 2 5 4.24 5 7c0 1.9 1.01 3.56 2.5 4.5V13a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1.5C14 10.56 15 8.9 15 7c0-2.76-2.24-5-5-5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-        <path d="M8 17h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="M8.5 15h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-    )}
-    {type === 'warning' && (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M8.57 3.2 2.22 14a1.67 1.67 0 0 0 1.43 2.5h12.7A1.67 1.67 0 0 0 17.78 14L11.43 3.2a1.67 1.67 0 0 0-2.86 0Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-        <path d="M10 8v3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        <circle cx="10" cy="13.5" r="0.75" fill="currentColor"/>
-      </svg>
-    )}
-    {type === 'danger' && (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5"/>
-        <path d="M7.5 7.5 12.5 12.5M12.5 7.5 7.5 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-    )}
+    {
+      type === 'info' && (
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            cx="10"
+            cy="10"
+            r="8.5"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <path
+            d="M10 9v5"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+          <circle cx="10" cy="6.5" r="0.75" fill="currentColor" />
+        </svg>
+      )
+    }
+    {
+      type === 'tip' && (
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10 2C7.24 2 5 4.24 5 7c0 1.9 1.01 3.56 2.5 4.5V13a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1.5C14 10.56 15 8.9 15 7c0-2.76-2.24-5-5-5Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M8 17h4"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+          <path
+            d="M8.5 15h3"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+        </svg>
+      )
+    }
+    {
+      type === 'warning' && (
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.57 3.2 2.22 14a1.67 1.67 0 0 0 1.43 2.5h12.7A1.67 1.67 0 0 0 17.78 14L11.43 3.2a1.67 1.67 0 0 0-2.86 0Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M10 8v3.5"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+          <circle cx="10" cy="13.5" r="0.75" fill="currentColor" />
+        </svg>
+      )
+    }
+    {
+      type === 'danger' && (
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            cx="10"
+            cy="10"
+            r="8.5"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+          <path
+            d="M7.5 7.5 12.5 12.5M12.5 7.5 7.5 12.5"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+        </svg>
+      )
+    }
   </div>
 
   <!-- Content -->
   <div class="min-w-0 flex-1">
-    {title && (
-      <strong class={`block text-[0.9rem] font-semibold mb-1 ${v.icon}`}>{title}</strong>
-    )}
-    <div class="text-ink-soft text-[0.95rem] leading-relaxed [&_code]:text-accent [&_code]:bg-bg-2 [&_code]:rounded [&_code]:px-1 [&_a]:text-accent [&_a]:underline">
+    {
+      title && (
+        <strong class={`mb-1 block text-[0.9rem] font-semibold ${v.icon}`}>
+          {title}
+        </strong>
+      )
+    }
+    <div
+      class="text-ink-soft [&_code]:text-accent [&_code]:bg-bg-2 [&_a]:text-accent text-[0.95rem] leading-relaxed [&_a]:underline [&_code]:rounded [&_code]:px-1"
+    >
       <slot />
     </div>
   </div>

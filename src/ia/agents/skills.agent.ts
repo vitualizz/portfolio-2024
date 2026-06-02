@@ -25,7 +25,11 @@ export const skillsAgent: IDomainAgent = {
   domain: 'skills',
   sourceLabel: 'skills.ts',
 
-  answer: async (question: string, history: ChatMessage[], lang: Lang): Promise<DomainAnswer> => {
+  answer: async (
+    question: string,
+    history: ChatMessage[],
+    lang: Lang
+  ): Promise<DomainAnswer> => {
     try {
       const data = loadSkills()
       const formatted = formatSkills(data)
@@ -38,7 +42,12 @@ export const skillsAgent: IDomainAgent = {
         hasContent: content.length > 0
       }
     } catch {
-      return { domain: 'skills', sourceLabel: 'skills.ts', content: '', hasContent: false }
+      return {
+        domain: 'skills',
+        sourceLabel: 'skills.ts',
+        content: '',
+        hasContent: false
+      }
     }
   }
 }

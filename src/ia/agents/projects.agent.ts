@@ -25,7 +25,11 @@ export const projectsAgent: IDomainAgent = {
   domain: 'projects',
   sourceLabel: 'projects.json',
 
-  answer: async (question: string, history: ChatMessage[], lang: Lang): Promise<DomainAnswer> => {
+  answer: async (
+    question: string,
+    history: ChatMessage[],
+    lang: Lang
+  ): Promise<DomainAnswer> => {
     try {
       const data = loadProjects()
       const formatted = formatProjects(data, lang)
@@ -38,7 +42,12 @@ export const projectsAgent: IDomainAgent = {
         hasContent: content.length > 0
       }
     } catch {
-      return { domain: 'projects', sourceLabel: 'projects.json', content: '', hasContent: false }
+      return {
+        domain: 'projects',
+        sourceLabel: 'projects.json',
+        content: '',
+        hasContent: false
+      }
     }
   }
 }
