@@ -123,7 +123,8 @@ const locale: LanguageLocale = {
     see_all: 'Ver todos los posts',
     index_eyebrow: 'Blog · vitualizz',
     index_title: "Notas del <span class='text-accent'>campo</span> de batalla",
-    index_subtitle: 'Lo que voy aprendiendo construyendo backends, agentes y SaaS en producción. Sin hype, sin "10 razones por las que…" — solo código, decisiones y a veces los tres gatos opinando al lado.',
+    index_subtitle:
+      'Lo que voy aprendiendo construyendo backends, agentes y SaaS en producción. Sin hype, sin "10 razones por las que…" — solo código, decisiones y a veces los tres gatos opinando al lado.',
     index_stat_posts: 'Posts',
     index_stat_topics: 'Tópicos',
     index_stat_cats: 'Gatos',
@@ -131,25 +132,30 @@ const locale: LanguageLocale = {
     filter_all: 'Todo',
     filter_search_placeholder: 'Buscar entre los posts...',
     featured_label: 'Último post',
-    closer_title: "¿Quieres recibir los nuevos posts <span class='text-accent'>antes que nadie</span>?",
-    closer_text: 'Por ahora no tengo newsletter — pero puedes seguirme en GitHub o LinkedIn, y si te gustó algo, escríbeme. Respondo a todo lo que llega.',
+    closer_title:
+      "¿Quieres recibir los nuevos posts <span class='text-accent'>antes que nadie</span>?",
+    closer_text:
+      'Por ahora no tengo newsletter — pero puedes seguirme en GitHub o LinkedIn, y si te gustó algo, escríbeme. Respondo a todo lo que llega.',
     closer_github: 'Seguirme en GitHub ↗',
     closer_contact: 'Escríbeme',
     mascot_text: 'fin de la lista — vuelve pronto, los gatos también escriben',
     empty_title: 'Ningún post coincide',
-    empty_text: 'Prueba con otro tag o limpia la búsqueda. Los gatos también se confunden a veces.',
-    croq_label: '¿Te gustó este post?',
-    croq_title: 'Apóyame con unas croquetas para mis gatos',
-    croq_body: 'Si lo que escribí te ahorró un dolor de cabeza, déjale unas croquetas a mis tres gatos. Ellos revisan cada PR antes que cualquier humano.',
-    croq_cta: 'Invitar croquetas',
+    empty_text:
+      'Prueba con otro tag o limpia la búsqueda. Los gatos también se confunden a veces.',
+    follow_label: 'Mantente en contacto',
+    follow_title: '¿Querés seguir en contacto?',
+    follow_body:
+      'Si te sirvió este post, la mejor forma de seguir mi trabajo es GitHub y LinkedIn — publico ahí primero.',
+    follow_github: 'Seguirme en GitHub',
+    follow_linkedin: 'Conectar en LinkedIn',
     post_nav_prev: '← Anterior',
     post_nav_next: 'Siguiente →',
     more_posts_eyebrow: '// Más notas',
-    more_posts_title: 'Otras cosas que escribí',
+    more_posts_title: 'Otras cosas que escribí'
   },
   ai: {
     greeting:
-      '¡Hola! Soy la versión IA de Lee. Preguntame sobre <b class="hl">backend</b>, <b class="hl">arquitectura</b>, <b class="hl">agentes de IA</b>, <b class="hl">Postgres</b> o proyectos reales en producción 🐱.',
+      '¿Qué querés saber? Preguntame sobre <b class="hl">backend</b>, <b class="hl">arquitectura</b>, <b class="hl">agentes de IA</b>, <b class="hl">Postgres</b> o proyectos reales en producción 🐱.',
     hint: 'Tip: prueba un atajo arriba ↑ o escribe tu propia pregunta abajo ↓',
     input_placeholder: 'Escribe tu pregunta para Lee...',
     send_aria: 'Enviar',

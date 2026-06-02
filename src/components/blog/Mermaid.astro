@@ -1,0 +1,44 @@
+---
+interface Props {
+  code: string
+  title?: string
+}
+
+const { code, title } = Astro.props
+---
+
+<figure class="not-prose my-8">
+  <pre
+    class="mermaid border-line bg-bg-2 flex justify-center overflow-x-auto rounded-lg border p-4">{code}</pre>
+  {
+    title && (
+      <figcaption class="text-muted-custom mt-2 text-center font-mono text-[11px] tracking-[0.06em] uppercase">
+        {title}
+      </figcaption>
+    )
+  }
+</figure>
+
+<script>
+  import mermaid from 'mermaid'
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'dark',
+    securityLevel: 'loose',
+    fontFamily: 'inherit',
+    themeVariables: {
+      primaryColor: '#1a1d24',
+      primaryTextColor: '#e8eaf0',
+      lineColor: '#5b8def',
+      fontSize: '14px'
+    }
+  })
+
+  const run = () => mermaid.run({ querySelector: '.mermaid' })
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run)
+  } else {
+    run()
+  }
+</script>

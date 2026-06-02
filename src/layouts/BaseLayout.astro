@@ -72,7 +72,8 @@ const twitterImage = new URL('/img/seo/twitter-image.png', Astro.url)
     <script>
       function spawnCats() {
         if (document.querySelector('.walking-cat')) return
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+          return
         function spawn(cls: string, inner: string, delay?: string) {
           const el = document.createElement('div')
           el.className = cls

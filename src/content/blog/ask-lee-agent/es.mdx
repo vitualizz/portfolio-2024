@@ -1,0 +1,372 @@
+---
+title: 'Cómo construí Ask Lee: de un prompt hardcodeado a un sistema multi-agente'
+seoTitle: 'Construyendo Ask Lee: arquitectura de agentes IA en TypeScript'
+cover: ./cover.webp
+coverLink: ''
+shortDescription: 'El postmortem real de construir un asistente IA para mi portfolio: decisiones de arquitectura, errores cometidos y por qué terminé con un sistema multi-agente en lugar de RAG.'
+longDescription: 'Un recorrido técnico honesto por las iteraciones de Ask Lee — desde un string hardcodeado de 100 líneas hasta un sistema con router LLM, agentes de dominio en paralelo y un orquestador que sintetiza respuestas. Decisiones de diseño, tradeoffs reales y lo que aprendí sobre prompts en el proceso.'
+author: 'Lee Palacios'
+date: 2026-06-02
+tags: ['IA', 'arquitectura', 'agentes', 'TypeScript', 'LLM']
+lang: 'es'
+---
+
+import Mermaid from '../../../components/blog/Mermaid.astro'
+
+# Cómo construí Ask Lee: de un prompt hardcodeado a un sistema multi-agente
+
+Este no es un tutorial. Es una bitácora honesta.
+
+Cada portfolio tiene una sección de "contactame". Yo quería algo diferente: un agente IA que pudiera responder preguntas técnicas sobre mí directamente. Así nació Ask Lee. Esta es la historia de cómo evolucionó — no la versión pulida que presentaría en una charla, sino la real, con las decisiones que parecían correctas y las que resultaron estar equivocadas. Si llegaste acá queriendo ver cómo pienso y no solo qué entrego, esto es para vos.
+
+---
+
+## Acto 1: El punto de partida
+
+La primera versión de Ask Lee era un único string enorme. Algo así:
+
+```typescript
+// El problema: datos duplicados manualmente en el prompt
+const LEE_SYSTEM_PROMPT = `
+  Sos Lee IA, el asistente de Lee Palacios.
+  Lee trabajó en Sperant de 2020 a 2022 como Fullstack...
+  Sus proyectos incluyen Patrimore, un SaaS de gestión...
+  Sus skills principales son TypeScript, React, Ruby on Rails...
+  // ~80 líneas más hardcodeadas
+`
+```
+
+El problema estructural era obvio: cada vez que actualizaba `experience.json` o agregaba un proyecto, tenía que editar el prompt manualmente. Datos en dos lugares. Dos fuentes de verdad que iban a divergir sí o sí.
+
+No había separación de responsabilidades. Los datos, las instrucciones de comportamiento y la lógica de qué recuperar estaban todos mezclados en un mismo string de 100 líneas.
+
+---
+
+## Antes de seguir: qué es un agente (de verdad)
+
+Antes de hablar de decisiones arquitecturales, vale la pena alinear definiciones. La palabra "agente" se usa para todo hoy.
+
+Un **chat** es lo más básico: enviás mensajes, el LLM responde. Stateless entre llamadas, sin memoria más allá del historial que vos le mandás, sin capacidad de hacer nada externo.
+
+Un **agente** es un chat con herramientas. El LLM puede decidir llamar funciones — buscar en una base de datos, ejecutar código, consultar una API — y procesar el resultado antes de responder. La diferencia clave: el modelo razona sobre _qué hacer_, no solo _qué decir_.
+
+Un **sistema multi-agente** es un orquestador que coordina múltiples agentes especializados. Cada uno tiene su propio prompt, su propio contexto y su propia responsabilidad. El orquestador decide a quién llamar y cómo sintetizar los resultados.
+
+```
+Chat             →  Usuario → LLM → Respuesta
+Agente           →  Usuario → LLM → [Tool call] → LLM → Respuesta
+Multi-agente     →  Usuario → Orquestador → [AgentA + AgentB] → Síntesis → Respuesta
+```
+
+¿Por qué importa entender esto? Porque la solución correcta depende del problema. Un chat alcanza para responder preguntas con contexto fijo. Un agente alcanza cuando necesitás recuperar datos dinámicos. Un sistema multi-agente tiene sentido cuando diferentes dominios de conocimiento necesitan razonamiento especializado — y el ruido de mezclarlos degrada la calidad.
+
+El error más común es saltar directo al sistema más complejo sin pasar por los anteriores. La complejidad tiene que justificarse, no asumirse.
+
+---
+
+## Acto 2: La primera decisión — ¿RAG o no RAG?
+
+Lo primero que consideré fue RAG. Embeddings, Pinecone, pgvector, chunking de documentos, búsqueda semántica. Es la respuesta que aparece en todos los tutoriales cuando hablás de "darle contexto a un LLM".
+
+Antes de decidir, vale entender qué resuelve RAG y cuándo tiene sentido.
+
+**RAG** (Retrieval-Augmented Generation) existe para un problema específico: la base de conocimiento es demasiado grande para entrar en el contexto del modelo. En lugar de meter todo, buscás los fragmentos más relevantes por similitud semántica y solo inyectás esos. Tiene sentido cuando tenés miles de documentos, cuando el conocimiento cambia frecuentemente y cuando la data no tiene estructura fija.
+
+Mi portfolio no tiene ninguno de esos problemas. Experiencia laboral: un JSON tipado con 4 entradas. Proyectos: otro JSON con 8 ítems. Skills: un archivo TypeScript. Blog: a lo sumo una docena de posts con schema de Zod. **Todo entra en el contexto de un modelo sin sudar.**
+
+Agregar embeddings, un vector store, latencia de búsqueda semántica y costo de indexado para recuperar lo que ya tengo perfectamente ordenado en JSONs tipados sería añadir complejidad sin resolver ningún problema real. Peor: haría el sistema más difícil de debuggear y más caro de operar.
+
+> "Start with simple prompts, optimize them, and add complexity only when simpler solutions fall short."
+> — Anthropic, _Building Effective Agents_, 2024
+
+La regla práctica que me quedó: **no traigas RAG hasta que la data no entre en el prompt**. Si entra, usá loaders deterministas. Si no entra, ahí sí evaluá embeddings.
+
+Decidí ir por recuperación determinista — loaders tipados que leen los JSONs y los formatean como texto. Pero eso abría otra pregunta: ¿qué loader para qué pregunta?
+
+---
+
+## Acto 3: Primera arquitectura — el router de keywords
+
+El primer intento de estructura fue un **IntentRouter** basado en keywords. La idea: un mapa que asociaba palabras clave con herramientas.
+
+```typescript
+const KEYWORD_MAP: Record<string, ToolKey[]> = {
+  experience: [
+    'experience',
+    'work',
+    'role',
+    'empresa',
+    'carrera',
+    'trabajé',
+    'job'
+  ],
+  projects: ['project', 'built', 'proyecto', 'hice', 'construí', 'portfolio'],
+  skills: ['skill', 'tech', 'stack', 'framework', 'lenguaje', 'tecnología'],
+  blog: ['post', 'article', 'wrote', 'escribí', 'blog', 'artículo']
+}
+```
+
+Las "tools" devolvían `JSON.stringify` del dato correspondiente, con un cap de caracteres para no explotar el contexto. El router hacía `includes()` sobre el mensaje del usuario para decidir qué herramientas cargar.
+
+Al principio se sentía bien. Determinista, barato, cero latencia de routing. Podía razonar exactamente qué iba a pasar para cualquier input.
+
+El problema apareció en cuanto empecé a probar con mensajes reales.
+
+<Mermaid
+  code={`flowchart LR
+  subgraph V1["❌ v1 — keyword router"]
+    direction TB
+    M1[Mensaje del usuario] --> KW["Router de keywords\n60+ strings hardcodeados\nES + EN solamente"]
+    KW --> TJ["Tools devuelven JSON crudo\nJSON.stringify con char caps\nmatched: boolean"]
+    TJ --> PR1["Mega prompt\nJSON + instrucciones + datos\ntodo mezclado"]
+    PR1 --> LLM1["LLM\n↳ contexto ruidoso"]
+    LLM1 --> OUT1[Respuesta]
+  end
+  note1["Problema: 'Où a travaillé Lee?'\nno matchea ningún keyword.\nContexto vacío → el LLM inventa."]`}
+/>
+
+"Where did Lee work?" activaba la tool de experience. Bien. "Contame de Lee" no activaba nada claro — fallback a todas las tools, contexto gigante, respuesta genérica. "Où a travaillé Lee?" (en francés) → cero matches → contexto vacío → el modelo inventaba.
+
+El router de keywords no entiende significado. Solo hace pattern matching sobre strings. Eso lo hace frágil en cualquier idioma que no sea el que yo anticipé cuando escribí el mapa.
+
+---
+
+## Acto 4: El router tiene que ser el experto
+
+La solución fue convertir el router en una llamada LLM con una sola responsabilidad: clasificar la intención por significado, en cualquier idioma.
+
+El prompt del router es así en producción:
+
+```typescript
+const ROUTER_PROMPT = `You are an intent router for a portfolio assistant about Lee Palacios.
+Decide whether the user message needs data retrieval and which tools to use.
+
+Tools (domains):
+- experience: Lee's work history, jobs, companies, roles, career timeline.
+- projects: products/apps Lee built, portfolio work, what he shipped.
+- skills: technologies, stack, languages, frameworks, tools Lee knows.
+- blog: articles/posts Lee wrote.
+
+Rules:
+- If the message is a greeting, small talk, thanks, a compliment, meta ("who are you"),
+  or anything that does NOT need Lee's data, return mode "direct" with an empty toolKeys array.
+- Otherwise return mode "retrieve" with ONLY the relevant tool keys.
+- If retrieval is needed but the topic is broad/ambiguous ("tell me about Lee"),
+  include all four: experience, projects, skills, blog.
+- Never include "github".
+- Decide based on MEANING in ANY language (Spanish, English, French, etc.).
+  Do not rely on exact keywords.
+
+Respond with ONE line of strict JSON, no markdown, no explanation:
+{"mode":"direct"|"retrieve","toolKeys":["experience","projects","skills","blog"]}`
+```
+
+El router devuelve un objeto tipado con dos campos:
+
+```typescript
+type RouterDecision = {
+  mode: 'direct' | 'retrieve' // ¿necesita datos o no?
+  toolKeys: ToolKey[] // qué agentes invocar
+}
+
+// Ejemplos de respuesta del router:
+// "Hola!"                    → { mode: 'direct',   toolKeys: [] }
+// "Where did Lee work?"      → { mode: 'retrieve', toolKeys: ['experience'] }
+// "Cuáles son sus skills?"   → { mode: 'retrieve', toolKeys: ['skills'] }
+// "Où a travaillé Lee?"      → { mode: 'retrieve', toolKeys: ['experience'] }
+```
+
+Si el modelo devuelve JSON inválido o una respuesta inesperada, el parseo cae a un `SAFE_FALLBACK` que activa todos los dominios — nunca deja al usuario sin respuesta.
+
+El `mode: 'direct'` es una **arista condicional** — el mismo concepto que usaría en LangGraph. "Hola!" no necesita datos de Lee. "¿Qué podés hacer?" tampoco. El router lo detecta y el orquestador toma ese camino sin llamar a ningún agente de dominio.
+
+El tradeoff es explícito: +1 llamada LLM (temperature 0, ~60 tokens). A cambio obtengo comprensión real del significado en cualquier idioma. Para un portfolio que quiero que funcione bien, ese costo vale.
+
+---
+
+## Acto 5: La distinción que cambió todo — Tools vs Agents
+
+Esta es la parte donde la arquitectura dejó de ser un hack y se convirtió en algo que puedo razonar.
+
+Las **tools** de v1 tenían un problema de identidad: decidían si el dato era relevante para la pregunta (filtraban por keyword), formateaban el JSON, y ponían un cap de caracteres. Tres responsabilidades mezcladas. Y el resultado — JSON crudo — lo tenía que procesar el prompt principal junto con todo lo demás.
+
+La distinción real es esta:
+
+- Una **tool** es un fetcher de datos. Carga, filtra, retorna. Sin LLM. Sin razonamiento. Pura función.
+- Un **agente** es una instancia LLM con un prompt propio y un objetivo claro. Razona sobre su dominio y produce una respuesta especialista.
+
+El contrato que define cada agente de dominio es simple:
+
+```typescript
+export interface IDomainAgent {
+  readonly domain: string
+  readonly sourceLabel: string
+  answer(
+    question: string,
+    history: ChatMessage[],
+    lang: Lang
+  ): Promise<DomainAnswer>
+}
+
+export type DomainAnswer = {
+  domain: string
+  sourceLabel: string
+  content: string
+  hasContent: boolean
+}
+```
+
+Y la implementación de `experienceAgent` muestra la separación limpia:
+
+```typescript
+export const experienceAgent: IDomainAgent = {
+  domain: 'experience',
+  sourceLabel: 'experience.json',
+
+  answer: async (question, history, lang): Promise<DomainAnswer> => {
+    try {
+      const data = loadExperience() // loader puro, sin LLM
+      const formatted = formatExperience(data, lang) // formatter puro, sin LLM
+      const system = buildPrompt(formatted, lang) // prompt del especialista
+      const content = await generateDomainAnswer(system, question, history) // LLM call
+      return {
+        domain: 'experience',
+        sourceLabel: 'experience.json',
+        content,
+        hasContent: content.length > 0
+      }
+    } catch {
+      return {
+        domain: 'experience',
+        sourceLabel: 'experience.json',
+        content: '',
+        hasContent: false
+      }
+    }
+  }
+}
+```
+
+Tres capas distintas: `loadExperience()` es un loader puro que lee el JSON tipado. `formatExperience()` es un formatter puro que convierte los datos a texto natural:
+
+```typescript
+export const formatExperience = (
+  entries: ExperienceEntry[],
+  lang: Lang
+): string =>
+  entries
+    .map((e) => {
+      const desc = lang === 'es' ? e.description_es : e.description_en
+      return [
+        `${e.role} @ ${e.company} (${e.period.start} – ${e.period.end})`,
+        `Stack: ${e.tech.join(', ')}`,
+        desc
+      ].join('\n')
+    })
+    .join('\n\n')
+```
+
+Y recién después viene el LLM, con un prompt enfocado en su dominio. El agente de experience no sabe nada de projects. El agente de skills no sabe nada de blog. Eso es contexto limpio y responsabilidades claras.
+
+Por qué esto escala: agregar un dominio nuevo es agregar un archivo de agente + su loader + su formatter, sin tocar nada de lo existente.
+
+---
+
+## Acto 6: La arquitectura final
+
+El orquestador ata todo. Toma la decisión del router y la ejecuta con tres caminos posibles:
+
+```typescript
+// Camino 1: modo directo — sin tools, respuesta directa con persona + DIRECT_RULES
+if (decision.mode === 'direct') {
+  const system = `${PERSONA}\n\n${DIRECT_RULES}`
+  const result = streamAskAnswer({ system, messages: history })
+  return { result, meta: { sources: [], toolsUsed: [], confidence: 'high' } }
+}
+
+// Camino 2: modo retrieve — agentes seleccionados en paralelo
+const agents = decision.toolKeys
+  .map((key) => AGENT_REGISTRY[key])
+  .filter(Boolean)
+const answers: DomainAnswer[] = await Promise.all(
+  agents.map((agent) => agent.answer(latestMessage, history, lang))
+)
+
+const activeAnswers = answers.filter((a) => a.hasContent)
+
+// Sin contenido → fallback honesto, confianza baja
+if (activeAnswers.length === 0) {
+  /* ... */
+}
+
+// Un agente con contenido → stream directo con persona completa
+if (activeAnswers.length === 1) {
+  /* ... */
+}
+
+// Múltiples agentes → síntesis: una sola voz sobre los reportes especializados
+const synthesisSystem = buildSynthesisSystem(activeAnswers, lang)
+const result = streamAskAnswer({ system: synthesisSystem, messages: history })
+```
+
+Los `Promise.all` son la clave de la latencia. Los agentes de dominio corren en paralelo — si el router selecciona experience + projects + skills, los tres hacen su llamada LLM al mismo tiempo. El tiempo total es el del agente más lento, no la suma de los tres.
+
+### Por qué el orquestador importa más que el prompt
+
+Acá está la diferencia real con "hacerle un buen prompt al modelo".
+
+Un solo prompt que intenta saberlo todo recibe todo el contexto de golpe: experiencia laboral, proyectos, skills, posts. Es ruidoso. El modelo tiene que decidir qué es relevante dentro de esa masa de información. El resultado tiende a ser genérico.
+
+El orquestador hace lo opuesto: **cada agente recibe solo el contexto de su dominio**. El agente de experience ve únicamente el historial laboral formateado. El agente de skills ve únicamente el stack técnico. Eso reduce el ruido, mejora el uso de tokens y produce respuestas más precisas — porque el modelo no tiene que filtrar lo irrelevante, ya se hizo antes de que llegue al LLM.
+
+Hay tres beneficios concretos:
+
+1. **Contexto limpio**: menos tokens de ruido = respuestas más precisas por token consumido.
+2. **Razonamiento especializado**: un agente con prompt enfocado en carrera responde mejor preguntas de carrera que un generalista con todo el contexto.
+3. **Escalabilidad**: agregar un nuevo dominio (GitHub, certificaciones, disponibilidad) es crear un archivo de agente nuevo. El orquestador y los otros agentes no se tocan.
+
+Además, el historial de conversación se pasa a cada agente — el contexto de la conversación fluye correctamente. Si el usuario pregunta "¿y qué hizo allá?" después de una pregunta sobre Sperant, cada agente recibe el historial y puede resolver la referencia.
+
+<Mermaid code={`flowchart TD
+  U([Usuario]) --> API[POST /api/ask-lee]
+  API --> ORQ[[Orquestador]]
+
+ORQ --> R{{"Router LLM\n— clasifica intención —\ncualquier idioma"}}
+
+R -->|"mode: direct\nHola / off-topic"| DIR["LLM\npersona + propósito\nsin contexto de datos"]
+R -->|"mode: retrieve\ncarrera / proyectos / stack"| PA
+
+subgraph PA["Promise.all — agentes en paralelo"]
+EA["ExperienceAgent\nLLM especializado\ncontexto: solo carrera"]
+PRA["ProjectsAgent\nLLM especializado\ncontexto: solo proyectos"]
+SA["SkillsAgent\nLLM especializado\ncontexto: solo stack"]
+BA["BlogAgent\nLLM especializado\ncontexto: solo posts"]
+end
+
+PA --> SYN{{"Orquestador\n1 agente → stream directo\nN agentes → síntesis LLM"}}
+DIR --> SSE
+SYN --> SSE[/"SSE stream\nchunk + done + sources"/]
+SSE --> UI([AskAiSidebar])
+
+style ORQ fill:#1f2937,stroke:#f59e0b
+style R fill:#1f2937,stroke:#6b7280
+style SYN fill:#1f2937,stroke:#f59e0b
+style SSE fill:#1f2937,stroke:#10b981`} />
+
+Todo se entrega por SSE. La API emite eventos `chunk` con tokens en tiempo real y un evento `done` con metadatos: `sources`, `confidence`, `toolsUsed`. La sidebar renderiza los chunks mientras llegan — el usuario ve la respuesta construirse, no espera a que termine.
+
+---
+
+## Cierre: lo que aprendí
+
+**Los prompts son contratos, no descripciones.** La primera versión de `DIRECT_RULES` decía "respond warmly, reply naturally". El resultado: "¡Hola! ¿Qué tal tu día?" — un chatbot genérico. Un prompt sin propósito explícito deja al modelo adivinar qué querés. La versión final tiene propósito, ejemplos de qué hacer y qué NO hacer, y constraints duros. La diferencia entre un agente que funciona y uno que parece funcionar suele estar en el prompt.
+
+**La pregunta correcta no es "¿cuántos agentes?"** sino "¿quién razona y quién solo trae datos?". Un loader es una función pura. Un formatter es una función pura. Solo cuando necesitás que algo entienda contexto y produzca lenguaje natural, ahí ponés un LLM. Cada LLM call tiene un costo — en latencia, en tokens, en dinero. Usarlo donde no hace falta es desperdicio; no usarlo donde sí hace falta es calidad degradada.
+
+**Sobre complejidad**: empecé con la solución más simple. La fui reemplazando cada vez que el dolor fue suficiente para justificar el nivel siguiente. Keywords → router LLM porque las keywords no entienden significado. JSON tools → agentes especializados porque los tools mezclaban responsabilidades. Sin RAG porque los datos entran en el contexto. Cada decisión tiene una razón concreta, no "suena bien en un README".
+
+**Las buenas prácticas importan más que el framework.** El patrón de separar loaders / formatters / agents / orchestrator no es específico de ninguna librería. Es separación de responsabilidades aplicada a sistemas LLM. LangGraph, OpenAI Agents SDK, lo que sea — todos terminan en esta forma porque los problemas son los mismos: contexto ruidoso, routing impreciso, responsabilidades mezcladas.
+
+---
+
+Ask Lee está vivo en este sitio. Podés abrirlo y hacerle preguntas sobre mi carrera, mis proyectos o mi stack. Y si algo falla — mis gatos están revisando el PR antes que cualquier humano.

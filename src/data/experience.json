@@ -5,7 +5,14 @@
     "period": { "start": "2025-10", "end": "2026-05" },
     "description_es": "Modernicé la infraestructura central y diseñé un motor de IA que automatiza la clasificación de miles de pagos en tiempo real. Centralicé la facturación integrando múltiples plataformas, eliminando por completo los errores críticos de cobro.",
     "description_en": "Modernized the core infrastructure and designed an AI engine that automates the classification of thousands of real-time payments. Centralized billing by integrating multiple platforms, completely eliminating critical invoicing errors.",
-    "tech": ["Ruby on Rails", "FastAPI", "Kamal", "AI / LLM", "React", "TypeScript"]
+    "tech": [
+      "Ruby on Rails",
+      "FastAPI",
+      "Kamal",
+      "AI / LLM",
+      "React",
+      "TypeScript"
+    ]
   },
   {
     "company": "ComunidadFeliz",

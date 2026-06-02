@@ -10,26 +10,37 @@ const {
   suggestions = [
     'Resúmeme el post en 3 líneas',
     '¿Cuál es el punto más importante?',
-    '¿Cómo aplicar esto en producción?',
-  ],
+    '¿Cómo aplicar esto en producción?'
+  ]
 } = Astro.props
 ---
 
-<aside class="sticky top-[92px] flex flex-col gap-[18px] self-start min-[1080px]:block hidden">
-  <div id="ask-ai-card" class="ask-ai-card bg-gradient-to-b from-bg-2 to-bg-2/80 border border-line rounded-[18px] overflow-hidden relative shadow-[0_18px_40px_rgba(0,0,0,0.28)]">
+<aside
+  class="sticky top-[92px] flex hidden flex-col gap-[18px] self-start min-[1080px]:block"
+>
+  <div
+    id="ask-ai-card"
+    class="ask-ai-card from-bg-2 to-bg-2/80 border-line relative overflow-hidden rounded-[18px] border bg-gradient-to-b shadow-[0_18px_40px_rgba(0,0,0,0.28)]"
+  >
     <div class="flex items-center gap-2.5 px-4 pt-3.5 pb-2">
-      <span class="aai-dot w-2 h-2 rounded-full bg-mint shrink-0" aria-hidden="true"></span>
-      <h3 class="font-display font-bold text-[14.5px] tracking-[-0.015em] text-ink flex-1 leading-tight m-0">
+      <span
+        class="aai-dot bg-mint h-2 w-2 shrink-0 rounded-full"
+        aria-hidden="true"></span>
+      <h3
+        class="font-display text-ink m-0 flex-1 text-[14.5px] leading-tight font-bold tracking-[-0.015em]"
+      >
         ¿Dudas? Pregúntale a Lee-AI
       </h3>
-      <span class="font-mono text-[10.5px] text-muted-custom px-[7px] py-0.5 rounded-full border border-line bg-bg/60 tracking-[0.03em]">
+      <span
+        class="text-muted-custom border-line bg-bg/60 rounded-full border px-[7px] py-0.5 font-mono text-[10.5px] tracking-[0.03em]"
+      >
         haiku
       </span>
     </div>
 
-    <p class="px-4 pb-3 text-[12.5px] text-muted-custom leading-[1.5] m-0">
-      Un asistente que <b class="text-ink-soft">leyó este post</b> y responde como si fuera yo.
-      Hacé preguntas técnicas o pedí un resumen.
+    <p class="text-muted-custom m-0 px-4 pb-3 text-[12.5px] leading-[1.5]">
+      Un asistente que <b class="text-ink-soft">leyó este post</b> y responde como
+      si fuera yo. Hacé preguntas técnicas o pedí un resumen.
     </p>
 
     <div class="flex flex-wrap gap-1.5 px-4 pb-3">
@@ -37,7 +48,7 @@ const {
         suggestions.map((q) => (
           <button
             data-q={q}
-            class="font-mono text-[11px] px-2.5 py-1.5 rounded-lg bg-transparent border border-line text-ink-soft cursor-pointer leading-tight hover:bg-accent/10 hover:border-accent/40 hover:text-ink hover:-translate-y-px transition-all"
+            class="border-line text-ink-soft hover:bg-accent/10 hover:border-accent/40 hover:text-ink cursor-pointer rounded-lg border bg-transparent px-2.5 py-1.5 font-mono text-[11px] leading-tight transition-all hover:-translate-y-px"
           >
             {q}
           </button>
@@ -47,20 +58,24 @@ const {
 
     <div
       id="aai-conv"
-      class="px-3.5 pb-1 max-h-[340px] overflow-y-auto flex flex-col gap-3 scroll-smooth empty:hidden aai-conv-scroll"
-    ></div>
+      class="aai-conv-scroll flex max-h-[340px] flex-col gap-3 overflow-y-auto scroll-smooth px-3.5 pb-1 empty:hidden"
+    >
+    </div>
 
-    <form id="aai-form" class="flex items-center px-3 py-2.5 border-t border-line bg-bg/70">
-      <span class="font-mono text-accent font-bold px-2 text-[15px]">›</span>
+    <form
+      id="aai-form"
+      class="border-line bg-bg/70 flex items-center border-t px-3 py-2.5"
+    >
+      <span class="text-accent px-2 font-mono text-[15px] font-bold">›</span>
       <input
         type="text"
         placeholder="Pregunta sobre el post..."
         autocomplete="off"
         maxlength="240"
-        class="flex-1 border-none bg-transparent outline-none text-ink font-sans text-[13.5px] px-0.5 py-1.5 min-w-0 placeholder:text-muted-custom"
+        class="text-ink placeholder:text-muted-custom min-w-0 flex-1 border-none bg-transparent px-0.5 py-1.5 font-sans text-[13.5px] outline-none"
       />
       <button
-        class="aai-send w-[30px] h-[30px] bg-accent text-[#0b0c10] border-none rounded-lg cursor-pointer flex items-center justify-center shrink-0 hover:-translate-y-px transition-transform disabled:bg-bg-3 disabled:text-muted-custom disabled:cursor-wait disabled:translate-y-0"
+        class="aai-send bg-accent disabled:bg-bg-3 disabled:text-muted-custom flex h-[30px] w-[30px] shrink-0 cursor-pointer items-center justify-center rounded-lg border-none text-[#0b0c10] transition-transform hover:-translate-y-px disabled:translate-y-0 disabled:cursor-wait"
         type="submit"
         aria-label="Enviar"
       >
@@ -79,7 +94,6 @@ const {
       </button>
     </form>
   </div>
-
 </aside>
 
 <style>
@@ -91,7 +105,13 @@ const {
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), var(--coral), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--accent),
+      var(--coral),
+      transparent
+    );
     opacity: 0.85;
   }
 
@@ -102,14 +122,25 @@ const {
   }
 
   @keyframes aai-pulse {
-    0%   { box-shadow: 0 0 0 0   color-mix(in oklab, var(--mint) 55%, transparent); }
-    70%  { box-shadow: 0 0 0 7px color-mix(in oklab, var(--mint)  0%, transparent); }
-    100% { box-shadow: 0 0 0 0   color-mix(in oklab, var(--mint)  0%, transparent); }
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--mint) 55%, transparent);
+    }
+    70% {
+      box-shadow: 0 0 0 7px color-mix(in oklab, var(--mint) 0%, transparent);
+    }
+    100% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--mint) 0%, transparent);
+    }
   }
 
   /* Custom scrollbar */
-  .aai-conv-scroll::-webkit-scrollbar       { width: 5px; }
-  .aai-conv-scroll::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .aai-conv-scroll::-webkit-scrollbar {
+    width: 5px;
+  }
+  .aai-conv-scroll::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 3px;
+  }
 
   /* Dynamically-created message elements — must be :global since JS injects them */
   :global(.aai-msg) {
@@ -119,16 +150,25 @@ const {
     align-items: start;
     animation: aai-in 0.4s cubic-bezier(0.2, 0.7, 0.3, 1) both;
   }
-  :global(.aai-msg.aai-msg-user) { grid-template-columns: 1fr 26px; }
-  :global(.aai-msg.aai-msg-user .aai-avatar) { order: 2; }
+  :global(.aai-msg.aai-msg-user) {
+    grid-template-columns: 1fr 26px;
+  }
+  :global(.aai-msg.aai-msg-user .aai-avatar) {
+    order: 2;
+  }
 
   :global(.aai-avatar) {
-    width: 26px; height: 26px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-family: var(--font-display);
-    font-weight: 700; font-size: 11px;
-    background: var(--accent); color: #0b0c10;
+    font-weight: 700;
+    font-size: 11px;
+    background: var(--accent);
+    color: #0b0c10;
     flex-shrink: 0;
   }
   :global(.aai-msg-user .aai-avatar) {
@@ -141,38 +181,74 @@ const {
     background: color-mix(in oklab, var(--bg) 60%, transparent);
     border: 1px solid var(--line);
     border-radius: 12px;
-    font-size: 13px; line-height: 1.55; color: var(--ink);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink);
   }
   :global(.aai-msg-user .aai-bubble) {
     background: color-mix(in oklab, var(--coral) 10%, var(--bg-2));
     border-color: color-mix(in oklab, var(--coral) 25%, var(--line));
   }
-  :global(.aai-bubble p)      { margin: 0; }
-  :global(.aai-bubble p + p)  { margin-top: 0.6em; }
-  :global(.aai-bubble b)      { color: var(--accent); font-weight: 600; }
+  :global(.aai-bubble p) {
+    margin: 0;
+  }
+  :global(.aai-bubble p + p) {
+    margin-top: 0.6em;
+  }
+  :global(.aai-bubble b) {
+    color: var(--accent);
+    font-weight: 600;
+  }
   :global(.aai-bubble code) {
-    font-family: var(--font-mono); font-size: 0.88em;
+    font-family: var(--font-mono);
+    font-size: 0.88em;
     background: color-mix(in oklab, var(--accent) 12%, transparent);
-    color: var(--accent); padding: 1px 5px; border-radius: 4px;
+    color: var(--accent);
+    padding: 1px 5px;
+    border-radius: 4px;
   }
 
-  :global(.aai-thinking) { display: inline-flex; align-items: center; gap: 4px; }
+  :global(.aai-thinking) {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
   :global(.aai-thinking span) {
-    width: 5px; height: 5px; border-radius: 50%;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
     background: var(--accent);
     animation: aai-bounce 1.2s infinite;
   }
-  :global(.aai-thinking span:nth-child(2)) { animation-delay: 0.15s; }
-  :global(.aai-thinking span:nth-child(3)) { animation-delay: 0.30s; }
+  :global(.aai-thinking span:nth-child(2)) {
+    animation-delay: 0.15s;
+  }
+  :global(.aai-thinking span:nth-child(3)) {
+    animation-delay: 0.3s;
+  }
 
   @keyframes aai-bounce {
-    0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
-    40%            { transform: translateY(-3px); opacity: 1; }
+    0%,
+    80%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.4;
+    }
+    40% {
+      transform: translateY(-3px);
+      opacity: 1;
+    }
   }
 
   @keyframes aai-in {
-    from { opacity: 0; transform: translateY(4px); }
-    to   { opacity: 1; transform: none; }
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 </style>
 
@@ -186,8 +262,10 @@ const {
     const suggestBtns = card.querySelectorAll('[data-q]')
 
     const article = document.querySelector('.blog-article')
-    const title = article?.querySelector('.display-title')?.textContent?.trim() ?? ''
-    const subtitle = article?.querySelector('.subtitle')?.textContent?.trim() ?? ''
+    const title =
+      article?.querySelector('.display-title')?.textContent?.trim() ?? ''
+    const subtitle =
+      article?.querySelector('.subtitle')?.textContent?.trim() ?? ''
     const tag = article?.querySelector('.tag-pill')?.textContent?.trim() ?? ''
 
     let bodyText = ''
@@ -197,7 +275,10 @@ const {
       clone.querySelectorAll('pre').forEach((p) => {
         ;(p as HTMLElement).textContent = '\n[código]\n' + p.textContent + '\n'
       })
-      bodyText = clone.innerText.replace(/\n{3,}/g, '\n\n').trim().slice(0, 6000)
+      bodyText = clone.innerText
+        .replace(/\n{3,}/g, '\n\n')
+        .trim()
+        .slice(0, 6000)
     }
 
     const history: Array<{ role: string; content: string }> = []
@@ -205,7 +286,14 @@ const {
     function esc(s: string) {
       return String(s).replace(
         /[&<>"']/g,
-        (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c,
+        (c) =>
+          ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+          })[c] ?? c
       )
     }
 
@@ -253,8 +341,8 @@ const {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             messages: history.slice(-6),
-            context: { title, subtitle, tag, body: bodyText },
-          }),
+            context: { title, subtitle, tag, body: bodyText }
+          })
         })
         const data = await res.json()
         thinking?.remove()
@@ -263,7 +351,8 @@ const {
         history.push({ role: 'assistant', content: answer })
       } catch {
         if (thinking)
-          thinking.querySelector('.aai-bubble')!.innerHTML = `<p>Algo se cayó. Intentá de nuevo.</p>`
+          thinking.querySelector('.aai-bubble')!.innerHTML =
+            `<p>Algo se cayó. Intentá de nuevo.</p>`
       } finally {
         if (sendBtn) sendBtn.disabled = false
         if (input) input.focus()
@@ -277,8 +366,8 @@ const {
 
     suggestBtns.forEach((b) =>
       b.addEventListener('click', () =>
-        ask((b as HTMLElement).dataset.q ?? b.textContent ?? ''),
-      ),
+        ask((b as HTMLElement).dataset.q ?? b.textContent ?? '')
+      )
     )
   }
 </script>

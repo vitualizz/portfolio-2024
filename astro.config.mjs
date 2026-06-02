@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap'
 
 import playformCompress from '@playform/compress'
 
-import mdx from '@astrojs/mdx';
+import mdx from '@astrojs/mdx'
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,15 +13,19 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-  integrations: [sitemap({
-    i18n: {
-      defaultLocale: 'es',
-      locales: {
-        es: 'es-ES',
-        en: 'en-US'
+  integrations: [
+    sitemap({
+      i18n: {
+        defaultLocale: 'es',
+        locales: {
+          es: 'es-ES',
+          en: 'en-US'
+        }
       }
-    }
-  }), playformCompress(), mdx()],
+    }),
+    playformCompress(),
+    mdx()
+  ],
   output: 'server',
   adapter: vercelServerless({
     maxDuration: 15

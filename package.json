@@ -13,7 +13,9 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "pnpm typecheck && pnpm lint && pnpm format:check"
+    "check": "pnpm typecheck && pnpm lint && pnpm format:check",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.65",
@@ -28,6 +30,7 @@
     "ai": "^6.0.191",
     "astro": "^5.12.3",
     "astro-heroicons": "^2.1.1",
+    "mermaid": "^11.15.0",
     "resend": "^4.7.0",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.1.7"
@@ -45,7 +48,8 @@
     "prettier-plugin-astro": "^0.13.0",
     "prettier-plugin-tailwindcss": "^0.7.0",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^7.7.0"
+    "typescript-eslint": "^7.7.0",
+    "vitest": "^4.1.8"
   },
   "volta": {
     "node": "20.17.0",

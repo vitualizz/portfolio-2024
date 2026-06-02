@@ -44,6 +44,7 @@ end
 ```
 
 Reference tables:
+
 - `products`: `id, name, price, discount_rate, stock`
 - `orders`: `id, user_id, status, total, created_at`
 - `line_items`: `id, order_id, product_id, quantity, unit_price`
@@ -69,7 +70,8 @@ end
 ```
 
 <Callout type="tip">
-  **Code is read far more often than it's written.** A descriptive name replaces the comment — the code documents itself.
+  **Code is read far more often than it's written.** A descriptive name replaces
+  the comment — the code documents itself.
 </Callout>
 
 ## 2. **Use Guard Clauses**
@@ -100,7 +102,11 @@ end
 ```
 
 <Callout type="info">
-  **.present? is Rails, not pure Ruby.** `.present?` (and `.blank?`) come from ActiveSupport. In pure Ruby use `nil?` or `!value.nil?`. Knowing the difference avoids confusion when switching between plain Ruby and Rails projects. For the `&.` operator that prevents `NoMethodError` directly, see Section 5.
+  **.present? is Rails, not pure Ruby.** `.present?` (and `.blank?`) come from
+  ActiveSupport. In pure Ruby use `nil?` or `!value.nil?`. Knowing the
+  difference avoids confusion when switching between plain Ruby and Rails
+  projects. For the `&.` operator that prevents `NoMethodError` directly, see
+  Section 5.
 </Callout>
 
 ## 3. **Avoid Long Methods**
@@ -190,7 +196,11 @@ end
 ```
 
 <Callout type="warning">
-  **Bang methods (!) raise, the others don't.** `order.save` returns `false` on a validation failure — silent. `order.save!` raises `ActiveRecord::RecordInvalid` — explicit. When you combine scopes with writes, you need to decide: do you want to know about errors explicitly (bang) or handle them via the return value?
+  **Bang methods (!) raise, the others don't.** `order.save` returns `false` on
+  a validation failure — silent. `order.save!` raises
+  `ActiveRecord::RecordInvalid` — explicit. When you combine scopes with writes,
+  you need to decide: do you want to know about errors explicitly (bang) or
+  handle them via the return value?
 </Callout>
 
 ## 5. **Use the Safe Navigation Operator (&.)**
@@ -209,7 +219,10 @@ city = user&.address&.city
 ```
 
 <Callout type="danger">
-  **Don't overuse &.** `&.` is for cases where `nil` is a valid domain value. If you use it to silence `NoMethodError` everywhere, you're hiding real bugs — the day an unexpected `nil` shows up, you'll have no stack trace telling you where it came from.
+  **Don't overuse &.** `&.` is for cases where `nil` is a valid domain value. If
+  you use it to silence `NoMethodError` everywhere, you're hiding real bugs —
+  the day an unexpected `nil` shows up, you'll have no stack trace telling you
+  where it came from.
 </Callout>
 
 ## 6. **Always Think About Performance**
@@ -217,7 +230,8 @@ city = user&.address&.city
 90% of Rails performance problems are N+1. Let's start there.
 
 <Callout type="warning">
-  **N+1 anti-pattern.** One query per element in the loop. With 100 orders and an `each` that touches `order.line_items` or `order.user`, that's 101 queries.
+  **N+1 anti-pattern.** One query per element in the loop. With 100 orders and
+  an `each` that touches `order.line_items` or `order.user`, that's 101 queries.
 </Callout>
 
 ```ruby
@@ -243,7 +257,8 @@ end
 ```
 
 <Callout type="tip">
-  **If there's a loop, there's an includes.** Mental rule: if your loop accesses an association, use `includes` or you'll pay the toll.
+  **If there's a loop, there's an includes.** Mental rule: if your loop accesses
+  an association, use `includes` or you'll pay the toll.
 </Callout>
 
 Other performance practices worth keeping on your radar:
@@ -277,7 +292,9 @@ end
 ```
 
 <Callout type="tip">
-  **A good test explains the code.** The `describe`/`it` block should read like a sentence: "Order#total sums the subtotals of each line_item". If it doesn't read that way, the test name is wrong — not the code.
+  **A good test explains the code.** The `describe`/`it` block should read like
+  a sentence: "Order#total sums the subtotals of each line_item". If it doesn't
+  read that way, the test name is wrong — not the code.
 </Callout>
 
 ## 8. **Modern Ruby Idioms**
@@ -318,7 +335,10 @@ end
 ```
 
 <Callout type="info">
-  **Why frozen_string_literal matters.** Every time you write `'confirmed'`, Ruby allocates a new string object. With the magic comment, those strings are shared and nobody can accidentally mutate them. It's the default in many Ruby 3+ projects, but the comment is still explicit and portable.
+  **Why frozen_string_literal matters.** Every time you write `'confirmed'`,
+  Ruby allocates a new string object. With the magic comment, those strings are
+  shared and nobody can accidentally mutate them. It's the default in many Ruby
+  3+ projects, but the comment is still explicit and portable.
 </Callout>
 
 ## Conclusion

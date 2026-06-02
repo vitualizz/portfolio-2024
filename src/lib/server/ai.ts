@@ -1,5 +1,5 @@
 import { createOpenAI } from '@ai-sdk/openai'
-import { generateText, type ModelMessage } from 'ai'
+import { generateText, streamText, type ModelMessage } from 'ai'
 
 const openai = createOpenAI({
   apiKey: import.meta.env.OPENAI_API_KEY
@@ -7,7 +7,7 @@ const openai = createOpenAI({
 
 export type ChatMessage = { role: string; content: string }
 
-export const OPENAI_MODEL = 'gpt-5-mini'
+export const OPENAI_MODEL = 'gpt-4o-mini'
 export const MAX_OUTPUT_TOKENS = 1000
 
 type AskOptions = {
@@ -36,13 +36,41 @@ export const normalizeMessages = (value: unknown): ChatMessage[] => {
       )
     })
     .map((item) => ({ role: item.role, content: item.content }))
-    .slice(-6)
 }
 
-const toModelMessage = (message: ChatMessage): ModelMessage => ({
+export const toModelMessage = (message: ChatMessage): ModelMessage => ({
   role: message.role === 'assistant' ? 'assistant' : 'user',
   content: message.content
 })
+
+export const streamAskAnswer = ({
+  system,
+  messages
+}: {
+  system: string
+  messages: ChatMessage[]
+}) =>
+  streamText({
+    model: openai(OPENAI_MODEL),
+    system,
+    messages: messages.map(toModelMessage),
+    maxOutputTokens: MAX_OUTPUT_TOKENS
+  })
+
+export const generateRouterDecision = async (
+  system: string,
+  userText: string
+): Promise<string> => {
+  if (!import.meta.env.OPENAI_API_KEY) return ''
+  const { text } = await generateText({
+    model: openai(OPENAI_MODEL),
+    system,
+    messages: [{ role: 'user', content: userText }],
+    temperature: 0,
+    maxOutputTokens: 60
+  })
+  return text
+}
 
 export const generateAskAnswer = async ({
   system,
@@ -65,4 +93,21 @@ export const generateAskAnswer = async ({
   } catch (error) {
     return fallbackAnswer
   }
+}
+
+export const generateDomainAnswer = async (
+  system: string,
+  question: string,
+  history: { role: 'user' | 'assistant'; content: string }[]
+): Promise<string> => {
+  const { text } = await generateText({
+    model: openai(OPENAI_MODEL),
+    system,
+    messages: [
+      ...history.map(toModelMessage),
+      { role: 'user', content: question }
+    ],
+    maxOutputTokens: 300
+  })
+  return text
 }

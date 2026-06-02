@@ -44,6 +44,7 @@ end
 ```
 
 Tablas de referencia:
+
 - `products`: `id, name, price, discount_rate, stock`
 - `orders`: `id, user_id, status, total, created_at`
 - `line_items`: `id, order_id, product_id, quantity, unit_price`
@@ -69,7 +70,8 @@ end
 ```
 
 <Callout type="tip">
-  **El código se lee más veces de las que se escribe.** Un nombre descriptivo te ahorra el comentario — el código se auto-documenta.
+  **El código se lee más veces de las que se escribe.** Un nombre descriptivo te
+  ahorra el comentario — el código se auto-documenta.
 </Callout>
 
 ## 2. **Usa Guard Clauses**
@@ -100,7 +102,10 @@ end
 ```
 
 <Callout type="info">
-  **.present? es de Rails, no de Ruby puro.** `.present?` (y `.blank?`) vienen de ActiveSupport. En Ruby puro usá `nil?` o `!value.nil?`. Aclararlo evita confusión cuando saltás entre proyectos Ruby y Rails. Para el operador `&.` que evita el `NoMethodError` directamente, te cuento en la Sección 5.
+  **.present? es de Rails, no de Ruby puro.** `.present?` (y `.blank?`) vienen
+  de ActiveSupport. En Ruby puro usá `nil?` o `!value.nil?`. Aclararlo evita
+  confusión cuando saltás entre proyectos Ruby y Rails. Para el operador `&.`
+  que evita el `NoMethodError` directamente, te cuento en la Sección 5.
 </Callout>
 
 ## 3. **Evita los métodos largos**
@@ -190,7 +195,11 @@ end
 ```
 
 <Callout type="warning">
-  **Bang methods (!) explotan, los normales no.** `order.save` devuelve `false` si falla la validación — silencioso. `order.save!` lanza `ActiveRecord::RecordInvalid` — explícito. En scopes y queries no aplica directamente, pero cuando combinás scopes con writes tenés que decidir: ¿querés saber del error explícitamente (bang) o manejarlo con el return value?
+  **Bang methods (!) explotan, los normales no.** `order.save` devuelve `false`
+  si falla la validación — silencioso. `order.save!` lanza
+  `ActiveRecord::RecordInvalid` — explícito. En scopes y queries no aplica
+  directamente, pero cuando combinás scopes con writes tenés que decidir:
+  ¿querés saber del error explícitamente (bang) o manejarlo con el return value?
 </Callout>
 
 ## 5. **Usa el operador de navegación segura (&.)**
@@ -209,7 +218,10 @@ city = user&.address&.city
 ```
 
 <Callout type="danger">
-  **No abuses de &.** `&.` es para casos donde `nil` es un valor válido del dominio. Si lo usás para callar `NoMethodError` en todos lados, estás escondiendo bugs reales — el día que aparezca un `nil` inesperado, no vas a tener stack trace que te diga dónde.
+  **No abuses de &.** `&.` es para casos donde `nil` es un valor válido del
+  dominio. Si lo usás para callar `NoMethodError` en todos lados, estás
+  escondiendo bugs reales — el día que aparezca un `nil` inesperado, no vas a
+  tener stack trace que te diga dónde.
 </Callout>
 
 ## 6. **Siempre enfocate en el rendimiento**
@@ -217,7 +229,8 @@ city = user&.address&.city
 El 90% de los problemas de performance en Rails son N+1. Empezamos por ahí.
 
 <Callout type="warning">
-  **Anti-patrón N+1.** Una query por cada elemento del loop. Con 100 órdenes y un `each` que toca `order.line_items` o `order.user`, son 101 queries.
+  **Anti-patrón N+1.** Una query por cada elemento del loop. Con 100 órdenes y
+  un `each` que toca `order.line_items` o `order.user`, son 101 queries.
 </Callout>
 
 ```ruby
@@ -243,7 +256,8 @@ end
 ```
 
 <Callout type="tip">
-  **Cuando hay loop, hay includes.** Regla mental: si tu loop accede a una asociación, usá `includes` o vas a pagar el peaje.
+  **Cuando hay loop, hay includes.** Regla mental: si tu loop accede a una
+  asociación, usá `includes` o vas a pagar el peaje.
 </Callout>
 
 Otras prácticas de performance que conviene tener en el radar:
@@ -277,7 +291,10 @@ end
 ```
 
 <Callout type="tip">
-  **Un buen test es un test que te explica el código.** El bloque `describe`/`it` debería leerse como una frase: "Order#total suma los subtotales de cada line_item". Si no se lee así, el nombre del test está mal — no el código.
+  **Un buen test es un test que te explica el código.** El bloque
+  `describe`/`it` debería leerse como una frase: "Order#total suma los
+  subtotales de cada line_item". Si no se lee así, el nombre del test está mal —
+  no el código.
 </Callout>
 
 ## 8. **Idioms modernos de Ruby**
@@ -318,7 +335,10 @@ end
 ```
 
 <Callout type="info">
-  **Por qué importa frozen_string_literal.** Cada vez que escribís `'confirmed'`, Ruby aloca un nuevo string. Con el magic comment, los strings se comparten y nadie los puede mutar accidentalmente. Es default en Ruby 3+ en muchos proyectos, pero el comment sigue siendo explícito y portable.
+  **Por qué importa frozen_string_literal.** Cada vez que escribís
+  `'confirmed'`, Ruby aloca un nuevo string. Con el magic comment, los strings
+  se comparten y nadie los puede mutar accidentalmente. Es default en Ruby 3+ en
+  muchos proyectos, pero el comment sigue siendo explícito y portable.
 </Callout>
 
 ## Conclusión

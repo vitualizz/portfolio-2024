@@ -124,10 +124,11 @@ export type LanguageLocale = {
     mascot_text: string
     empty_title: string
     empty_text: string
-    croq_label: string
-    croq_title: string
-    croq_body: string
-    croq_cta: string
+    follow_label: string
+    follow_title: string
+    follow_body: string
+    follow_github: string
+    follow_linkedin: string
     post_nav_prev: string
     post_nav_next: string
     more_posts_eyebrow: string

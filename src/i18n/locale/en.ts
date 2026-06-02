@@ -122,7 +122,8 @@ const locale: LanguageLocale = {
     see_all: 'See all posts',
     index_eyebrow: 'Blog · vitualizz',
     index_title: "Notes from the <span class='text-accent'>trenches</span>",
-    index_subtitle: "What I'm learning building backends, agents, and SaaS in production. No hype, no '10 reasons why...' — just code, decisions, and sometimes three cats giving their take.",
+    index_subtitle:
+      "What I'm learning building backends, agents, and SaaS in production. No hype, no '10 reasons why...' — just code, decisions, and sometimes three cats giving their take.",
     index_stat_posts: 'Posts',
     index_stat_topics: 'Topics',
     index_stat_cats: 'Cats',
@@ -130,24 +131,29 @@ const locale: LanguageLocale = {
     filter_all: 'All',
     filter_search_placeholder: 'Search posts...',
     featured_label: 'Latest',
-    closer_title: "Want to get new posts <span class='text-accent'>before anyone else</span>?",
-    closer_text: "No newsletter yet — but you can follow me on GitHub or LinkedIn. If something resonated, write to me. I reply to everything.",
+    closer_title:
+      "Want to get new posts <span class='text-accent'>before anyone else</span>?",
+    closer_text:
+      'No newsletter yet — but you can follow me on GitHub or LinkedIn. If something resonated, write to me. I reply to everything.',
     closer_github: 'Follow on GitHub ↗',
     closer_contact: 'Write to me',
     mascot_text: 'end of list — check back soon, the cats write too',
     empty_title: 'No posts match',
-    empty_text: "Try another tag or clear the search. Even cats get confused sometimes.",
-    croq_label: 'Did you like this post?',
-    croq_title: 'Support me with some kibble for my cats',
-    croq_body: 'If what I wrote saved you a headache, buy some kibble for my three cats. They review every PR before any human does.',
-    croq_cta: 'Buy some kibble',
+    empty_text:
+      'Try another tag or clear the search. Even cats get confused sometimes.',
+    follow_label: 'Stay connected',
+    follow_title: 'Want to keep in touch?',
+    follow_body:
+      'If you enjoyed this post, the best way to follow my work is GitHub and LinkedIn — I publish there first.',
+    follow_github: 'Follow on GitHub',
+    follow_linkedin: 'Connect on LinkedIn',
     post_nav_prev: '← Previous',
     post_nav_next: 'Next →',
     more_posts_eyebrow: '// More notes',
-    more_posts_title: 'Other things I wrote',
+    more_posts_title: 'Other things I wrote'
   },
   ai: {
-    greeting: `Hi! I'm Lee's AI version. Ask me about <b class="hl">backend</b>, <b class="hl">architecture</b>, <b class="hl">AI agents</b>, <b class="hl">Postgres</b>, or production projects 🐱.`,
+    greeting: `What do you want to know? Ask me about <b class="hl">backend</b>, <b class="hl">architecture</b>, <b class="hl">AI agents</b>, <b class="hl">Postgres</b>, or production projects 🐱.`,
     hint: 'Tip: try a shortcut above ↑ or write your own question below ↓',
     input_placeholder: 'Write your question for Lee...',
     send_aria: 'Send',
