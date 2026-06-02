@@ -50,7 +50,9 @@ describe('buildCoverPrompt', () => {
   })
 
   it('injects the style guide into the user message', async () => {
-    mockGenerateText.mockResolvedValue({ text: 'A dark minimalist image' } as ReturnType<typeof generateText> extends Promise<infer T> ? T : never)
+    mockGenerateText.mockResolvedValue({
+      text: 'A dark minimalist image'
+    } as ReturnType<typeof generateText> extends Promise<infer T> ? T : never)
 
     await buildCoverPrompt(baseAnalysis, baseConfig)
 
@@ -61,7 +63,9 @@ describe('buildCoverPrompt', () => {
   })
 
   it('system prompt forbids text in image', async () => {
-    mockGenerateText.mockResolvedValue({ text: 'Dark neural network image' } as ReturnType<typeof generateText> extends Promise<infer T> ? T : never)
+    mockGenerateText.mockResolvedValue({
+      text: 'Dark neural network image'
+    } as ReturnType<typeof generateText> extends Promise<infer T> ? T : never)
 
     await buildCoverPrompt(baseAnalysis, baseConfig)
 
@@ -74,7 +78,9 @@ describe('buildCoverPrompt', () => {
   })
 
   it('applies AI/LLM topic cues for AI-tagged post', async () => {
-    mockGenerateText.mockResolvedValue({ text: 'Neural network glow' } as ReturnType<typeof generateText> extends Promise<infer T> ? T : never)
+    mockGenerateText.mockResolvedValue({
+      text: 'Neural network glow'
+    } as ReturnType<typeof generateText> extends Promise<infer T> ? T : never)
 
     const aiAnalysis: ContentAnalysis = {
       ...baseAnalysis,
@@ -92,7 +98,9 @@ describe('buildCoverPrompt', () => {
   })
 
   it('applies Rails topic cues for Rails-tagged post', async () => {
-    mockGenerateText.mockResolvedValue({ text: 'Railway tracks and rubies' } as ReturnType<typeof generateText> extends Promise<infer T> ? T : never)
+    mockGenerateText.mockResolvedValue({
+      text: 'Railway tracks and rubies'
+    } as ReturnType<typeof generateText> extends Promise<infer T> ? T : never)
 
     const railsAnalysis: ContentAnalysis = {
       ...baseAnalysis,
@@ -110,7 +118,9 @@ describe('buildCoverPrompt', () => {
   })
 
   it('returns PromptResult with trimmed prompt and topic', async () => {
-    mockGenerateText.mockResolvedValue({ text: '  Dark image prompt  ' } as ReturnType<typeof generateText> extends Promise<infer T> ? T : never)
+    mockGenerateText.mockResolvedValue({
+      text: '  Dark image prompt  '
+    } as ReturnType<typeof generateText> extends Promise<infer T> ? T : never)
 
     const result = await buildCoverPrompt(baseAnalysis, baseConfig)
     expect(result.prompt).toBe('Dark image prompt')

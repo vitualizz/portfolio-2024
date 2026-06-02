@@ -19,9 +19,13 @@ export const defaultConfig: CoverConfig = {
     'High contrast, moody atmosphere.'
   ].join(' '),
   topicMap: {
-    'rails': 'Ruby on Rails — red gemstones, railway tracks, server racks, database schemas, elegant code.',
-    'ai-llm': 'AI / LLM — neural network nodes, glowing circuits, data streams, language models, digital synapses.',
-    'aws-devops': 'AWS / DevOps — cloud infrastructure, server clusters, deployment pipelines, network diagrams, containers.',
-    'general': 'Software engineering — abstract code structures, glowing terminals, digital architecture, clean technology.'
+    rails:
+      'Ruby on Rails — red gemstones, railway tracks, server racks, database schemas, elegant code.',
+    'ai-llm':
+      'AI / LLM — neural network nodes, glowing circuits, data streams, language models, digital synapses.',
+    'aws-devops':
+      'AWS / DevOps — cloud infrastructure, server clusters, deployment pipelines, network diagrams, containers.',
+    general:
+      'Software engineering — abstract code structures, glowing terminals, digital architecture, clean technology.'
   }
 }

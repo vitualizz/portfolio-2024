@@ -19,7 +19,9 @@ export async function processImage(
   } else {
     const res = await fetch(imageResult.data)
     if (!res.ok) {
-      throw new Error(`[blog:cover] Failed to fetch image: ${res.status} ${res.statusText}`)
+      throw new Error(
+        `[blog:cover] Failed to fetch image: ${res.status} ${res.statusText}`
+      )
     }
     inputBuffer = Buffer.from(await res.arrayBuffer())
   }

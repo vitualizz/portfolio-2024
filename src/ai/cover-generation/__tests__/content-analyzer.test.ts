@@ -105,23 +105,29 @@ describe('analyzeContent', () => {
   })
 
   it('exits non-zero on missing en.mdx', () => {
-    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((_code?: string | number | null | undefined) => {
-      throw new Error('process.exit')
-    })
+    const exitSpy = vi
+      .spyOn(process, 'exit')
+      .mockImplementation((_code?: string | number | null | undefined) => {
+        throw new Error('process.exit')
+      })
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
     expect(() => analyzeContent('missing-en')).toThrow('process.exit')
     expect(exitSpy).toHaveBeenCalledWith(1)
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Missing file'))
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Missing file')
+    )
 
     exitSpy.mockRestore()
     consoleSpy.mockRestore()
   })
 
   it('exits non-zero for unknown slug', () => {
-    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((_code?: string | number | null | undefined) => {
-      throw new Error('process.exit')
-    })
+    const exitSpy = vi
+      .spyOn(process, 'exit')
+      .mockImplementation((_code?: string | number | null | undefined) => {
+        throw new Error('process.exit')
+      })
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
     expect(() => analyzeContent('no-such-slug')).toThrow('process.exit')

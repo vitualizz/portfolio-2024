@@ -1,6 +1,11 @@
 import { createOpenAI } from '@ai-sdk/openai'
 import { generateText } from 'ai'
-import type { ContentAnalysis, CoverConfig, PromptResult, TopicKey } from '../types.js'
+import type {
+  ContentAnalysis,
+  CoverConfig,
+  PromptResult,
+  TopicKey
+} from '../types.js'
 
 const SYSTEM_PROMPT = `You are an expert visual art director for a software engineering blog.
 Your task is to write a detailed image generation prompt for a cover image.
@@ -15,11 +20,15 @@ STRICT RULES — violating any is a failure:
 
 Return ONLY the image prompt as plain text. No explanation, no metadata.`
 
-function buildUserMessage(analysis: ContentAnalysis, config: CoverConfig): string {
+function buildUserMessage(
+  analysis: ContentAnalysis,
+  config: CoverConfig
+): string {
   const topicGuidance = config.topicMap[analysis.primaryTopic]
-  const conceptList = analysis.concepts.length > 0
-    ? `\nKey concepts: ${analysis.concepts.slice(0, 5).join(', ')}`
-    : ''
+  const conceptList =
+    analysis.concepts.length > 0
+      ? `\nKey concepts: ${analysis.concepts.slice(0, 5).join(', ')}`
+      : ''
 
   return `Blog post: "${analysis.title}"
 Topic: ${analysis.primaryTopic} — ${topicGuidance}

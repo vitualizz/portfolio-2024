@@ -69,9 +69,11 @@ const mockGetProvider = vi.mocked(getProvider)
 const mockProcessImage = vi.mocked(processImage)
 
 function makeExitSpy() {
-  return vi.spyOn(process, 'exit').mockImplementation((_code?: string | number | null | undefined) => {
-    throw new Error(`process.exit(${_code})`)
-  })
+  return vi
+    .spyOn(process, 'exit')
+    .mockImplementation((_code?: string | number | null | undefined) => {
+      throw new Error(`process.exit(${_code})`)
+    })
 }
 
 describe('CLI guard — overwrite protection', () => {
@@ -92,7 +94,9 @@ describe('CLI guard — overwrite protection', () => {
         : str.includes('cover.webp')
     })
 
-    await expect(main(['node', 'generate-blog-cover.ts', 'my-slug'])).rejects.toThrow('process.exit(1)')
+    await expect(
+      main(['node', 'generate-blog-cover.ts', 'my-slug'])
+    ).rejects.toThrow('process.exit(1)')
     expect(exitSpy).toHaveBeenCalledWith(1)
     expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('--force'))
 
@@ -113,14 +117,21 @@ describe('CLI guard — overwrite protection', () => {
       concepts: [],
       primaryTopic: 'general'
     })
-    mockBuildPrompt.mockResolvedValue({ prompt: 'A dark image', topic: 'general' })
-    const mockGenerate = vi.fn().mockResolvedValue({ kind: 'base64' as const, data: 'abc' })
+    mockBuildPrompt.mockResolvedValue({
+      prompt: 'A dark image',
+      topic: 'general'
+    })
+    const mockGenerate = vi
+      .fn()
+      .mockResolvedValue({ kind: 'base64' as const, data: 'abc' })
     mockGetProvider.mockReturnValue({ generate: mockGenerate })
     mockProcessImage.mockResolvedValue('/fake/blog/my-slug/cover.webp')
 
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
-    await expect(main(['node', 'generate-blog-cover.ts', 'my-slug', '--force'])).resolves.toBeUndefined()
+    await expect(
+      main(['node', 'generate-blog-cover.ts', 'my-slug', '--force'])
+    ).resolves.toBeUndefined()
 
     consoleSpy.mockRestore()
   })
@@ -131,9 +142,13 @@ describe('CLI guard — --preview stub', () => {
     const exitSpy = makeExitSpy()
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
-    await expect(main(['node', 'generate-blog-cover.ts', 'any-slug', '--preview'])).rejects.toThrow('process.exit(0)')
+    await expect(
+      main(['node', 'generate-blog-cover.ts', 'any-slug', '--preview'])
+    ).rejects.toThrow('process.exit(0)')
     expect(exitSpy).toHaveBeenCalledWith(0)
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('not yet implemented'))
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining('not yet implemented')
+    )
 
     exitSpy.mockRestore()
     consoleSpy.mockRestore()
@@ -145,9 +160,13 @@ describe('CLI guard — --variants stub', () => {
     const exitSpy = makeExitSpy()
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
-    await expect(main(['node', 'generate-blog-cover.ts', 'any-slug', '--variants=3'])).rejects.toThrow('process.exit(0)')
+    await expect(
+      main(['node', 'generate-blog-cover.ts', 'any-slug', '--variants=3'])
+    ).rejects.toThrow('process.exit(0)')
     expect(exitSpy).toHaveBeenCalledWith(0)
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('not yet implemented'))
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining('not yet implemented')
+    )
 
     exitSpy.mockRestore()
     consoleSpy.mockRestore()
@@ -159,7 +178,9 @@ describe('CLI guard — missing slug', () => {
     const exitSpy = makeExitSpy()
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
-    await expect(main(['node', 'generate-blog-cover.ts'])).rejects.toThrow('process.exit(1)')
+    await expect(main(['node', 'generate-blog-cover.ts'])).rejects.toThrow(
+      'process.exit(1)'
+    )
     expect(exitSpy).toHaveBeenCalledWith(1)
     expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Usage'))
 
@@ -184,14 +205,21 @@ describe('CLI guard — CliFlags parsing', () => {
       concepts: [],
       primaryTopic: 'general'
     })
-    mockBuildPrompt.mockResolvedValue({ prompt: 'A dark image', topic: 'general' })
-    const mockGenerate = vi.fn().mockResolvedValue({ kind: 'base64' as const, data: 'abc' })
+    mockBuildPrompt.mockResolvedValue({
+      prompt: 'A dark image',
+      topic: 'general'
+    })
+    const mockGenerate = vi
+      .fn()
+      .mockResolvedValue({ kind: 'base64' as const, data: 'abc' })
     mockGetProvider.mockReturnValue({ generate: mockGenerate })
     mockProcessImage.mockResolvedValue('/fake/blog/my-slug/cover.webp')
 
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 
-    await expect(main(['node', 'generate-blog-cover.ts', 'my-slug', '--force'])).resolves.toBeUndefined()
+    await expect(
+      main(['node', 'generate-blog-cover.ts', 'my-slug', '--force'])
+    ).resolves.toBeUndefined()
 
     consoleSpy.mockRestore()
   })
@@ -201,10 +229,16 @@ describe('CLI guard — CliFlags parsing', () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
     delete process.env.OPENAI_API_KEY
 
-    mockExistsSync.mockImplementation((p: string | URL | Buffer) => !String(p).includes('cover.webp'))
+    mockExistsSync.mockImplementation(
+      (p: string | URL | Buffer) => !String(p).includes('cover.webp')
+    )
 
-    await expect(main(['node', 'generate-blog-cover.ts', 'my-slug'])).rejects.toThrow('process.exit(1)')
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('OPENAI_API_KEY'))
+    await expect(
+      main(['node', 'generate-blog-cover.ts', 'my-slug'])
+    ).rejects.toThrow('process.exit(1)')
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining('OPENAI_API_KEY')
+    )
 
     exitSpy.mockRestore()
     consoleSpy.mockRestore()

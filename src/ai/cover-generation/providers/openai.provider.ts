@@ -6,7 +6,10 @@ type OpenAIImageResponse = {
   data?: Array<{ url?: string; b64_json?: string }>
 }
 
-function buildRequestBody(prompt: string, config: CoverConfig): Record<string, unknown> {
+function buildRequestBody(
+  prompt: string,
+  config: CoverConfig
+): Record<string, unknown> {
   const body: Record<string, unknown> = {
     model: config.model,
     prompt,
@@ -15,7 +18,10 @@ function buildRequestBody(prompt: string, config: CoverConfig): Record<string, u
   }
 
   // gpt-image models: no response_format/style; use quality instead
-  if (config.model.startsWith('gpt-image') || config.model.startsWith('chatgpt-image')) {
+  if (
+    config.model.startsWith('gpt-image') ||
+    config.model.startsWith('chatgpt-image')
+  ) {
     body.quality = config.imageQuality
     return body
   }
@@ -46,7 +52,9 @@ export class OpenAIImageProvider implements IImageGenerator {
 
     if (!res.ok) {
       const text = await res.text()
-      throw new Error(`[blog:cover] OpenAI image generation failed (${res.status}): ${text}`)
+      throw new Error(
+        `[blog:cover] OpenAI image generation failed (${res.status}): ${text}`
+      )
     }
 
     const json = (await res.json()) as OpenAIImageResponse

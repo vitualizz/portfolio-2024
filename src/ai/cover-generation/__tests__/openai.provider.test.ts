@@ -53,7 +53,11 @@ describe('OpenAIImageProvider', () => {
   })
 
   it('returns url when API responds with url (dall-e models)', async () => {
-    const dalleConfig: CoverConfig = { ...baseConfig, model: 'dall-e-3', generationSize: '1792x1024' }
+    const dalleConfig: CoverConfig = {
+      ...baseConfig,
+      model: 'dall-e-3',
+      generationSize: '1792x1024'
+    }
 
     vi.mocked(global.fetch).mockResolvedValue({
       ok: true,
@@ -65,10 +69,15 @@ describe('OpenAIImageProvider', () => {
     const provider = new OpenAIImageProvider()
     const result = await provider.generate('prompt', dalleConfig)
 
-    const body = JSON.parse(vi.mocked(global.fetch).mock.calls[0][1]?.body as string)
+    const body = JSON.parse(
+      vi.mocked(global.fetch).mock.calls[0][1]?.body as string
+    )
     expect(body).not.toHaveProperty('response_format')
     expect(body).not.toHaveProperty('quality')
-    expect(result).toEqual({ kind: 'url', data: 'https://example.com/image.png' })
+    expect(result).toEqual({
+      kind: 'url',
+      data: 'https://example.com/image.png'
+    })
   })
 
   it('throws with API error body on non-OK response', async () => {
@@ -79,6 +88,8 @@ describe('OpenAIImageProvider', () => {
     } as unknown as Response)
 
     const provider = new OpenAIImageProvider()
-    await expect(provider.generate('prompt', baseConfig)).rejects.toThrow('OpenAI image generation failed (400)')
+    await expect(provider.generate('prompt', baseConfig)).rejects.toThrow(
+      'OpenAI image generation failed (400)'
+    )
   })
 })

@@ -140,7 +140,9 @@ describe('processImage', () => {
       data: 'https://example.com/bad.png'
     }
 
-    await expect(processImage(imageResult, 'test-slug', baseConfig)).rejects.toThrow('Failed to fetch image')
+    await expect(
+      processImage(imageResult, 'test-slug', baseConfig)
+    ).rejects.toThrow('Failed to fetch image')
   })
 
   it('writes to correct output path', async () => {

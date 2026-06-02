@@ -8,9 +8,28 @@ const BLOG_DIR = path.resolve(process.cwd(), 'src/content/blog')
 
 function detectTopic(tags: string[]): TopicKey {
   const normalized = tags.map((t) => t.toLowerCase())
-  if (normalized.some((t) => t.includes('rails') || t.includes('ruby'))) return 'rails'
-  if (normalized.some((t) => t.includes('ai') || t.includes('llm') || t.includes('ia') || t.includes('agent'))) return 'ai-llm'
-  if (normalized.some((t) => t.includes('aws') || t.includes('devops') || t.includes('docker') || t.includes('cloud'))) return 'aws-devops'
+  if (normalized.some((t) => t.includes('rails') || t.includes('ruby')))
+    return 'rails'
+  if (
+    normalized.some(
+      (t) =>
+        t.includes('ai') ||
+        t.includes('llm') ||
+        t.includes('ia') ||
+        t.includes('agent')
+    )
+  )
+    return 'ai-llm'
+  if (
+    normalized.some(
+      (t) =>
+        t.includes('aws') ||
+        t.includes('devops') ||
+        t.includes('docker') ||
+        t.includes('cloud')
+    )
+  )
+    return 'aws-devops'
   return 'general'
 }
 
@@ -28,7 +47,9 @@ export function analyzeContent(slug: string): ContentAnalysis {
   const slugDir = path.join(BLOG_DIR, slug)
 
   if (!fs.existsSync(slugDir)) {
-    console.error(`[blog:cover] Unknown slug: "${slug}" — directory not found: ${slugDir}`)
+    console.error(
+      `[blog:cover] Unknown slug: "${slug}" — directory not found: ${slugDir}`
+    )
     process.exit(1)
   }
 
@@ -49,8 +70,10 @@ export function analyzeContent(slug: string): ContentAnalysis {
     const { data, content } = matter(raw)
 
     if (!title && data.title) title = String(data.title)
-    if (!shortDescription && data.shortDescription) shortDescription = String(data.shortDescription)
-    if (!longDescription && data.longDescription) longDescription = String(data.longDescription)
+    if (!shortDescription && data.shortDescription)
+      shortDescription = String(data.shortDescription)
+    if (!longDescription && data.longDescription)
+      longDescription = String(data.longDescription)
     if (Array.isArray(data.tags)) allTags.push(...data.tags.map(String))
     allConcepts.push(...extractConcepts(content))
   }

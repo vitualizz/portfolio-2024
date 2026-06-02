@@ -18,7 +18,9 @@ function parseArgs(argv: string[]): { slug: string; flags: CliFlags } {
   const preview = args.includes('--preview')
 
   const variantArg = args.find((a) => a.startsWith('--variants='))
-  const variants = variantArg ? parseInt(variantArg.split('=')[1] ?? '1', 10) : 0
+  const variants = variantArg
+    ? parseInt(variantArg.split('=')[1] ?? '1', 10)
+    : 0
 
   return { slug, flags: { force, preview, variants } }
 }
@@ -27,7 +29,9 @@ export async function main(argv: string[] = process.argv): Promise<void> {
   const { slug, flags } = parseArgs(argv)
 
   if (!slug) {
-    console.error('[blog:cover] Usage: pnpm blog:cover <slug> [--force] [--preview] [--variants=N]')
+    console.error(
+      '[blog:cover] Usage: pnpm blog:cover <slug> [--force] [--preview] [--variants=N]'
+    )
     process.exit(1)
   }
 
@@ -46,13 +50,17 @@ export async function main(argv: string[] = process.argv): Promise<void> {
   // Guard: validate slug directory exists
   const slugDir = path.join(BLOG_DIR, slug)
   if (!fs.existsSync(slugDir)) {
-    console.error(`[blog:cover] Unknown slug: "${slug}" — not found at ${slugDir}`)
+    console.error(
+      `[blog:cover] Unknown slug: "${slug}" — not found at ${slugDir}`
+    )
     process.exit(1)
   }
 
   // Guard: check API key before any network call
   if (!process.env.OPENAI_API_KEY) {
-    console.error('[blog:cover] Missing required environment variable: OPENAI_API_KEY')
+    console.error(
+      '[blog:cover] Missing required environment variable: OPENAI_API_KEY'
+    )
     process.exit(1)
   }
 
@@ -61,7 +69,7 @@ export async function main(argv: string[] = process.argv): Promise<void> {
   if (fs.existsSync(outputPath) && !flags.force) {
     console.error(
       `[blog:cover] cover.webp already exists at ${outputPath}\n` +
-      `  Run with --force to overwrite.`
+        `  Run with --force to overwrite.`
     )
     process.exit(1)
   }
@@ -75,7 +83,10 @@ export async function main(argv: string[] = process.argv): Promise<void> {
 
   console.log('[blog:cover] Generating image...')
   const provider = getProvider(defaultConfig)
-  const imageResult = await provider.generate(promptResult.prompt, defaultConfig)
+  const imageResult = await provider.generate(
+    promptResult.prompt,
+    defaultConfig
+  )
 
   console.log('[blog:cover] Processing image with Sharp...')
   const written = await processImage(imageResult, slug, defaultConfig)
@@ -86,7 +97,10 @@ export async function main(argv: string[] = process.argv): Promise<void> {
 // Run when called directly (not imported by tests)
 if (process.argv[1] && process.argv[1].includes('generate-blog-cover')) {
   main().catch((err: unknown) => {
-    console.error('[blog:cover] Fatal error:', err instanceof Error ? err.message : String(err))
+    console.error(
+      '[blog:cover] Fatal error:',
+      err instanceof Error ? err.message : String(err)
+    )
     process.exit(1)
   })
 }
