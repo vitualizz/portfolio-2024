@@ -149,7 +149,7 @@ const locale: LanguageLocale = {
   },
   ai: {
     greeting:
-      '¡Hola! Soy la versión IA de Lee. Preguntame sobre <b class="hl">backend</b>, <b class="hl">arquitectura</b>, <b class="hl">agentes de IA</b>, <b class="hl">Postgres</b> o proyectos reales en producción 🐱.',
+      '¿Qué querés saber? Preguntame sobre <b class="hl">backend</b>, <b class="hl">arquitectura</b>, <b class="hl">agentes de IA</b>, <b class="hl">Postgres</b> o proyectos reales en producción 🐱.',
     hint: 'Tip: prueba un atajo arriba ↑ o escribe tu propia pregunta abajo ↓',
     input_placeholder: 'Escribe tu pregunta para Lee...',
     send_aria: 'Enviar',

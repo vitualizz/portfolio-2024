@@ -17,13 +17,6 @@ const aiT = t('ai')
       <h2 class="s-title" set:html={safeI18nHtml(t('home').ai_title)} />
       <p class="s-sub">
         {t('home').ai_subtitle}
-        <span
-          class="ai-built mt-[10px] block font-mono text-[12px] text-[color:var(--muted)]"
-          >(construido con <code
-            class="text-accent rounded bg-[color:color-mix(in_oklab,var(--accent)_12%,transparent)] px-[6px] py-[2px] text-[11.5px]"
-            >Claude Haiku</code
-          > · via API)</span
-        >
       </p>
     </div>
 
@@ -44,7 +37,7 @@ const aiT = t('ai')
           <span
             class="ai-dot bg-mint h-2 w-2 rounded-full shadow-[0_0_0_4px_color-mix(in_oklab,var(--mint)_25%,transparent)]"
           ></span>
-          <span class="text-ink ai-label">lee-ai · v1</span>
+          <span class="text-ink ai-label">Lee IA · v1</span>
         </div>
         <div class="flex flex-wrap gap-1">
           <button
@@ -71,24 +64,14 @@ const aiT = t('ai')
         class="ai-conv flex max-h-[420px] flex-col gap-[18px] overflow-y-auto scroll-smooth px-[22px] pt-6 pb-3"
         id="aiConv"
       >
-        <div
-          class="ai-msg ai-msg-bot grid grid-cols-[32px_1fr] items-start gap-3"
-        >
-          <div
-            class="ai-avatar bg-accent font-display flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[14px] font-bold text-[#0B0C10]"
-          >
-            L
-          </div>
-          <div
-            class="ai-bubble border-line text-ink min-w-0 rounded-[14px] border bg-[color:color-mix(in_oklab,var(--bg)_60%,transparent)] px-[18px] py-[14px] text-[14.5px] leading-[1.6] break-words"
-          >
-            <p set:html={safeI18nHtml(aiT.greeting)} />
-            <p
-              class="ai-hint mt-2 font-mono text-[11.5px] text-[color:var(--muted)]"
-            >
-              {aiT.hint}
-            </p>
-          </div>
+        <div class="ai-invite flex flex-col items-center justify-center gap-2 py-8 text-center" id="aiInvite">
+          <p
+            class="text-ink text-[15px] leading-[1.6]"
+            set:html={safeI18nHtml(aiT.greeting)}
+          />
+          <p class="font-mono text-[11.5px] text-[color:var(--muted)]">
+            {aiT.hint}
+          </p>
         </div>
       </div>
 
@@ -288,6 +271,7 @@ const aiT = t('ai')
 
     async function ask(question: string) {
       if (!question.trim()) return
+      root.querySelector('#aiInvite')?.remove()
       addMsg('user', question)
       history.push({ role: 'user', content: question })
       const sendBtn = form!.querySelector('.ai-send') as HTMLButtonElement
@@ -300,11 +284,46 @@ const aiT = t('ai')
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ messages: history.slice(-6) })
         })
-        const data = await res.json()
         thinking.remove()
-        const answer = data.answer || msg.error_fallback || 'Error'
-        addMsg('assistant', answer)
-        history.push({ role: 'assistant', content: answer })
+        const bubble = addMsg('assistant', '')
+        const bub = bubble.querySelector('.ai-bubble') as HTMLElement
+        const reader = res.body!.getReader()
+        const dec = new TextDecoder()
+        let buf = ''
+        let answer = ''
+        let meta: { sources?: string[] } | null = null
+        while (true) {
+          const { value, done } = await reader.read()
+          if (done) break
+          buf += dec.decode(value, { stream: true })
+          const parts = buf.split('\n\n')
+          buf = parts.pop() || ''
+          for (const part of parts) {
+            if (!part.startsWith('data: ')) continue
+            try {
+              const evt = JSON.parse(part.slice(6))
+              if (evt.type === 'chunk') {
+                answer += evt.content
+                bub.innerHTML = renderMd(answer)
+              } else if (evt.type === 'done') {
+                meta = evt
+              } else if (evt.type === 'error') {
+                answer = answer || msg.error_fallback || 'Error'
+                bub.innerHTML = renderMd(answer)
+              }
+            } catch {
+              // ignore malformed SSE lines
+            }
+          }
+          conv!.scrollTop = conv!.scrollHeight
+        }
+        history.push({ role: 'assistant', content: answer || msg.error_fallback || 'Error' })
+        if (meta?.sources?.length) {
+          bub.insertAdjacentHTML(
+            'beforeend',
+            `<div class="ai-sources mt-2 text-[12px] opacity-60">Sources: ${meta.sources.map((s: string) => `✓ ${s}`).join('  ')}</div>`
+          )
+        }
       } catch {
         thinking.querySelector('.ai-bubble')!.innerHTML =
           `<p>${msg.crash_fallback || 'Error'}</p>`

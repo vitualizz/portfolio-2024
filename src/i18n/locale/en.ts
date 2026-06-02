@@ -147,7 +147,7 @@ const locale: LanguageLocale = {
     more_posts_title: 'Other things I wrote',
   },
   ai: {
-    greeting: `Hi! I'm Lee's AI version. Ask me about <b class="hl">backend</b>, <b class="hl">architecture</b>, <b class="hl">AI agents</b>, <b class="hl">Postgres</b>, or production projects 🐱.`,
+    greeting: `What do you want to know? Ask me about <b class="hl">backend</b>, <b class="hl">architecture</b>, <b class="hl">AI agents</b>, <b class="hl">Postgres</b>, or production projects 🐱.`,
     hint: 'Tip: try a shortcut above ↑ or write your own question below ↓',
     input_placeholder: 'Write your question for Lee...',
     send_aria: 'Send',
