@@ -105,11 +105,9 @@ describe('analyzeContent', () => {
   })
 
   it('exits non-zero on missing en.mdx', () => {
-    const exitSpy = vi
-      .spyOn(process, 'exit')
-      .mockImplementation(() => {
-        throw new Error('process.exit')
-      })
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => {
+      throw new Error('process.exit')
+    })
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
     expect(() => analyzeContent('missing-en')).toThrow('process.exit')
@@ -123,11 +121,9 @@ describe('analyzeContent', () => {
   })
 
   it('exits non-zero for unknown slug', () => {
-    const exitSpy = vi
-      .spyOn(process, 'exit')
-      .mockImplementation(() => {
-        throw new Error('process.exit')
-      })
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => {
+      throw new Error('process.exit')
+    })
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
     expect(() => analyzeContent('no-such-slug')).toThrow('process.exit')

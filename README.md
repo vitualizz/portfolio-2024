@@ -56,10 +56,10 @@ src/
 
 ### Environment variables
 
-| Variable         | Required | Description                                                                                 |
-| :--------------- | :------- | :------------------------------------------------------------------------------------------ |
-| `RESEND_API_KEY` | Yes      | API key for the contact form. Get one at [resend.com](https://resend.com).                  |
-| `OPENAI_API_KEY` | Yes      | API key used by `/api/ask-lee` and `/api/ask-blog` to generate Ask AI responses via OpenAI. |
+| Variable         | Required | Description                                                                          |
+| :--------------- | :------- | :----------------------------------------------------------------------------------- |
+| `RESEND_API_KEY` | Yes      | API key for the contact form. Get one at [resend.com](https://resend.com).           |
+| `OPENAI_API_KEY` | Yes      | API key for Ask Lee (`/api/ask-lee`, `/api/ask-blog`) and the `pnpm blog:cover` CLI. |
 
 Copy `.env.example` to `.env` and fill in the values.
 
@@ -67,13 +67,15 @@ Copy `.env.example` to `.env` and fill in the values.
 
 All commands run from the project root:
 
-| Command            | Action                                     |
-| :----------------- | :----------------------------------------- |
-| `pnpm install`     | Install dependencies                       |
-| `pnpm dev`         | Start local dev server at `localhost:4321` |
-| `pnpm build`       | Type-check and build for production        |
-| `pnpm preview`     | Preview the production build locally       |
-| `pnpm astro check` | Run Astro type checking                    |
+| Command                  | Action                                     |
+| :----------------------- | :----------------------------------------- |
+| `pnpm install`           | Install dependencies                       |
+| `pnpm dev`               | Start local dev server at `localhost:4321` |
+| `pnpm build`             | Type-check and build for production        |
+| `pnpm preview`           | Preview the production build locally       |
+| `pnpm astro check`       | Run Astro type checking                    |
+| `pnpm blog:cover <slug>` | Generate a blog cover image (see below)    |
+| `pnpm test`              | Run unit tests                             |
 
 ## Blog
 
@@ -81,10 +83,21 @@ Posts use [Astro Content Collections](https://docs.astro.build/en/guides/content
 
 ```
 src/content/blog/<slug>/
-├── cover.webp   # Post cover image
-├── en.md        # English content
-└── es.md        # Spanish content
+├── cover.webp   # Post cover image (1200×630 WebP)
+├── en.mdx       # English content
+└── es.mdx       # Spanish content
 ```
+
+### Cover generation
+
+Generate or regenerate a cover with the build-time CLI (requires `OPENAI_API_KEY` in `.env`):
+
+```bash
+pnpm blog:cover <slug>           # writes src/content/blog/<slug>/cover.webp
+pnpm blog:cover <slug> --force   # overwrite existing cover.webp
+```
+
+Pipeline details: `src/ai/cover-generation/README.md`.
 
 Frontmatter schema (from `src/content/config.ts`):
 
@@ -109,7 +122,7 @@ The site is deployed to Vercel using the `@astrojs/vercel` serverless adapter (`
 
 Set the following environment variable in the Vercel dashboard under **Settings → Environment Variables**:
 
-| Variable         | Description                                                  |
-| :--------------- | :----------------------------------------------------------- |
-| `RESEND_API_KEY` | Required for the contact form to send emails                 |
-| `OPENAI_API_KEY` | Required for `/api/ask-lee` and `/api/ask-blog` AI responses |
+| Variable         | Description                                             |
+| :--------------- | :------------------------------------------------------ |
+| `RESEND_API_KEY` | Required for the contact form to send emails            |
+| `OPENAI_API_KEY` | Required for Ask Lee APIs and the `pnpm blog:cover` CLI |
