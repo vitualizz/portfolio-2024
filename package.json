@@ -15,7 +15,8 @@
     "format:check": "prettier --check .",
     "check": "pnpm typecheck && pnpm lint && pnpm format:check",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "blog:cover": "tsx --env-file .env src/scripts/generate-blog-cover.ts"
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.65",
@@ -44,9 +45,11 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-astro": "^0.34.0",
     "eslint-plugin-prettier": "^5.1.3",
+    "gray-matter": "^4.0.3",
     "prettier": "3.2.5",
     "prettier-plugin-astro": "^0.13.0",
     "prettier-plugin-tailwindcss": "^0.7.0",
+    "tsx": "^4.22.4",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.7.0",
     "vitest": "^4.1.8"
