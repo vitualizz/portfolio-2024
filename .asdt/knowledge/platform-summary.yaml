@@ -1,4 +1,4 @@
-schema_version: "1"
+schema_version: '1'
 stack:
   - Node.js
-file_structure: "src/ for all source code including components, pages, layouts, i18n, data, scripts, and styles"
+file_structure: 'src/ for all source code including components, pages, layouts, i18n, data, scripts, and styles'

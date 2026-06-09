@@ -35,7 +35,7 @@ Los equipos de software reales no trabajan así. Un equipo tiene roles. Cada rol
 
 Cuando el chat termina, el razonamiento desaparece. No hay pipeline. No hay artefactos tipados. No hay traza de por qué se tomó cada decisión.
 
-La tesis de ASDT: ¿qué pasa si cada rol es un agente especializado, y los agentes se comunican *solo* a través de artefactos tipados, versionados y legibles por Git?
+La tesis de ASDT: ¿qué pasa si cada rol es un agente especializado, y los agentes se comunican _solo_ a través de artefactos tipados, versionados y legibles por Git?
 
 ---
 
@@ -120,7 +120,7 @@ Una TUI construida con Bubbletea que hace la instalación visual de los skill fi
 Lo que conecta las dos capas es el **artifact envelope** — el contrato entre agentes:
 
 ```yaml
-schema_version: "1"
+schema_version: '1'
 agent: developer
 change_id: add-auth-flow
 created_at: 2026-06-04T18:00:00Z
@@ -128,7 +128,7 @@ input_refs:
   - requirements-spec
   - system-design
 payload:
-  implementation_plan: "..."
+  implementation_plan: '...'
   files_changed: [...]
 ```
 
@@ -137,24 +137,24 @@ Cada artefacto carga `input_refs` — la cadena de trazabilidad. Desde cualquier
 <Mermaid code={`flowchart TD
   U(["Request del usuario"])
 
-  U -->|"No sé qué necesito"| META{{"Router de recomendación — /asdt\n(analiza, sugiere, no ejecuta)"}}
-  U -->|"Sé qué necesito"| SPEC
+U -->|"No sé qué necesito"| META{{"Router de recomendación — /asdt\n(analiza, sugiere, no ejecuta)"}}
+U -->|"Sé qué necesito"| SPEC
 
-  META -->|"Routing plan\n+ pasos configurados"| SPEC
+META -->|"Routing plan\n+ pasos configurados"| SPEC
 
-  subgraph SPEC["Especialista — también es un orquestador"]
-    direction TB
-    IL["Inline steps\nknowledge-recall · platform-analysis\ncorren en el propio contexto del especialista"]
-    SA1["Sub-agente: explore"]
-    SA2["Sub-agente: spec / design"]
-    SA3["Sub-agente: implement"]
-    IL --> SA1 --> SA2 --> SA3
-  end
+subgraph SPEC["Especialista — también es un orquestador"]
+direction TB
+IL["Inline steps\nknowledge-recall · platform-analysis\ncorren en el propio contexto del especialista"]
+SA1["Sub-agente: explore"]
+SA2["Sub-agente: spec / design"]
+SA3["Sub-agente: implement"]
+IL --> SA1 --> SA2 --> SA3
+end
 
-  SA1 & SA2 & SA3 --> ART[(".asdt/\nCadena de artefactos trazable\ncada decisión apunta a su origen")]
+SA1 & SA2 & SA3 --> ART[(".asdt/\nCadena de artefactos trazable\ncada decisión apunta a su origen")]
 
-  style META fill:#1f2937,stroke:#f59e0b
-  style ART fill:#1f2937,stroke:#10b981`} />
+style META fill:#1f2937,stroke:#f59e0b
+style ART fill:#1f2937,stroke:#10b981`} />
 
 Cada sub-agente hace exactamente una cosa, produce exactamente un artefacto, y no delega más. El especialista es el único que orquesta — los sub-agentes son unidades atómicas de trabajo.
 
@@ -177,7 +177,7 @@ type Provider interface {
 }
 ```
 
-El comentario en el código lo dice explícito: *"the core never imports a concrete memory vendor"*. Hoy existen dos implementaciones:
+El comentario en el código lo dice explícito: _"the core never imports a concrete memory vendor"_. Hoy existen dos implementaciones:
 
 - **NullProvider**: el path offline por defecto. Guarda artefactos como archivos YAML en `.asdt/runs/`. Sin dependencias externas, sin latencia de red. Es el comportamiento cuando no hay proveedor configurado.
 - **EngramProvider**: el backend de producción. Delega a Engram via una interfaz de una sola función (`MCPCaller`). El núcleo nunca importa el SDK de MCP directamente — solo conoce un método `Call`. Cualquier backend MCP puede enchufarse detrás de esa misma interfaz.
@@ -193,6 +193,7 @@ Cada artefacto tiene una dirección única:
 ```
 
 Ejemplos reales del sistema:
+
 - `portfolio-2024/add-auth/architect/system-design`
 - `portfolio-2024/add-auth/developer/dev-implementation`
 - `portfolio-2024/add-auth/qa/test-cases`
@@ -208,20 +209,20 @@ El router clasifica cada request por dos ejes que funcionan de forma independien
 
 **Eje 1 — Complejidad** (determina qué pasos ejecuta cada especialista):
 
-| Nivel | Señal | Comportamiento |
-|-------|-------|----------------|
-| trivial | "quick", "sanity check", "gut check" | 1 paso mínimo |
-| simple | "rename", "color", "label" | subset pequeño |
-| moderate | "add", "feature", "endpoint" | pasos principales |
-| complex | "architect", "migrate", "module" | pipeline completo |
+| Nivel    | Señal                                | Comportamiento    |
+| -------- | ------------------------------------ | ----------------- |
+| trivial  | "quick", "sanity check", "gut check" | 1 paso mínimo     |
+| simple   | "rename", "color", "label"           | subset pequeño    |
+| moderate | "add", "feature", "endpoint"         | pasos principales |
+| complex  | "architect", "migrate", "module"     | pipeline completo |
 
 **Eje 2 — Risk surface** (activa al especialista de Security, independiente de la complejidad):
 
-| Nivel | Señal | Respuesta |
-|-------|-------|-----------|
-| none | — | Security no se invoca |
-| moderate | auth, session, token, PII | threat modeling + hardening checklist |
-| high | password, credential, 2+ familias de riesgo | STRIDE completo |
+| Nivel    | Señal                                       | Respuesta                             |
+| -------- | ------------------------------------------- | ------------------------------------- |
+| none     | —                                           | Security no se invoca                 |
+| moderate | auth, session, token, PII                   | threat modeling + hardening checklist |
+| high     | password, credential, 2+ familias de riesgo | STRIDE completo                       |
 
 Si los dos ejes fueran uno solo, cambiar el algoritmo de hashing de contraseñas — técnicamente un one-liner — quedaría sin revisión de Security porque su complejidad es baja. O dispararía el workflow completo si el sistema decidiera que "todo lo que toca seguridad es complejo". La independencia entre ejes es lo que permite que cada dimensión sea honesta con su propia escala.
 
@@ -237,12 +238,12 @@ Cuando tienes una cadena de 5 especialistas con hasta 6 sub-agentes cada uno, el
 
 **Presupuestos de tokens por capa**: cada tipo de contenido tiene un límite explícito:
 
-| Capa | Límite |
-|------|--------|
-| Memoria organizacional (knowledge-recall) | ≤ 300 tokens, top 3 resultados |
-| Contexto de plataforma (stack + convenciones) | ≤ 500 tokens |
-| Resumen de artefacto en handoff steps | ≤ 200 tokens |
-| Campo `summary` en decision preservation | ≤ 150 tokens |
+| Capa                                          | Límite                         |
+| --------------------------------------------- | ------------------------------ |
+| Memoria organizacional (knowledge-recall)     | ≤ 300 tokens, top 3 resultados |
+| Contexto de plataforma (stack + convenciones) | ≤ 500 tokens                   |
+| Resumen de artefacto en handoff steps         | ≤ 200 tokens                   |
+| Campo `summary` en decision preservation      | ≤ 150 tokens                   |
 
 Estos límites no son enforcement automático — son guías en los prompts de cada capa. La filosofía: definir el presupuesto antes de tener datos reales y ajustarlo cuando duela, no enforcer a ciegas y degradar calidad en silencio.
 
