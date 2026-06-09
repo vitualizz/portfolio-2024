@@ -24,7 +24,7 @@ interface Props {
   author: string
   date: Date
   tags: string[]
-  lang: string
+  lang: 'es' | 'en'
   readingTime: number
   cover?: ImageMetadata
   prevPost?: NavPost | null
@@ -46,7 +46,7 @@ const {
   morePosts = []
 } = Astro.props
 
-const t = useTranslation(lang as 'en' | 'es')
+const t = useTranslation(lang)
 const tBlog = t('blog')
 
 const dateLocale = lang === 'es' ? 'es-PE' : 'en-US'
@@ -258,7 +258,7 @@ const suggestions =
             <span
               class="text-muted-custom font-mono text-[12px] tracking-[0.06em] uppercase"
             >
-              {lang === 'es' ? '¿Te sirvió?' : 'Was this helpful?'}
+              {tBlog.share_prompt}
             </span>
             <div class="flex flex-wrap gap-2">
               <a
@@ -277,7 +277,7 @@ const suggestions =
                     d="M22.46 6c-.77.35-1.6.58-2.46.69a4.28 4.28 0 0 0 1.88-2.37 8.59 8.59 0 0 1-2.72 1.04 4.28 4.28 0 0 0-7.4 3.9 12.13 12.13 0 0 1-8.8-4.46 4.28 4.28 0 0 0 1.32 5.71 4.27 4.27 0 0 1-1.94-.54v.05a4.28 4.28 0 0 0 3.43 4.2 4.3 4.3 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.97 8.59 8.59 0 0 1-5.32 1.83A8.7 8.7 0 0 1 0 18.94a12.1 12.1 0 0 0 6.56 1.92c7.88 0 12.19-6.52 12.19-12.18 0-.19 0-.37-.01-.55A8.7 8.7 0 0 0 22.46 6z"
                   ></path>
                 </svg>
-                {lang === 'es' ? 'Compartir' : 'Share'}
+                {tBlog.share_cta}
               </a>
               <a
                 href={`/${lang}#contact`}
@@ -294,7 +294,7 @@ const suggestions =
                   <rect x="3" y="5" width="18" height="14" rx="2"></rect>
                   <polyline points="3,7 12,13 21,7"></polyline>
                 </svg>
-                {lang === 'es' ? 'Escríbeme' : 'Contact'}
+                {tBlog.contact_cta}
               </a>
             </div>
           </div>

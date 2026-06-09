@@ -1,37 +1,25 @@
 ---
 import projects from 'src/data/projects.json'
 import Icon from 'src/components/Icon.astro'
-import { getLangFromUrl } from 'src/i18n/utils'
 import { useTranslation } from 'src/i18n/utils'
 import type { IconType } from 'src/types/Icons.types.ts'
 import { safeI18nHtml } from 'src/components/shared/i18nRichText'
 
-const lang = getLangFromUrl(Astro.url)
+interface Props {
+  lang: 'es' | 'en'
+}
+
+const { lang } = Astro.props
 const t = useTranslation(lang)
 
-const VALID_ICONS = new Set<string>([
-  'javascript',
-  'ruby',
-  'typescript',
-  'python',
-  'sql',
-  'rails',
-  'react',
-  'tailwind',
-  'astro',
-  'vue',
-  'node',
-  'postgres',
-  'aws',
-  'selenium',
-  'git',
-  'docker',
-  'elasticsearch',
-  'lambda',
-  'dynamodb',
-  'redux',
-  'gpt'
-])
+const ICON_LIST = [
+  'javascript', 'ruby', 'typescript', 'python', 'sql',
+  'rails', 'react', 'tailwind', 'astro', 'vue', 'node',
+  'postgres', 'aws', 'selenium', 'git', 'docker',
+  'elasticsearch', 'lambda', 'dynamodb', 'redux', 'gpt'
+] as const satisfies readonly IconType[]
+
+const VALID_ICONS = new Set<string>(ICON_LIST)
 ---
 
 <projects-section>

@@ -419,6 +419,11 @@ h4 {
     transform: none;
     transition: none;
   }
+  .stars,
+  .stars2,
+  .stars3 {
+    animation: none;
+  }
 }
 
 /* ===== SECTION SHELL ===== */

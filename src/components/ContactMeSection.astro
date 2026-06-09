@@ -109,6 +109,7 @@ const t = useTranslation(lang)
             id="cf-message"
             name="description"
             required
+            rows="5"
             placeholder={t('contact_modal').message_placeholder}></textarea>
         </div>
         <div class="field">
@@ -130,7 +131,7 @@ const t = useTranslation(lang)
         </div>
       </form>
 
-      <div class="form-success" id="contactSuccess" hidden>
+      <div class="form-success" id="contactSuccess" role="status" aria-live="polite" hidden>
         <div class="check">
           <svg
             viewBox="0 0 24 24"
@@ -250,6 +251,8 @@ const t = useTranslation(lang)
     private openContactModal = () => {
       if (!this.modal?.open) this.modal?.showModal()
       document.body.style.overflow = 'hidden'
+      const firstInput = this.modal?.querySelector<HTMLElement>('input, textarea')
+      firstInput?.focus()
     }
 
     private closeContactModal = () => {

@@ -20,25 +20,38 @@ const { code, title } = Astro.props
 </figure>
 
 <script>
-  import mermaid from 'mermaid'
+  async function initMermaid() {
+    const mermaid = (await import('mermaid')).default
+    const isDark = document.documentElement.dataset.theme !== 'light'
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: isDark ? 'dark' : 'default',
+      securityLevel: 'loose',
+      fontFamily: 'inherit',
+      themeVariables: {
+        primaryColor: '#1a1d24',
+        primaryTextColor: '#e8eaf0',
+        lineColor: '#5b8def',
+        fontSize: '14px'
+      }
+    })
+    await mermaid.run({ querySelector: '.mermaid' })
+  }
 
-  mermaid.initialize({
-    startOnLoad: false,
-    theme: 'dark',
-    securityLevel: 'loose',
-    fontFamily: 'inherit',
-    themeVariables: {
-      primaryColor: '#1a1d24',
-      primaryTextColor: '#e8eaf0',
-      lineColor: '#5b8def',
-      fontSize: '14px'
-    }
+  initMermaid()
+
+  const observer = new MutationObserver(() => initMermaid())
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme']
   })
 
-  const run = () => mermaid.run({ querySelector: '.mermaid' })
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', run)
-  } else {
-    run()
-  }
+  document.addEventListener('astro:after-swap', () => {
+    observer.disconnect()
+    initMermaid()
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    })
+  })
 </script>

@@ -133,6 +133,9 @@ export type LanguageLocale = {
     post_nav_next: string
     more_posts_eyebrow: string
     more_posts_title: string
+    share_prompt: string
+    share_cta: string
+    contact_cta: string
   }
   ai: {
     greeting: string

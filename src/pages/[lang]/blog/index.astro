@@ -130,14 +130,14 @@ function getReadingTime(body: string): number {
         >{tBlog.filter_label}</span
       >
 
-      <button class="bf-chip bf-chip-active" data-filter="all">
+      <button class="bf-chip bf-chip-active" data-filter="all" aria-pressed="true">
         {tBlog.filter_all}
         <span class="font-mono text-[10.5px] opacity-65">{posts.length}</span>
       </button>
 
       {
         uniquePrimaryTags.map((tag) => (
-          <button class="bf-chip" data-filter={tag}>
+          <button class="bf-chip" data-filter={tag} aria-pressed="false">
             {formatTag(tag)}
             <span class="font-mono text-[10.5px] opacity-65">
               {primaryTagCounts[tag]}
@@ -207,7 +207,7 @@ function getReadingTime(body: string): number {
                 {post.data.cover && (
                   <Image
                     src={post.data.cover}
-                    alt={post.data.title}
+                    alt=""
                     width={isFeatured ? 1200 : 800}
                     height={isFeatured ? 630 : 450}
                     loading={i === 0 ? 'eager' : 'lazy'}
@@ -756,7 +756,10 @@ function getReadingTime(body: string): number {
 
   chips.forEach((chip) => {
     chip.addEventListener('click', () => {
-      chips.forEach((c) => c.classList.toggle('bf-chip-active', c === chip))
+      chips.forEach((c) => {
+        c.classList.toggle('bf-chip-active', c === chip)
+        c.setAttribute('aria-pressed', c === chip ? 'true' : 'false')
+      })
       currentFilter = chip.dataset.filter ?? 'all'
       filterPosts()
     })

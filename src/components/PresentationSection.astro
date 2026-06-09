@@ -53,9 +53,10 @@ const t = useTranslation(lang)
             style="font-size:clamp(18px,1.6vw,22px)"
           >
             <span class="text-accent font-mono font-bold">›</span>
-            <span
+            <span class="sr-only">Senior Fullstack Engineer</span><span
               class="typewriter text-coral font-mono text-[0.92em] font-semibold tracking-[-0.005em]"
               id="typewriter"
+              aria-hidden="true"
               data-words={t('presentation').typewriter_words}
               >Senior Fullstack Engineer</span
             ><span
@@ -114,7 +115,7 @@ const t = useTranslation(lang)
             <button
               class="icon-btn bg-bg-2 border-line text-ink hover:bg-accent hover:border-accent inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-[14px] border transition-[transform,background,border-color,color] duration-200 hover:-translate-y-0.5 hover:text-[#0b0c10]"
               data-open-modal="contact"
-              aria-label={t('contact_modal').submit}
+              aria-label={lang === 'es' ? 'Abrir formulario de contacto' : 'Open contact form'}
             >
               <svg
                 viewBox="0 0 24 24"

@@ -151,7 +151,10 @@ const locale: LanguageLocale = {
     post_nav_prev: '← Anterior',
     post_nav_next: 'Siguiente →',
     more_posts_eyebrow: '// Más notas',
-    more_posts_title: 'Otras cosas que escribí'
+    more_posts_title: 'Otras cosas que escribí',
+    share_prompt: '¿Te sirvió?',
+    share_cta: 'Compartir',
+    contact_cta: 'Escríbeme'
   },
   ai: {
     greeting:

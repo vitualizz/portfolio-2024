@@ -150,7 +150,10 @@ const locale: LanguageLocale = {
     post_nav_prev: '← Previous',
     post_nav_next: 'Next →',
     more_posts_eyebrow: '// More notes',
-    more_posts_title: 'Other things I wrote'
+    more_posts_title: 'Other things I wrote',
+    share_prompt: 'Was this helpful?',
+    share_cta: 'Share',
+    contact_cta: 'Contact'
   },
   ai: {
     greeting: `What do you want to know? Ask me about <b class="hl">backend</b>, <b class="hl">architecture</b>, <b class="hl">AI agents</b>, <b class="hl">Postgres</b>, or production projects 🐱.`,

@@ -28,7 +28,7 @@ const t = useTranslation(lang)
         <span>vitualizz</span>
       </a>
 
-      <nav class="nav-links flex gap-8 text-[14.5px] font-medium">
+      <nav class="nav-links flex gap-8 text-[14.5px] font-medium" aria-label="Main navigation">
         <a href={withLangPath(lang, `#${SECTION_IDS.about}`)} data-nav
           >{t('nav').about_me}</a
         >
@@ -69,6 +69,7 @@ const t = useTranslation(lang)
                     '{language}',
                     code === 'es' ? 'Español' : 'English'
                   )}
+                  aria-current={code === lang ? 'true' : undefined}
                 >
                   {code === 'es' ? 'Español' : 'English'}
                 </a>
@@ -143,8 +144,12 @@ const t = useTranslation(lang)
         const blogLink =
           this.querySelectorAll<HTMLAnchorElement>('[data-nav-blog]')[0]
         if (blogLink) {
-          this.navLinks.forEach((a) => a.classList.remove('active'))
+          this.navLinks.forEach((a) => {
+            a.classList.remove('active')
+            a.removeAttribute('aria-current')
+          })
           blogLink.classList.add('active')
+          blogLink.setAttribute('aria-current', 'location')
         }
         return
       }
@@ -176,9 +181,15 @@ const t = useTranslation(lang)
         if (item.target && item.target.offsetTop <= y) active = item
       }
 
-      this.navLinks.forEach((a) =>
-        a.classList.toggle('active', a === active?.a)
-      )
+      this.navLinks.forEach((a) => {
+        const isActive = a === active?.a
+        a.classList.toggle('active', isActive)
+        if (isActive) {
+          a.setAttribute('aria-current', 'location')
+        } else {
+          a.removeAttribute('aria-current')
+        }
+      })
     }
   }
 
