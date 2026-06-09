@@ -20,12 +20,12 @@ export const defaultConfig: CoverConfig = {
   ].join(' '),
   topicMap: {
     rails:
-      'Ruby on Rails — red gemstones, railway tracks, server racks, database schemas, elegant code.',
+      'Ruby on Rails — deep crimson gemstone formations, cascading water through carved stone channels, elegant Victorian railway arches, layered geological strata with rich red tones, warm amber and burgundy light.',
     'ai-llm':
-      'AI / LLM — neural network nodes, glowing circuits, data streams, language models, digital synapses.',
+      'AI / LLM — cosmic nebulae and star clusters, bioluminescent deep-sea organisms, aurora borealis curtains, abstract fluid dynamics with flowing color gradients, crystalline lattice structures viewed from within.',
     'aws-devops':
-      'AWS / DevOps — cloud infrastructure, server clusters, deployment pipelines, network diagrams, containers.',
+      'AWS / DevOps — aerial cityscape at night with light trails, intricate mechanical clock gears macro photography, industrial pipe and valve networks, atmospheric cloud formations from above, monumental bridge infrastructure.',
     general:
-      'Software engineering — abstract code structures, glowing terminals, digital architecture, clean technology.'
+      'Software engineering — abstract geometric forms with layered depth, architectural interior spaces with dramatic lighting, prism light diffraction on dark surfaces, mathematical spiral and fractal patterns, blueprint line art.'
   }
 }

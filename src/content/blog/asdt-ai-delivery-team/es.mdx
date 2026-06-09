@@ -1,0 +1,307 @@
+---
+title: 'ASDT: cómo construí un equipo de delivery de software impulsado por IA'
+seoTitle: 'ASDT: pipeline de delivery multi-agente con skill files y artefactos tipados'
+cover: ./cover.webp
+coverLink: ''
+shortDescription: 'El postmortem de construir ASDT — un sistema de agentes especializados que simula un equipo completo: UX/UI, Architect, Developer, QA y Security en un pipeline basado en artefactos tipados.'
+longDescription: 'De un MVP con 2 agentes a un sistema con 5 especialistas, routing adaptivo, memory layer agnóstico y TUI en Go. El recorrido honesto de cómo evolucionó ASDT, las decisiones que se tomaron, las que se difirieron con razón, y lo que falta para llegar al sistema completo.'
+author: 'Lee Palacios'
+date: 2026-06-09
+tags: ['IA', 'arquitectura', 'agentes', 'Go', 'LLM']
+lang: 'es'
+---
+
+import Mermaid from '../../../components/blog/Mermaid.astro'
+
+# ASDT: cómo construí un equipo de delivery de software impulsado por IA
+
+Este no es un tutorial. Es el postmortem honesto de una herramienta que construí para resolver un problema que tenía yo mismo.
+
+Desarrollo software mayormente solo. A veces con un equipo pequeño. En ambos casos, usaba la IA de la misma manera que la usa todo el mundo: un chat. Un prompt, una respuesta. "Hazme un componente React", "revisa este endpoint", "¿cómo nombro esta función?". Todo en el mismo contexto, sin estructura, sin memoria entre sesiones. Todos los roles — PM, Arquitecto, Developer, QA, Security — colapsados en un solo mensaje.
+
+**El problema no era el LLM. Era yo.**
+
+**ASDT** es un sistema donde cada rol del equipo es un agente independiente con su propio foco. Los agentes no se comunican por chat: se pasan artefactos estructurados. Cada decisión queda registrada, trazable y revisable. Lo que un chat destruye cuando se cierra, un pipeline lo conserva.
+
+El chat es inmediato. El pipeline es auditable. Para entregar software que sobreviva más de una semana, prefiero lo auditable.
+
+---
+
+## El problema: todos los roles en un solo prompt
+
+Cuando terminas una conversación con un AI coding assistant, ¿qué queda? Una respuesta. Sin estructura. Sin trazabilidad. Sin "por qué". El próximo día empiezas desde cero.
+
+Los equipos de software reales no trabajan así. Un equipo tiene roles. Cada rol tiene responsabilidades claras. Los entregables de un rol son la entrada del siguiente. El PM escribe los requirements, el arquitecto diseña el sistema basándose en ellos, el developer implementa basándose en el diseño, el QA valida contra los requirements originales. Hay una cadena. Hay artefactos. Hay trazabilidad.
+
+Cuando el chat termina, el razonamiento desaparece. No hay pipeline. No hay artefactos tipados. No hay traza de por qué se tomó cada decisión.
+
+La tesis de ASDT: ¿qué pasa si cada rol es un agente especializado, y los agentes se comunican *solo* a través de artefactos tipados, versionados y legibles por Git?
+
+---
+
+## La idea original: el producto es el skill file
+
+Antes de escribir una línea de Go, tomé una decisión que resultó ser la más importante del proyecto.
+
+El instinto inicial era construir un CLI en Go con una TUI (una interfaz visual que corre en la línea de comandos). El problema: si el producto es el binario, el producto no corre sin compilar Go. Y si no corre sin compilar Go, no existe para alguien que usa directamente un code assistant como Claude Code, Cursor, Windsurf, u otros.
+
+La inversión fue esta: **el producto es el skill package**, no el binario. Un conjunto de archivos Markdown y YAML que definen al router y a cada especialista puede correr en cualquier code assistant que soporte slash commands. La herramienta nació con Claude Code y OpenCode como primeros entornos, pero el diseño fue deliberadamente agnóstico desde el principio — cualquier asistente que pueda leer un archivo y ejecutar un prompt puede integrarlo.
+
+El binario Go es una capa de visualización opcional. Útil, pero no el core.
+
+El estado del proyecto vive en `.asdt/` — un directorio aislado inspirado en cómo Git maneja el suyo. Desinstalación completa = `rm -rf .asdt/`. El proyecto host no se toca.
+
+---
+
+## Cómo evolucionó: de 2 agentes a un pipeline completo
+
+### Fase 1 — MVP
+
+Dos agentes: Requirements + Developer. Pipeline lineal. Sin Architect, sin QA, sin routing adaptivo. Lo suficiente para validar una sola hipótesis: que los artefactos tipados pueden reemplazar el contexto compartido de un chat, y que un agente puede leer el output del anterior y producir algo coherente.
+
+El resultado no fue código limpio. Fue la confirmación de que el concepto funcionaba.
+
+### Fase 2 — Specialist-First Reborn
+
+5 especialistas independientes, cada uno con su propio skill file. Un router de recomendación como coordinador sin estado. El `workflow.yaml` de cada especialista como única fuente de verdad sobre sus capacidades y pasos disponibles.
+
+La decisión clave de esta fase: el router no duplica la lógica de los especialistas. El router recomienda. Los especialistas ejecutan. Esa separación es la que hace que el sistema sea extensible sin tocar nada de lo existente — agregar un especialista es añadir un directorio, sin modificar el router.
+
+### Fase 3 — Knowledge Layer
+
+`/asdt-init` detecta automáticamente el stack del proyecto, el test runner, el estilo de nomenclatura, el patrón arquitectónico. Ese contexto se inyecta en cada invocación de especialista — un briefing compartido para toda la cadena.
+
+**Detectar primero, preguntar solo lo que no se puede inferir.** Si el stack está en `package.json`, no preguntes al usuario. Preguntas innecesarias son fricción. La fricción hace que la gente abandone la herramienta.
+
+### Fase 4 — Adaptive Workflow
+
+El sistema se adapta a la complejidad del request. Un pedido trivial paga el costo mínimo — un solo paso. Un pedido complejo activa el pipeline completo. No cobra el mismo precio por renombrar una variable que por diseñar un módulo de autenticación.
+
+Para que esto funcione sin errores silenciosos, cada lista de pasos se valida contra el `workflow.yaml` del especialista antes de ejecutarse. Si un paso no existe en el registro → rechazado. Si a un paso le falta un predecesor necesario → se inserta automáticamente.
+
+### Fase 5 — Context Enrichment
+
+Detección de naming style, architectural style y test runner con tabla de confianza por campo. Centralización del executor header — un único archivo referenciado en lugar de duplicar el mismo bloque en los 5 skill files. La clase de "detalle" que evita bugs de sincronización cuando el sistema evoluciona.
+
+---
+
+## La arquitectura: dos niveles de orquestación
+
+Uno de los principios más prácticos del sistema es que el router de recomendación (`/asdt`) es completamente opcional.
+
+**Con el router**: si no tienes claro qué especialistas necesita tu tarea, invocas `/asdt` con una descripción en lenguaje natural. El sistema analiza complejidad y riesgo, propone un plan y espera confirmación. Una vez que aceptas, te indica qué comandos ejecutar — pero los ejecutas tú, no él.
+
+**Directo al especialista**: si ya sabes lo que necesitas, vas directo. `/asdt-developer "add auth flow"` o `/asdt-security "review this API"` funcionan sin ningún paso previo. Cada especialista está diseñado para operar de forma autónoma desde el primer momento.
+
+Un desarrollador que conoce bien sus herramientas compone su propio pipeline. Alguien con un request ambiguo usa el router como guía. El sistema no te impone un camino.
+
+Aquí está el detalle de diseño que más me costó articular bien, y que creo que es la idea más interesante del sistema:
+
+**El router no orquesta sub-agentes. Orquesta a los especialistas. Y los especialistas orquestan a sus propios sub-agentes.**
+
+Son tres niveles independientes:
+
+- **Nivel 1 — Router de recomendación (`/asdt`)**: analiza el request, produce un plan de routing con pasos configurados para cada especialista, y entrega el control al usuario. No ejecuta nada.
+- **Nivel 2 — Especialista**: recibe el plan, orquesta internamente una cadena de sub-agentes. Un request complejo a `/asdt-developer` puede lanzar hasta 6 sub-agentes secuenciales (explore → spec → design → tasks → implement → test).
+- **Nivel 3 — Sub-agente**: unidad atómica. Un trabajo, un artefacto, sin delegación adicional.
+
+Los especialistas son composables precisamente porque cada uno es un sistema autónomo. Puedes invocar solo el Architect para una decisión de diseño puntual. Puedes invocar solo el Security para una revisión de amenazas en un módulo existente. El pipeline completo existe cuando lo necesitas — no es obligatorio.
+
+El sistema tiene dos capas independientes que comparten un único espacio de estado: `.asdt/`.
+
+**Capa 1 — Skill System** (funciona en cualquier code assistant):
+
+Un conjunto de archivos Markdown y YAML que definen al router y a los 5 especialistas. Corren en Claude Code, OpenCode, o cualquier asistente que soporte slash commands. Sin Go. Sin compilar. Sin dependencias.
+
+**Capa 2 — Binario Go** (opcional):
+
+Una TUI construida con Bubbletea que hace la instalación visual de los skill files, detecta el ambiente, y muestra un dashboard con el estado real del pipeline.
+
+Lo que conecta las dos capas es el **artifact envelope** — el contrato entre agentes:
+
+```yaml
+schema_version: "1"
+agent: developer
+change_id: add-auth-flow
+created_at: 2026-06-04T18:00:00Z
+input_refs:
+  - requirements-spec
+  - system-design
+payload:
+  implementation_plan: "..."
+  files_changed: [...]
+```
+
+Cada artefacto carga `input_refs` — la cadena de trazabilidad. Desde cualquier decisión de implementación se puede remontar hasta el ADR que definió el approach, y hasta los requirements que lo motivaron. No es un log de chat — es un audit trail tipado con versiones de schema.
+
+<Mermaid code={`flowchart TD
+  U(["Request del usuario"])
+
+  U -->|"No sé qué necesito"| META{{"Router de recomendación — /asdt\n(analiza, sugiere, no ejecuta)"}}
+  U -->|"Sé qué necesito"| SPEC
+
+  META -->|"Routing plan\n+ pasos configurados"| SPEC
+
+  subgraph SPEC["Especialista — también es un orquestador"]
+    direction TB
+    IL["Inline steps\nknowledge-recall · platform-analysis\ncorren en el propio contexto del especialista"]
+    SA1["Sub-agente: explore"]
+    SA2["Sub-agente: spec / design"]
+    SA3["Sub-agente: implement"]
+    IL --> SA1 --> SA2 --> SA3
+  end
+
+  SA1 & SA2 & SA3 --> ART[(".asdt/\nCadena de artefactos trazable\ncada decisión apunta a su origen")]
+
+  style META fill:#1f2937,stroke:#f59e0b
+  style ART fill:#1f2937,stroke:#10b981`} />
+
+Cada sub-agente hace exactamente una cosa, produce exactamente un artefacto, y no delega más. El especialista es el único que orquesta — los sub-agentes son unidades atómicas de trabajo.
+
+---
+
+## La capa de memoria: agnóstica por diseño
+
+Un pipeline de agentes que no recuerda nada entre sesiones es una cadena de prompts costosa. La memoria es lo que convierte el sistema en algo que acumula conocimiento — decisiones tomadas, contexto de cambios anteriores, patrones establecidos en el proyecto. Sin ella, cada invocación empieza desde cero y el principal diferenciador del sistema desaparece.
+
+Hoy el backend de memoria es **Engram**. Pero el sistema está diseñado para que eso pueda cambiar, y esa decisión fue deliberada desde el principio.
+
+En la capa Go, todo acceso a memoria pasa por una sola interfaz:
+
+```go
+type Provider interface {
+    Save(ctx context.Context, entry Entry) error
+    Search(ctx context.Context, query string) ([]Entry, error)
+    Get(ctx context.Context, id string) (*Entry, error)
+    Name() string
+}
+```
+
+El comentario en el código lo dice explícito: *"the core never imports a concrete memory vendor"*. Hoy existen dos implementaciones:
+
+- **NullProvider**: el path offline por defecto. Guarda artefactos como archivos YAML en `.asdt/runs/`. Sin dependencias externas, sin latencia de red. Es el comportamiento cuando no hay proveedor configurado.
+- **EngramProvider**: el backend de producción. Delega a Engram via una interfaz de una sola función (`MCPCaller`). El núcleo nunca importa el SDK de MCP directamente — solo conoce un método `Call`. Cualquier backend MCP puede enchufarse detrás de esa misma interfaz.
+
+Agregar un nuevo backend — un vector DB, SQLite, otro servidor MCP — es implementar cuatro métodos. El resto del sistema no cambia.
+
+### Topic keys: el sistema de direccionamiento de artefactos
+
+Cada artefacto tiene una dirección única:
+
+```
+{project}/{change}/{specialist}/{artifact-type}
+```
+
+Ejemplos reales del sistema:
+- `portfolio-2024/add-auth/architect/system-design`
+- `portfolio-2024/add-auth/developer/dev-implementation`
+- `portfolio-2024/add-auth/qa/test-cases`
+- `portfolio-2024/add-auth/security/stride-threats`
+
+La granularidad es deliberada — un topic_key por tipo de artefacto, no uno grueso por especialista ni por cambio completo. Esto permite que los especialistas recuperen exactamente lo que necesitan sin traer contexto irrelevante. El Developer que lee el `system-design` del Architect no necesita, ni recibe, el análisis de riesgos ni el ADR completo.
+
+---
+
+## El routing: dos ejes independientes
+
+El router clasifica cada request por dos ejes que funcionan de forma independiente. Esa independencia cambia el tipo de errores que el sistema puede cometer — o evitar.
+
+**Eje 1 — Complejidad** (determina qué pasos ejecuta cada especialista):
+
+| Nivel | Señal | Comportamiento |
+|-------|-------|----------------|
+| trivial | "quick", "sanity check", "gut check" | 1 paso mínimo |
+| simple | "rename", "color", "label" | subset pequeño |
+| moderate | "add", "feature", "endpoint" | pasos principales |
+| complex | "architect", "migrate", "module" | pipeline completo |
+
+**Eje 2 — Risk surface** (activa al especialista de Security, independiente de la complejidad):
+
+| Nivel | Señal | Respuesta |
+|-------|-------|-----------|
+| none | — | Security no se invoca |
+| moderate | auth, session, token, PII | threat modeling + hardening checklist |
+| high | password, credential, 2+ familias de riesgo | STRIDE completo |
+
+Si los dos ejes fueran uno solo, cambiar el algoritmo de hashing de contraseñas — técnicamente un one-liner — quedaría sin revisión de Security porque su complejidad es baja. O dispararía el workflow completo si el sistema decidiera que "todo lo que toca seguridad es complejo". La independencia entre ejes es lo que permite que cada dimensión sea honesta con su propia escala.
+
+---
+
+## Prácticas de costo-beneficio
+
+Cuando tienes una cadena de 5 especialistas con hasta 6 sub-agentes cada uno, el costo de tokens se multiplica rápido. Estas son las prácticas concretas que controlan ese costo.
+
+**Fetch-once cache**: cada topic_key se resuelve exactamente una vez por run. El orquestador mantiene un mapa en contexto `topic_key → contenido`. En una cadena donde el `system-design` del Architect lo consumen Developer, QA y Security, son 3 búsquedas en memoria que se convierten en 1.
+
+**Inputs inyectados, no re-buscados**: el orquestador resuelve los inputs de cada sub-agente antes de lanzarlo e inyecta el contenido directamente en el prompt. La regla, codificada en el `executor-header` que se prepende a cada prompt de sub-agente, es simple: no busques tus propios inputs — ya están en el contexto. Lo que el orquestador ya resolvió, el sub-agente consume. Nunca repite el trabajo.
+
+**Presupuestos de tokens por capa**: cada tipo de contenido tiene un límite explícito:
+
+| Capa | Límite |
+|------|--------|
+| Memoria organizacional (knowledge-recall) | ≤ 300 tokens, top 3 resultados |
+| Contexto de plataforma (stack + convenciones) | ≤ 500 tokens |
+| Resumen de artefacto en handoff steps | ≤ 200 tokens |
+| Campo `summary` en decision preservation | ≤ 150 tokens |
+
+Estos límites no son enforcement automático — son guías en los prompts de cada capa. La filosofía: definir el presupuesto antes de tener datos reales y ajustarlo cuando duela, no enforcer a ciegas y degradar calidad en silencio.
+
+**Inline vs subagent**: los pasos que solo inyectan contexto (knowledge-recall, platform-analysis) corren en el hilo del especialista. Solo los pasos que producen un artefacto persistido se lanzan como sub-agentes independientes. Esta clasificación limita el crecimiento del contexto — los pasos inline no acumulan los payloads pesados de generación anteriores.
+
+**Degradación parcial en lugar de fallo total**: si un input no se pudo resolver, el sistema no aborta. El orquestador inyecta el input como no disponible y el sub-agente lo registra en su campo `open_items`. El pipeline sigue con la información disponible y el problema queda documentado en el artefacto — no silenciado.
+
+---
+
+## Las decisiones de diseño pendientes
+
+Todo sistema en fase de diseño activo tiene un conjunto de problemas que se conocen, se entienden bien, y se eligió diferir. No porque sean menores — algunos son críticos en escala — sino porque resolverlos antes de tener los datos correctos produce soluciones prematuras. Estos son los cinco que ASDT lleva en su backlog con fecha.
+
+**Naming contract drift** — el sistema distribuye el contrato de nombres entre archivos independientes. Cuando un especialista renombra un artefacto, los otros no son notificados. La solución correcta es un registro central de topic_keys con validación en escritura, no en lectura. Se difirió porque requiere un cambio de schema en los `workflow.yaml` — una decisión de breaking change que merece su propia ADR, no una corrección apresurada.
+
+**Context window blowup** — sin enforcement de presupuesto de tokens a nivel de sesión, los especialistas al final de una cadena larga pueden recibir contexto degradado sin que el sistema lo señale. La mitigación actual (guías de tokens por capa) es intencional: primero instrumentar y medir el uso real, luego enforcer. Enforcer antes de tener datos reales significa cortar calidad a ciegas.
+
+**N búsquedas redundantes** — hoy cada especialista puede hacer su propia búsqueda de memoria organizacional. En una cadena de 4 especialistas, eso son 4 búsquedas sobre el mismo corpus. La solución — una sola búsqueda a nivel orquestador con resultado inyectado en todos — existe en el diseño pero no está implementada aún.
+
+**Sin lifecycle de artefactos** — los artefactos se escriben pero no se superseden ni archivan. No hay estados `draft | final | superseded | archived`. En 6 meses el corpus crece sin control y la calidad del knowledge-recall se degrada. Este problema no duele en escala pequeña. A escala, es estructural.
+
+**Keyword routing frágil** — "add a tiny label" activa el nivel `moderate` por la presencia de "add". El clasificador de keywords no entiende semántica. La solución correcta es un advisory tier — un modo de respuesta directa para requests simples que no pasa por el pipeline — o un paso de clasificación por LLM, que tiene su propio costo de latencia.
+
+---
+
+## Estado actual y lo que viene
+
+Un desarrollador solo usando ASDT obtiene, en un solo pipeline, análisis de PM, decisiones de arquitectura, flujos de UX, implementación con plan explícito, validación de QA y revisión de security. Todo trazable. Todo revisable. Como si hubiera tenido un equipo completo que escribe las cosas.
+
+En una semana de trabajo, el sistema pasó de cero a ese pipeline. Cinco especialistas, routing adaptivo, detección automática del proyecto, memoria persistida entre sesiones. Eso no es poco.
+
+Pero tiene una limitación clara hoy: **el costo mínimo de interacción es demasiado alto**. Cualquier request — incluso "¿cuál es un buen nombre para esta variable?" — paga el precio del pipeline completo. El próximo paso más importante es el **advisory tier**: un modo de respuesta directa para preguntas rápidas y gut-checks, sin subagentes ni artefactos. Un tier así cambiaría el valor-por-token de todo el sistema porque reduciría el costo del caso más frecuente.
+
+Lo que sigue: búsqueda de memoria compartida a nivel orquestador (una búsqueda para toda la cadena, no una por especialista), lifecycle de artefactos (draft → final → superseded → archived para mantener el corpus limpio), y budget enforcement con degradación explícita una vez que la instrumentación entregue datos reales.
+
+---
+
+Lo que me interesa de ASDT no es la implementación específica. Es demostrar que un pipeline de delivery basado en artefactos puede tener propiedades que un chat nunca va a tener: trazabilidad, especialización por rol, reproducibilidad.
+
+El chat es inmediato. El pipeline es auditable. Para entregar software que sobreviva más de una semana, prefiero lo auditable.
+
+El código fuente, los skill files y los especialistas están disponibles en [GitHub](https://github.com/vitualizz/AI-Software-Delivery-Team).
+
+---
+
+## Glosario
+
+**Skill file**: un archivo de texto estructurado (Markdown + YAML) que define el rol de un especialista — qué sabe hacer, en qué orden lo hace, y qué produce. Es como una descripción de puesto combinada con un manual de procesos, pero para un agente de IA.
+
+**Router de recomendación (`/asdt`)**: recibe el request del usuario, analiza complejidad y riesgo, y produce un plan de routing — una lista de especialistas sugeridos con sus pasos configurados. No ejecuta nada, no lanza agentes, no coordina nada. Es un punto de entrada opcional para quienes no saben qué especialista necesitan.
+
+**Especialista**: un agente con foco específico que, a su vez, también es un orquestador. Cuando se invoca `/asdt-developer`, ese especialista orquesta internamente una cadena de sub-agentes, uno por cada paso. Cada especialista puede usarse solo, sin pasar por el router.
+
+**Sub-agente**: la unidad atómica de trabajo. Cada paso de un especialista se lanza como un sub-agente independiente con su propio contexto acotado. Hace exactamente una cosa, produce exactamente un artefacto, y no delega más.
+
+**Artifact / Artifact envelope**: el resultado estructurado de un sub-agente. No es texto libre — es un archivo YAML tipado con versión, autor, y una cadena de `input_refs` que apunta a los artefactos anteriores. Es el "recibo" de cada decisión en el pipeline.
+
+**Workflow.yaml**: el índice de pasos que puede ejecutar un especialista, en qué orden, y qué necesita cada paso como entrada. Es la única fuente de verdad sobre las capacidades del especialista. Hay dos tipos de pasos: `inline` (inyectan información sin producir artefacto) y `subagent` (se lanzan como sub-agentes independientes y producen un artefacto persistido).
+
+**Advisory tier**: modo de respuesta directa para preguntas y gut-checks rápidos, sin subagentes ni artefactos. No existe aún en el sistema — es la próxima mejora de mayor impacto en valor-por-token.
+
+**ADR (Architecture Decision Record)**: un documento que captura una decisión técnica, las alternativas consideradas y por qué se eligió ese camino.

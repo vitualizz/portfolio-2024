@@ -1,0 +1,307 @@
+---
+title: 'ASDT: how I built an AI-powered software delivery team'
+seoTitle: 'ASDT: multi-agent delivery pipeline with skill files and typed artifacts'
+cover: ./cover.webp
+coverLink: ''
+shortDescription: 'The postmortem of building ASDT — a system of specialized agents that simulates a full team: UX/UI, Architect, Developer, QA and Security in a typed-artifact pipeline.'
+longDescription: 'From an MVP with 2 agents to a system with 5 specialists, adaptive routing, an agnostic memory layer, and a Go TUI. The honest story of how ASDT evolved — the decisions made, the ones consciously deferred, and what remains to reach the complete system.'
+author: 'Lee Palacios'
+date: 2026-06-09
+tags: ['AI', 'architecture', 'agents', 'Go', 'LLM']
+lang: 'en'
+---
+
+import Mermaid from '../../../components/blog/Mermaid.astro'
+
+# ASDT: how I built an AI-powered software delivery team
+
+This is not a tutorial. It's the honest postmortem of a tool I built to solve a problem I had myself.
+
+I mostly build software alone. Sometimes with a small team. In both cases, I used AI the same way everyone does: a chat. One prompt, one response. "Build me a React component", "review this endpoint", "what should I name this function?". Everything in the same context, no structure, no memory between sessions. Every role — PM, Architect, Developer, QA, Security — collapsed into a single message.
+
+**The problem wasn't the LLM. It was me.**
+
+**ASDT** is a system where each team role is an independent agent with its own focus. Agents don't communicate through chat — they pass structured artifacts. Every decision is recorded, traceable, and reviewable. What a chat destroys when it closes, a pipeline preserves.
+
+Chat is immediate. A pipeline is auditable. To deliver software that survives more than a week, I prefer auditable.
+
+---
+
+## The problem: every role in a single prompt
+
+When you finish a conversation with an AI coding assistant, what's left? A response. No structure. No traceability. No "why". The next day you start from zero.
+
+Real software teams don't work that way. A team has roles. Each role has clear responsibilities. The deliverables of one role are the input of the next. The PM writes the requirements, the architect designs the system based on them, the developer implements based on the design, QA validates against the original requirements. There's a chain. There are artifacts. There's traceability.
+
+When the chat ends, the reasoning disappears. There's no delivery pipeline. No typed artifacts. No trace of why each decision was made.
+
+ASDT's thesis: what if each role is a specialized agent, and agents communicate *only* through typed, versioned, Git-readable artifacts?
+
+---
+
+## The original idea: the product is the skill file
+
+Before writing a single line of Go, I made a decision that turned out to be the most important one in the project.
+
+The initial instinct was to build a Go CLI with a TUI (a visual interface that runs in the terminal). The problem: if the product is the binary, the product doesn't run without compiling Go. And if it doesn't run without compiling Go, it doesn't exist for someone using a code assistant like Claude Code, Cursor, Windsurf, or others directly.
+
+The inversion was this: **the product is the skill package**, not the binary. A set of Markdown and YAML files defining the router and each specialist can run in any code assistant that supports slash commands. The tool was born with Claude Code and OpenCode as first environments, but the design was deliberately agnostic from the start — any assistant that can read a file and execute a prompt can integrate it.
+
+The Go binary is an optional visualization layer. Useful, but not the core.
+
+The project's state lives in `.asdt/` — an isolated directory inspired by how Git manages its own. Full uninstall = `rm -rf .asdt/`. The host project is untouched.
+
+---
+
+## How it evolved: from 2 agents to a full pipeline
+
+### Phase 1 — MVP
+
+Two agents: Requirements + Developer. Linear pipeline. No Architect, no QA, no adaptive routing. Just enough to validate one hypothesis: that typed artifacts can replace the shared context of a chat, and that an agent can read the previous one's output and produce something coherent.
+
+The result wasn't clean code. It was confirmation that the concept worked.
+
+### Phase 2 — Specialist-First Reborn
+
+5 independent specialists, each with their own skill file. A stateless recommendation router as coordinator. Each specialist's `workflow.yaml` as the single source of truth for its capabilities and available steps.
+
+The key decision of this phase: the router doesn't duplicate specialist logic. The router recommends. Specialists execute. That separation is what makes the system extensible without touching anything existing — adding a specialist means adding a directory, without modifying the router.
+
+### Phase 3 — Knowledge Layer
+
+`/asdt-init` automatically detects the project stack, test runner, naming style, and architectural pattern. That context is injected into every specialist invocation — a shared briefing for the entire chain.
+
+**Detect first, ask only what can't be inferred.** If the stack is in `package.json`, don't ask the user. Unnecessary questions are friction. Friction makes people abandon the tool.
+
+### Phase 4 — Adaptive Workflow
+
+The system adapts to the request's complexity. A trivial request pays the minimum cost — a single step. A complex request activates the full pipeline. It doesn't charge the same price for renaming a variable as for designing an authentication module.
+
+For this to work without silent errors, each step list is validated against the specialist's `workflow.yaml` before execution. If a step doesn't exist in the registry → rejected. If a step is missing a required predecessor → auto-inserted.
+
+### Phase 5 — Context Enrichment
+
+Detection of naming style, architectural style, and test runner with a confidence table per field. Centralization of the executor header — a single referenced file instead of duplicating the same block across 5 specialist skill files. The kind of "detail" that prevents sync bugs as the system evolves.
+
+---
+
+## The architecture: two levels of orchestration
+
+One of the most practical principles of the system is that the recommendation router (`/asdt`) is completely optional.
+
+**With the router**: if you're not sure which specialists your task needs, invoke `/asdt` with a natural language description. The system analyzes complexity and risk, proposes a plan, and waits for your confirmation. Once you accept, it tells you exactly which commands to run — but you run them, not it.
+
+**Directly to the specialist**: if you already know what you need, go straight there. `/asdt-developer "add auth flow"` or `/asdt-security "review this API"` work without any prior step. Each specialist is designed to operate autonomously from the start.
+
+A developer who knows their tools composes their own pipeline. Someone with an ambiguous request uses the router as a guide. The system doesn't force a path on you.
+
+Here's the design detail that took me the longest to articulate clearly, and that I think is the most interesting idea in the system:
+
+**The router doesn't orchestrate sub-agents. It orchestrates specialists. And specialists orchestrate their own sub-agents.**
+
+Three independent levels:
+
+- **Level 1 — Recommendation router (`/asdt`)**: analyzes the request, produces a routing plan with configured steps for each specialist, and hands control back to the user. Executes nothing.
+- **Level 2 — Specialist**: receives the plan, orchestrates an internal chain of sub-agents. A complex request to `/asdt-developer` can launch up to 6 sequential sub-agents (explore → spec → design → tasks → implement → test).
+- **Level 3 — Sub-agent**: atomic unit. One job, one artifact, no further delegation.
+
+Specialists are composable precisely because each one is an autonomous system. You can invoke only the Architect for a focused design decision. You can invoke only Security for a threat review of an existing module. The full pipeline exists when you need it — it's not mandatory.
+
+The system has two independent layers sharing a single state boundary: `.asdt/`.
+
+**Layer 1 — Skill System** (works in any code assistant):
+
+A set of Markdown and YAML files defining the router and the 5 specialists. They run in Claude Code, OpenCode, or any assistant that supports slash commands. No Go. No compilation. No dependencies.
+
+**Layer 2 — Go Binary** (optional):
+
+A TUI built with Bubbletea that handles the visual installation of skill files, detects the environment, and shows a dashboard with the pipeline's real state.
+
+What connects the two layers is the **artifact envelope** — the contract between agents:
+
+```yaml
+schema_version: "1"
+agent: developer
+change_id: add-auth-flow
+created_at: 2026-06-04T18:00:00Z
+input_refs:
+  - requirements-spec
+  - system-design
+payload:
+  implementation_plan: "..."
+  files_changed: [...]
+```
+
+Every artifact carries `input_refs` — the traceability chain. From any implementation decision, you can trace back to the ADR that defined the approach, and back to the requirements that motivated it. It's not a chat log — it's a typed audit trail with schema versions.
+
+<Mermaid code={`flowchart TD
+  U(["User request"])
+
+  U -->|"I don't know what I need"| META{{"Recommendation router — /asdt\n(analyzes, suggests, never executes)"}}
+  U -->|"I know what I need"| SPEC
+
+  META -->|"Routing plan\n+ configured steps"| SPEC
+
+  subgraph SPEC["Specialist — also an orchestrator"]
+    direction TB
+    IL["Inline steps\nknowledge-recall · platform-analysis\nrun in the specialist's own context"]
+    SA1["Sub-agent: explore"]
+    SA2["Sub-agent: spec / design"]
+    SA3["Sub-agent: implement"]
+    IL --> SA1 --> SA2 --> SA3
+  end
+
+  SA1 & SA2 & SA3 --> ART[(".asdt/\nTraceable artifact chain\nevery decision points to its origin")]
+
+  style META fill:#1f2937,stroke:#f59e0b
+  style ART fill:#1f2937,stroke:#10b981`} />
+
+Each sub-agent does exactly one thing, produces exactly one artifact, and delegates no further. The specialist is the only one that orchestrates — sub-agents are atomic units of work.
+
+---
+
+## The memory layer: agnostic by design
+
+An agent pipeline that remembers nothing between sessions is just a more expensive chain of prompts. Memory is what turns the system into something that accumulates knowledge — decisions made, context from previous changes, patterns established in the project. Without it, every invocation starts from zero and the system's main differentiator disappears.
+
+Today the memory backend is **Engram**. But the system is designed to allow that to change, and that was a deliberate decision from the start.
+
+In the Go layer, all memory access goes through a single interface:
+
+```go
+type Provider interface {
+    Save(ctx context.Context, entry Entry) error
+    Search(ctx context.Context, query string) ([]Entry, error)
+    Get(ctx context.Context, id string) (*Entry, error)
+    Name() string
+}
+```
+
+The comment in the code is explicit: *"the core never imports a concrete memory vendor"*. Today there are two implementations:
+
+- **NullProvider**: the default offline path. Saves artifacts as YAML files in `.asdt/runs/`. No external dependencies, no network latency. It's the behavior when no provider is configured.
+- **EngramProvider**: the production backend. Delegates to Engram via a single-method interface (`MCPCaller`). The core never imports the MCP SDK directly — it only knows one `Call` method. Any MCP backend can be plugged in behind that same interface.
+
+Adding a new backend — a vector DB, SQLite, another MCP server — means implementing four methods. The rest of the system doesn't change.
+
+### Topic keys: the artifact addressing system
+
+Each artifact has a unique address:
+
+```
+{project}/{change}/{specialist}/{artifact-type}
+```
+
+Real examples from the system:
+- `portfolio-2024/add-auth/architect/system-design`
+- `portfolio-2024/add-auth/developer/dev-implementation`
+- `portfolio-2024/add-auth/qa/test-cases`
+- `portfolio-2024/add-auth/security/stride-threats`
+
+The granularity is deliberate — one topic_key per artifact type, not one coarse key per specialist or per full change. This lets specialists retrieve exactly what they need without pulling in irrelevant context. The Developer reading the Architect's `system-design` doesn't need, and doesn't receive, the risk analysis or the full ADR.
+
+---
+
+## Routing: two independent axes
+
+The router classifies each request on two axes that operate independently. That independence changes the kind of errors the system can make — or avoid.
+
+**Axis 1 — Complexity** (determines which steps each specialist executes):
+
+| Level | Signal | Behavior |
+|-------|--------|----------|
+| trivial | "quick", "sanity check", "gut check" | 1 minimum step |
+| simple | "rename", "color", "label" | small subset |
+| moderate | "add", "feature", "endpoint" | main steps |
+| complex | "architect", "migrate", "module" | full pipeline |
+
+**Axis 2 — Risk surface** (activates the Security specialist, independent of complexity):
+
+| Level | Signal | Response |
+|-------|--------|----------|
+| none | — | Security not invoked |
+| moderate | auth, session, token, PII | threat modeling + hardening checklist |
+| high | password, credential, 2+ risk families | full STRIDE chain |
+
+If both axes were one, changing the password hashing algorithm — technically a one-liner — would go without a Security review because its complexity is low. Or it would fire the full pipeline if the system decided "anything touching security is complex". The independence between axes is what lets each dimension be honest on its own scale.
+
+---
+
+## Cost-benefit practices
+
+When you have a chain of 5 specialists with up to 6 sub-agents each, token costs multiply fast. These are the concrete practices that keep that cost under control.
+
+**Fetch-once cache**: each topic_key is resolved exactly once per run. The orchestrator maintains a `topic_key → content` map in context. In a chain where the Architect's `system-design` is consumed by Developer, QA, and Security, that's 3 memory lookups becoming 1.
+
+**Injected inputs, never re-fetched**: the orchestrator resolves each sub-agent's inputs before launching it and injects the content directly into the prompt. The rule, encoded in the `executor-header` prepended to every sub-agent prompt, is simple: don't search for your own inputs — they're already in the context. What the orchestrator already resolved, the sub-agent consumes. It never repeats the work.
+
+**Token budgets per layer**: each content type has an explicit limit:
+
+| Layer | Limit |
+|-------|-------|
+| Organizational memory (knowledge-recall) | ≤ 300 tokens, top 3 results |
+| Platform context (stack + conventions) | ≤ 500 tokens |
+| Artifact summary in handoff steps | ≤ 200 tokens |
+| `summary` field in decision preservation | ≤ 150 tokens |
+
+These limits are not automatic enforcement — they're guidelines in each layer's prompts. The philosophy: define the budget before having real data and adjust when it hurts, not enforce blindly and silently degrade quality.
+
+**Inline vs subagent**: steps that only inject context (knowledge-recall, platform-analysis) run in the specialist's thread. Only steps that produce a persisted artifact are launched as independent sub-agents. This classification limits context growth — inline steps don't accumulate the heavy payloads from previous generation steps.
+
+**Partial degradation instead of total failure**: if an input couldn't be resolved, the system doesn't abort. The orchestrator injects the input as unavailable and the sub-agent records it in its `open_items` field. The pipeline continues with available information and the problem is documented in the artifact — not silenced.
+
+---
+
+## Pending design decisions
+
+Every system in active design has a set of problems that are known, well understood, and consciously deferred. Not because they're minor — some are critical at scale — but because solving them without the right data produces premature solutions. These are the five ASDT carries on its backlog.
+
+**Naming contract drift** — the system distributes the naming contract across independent files. When a specialist renames an artifact, the others aren't notified. The correct solution is a central topic_key registry with write-time validation, not read-time. Deferred because it requires a schema change in the `workflow.yaml` files — a breaking change decision that deserves its own ADR, not a rushed fix.
+
+**Context window blowup** — without session-level token budget enforcement, specialists at the end of a long chain can receive degraded context without the system flagging it. The current mitigation (per-layer token guidelines) is intentional: first instrument and measure real usage, then enforce. Enforcing before having real data means cutting quality blindly.
+
+**N redundant searches** — today each specialist can run its own organizational memory search. In a chain of 4 specialists, that's 4 searches over the same corpus. The solution — a single orchestrator-level search with the result injected into all specialists — exists in the design but isn't implemented yet.
+
+**No artifact lifecycle** — artifacts are written but never superseded or archived. No `draft | final | superseded | archived` states. In 6 months the corpus grows unchecked and knowledge-recall quality degrades. This doesn't hurt at small scale. At scale, it's structural.
+
+**Fragile keyword routing** — "add a tiny label" activates the `moderate` level because of the word "add". The keyword classifier doesn't understand semantics. The correct solution is an advisory tier — a direct-response mode for simple requests that bypasses the pipeline — or an LLM classification step, which carries its own latency cost.
+
+---
+
+## Current state and what's next
+
+A solo developer using ASDT gets, in a single pipeline, PM analysis, architecture decisions, UX flows, implementation with an explicit plan, QA validation, and security review. All traceable. All reviewable. As if they had a full team that writes things down.
+
+In one week of work, the system went from zero to that pipeline. Five specialists, adaptive routing, automatic project detection, memory persisted between sessions. That's not nothing.
+
+But it has one clear limitation today: **the minimum interaction cost is too high**. Any request — even "what's a good name for this variable?" — pays the full pipeline price. The most important next step is the **advisory tier**: a direct-response mode for quick questions and gut-checks, without sub-agents or artifacts. A tier like that would change the value-per-token of the entire system by reducing the cost of the most frequent case.
+
+What follows: shared memory search at the orchestrator level (one search for the entire chain, not one per specialist), artifact lifecycle (draft → final → superseded → archived to keep the corpus clean), and budget enforcement with explicit degradation once instrumentation delivers real data.
+
+---
+
+What interests me about ASDT isn't the specific implementation. It's demonstrating that an artifact-based delivery pipeline can have properties a chat never will: traceability, role specialization, reproducibility.
+
+Chat is immediate. A pipeline is auditable. To deliver software that survives more than a week, I prefer auditable.
+
+The source code, skill files, and specialists are available on [GitHub](https://github.com/vitualizz/AI-Software-Delivery-Team).
+
+---
+
+## Glossary
+
+**Skill file**: a structured text file (Markdown + YAML) that defines a specialist's role — what it can do, in what order, and what it produces. Think of it as a job description combined with a process manual, but for an AI agent.
+
+**Recommendation router (`/asdt`)**: receives the user's request, analyzes complexity and risk, and produces a routing plan — a list of suggested specialists with configured steps. It executes nothing, launches no agents, coordinates nothing. It's an optional entry point for those who don't know which specialist they need.
+
+**Specialist**: an agent with a specific focus that is, itself, also an orchestrator. When `/asdt-developer` is invoked, that specialist internally orchestrates a chain of sub-agents, one per step. Each specialist can be used standalone, without going through the router.
+
+**Sub-agent**: the atomic unit of work. Each specialist step is launched as an independent sub-agent with its own bounded context. It does exactly one thing, produces exactly one artifact, and delegates no further.
+
+**Artifact / Artifact envelope**: the structured output of a sub-agent. It's not free text — it's a typed YAML file with version, author, and a chain of `input_refs` pointing to previous artifacts. The "receipt" for every decision in the pipeline.
+
+**Workflow.yaml**: the index of steps a specialist can execute, in what order, and what each step needs as input. The single source of truth for a specialist's capabilities. Two step types: `inline` (inject information without producing an artifact) and `subagent` (launched as independent sub-agents, produce a persisted artifact).
+
+**Advisory tier**: a direct-response mode for quick questions and gut-checks, without sub-agents or artifacts. Doesn't exist in the system yet — it's the next highest-impact improvement for value-per-token.
+
+**ADR (Architecture Decision Record)**: a document that captures a technical decision, the alternatives considered, and why a specific path was chosen.

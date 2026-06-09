@@ -1,0 +1,19 @@
+schema_version: "1"
+scanned_at: "2026-06-09T00:00:00Z"
+fields:
+  is_monorepo:
+    value: "false"
+    source: detected
+    confidence: high
+  test_runner:
+    value: "vitest run"
+    source: detected
+    confidence: high
+  naming_style:
+    value: "mixed"
+    source: detected
+    confidence: low
+  architectural_style:
+    value: "layered"
+    source: detected
+    confidence: medium

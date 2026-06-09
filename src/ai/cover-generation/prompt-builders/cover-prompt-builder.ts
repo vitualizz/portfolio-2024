@@ -15,8 +15,10 @@ STRICT RULES — violating any is a failure:
 - NO cartoon style, anime, illustration, or clipart
 - NO stock photography or photorealistic people
 - NO generic "coding" clichés (floating code snippets, keyboards, laptops)
-- DO use: dark background, minimalist, cinematic lighting, technical aesthetic
-- DO use: abstract, atmospheric, high contrast, moody
+- NO circuit boards, PCB traces, electronic components, microchips, or motherboards
+- DO use: dark background, cinematic lighting, high contrast, moody atmosphere
+- DO vary the visual metaphor: organic nature, cosmic imagery, architectural spaces, fluid dynamics, crystalline structures, industrial macro, mathematical patterns — pick the one that best fits the topic
+- Each post should feel visually distinct from the others
 
 Return ONLY the image prompt as plain text. No explanation, no metadata.`
 
@@ -47,11 +49,11 @@ export async function buildCoverPrompt(
   const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
   const { text } = await generateText({
-    model: openai('gpt-4o-mini'),
+    model: openai('gpt-4o'),
     system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content: buildUserMessage(analysis, config) }],
-    maxOutputTokens: 300,
-    temperature: 0.7
+    maxOutputTokens: 350,
+    temperature: 0.9
   })
 
   return {

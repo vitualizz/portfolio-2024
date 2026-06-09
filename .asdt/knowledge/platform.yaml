@@ -1,0 +1,7 @@
+schema_version: "1"
+scanned_at: "2026-06-09T00:00:00Z"
+detected_stack:
+  - Node.js
+conventions:
+  file_structure: "src/ for all source code including components, pages, layouts, i18n, data, scripts, and styles"
+design_fingerprint: {}
