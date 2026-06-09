@@ -79,7 +79,7 @@ const suggestions =
       ]
 ---
 
-<BaseLayout title={`Lee Palacios - ${title}`}>
+<BaseLayout title={`Lee Palacios - ${title}`} description={shortDescription}>
   <!-- Reading progress bar -->
   <div
     id="read-progress"
@@ -192,7 +192,7 @@ const suggestions =
         </div>
 
         <!-- Prose body -->
-        <div class="prose prose-invert prose-headings:no-underline max-w-none">
+        <div class="prose prose-headings:no-underline max-w-none">
           <slot />
         </div>
 
@@ -449,6 +449,24 @@ const suggestions =
       color-mix(in oklab, var(--bg) 80%, transparent)
     );
     pointer-events: none;
+  }
+
+  /* Prose text colors — uses project CSS vars, responds to theme automatically */
+  article :global(.prose) {
+    --tw-prose-body: var(--ink-soft);
+    --tw-prose-headings: var(--ink);
+    --tw-prose-lead: var(--ink-soft);
+    --tw-prose-links: var(--accent);
+    --tw-prose-bold: var(--ink);
+    --tw-prose-counters: var(--muted);
+    --tw-prose-bullets: var(--muted);
+    --tw-prose-hr: var(--line);
+    --tw-prose-quotes: var(--ink-soft);
+    --tw-prose-quote-borders: var(--accent);
+    --tw-prose-captions: var(--muted);
+    --tw-prose-code: var(--accent);
+    --tw-prose-th-borders: var(--line);
+    --tw-prose-td-borders: var(--line);
   }
 
   /* Prose slot overrides — :global needed for slot content */

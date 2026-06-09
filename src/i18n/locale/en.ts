@@ -212,10 +212,9 @@ const locale: LanguageLocale = {
     preview_modal_fallback: 'Open resume in a new tab'
   },
   seo: {
-    title:
-      'Tech Lead / Senior Fullstack Engineer | JavaScript, Ruby, AI Agents | Available for high-impact teams',
+    title: 'Lee Palacios | Senior Fullstack Engineer · JS, Ruby & AI',
     description:
-      'Software engineer with 7+ years shipping product in LatAm startups. Specialized in backend, architecture, and AI agents for teams that need speed without quality tradeoffs.',
+      '7+ years shipping product at LatAm startups. Specialized in backend, architecture, and AI agents for teams that need speed without quality tradeoffs.',
     image: '/img/seo/og-image.png',
     url: 'https://vitualizz.vercel.app/en'
   }

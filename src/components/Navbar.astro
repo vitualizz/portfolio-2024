@@ -3,7 +3,7 @@ import { getLangFromUrl } from '../i18n/utils'
 import { useTranslation } from 'src/i18n/utils'
 import ResumeActions from 'src/components/ResumeActions.astro'
 import ThemeToggle from 'src/components/ThemeToggle.astro'
-import { LANG_CODES, SECTION_IDS, withLangPath } from 'src/i18n/constants'
+import { LANG_CODES, SECTION_IDS, withLangPath, CV_PATH_BY_LANG } from 'src/i18n/constants'
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslation(lang)
 ---
@@ -41,14 +41,17 @@ const t = useTranslation(lang)
         <a href={withLangPath(lang, `#${SECTION_IDS.contact}`)} data-nav
           >{t('nav').contact_me}</a
         >
+        <div class="nav-indicator" aria-hidden="true"></div>
       </nav>
 
       <div class="nav-right flex items-center gap-[14px]">
-        <ResumeActions
-          lang={lang}
-          variant="navbar"
-          triggerId="resume-actions-navbar"
-        />
+        <div class="resume-desktop">
+          <ResumeActions
+            lang={lang}
+            variant="navbar"
+            triggerId="resume-actions-navbar"
+          />
+        </div>
         <details class="lang-menu relative">
           <summary
             class="pill border-line text-ink hover:border-accent inline-flex cursor-pointer list-none items-center gap-2 rounded-full border px-4 py-[9px] text-[14px] font-medium transition-[border-color,background,transform] duration-200 hover:-translate-y-px"
@@ -78,17 +81,94 @@ const t = useTranslation(lang)
           </div>
         </details>
         <ThemeToggle />
+        <button
+          class="hamburger"
+          id="navHamburger"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="mobileDrawer"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </div>
   </header>
+
+  <div class="drawer-overlay" id="drawerOverlay" aria-hidden="true"></div>
+
+  <nav
+    id="mobileDrawer"
+    class="mobile-drawer"
+    aria-label="Mobile navigation"
+    aria-hidden="true"
+    inert
+  >
+    <div class="drawer-top">
+      <span class="drawer-brand">vitualizz</span>
+      <button class="drawer-close" id="drawerClose" aria-label="Close menu">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M4 4l12 12M16 4L4 16"/>
+        </svg>
+      </button>
+    </div>
+
+    <ul class="drawer-links">
+      <li>
+        <a href={withLangPath(lang, `#${SECTION_IDS.about}`)} data-mobile-nav>
+          {t('nav').about_me}
+        </a>
+      </li>
+      <li>
+        <a href={withLangPath(lang, `#${SECTION_IDS.projects}`)} data-mobile-nav>
+          {t('nav').projects}
+        </a>
+      </li>
+      <li>
+        <a href={withLangPath(lang, '/blog')} data-mobile-nav>
+          {t('nav').blog}
+        </a>
+      </li>
+      <li>
+        <a href={withLangPath(lang, `#${SECTION_IDS.contact}`)} data-mobile-nav>
+          {t('nav').contact_me}
+        </a>
+      </li>
+    </ul>
+
+    <div class="drawer-footer">
+      <div class="drawer-cv">
+        <span class="drawer-cv-label">{t('nav').resume_label}</span>
+        <div class="drawer-cv-actions">
+          <button
+            class="drawer-cv-btn"
+            data-drawer-cv-preview
+            data-lang={lang}
+          >
+            {t('resume_actions').preview}
+          </button>
+          <a
+            class="drawer-cv-btn drawer-cv-btn--accent"
+            href={CV_PATH_BY_LANG[lang]}
+            data-mobile-nav
+          >
+            {t('resume_actions').download}
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
 </portfolio-navbar>
 
 <style>
   .blob {
     animation: morph 9s ease-in-out infinite;
   }
-  .nav-links a {
+  .nav-links {
     position: relative;
+  }
+  .nav-links a {
     padding: 6px 0;
     color: var(--ink-soft);
     transition: color 0.2s;
@@ -100,15 +180,18 @@ const t = useTranslation(lang)
   .nav-links a.active {
     color: var(--ink);
   }
-  .nav-links a.active::after {
-    content: '';
+  .nav-indicator {
     position: absolute;
-    left: 0;
-    right: 0;
     bottom: -2px;
     height: 3px;
     background: var(--accent);
     border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.2s;
   }
   @media (max-width: 1080px) {
     .nav-links {
@@ -121,75 +204,397 @@ const t = useTranslation(lang)
       display: none;
     }
   }
+
+  /* Hamburger — hidden on desktop */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 38px;
+    height: 38px;
+    padding: 8px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    cursor: pointer;
+    color: var(--ink);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .hamburger:hover {
+    border-color: var(--accent);
+    background: color-mix(in oklab, var(--accent) 8%, transparent);
+  }
+  .hamburger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform 0.25s, opacity 0.25s;
+  }
+  .hamburger[aria-expanded='true'] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .hamburger[aria-expanded='true'] span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  .hamburger[aria-expanded='true'] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* Overlay */
+  .drawer-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 39;
+    background: color-mix(in oklab, var(--bg) 70%, transparent);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .drawer-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    backdrop-filter: blur(4px);
+  }
+
+  /* Drawer */
+  .mobile-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    width: min(320px, 88vw);
+    background: var(--bg-2);
+    border-left: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 24px;
+    transform: translateX(100%);
+    visibility: hidden;
+    transition:
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      visibility 0s linear 0.3s;
+    overflow-y: auto;
+  }
+  .mobile-drawer.is-open {
+    transform: translateX(0);
+    visibility: visible;
+    transition:
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      visibility 0s linear 0s;
+  }
+
+  /* Drawer header */
+  .drawer-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+  .drawer-brand {
+    font-family: var(--font-display, inherit);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .drawer-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .drawer-close:hover {
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+
+  /* Drawer links */
+  .drawer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .drawer-links a {
+    display: block;
+    padding: 11px 14px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .drawer-links a:hover,
+  .drawer-links a.active {
+    background: color-mix(in oklab, var(--accent) 10%, transparent);
+    color: var(--ink);
+  }
+  .drawer-links a.active {
+    color: var(--accent);
+  }
+
+  /* Drawer footer */
+  .drawer-footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+  }
+
+  /* CV actions */
+  .drawer-cv-label {
+    display: block;
+    font-family: var(--font-mono, monospace);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .drawer-cv-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .drawer-cv-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 8px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--ink-soft);
+    background: transparent;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .drawer-cv-btn:hover {
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+  .drawer-cv-btn--accent {
+    border-color: color-mix(in oklab, var(--accent) 50%, var(--line));
+    color: var(--accent);
+    background: color-mix(in oklab, var(--accent) 8%, transparent);
+  }
+  .drawer-cv-btn--accent:hover {
+    background: color-mix(in oklab, var(--accent) 14%, transparent);
+  }
+
+
+  /* Mobile breakpoint */
+  @media (max-width: 940px) {
+    .resume-desktop {
+      display: none;
+    }
+    .hamburger {
+      display: flex;
+    }
+    .drawer-overlay {
+      display: block;
+    }
+  }
 </style>
 
 <script>
   type NavbarItem = {
     a: HTMLAnchorElement
-    target: HTMLElement | null
+    target: HTMLElement
   }
 
   class PortfolioNavbarElement extends HTMLElement {
     private navLinks: HTMLAnchorElement[] = []
     private sectionMap: NavbarItem[] = []
-    private onScroll = () => this.updateActive()
+    private observer: IntersectionObserver | null = null
+    private intersecting = new Map<string, boolean>()
+    private currentActive: HTMLAnchorElement | null = null
+    private indicatorPlaced = false
+    private resizeTimer: ReturnType<typeof setTimeout> | null = null
+
+    private onKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        const hamburger = document.getElementById('navHamburger') as HTMLButtonElement | null
+        if (hamburger?.getAttribute('aria-expanded') === 'true') this.closeDrawer()
+      }
+    }
+
+    private onResize = () => {
+      if (this.resizeTimer) clearTimeout(this.resizeTimer)
+      this.resizeTimer = setTimeout(() => {
+        if (this.currentActive) this.moveIndicator(this.currentActive, false)
+      }, 100)
+    }
 
     connectedCallback() {
-      this.navLinks = Array.from(
-        this.querySelectorAll<HTMLAnchorElement>('[data-nav]')
-      )
+      this.wireDrawer()
+      document.addEventListener('keydown', this.onKeydown)
 
-      // On blog pages, mark the blog link active and skip scroll-based tracking
+      const sectionLinks = Array.from(this.querySelectorAll<HTMLAnchorElement>('[data-nav]'))
+      const blogNavLink = this.querySelector<HTMLAnchorElement>('[data-nav-blog]')
+      this.navLinks = blogNavLink ? [...sectionLinks, blogNavLink] : sectionLinks
+
       if (window.location.pathname.includes('/blog')) {
-        const blogLink =
-          this.querySelectorAll<HTMLAnchorElement>('[data-nav-blog]')[0]
-        if (blogLink) {
-          this.navLinks.forEach((a) => {
-            a.classList.remove('active')
-            a.removeAttribute('aria-current')
-          })
-          blogLink.classList.add('active')
-          blogLink.setAttribute('aria-current', 'location')
+        if (blogNavLink) {
+          sectionLinks.forEach((a) => { a.classList.remove('active'); a.removeAttribute('aria-current') })
+          blogNavLink.classList.add('active')
+          blogNavLink.setAttribute('aria-current', 'location')
+          this.currentActive = blogNavLink
+          this.moveIndicator(blogNavLink, false)
         }
+        window.addEventListener('resize', this.onResize, { passive: true })
         return
       }
 
-      this.sectionMap = this.navLinks
-        .map((a) => ({
-          a,
-          target: document.querySelector(a.hash || '') as HTMLElement | null
-        }))
-        .filter((item): item is NavbarItem => Boolean(item.target))
+      this.sectionMap = sectionLinks
+        .map((a) => ({ a, target: document.querySelector<HTMLElement>(a.hash || '') }))
+        .filter((item): item is NavbarItem => item.target !== null)
 
-      window.addEventListener('scroll', this.onScroll, { passive: true })
-      this.updateActive()
+      // #top (presentation) also maps to the about link
+      const aboutLink = sectionLinks.find((a) => a.hash === '#about')
+      const topSection = document.querySelector<HTMLElement>('#top')
+      if (aboutLink && topSection) {
+        this.sectionMap.unshift({ a: aboutLink, target: topSection })
+      }
+
+      // #blog section on homepage maps to the blog nav link
+      if (blogNavLink) {
+        const blogSection = document.querySelector<HTMLElement>('#blog')
+        if (blogSection) this.sectionMap.push({ a: blogNavLink, target: blogSection })
+      }
+
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => this.intersecting.set((e.target as HTMLElement).id, e.isIntersecting))
+          const active = this.sectionMap.find(
+            (item) => item.target && this.intersecting.get(item.target.id)
+          )
+          if (active) this.setActive(active.a)
+        },
+        { rootMargin: '-72px 0px -50% 0px' }
+      )
+
+      this.sectionMap.forEach((item) => this.observer!.observe(item.target))
+      window.addEventListener('resize', this.onResize, { passive: true })
     }
 
     disconnectedCallback() {
-      window.removeEventListener('scroll', this.onScroll)
+      this.observer?.disconnect()
+      document.removeEventListener('keydown', this.onKeydown)
+      window.removeEventListener('resize', this.onResize)
+      if (this.resizeTimer) clearTimeout(this.resizeTimer)
       this.navLinks = []
       this.sectionMap = []
+      this.intersecting.clear()
+      this.currentActive = null
+      this.indicatorPlaced = false
     }
 
-    private updateActive() {
-      if (!this.sectionMap.length) return
-
-      const y = window.scrollY + 120
-      let active = this.sectionMap[0]
-
-      for (const item of this.sectionMap) {
-        if (item.target && item.target.offsetTop <= y) active = item
-      }
-
+    private setActive(link: HTMLAnchorElement) {
+      if (link === this.currentActive) return
+      this.currentActive = link
       this.navLinks.forEach((a) => {
-        const isActive = a === active?.a
-        a.classList.toggle('active', isActive)
-        if (isActive) {
-          a.setAttribute('aria-current', 'location')
-        } else {
-          a.removeAttribute('aria-current')
-        }
+        a.classList.toggle('active', a === link)
+        if (a === link) a.setAttribute('aria-current', 'location')
+        else a.removeAttribute('aria-current')
       })
+      this.moveIndicator(link, this.indicatorPlaced)
+      this.indicatorPlaced = true
+    }
+
+    private moveIndicator(link: HTMLAnchorElement, animate: boolean) {
+      const indicator = this.querySelector<HTMLElement>('.nav-indicator')
+      const nav = this.querySelector<HTMLElement>('.nav-links')
+      if (!indicator || !nav) return
+
+      const navRect = nav.getBoundingClientRect()
+      const linkRect = link.getBoundingClientRect()
+
+      if (!animate) indicator.style.transition = 'none'
+
+      indicator.style.left = `${linkRect.left - navRect.left}px`
+      indicator.style.width = `${linkRect.width}px`
+      indicator.style.opacity = '1'
+
+      if (!animate) {
+        requestAnimationFrame(() => requestAnimationFrame(() => { indicator.style.transition = '' }))
+      }
+    }
+
+    private wireDrawer() {
+      const hamburger = document.getElementById('navHamburger') as HTMLButtonElement | null
+      const drawerOverlay = document.getElementById('drawerOverlay') as HTMLElement | null
+      const mobileDrawer = document.getElementById('mobileDrawer') as HTMLElement | null
+      const drawerClose = document.getElementById('drawerClose') as HTMLButtonElement | null
+
+      hamburger?.addEventListener('click', () => {
+        const isOpen = hamburger.getAttribute('aria-expanded') === 'true'
+        isOpen ? this.closeDrawer() : this.openDrawer()
+      })
+      drawerOverlay?.addEventListener('click', () => this.closeDrawer())
+      drawerClose?.addEventListener('click', () => this.closeDrawer())
+      mobileDrawer?.querySelectorAll('[data-mobile-nav]').forEach((link) => {
+        link.addEventListener('click', () => this.closeDrawer())
+      })
+
+      mobileDrawer?.querySelector('[data-drawer-cv-preview]')?.addEventListener('click', (e) => {
+        const btn = e.currentTarget as HTMLElement
+        window.dispatchEvent(new CustomEvent('resume:preview', {
+          detail: { lang: btn.dataset.lang, sourceId: 'drawer', triggerId: 'drawer-cv-preview' }
+        }))
+        this.closeDrawer()
+      })
+    }
+
+    private openDrawer() {
+      const hamburger = document.getElementById('navHamburger') as HTMLButtonElement | null
+      const drawerOverlay = document.getElementById('drawerOverlay') as HTMLElement | null
+      const mobileDrawer = document.getElementById('mobileDrawer') as HTMLElement | null
+      if (!hamburger || !drawerOverlay || !mobileDrawer) return
+      hamburger.setAttribute('aria-expanded', 'true')
+      hamburger.setAttribute('aria-label', 'Close menu')
+      drawerOverlay.classList.add('is-open')
+      mobileDrawer.classList.add('is-open')
+      mobileDrawer.removeAttribute('inert')
+      mobileDrawer.removeAttribute('aria-hidden')
+      document.body.style.overflow = 'hidden'
+      mobileDrawer.querySelector<HTMLElement>('a, button')?.focus()
+    }
+
+    private closeDrawer() {
+      const hamburger = document.getElementById('navHamburger') as HTMLButtonElement | null
+      const drawerOverlay = document.getElementById('drawerOverlay') as HTMLElement | null
+      const mobileDrawer = document.getElementById('mobileDrawer') as HTMLElement | null
+      if (!hamburger || !drawerOverlay || !mobileDrawer) return
+      hamburger.setAttribute('aria-expanded', 'false')
+      hamburger.setAttribute('aria-label', 'Open menu')
+      drawerOverlay.classList.remove('is-open')
+      mobileDrawer.classList.remove('is-open')
+      mobileDrawer.setAttribute('inert', '')
+      mobileDrawer.setAttribute('aria-hidden', 'true')
+      document.body.style.overflow = ''
+      hamburger.focus()
     }
   }
 

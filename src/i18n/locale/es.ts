@@ -214,10 +214,9 @@ const locale: LanguageLocale = {
     preview_modal_fallback: 'Abrir currículum en una nueva pestaña'
   },
   seo: {
-    title:
-      'Tech Lead / Senior Fullstack Engineer | JavaScript, Ruby, AI Agents | Disponible para equipos de alto impacto',
+    title: 'Lee Palacios | Tech Lead Fullstack · JS, Ruby & IA',
     description:
-      'Ingeniero de software con +7 años entregando producto en startups de Latam. Especializado en backend, arquitectura y agentes de IA para equipos que necesitan velocidad con calidad.',
+      'Ingeniero fullstack con +7 años en startups de Latam. Backend sólido, arquitectura y agentes de IA para equipos que priorizan velocidad y calidad.',
     image: '/img/seo/og-image.png',
     url: 'https://vitualizz.vercel.app/es'
   }

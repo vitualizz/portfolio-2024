@@ -14,34 +14,58 @@ const t = useTranslation(lang)
 interface Props {
   title?: string
   description?: string
+  ogImage?: string
 }
 
 const tSeo = t('seo')
-const { title, description } = Astro.props
-const ogImage = new URL('/img/seo/og-image.png', Astro.url)
-const twitterImage = new URL('/img/seo/twitter-image.png', Astro.url)
+const { title, description, ogImage: ogImageProp } = Astro.props
+
+const pageTitle = title ?? tSeo.title
+const pageDescription = description ?? tSeo.description
+const ogLocale = lang === 'es' ? 'es_ES' : 'en_US'
+const canonicalUrl = new URL(Astro.url.pathname, Astro.url)
+const ogImage = ogImageProp
+  ? new URL(ogImageProp, Astro.url)
+  : new URL('/img/seo/og-image.png', Astro.url)
+const twitterImage = ogImageProp
+  ? new URL(ogImageProp, Astro.url)
+  : new URL('/img/seo/twitter-image.png', Astro.url)
 ---
 
 <html lang={lang} data-theme="dark">
   <head>
     <script is:inline>
-      ;(function () {
+      function applyTheme() {
         const stored = localStorage.getItem('portfolio-theme')
         if (stored) document.documentElement.setAttribute('data-theme', stored)
-      })()
+      }
+      applyTheme()
+      document.addEventListener('astro:after-swap', applyTheme)
     </script>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description ?? tSeo.description} />
-    <meta property="og:title" content={tSeo.title} />
-    <meta property="og:description" content={tSeo.description} />
+    <meta name="description" content={pageDescription} />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalUrl} />
+    <!-- Open Graph -->
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={pageTitle} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url} />
-    <meta name="twitter:title" content={tSeo.title} />
-    <meta name="twitter:description" content={tSeo.description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:site_name" content="Lee Palacios" />
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@vitualizz" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={twitterImage} />
+    <meta name="twitter:image:alt" content={pageTitle} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link
       rel="preload"
@@ -57,7 +81,7 @@ const twitterImage = new URL('/img/seo/twitter-image.png', Astro.url)
       type="font/woff2"
       crossorigin
     />
-    <title>{title ?? tSeo.title}</title>
+    <title>{pageTitle}</title>
     <ClientRouter />
   </head>
   <body>
